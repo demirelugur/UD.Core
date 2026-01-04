@@ -11,7 +11,7 @@ if %errorLevel% neq 0 (
     exit /b
 )
 cd /d C:\Dosyalar\Projeler\UD\UD.Core
-dotnet pack UD.Core.csproj -c Release -o "C:\Dosyalar\Publish"
+dotnet pack UD.Core.csproj -c Release -o ../nupkgs
 echo Islem tamamlandi. Pencere 5 saniye icinde kapanacak...
 for /l %%x in (5,-1,1) do (
     echo %%x saniye...

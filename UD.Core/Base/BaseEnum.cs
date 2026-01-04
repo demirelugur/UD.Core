@@ -18,7 +18,7 @@
         public TEnum Not_Value
         {
             get { return base.ToEnum<TEnum>(); }
-            set { this.Id = value.ToString().ParseOrDefault<TKey>(); }
+            set { this.Id = value.ToLong().ToString().ParseOrDefault<TKey>(); }
         }
     }
     public abstract class BaseEnum<TKey> : BaseEntity<TKey>, IBaseEnum, ISoftDelete where TKey : struct

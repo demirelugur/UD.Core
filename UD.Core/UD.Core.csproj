@@ -7,7 +7,7 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\UD.Core.xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <PackageId>UD.Core</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>Uğur DEMİREL</Authors>
     <Company>UD</Company>
     <Product>UD.Core</Product>
