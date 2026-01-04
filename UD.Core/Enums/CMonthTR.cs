@@ -5,7 +5,7 @@
     using UD.Core.Helper;
     using System.ComponentModel;
     using static UD.Core.Helper.OrtakTools;
-    public sealed class CMonthTR : BaseEnum<CMonthTR.MonthTR>
+    public sealed class CMonthTR : BaseEnumCache<CMonthTR.MonthTR>
     {
         public enum MonthTR : byte
         {

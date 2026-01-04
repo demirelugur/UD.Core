@@ -2,7 +2,6 @@
 {
     using System;
     using static UD.Core.Helper.GlobalConstants;
-
     public static class DateExtensions
     {
         /// <summary>

@@ -39,7 +39,7 @@ public class PersonelModel
     [DefaultValue("")]
     public string? src_tr { get; set; }
 
-    [DefaultValue_GuidEmpty]
+    [DefaultValueGuidEmpty]
     public Guid uid { get; set;}
 }
 ```

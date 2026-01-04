@@ -306,20 +306,6 @@
             return stopwatch.Elapsed;
         }
         /// <summary>
-        /// <paramref name="data"/> verisini önbelleğe ekler ve başarılı işlem sonucunu (<see cref="IslemSonucResult{T}"/>) döndürür.
-        /// </summary>
-        /// <typeparam name="T">Önbelleğe eklenecek verinin tipi.</typeparam>
-        /// <param name="memorycache">Önbellek nesnesi.</param>
-        /// <param name="cachekey">Önbelleğe eklenecek değerin anahtarı.</param>
-        /// <param name="data">Önbelleğe eklenecek veri.</param>
-        /// <param name="timespan">Önbellekte tutulma süresi. Boş bırakılırsa varsayılan olarak 1 dakika kullanılır.</param>
-        /// <returns>Başarılı işlem sonucunu temsil eden <see cref="IslemSonucResult{T}"/> nesnesi.</returns>
-        public static IslemSonucResult<T> SetCacheAndReturnSuccess<T>(this IMemoryCache memorycache, object cachekey, T data, TimeSpan? timespan = null)
-        {
-            memorycache.Set(cachekey, data, timespan ?? TimeSpan.FromMinutes(1));
-            return new(data, true, default);
-        }
-        /// <summary>
         /// Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DescriptionAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.
         /// </summary>
         /// <param name="memberinfo">Üzerinde <see cref="DescriptionAttribute"/> aranacak üye bilgisi (sınıf, property, metod vb.).</param>

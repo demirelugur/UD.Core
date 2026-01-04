@@ -294,13 +294,5 @@
             }
             catch { return (default, default); }
         }
-        /// <summary>
-        /// Verilen hata mesajını başarısız sonucu temsil edecek şekilde döndürür.
-        /// </summary>
-        public static IslemSonucResult<T> ReturnFailed<T>(this string error) => new string[] { error }.ReturnFailed<T>();
-        /// <summary>
-        /// Verilen hata mesajını başarısız sonucu temsil edecek şekilde döndürür.
-        /// </summary>
-        public static IslemSonucResult<object[]> ReturnFailedObjectArray(this string error) => new string[] { error }.ReturnFailedObjectArray();
     }
 }

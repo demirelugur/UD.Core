@@ -7,11 +7,11 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\UD.Core.xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <PackageId>UD.Core</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>Uğur DEMİREL</Authors>
     <Company>UD</Company>
     <Product>UD.Core</Product>
-    <Description>Kurumsal projelerde tekrar kullanılabilir, doğrulama attribute&#39;ları, yardımcı sınıflar, extension method&#39;lar ve servis entegrasyonları içeren bir .NET Core kütüphanesi</Description>
+    <Description>Kurumsal projelerde tekrar kullanılabilir, doğrulama attribute'ları, yardımcı sınıflar, extension method'lar ve servis entegrasyonları içeren bir .NET Core kütüphanesi</Description>
     <PackageProjectUrl>https://github.com/demirelugur/UD.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/demirelugur/UD.Core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

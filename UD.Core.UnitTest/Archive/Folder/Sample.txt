@@ -1,6 +1,7 @@
 ﻿namespace BayuOrtak.Core.UnitTest.Archive.Folder
 {
     using BayuOrtak.Core.Attributes.DataAnnotations;
+    using BayuOrtak.Core.Attributes.DataAnnotations.DefaultValue;
     using BayuOrtak.Core.Extensions;
     using Newtonsoft.Json;
     using System;
@@ -12,7 +13,7 @@
     internal class Sample
     {
         [Validation_Required]
-        [DefaultValue_GuidEmpty]
+        [DefaultValueGuidEmptyAttribute]
         public Guid baglantiuploadid { get; set; }
 
         [Validation_Required]

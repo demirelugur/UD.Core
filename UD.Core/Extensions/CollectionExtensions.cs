@@ -176,14 +176,6 @@
             }
             return _ex;
         }
-        /// <summary>
-        /// Verilen hata mesajlarını başarısız sonucu temsil edecek şekilde döndürür.
-        /// </summary>
-        public static IslemSonucResult<T> ReturnFailed<T>(this string[] errors) => new(default, false, errors);
-        /// <summary>
-        /// Verilen hata mesajlarını başarısız sonucu temsil edecek şekilde döndürür.
-        /// </summary>
-        public static IslemSonucResult<object[]> ReturnFailedObjectArray(this string[] errors) => new(default, false, errors);
         #endregion
     }
 }

@@ -5,7 +5,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper;
     using static UD.Core.Helper.OrtakTools;
-    public sealed class CDayOfWeekTR : BaseEnum<CDayOfWeekTR.DayOfWeekTR>
+    public sealed class CDayOfWeekTR : BaseEnumCache<CDayOfWeekTR.DayOfWeekTR>
     {
         public enum DayOfWeekTR : byte
         {

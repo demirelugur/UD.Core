@@ -59,6 +59,7 @@
         public sealed class _title
         {
             public const string ebys = "EBYS(Elektronik Belge Yönetim Sistemi)";
+            public const string dys = "DYS(Doküman Yönetim Sistemi)";
             public const string isbn = "ISBN(Uluslararası Standart Kitap Numarası)";
             public const string mac = "MAC(Media Access Control)";
             public const string xss = "XSS(Cross - Site Scripting)";
@@ -80,11 +81,6 @@
             /// </summary>
             public const string stringlength_maxmin = "{0}, en az {2}, en fazla {1} karakter uzunluğunda olmalıdır!";
             public const string stringlength_maxminequal = "{0}, tam olarak {1} karakter uzunluğunda olmalıdır!";
-        }
-        internal static string webservice_connectionwarning(string dil, string argument)
-        {
-            Guard.UnSupportLanguage(dil, nameof(dil));
-            return String.Format((dil == "en" ? "There was a problem connecting to the \"{0}\" web service!" : "\"{0}\" web servisine bağlanırken bir sorun oluştu!"), argument);
         }
     }
 }
