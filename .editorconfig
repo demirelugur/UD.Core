@@ -170,3 +170,6 @@ dotnet_diagnostic.CA2254.severity = none
 
 # CA1068: CancellationToken parameters must come last
 dotnet_diagnostic.CA1068.severity = none
+
+# IDE0060: Remove unused parameter
+dotnet_diagnostic.IDE0060.severity = none
