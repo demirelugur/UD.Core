@@ -10,8 +10,8 @@ if %errorLevel% neq 0 (
     powershell -Command "Start-Process '%~0' -Verb RunAs"
     exit /b
 )
-cd /d C:\Dosyalar\Projeler\library-csharp-core-bayuortak\BayuOrtak.Core
-nuget pack BayuOrtak.Core.nuspec -OutputDirectory "C:\Dosyalar\Publish"
+cd /d C:\Dosyalar\Projeler\UD\UD.Core
+dotnet pack UD.Core.csproj -c Release -o "C:\Dosyalar\Publish"
 echo Islem tamamlandi. Pencere 5 saniye icinde kapanacak...
 for /l %%x in (5,-1,1) do (
     echo %%x saniye...

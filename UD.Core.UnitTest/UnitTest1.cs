@@ -3,6 +3,7 @@
     [TestFixture]
     public class Tests
     {
+        // dotnet pack UD.Core\UD.Core.csproj -c Release -o ./nupkgs
         [SetUp]
         public void Setup() { }
         [Test]
