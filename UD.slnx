@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="UD.Core.UnitTest/UD.Core.UnitTest.csproj" />
+  <Project Path="UD.Core/UD.Core.csproj" />
+</Solution>

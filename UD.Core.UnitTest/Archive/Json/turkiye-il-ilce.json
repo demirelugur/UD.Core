@@ -1,0 +1,4461 @@
+[
+  {
+    "plaka": "01",
+    "adi": "ADANA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "322",
+        "adi": "ALADAĞ"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "CEYHAN"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "ÇUKUROVA"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "FEKE"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "İMAMOĞLU"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "KARAİSALI"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "KARATAŞ"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "KOZAN"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "POZANTI"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "SAİMBEYLİ"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "SARIÇAM"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "SEYHAN"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "TUFANBEYLİ"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "YUMURTALIK"
+      },
+      {
+        "telefonkodu": "322",
+        "adi": "YÜREĞİR"
+      }
+    ]
+  },
+  {
+    "plaka": "02",
+    "adi": "ADIYAMAN",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "416",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "416",
+        "adi": "BESNİ"
+      },
+      {
+        "telefonkodu": "416",
+        "adi": "ÇELİKHAN"
+      },
+      {
+        "telefonkodu": "416",
+        "adi": "GERGER"
+      },
+      {
+        "telefonkodu": "416",
+        "adi": "GÖLBAŞI"
+      },
+      {
+        "telefonkodu": "416",
+        "adi": "KAHTA"
+      },
+      {
+        "telefonkodu": "416",
+        "adi": "SAMSAT"
+      },
+      {
+        "telefonkodu": "416",
+        "adi": "SİNCİK"
+      },
+      {
+        "telefonkodu": "416",
+        "adi": "TUT"
+      }
+    ]
+  },
+  {
+    "plaka": "03",
+    "adi": "AFYONKARAHİSAR",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "272",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "BAŞMAKÇI"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "BAYAT"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "BOLVADİN"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "ÇAY"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "ÇOBANLAR"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "DAZKIRI"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "DİNAR"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "EMİRDAĞ"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "EVCİLER"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "HOCALAR"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "İHSANİYE"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "İSCEHİSAR"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "KIZILÖREN"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "SANDIKLI"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "SİNANPAŞA"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "SULTANDAĞI"
+      },
+      {
+        "telefonkodu": "272",
+        "adi": "ŞUHUT"
+      }
+    ]
+  },
+  {
+    "plaka": "04",
+    "adi": "AĞRI",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "472",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "472",
+        "adi": "DİYADİN"
+      },
+      {
+        "telefonkodu": "472",
+        "adi": "DOĞUBAYAZIT"
+      },
+      {
+        "telefonkodu": "472",
+        "adi": "ELEŞKİRT"
+      },
+      {
+        "telefonkodu": "472",
+        "adi": "HAMUR"
+      },
+      {
+        "telefonkodu": "472",
+        "adi": "PATNOS"
+      },
+      {
+        "telefonkodu": "472",
+        "adi": "TAŞLIÇAY"
+      },
+      {
+        "telefonkodu": "472",
+        "adi": "TUTAK"
+      }
+    ]
+  },
+  {
+    "plaka": "05",
+    "adi": "AMASYA",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "358",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "358",
+        "adi": "GÖYNÜCEK"
+      },
+      {
+        "telefonkodu": "358",
+        "adi": "GÜMÜŞHACIKÖY"
+      },
+      {
+        "telefonkodu": "358",
+        "adi": "HAMAMÖZÜ"
+      },
+      {
+        "telefonkodu": "358",
+        "adi": "MERZİFON"
+      },
+      {
+        "telefonkodu": "358",
+        "adi": "SULUOVA"
+      },
+      {
+        "telefonkodu": "358",
+        "adi": "TAŞOVA"
+      }
+    ]
+  },
+  {
+    "plaka": "06",
+    "adi": "ANKARA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "312",
+        "adi": "AKYURT"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "ALTINDAĞ"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "AYAŞ"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "BALA"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "BEYPAZARI"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "ÇAMLIDERE"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "ÇANKAYA"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "ÇUBUK"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "ELMADAĞ"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "ETİMESGUT"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "EVREN"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "GÖLBAŞI"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "GÜDÜL"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "HAYMANA"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "KAHRAMANKAZAN"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "KALECİK"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "KEÇİÖREN"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "KIZILCAHAMAM"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "MAMAK"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "NALLIHAN"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "POLATLI"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "PURSAKLAR"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "SİNCAN"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "ŞEREFLİKOÇHİSAR"
+      },
+      {
+        "telefonkodu": "312",
+        "adi": "YENİMAHALLE"
+      }
+    ]
+  },
+  {
+    "plaka": "07",
+    "adi": "ANTALYA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "242",
+        "adi": "AKSEKİ"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "AKSU"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "ALANYA"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "DEMRE"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "DÖŞEMEALTI"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "ELMALI"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "FİNİKE"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "GAZİPAŞA"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "GÜNDOĞMUŞ"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "İBRADI"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "KAŞ"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "KEMER"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "KEPEZ"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "KONYAALTI"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "KORKUTELİ"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "KUMLUCA"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "MANAVGAT"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "MURATPAŞA"
+      },
+      {
+        "telefonkodu": "242",
+        "adi": "SERİK"
+      }
+    ]
+  },
+  {
+    "plaka": "08",
+    "adi": "ARTVİN",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "466",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "466",
+        "adi": "ARDANUÇ"
+      },
+      {
+        "telefonkodu": "466",
+        "adi": "ARHAVİ"
+      },
+      {
+        "telefonkodu": "466",
+        "adi": "BORÇKA"
+      },
+      {
+        "telefonkodu": "466",
+        "adi": "HOPA"
+      },
+      {
+        "telefonkodu": "466",
+        "adi": "KEMALPAŞA"
+      },
+      {
+        "telefonkodu": "466",
+        "adi": "MURGUL"
+      },
+      {
+        "telefonkodu": "466",
+        "adi": "ŞAVŞAT"
+      },
+      {
+        "telefonkodu": "466",
+        "adi": "YUSUFELİ"
+      }
+    ]
+  },
+  {
+    "plaka": "09",
+    "adi": "AYDIN",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "256",
+        "adi": "BOZDOĞAN"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "BUHARKENT"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "ÇİNE"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "DİDİM"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "EFELER"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "GERMENCİK"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "İNCİRLİOVA"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "KARACASU"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "KARPUZLU"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "KOÇARLI"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "KÖŞK"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "KUŞADASI"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "KUYUCAK"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "NAZİLLİ"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "SÖKE"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "SULTANHİSAR"
+      },
+      {
+        "telefonkodu": "256",
+        "adi": "YENİPAZAR"
+      }
+    ]
+  },
+  {
+    "plaka": "10",
+    "adi": "BALIKESİR",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "266",
+        "adi": "ALTIEYLÜL"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "AYVALIK"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "BALYA"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "BANDIRMA"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "BİGADİÇ"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "BURHANİYE"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "DURSUNBEY"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "EDREMİT"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "ERDEK"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "GÖMEÇ"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "GÖNEN"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "HAVRAN"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "İVRİNDİ"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "KARESİ"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "KEPSUT"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "MANYAS"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "MARMARA"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "SAVAŞTEPE"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "SINDIRGI"
+      },
+      {
+        "telefonkodu": "266",
+        "adi": "SUSURLUK"
+      }
+    ]
+  },
+  {
+    "plaka": "11",
+    "adi": "BİLECİK",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "228",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "228",
+        "adi": "BOZÜYÜK"
+      },
+      {
+        "telefonkodu": "228",
+        "adi": "GÖLPAZARI"
+      },
+      {
+        "telefonkodu": "228",
+        "adi": "İNHİSAR"
+      },
+      {
+        "telefonkodu": "228",
+        "adi": "OSMANELİ"
+      },
+      {
+        "telefonkodu": "228",
+        "adi": "PAZARYERİ"
+      },
+      {
+        "telefonkodu": "228",
+        "adi": "SÖĞÜT"
+      },
+      {
+        "telefonkodu": "228",
+        "adi": "YENİPAZAR"
+      }
+    ]
+  },
+  {
+    "plaka": "12",
+    "adi": "BİNGÖL",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "426",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "426",
+        "adi": "ADAKLI"
+      },
+      {
+        "telefonkodu": "426",
+        "adi": "GENÇ"
+      },
+      {
+        "telefonkodu": "426",
+        "adi": "KARLIOVA"
+      },
+      {
+        "telefonkodu": "426",
+        "adi": "KİĞI"
+      },
+      {
+        "telefonkodu": "426",
+        "adi": "SOLHAN"
+      },
+      {
+        "telefonkodu": "426",
+        "adi": "YAYLADERE"
+      },
+      {
+        "telefonkodu": "426",
+        "adi": "YEDİSU"
+      }
+    ]
+  },
+  {
+    "plaka": "13",
+    "adi": "BİTLİS",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "434",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "434",
+        "adi": "ADİLCEVAZ"
+      },
+      {
+        "telefonkodu": "434",
+        "adi": "AHLAT"
+      },
+      {
+        "telefonkodu": "434",
+        "adi": "GÜROYMAK"
+      },
+      {
+        "telefonkodu": "434",
+        "adi": "HİZAN"
+      },
+      {
+        "telefonkodu": "434",
+        "adi": "MUTKİ"
+      },
+      {
+        "telefonkodu": "434",
+        "adi": "TATVAN"
+      }
+    ]
+  },
+  {
+    "plaka": "14",
+    "adi": "BOLU",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "374",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "374",
+        "adi": "DÖRTDİVAN"
+      },
+      {
+        "telefonkodu": "374",
+        "adi": "GEREDE"
+      },
+      {
+        "telefonkodu": "374",
+        "adi": "GÖYNÜK"
+      },
+      {
+        "telefonkodu": "374",
+        "adi": "KIBRISCIK"
+      },
+      {
+        "telefonkodu": "374",
+        "adi": "MENGEN"
+      },
+      {
+        "telefonkodu": "374",
+        "adi": "MUDURNU"
+      },
+      {
+        "telefonkodu": "374",
+        "adi": "SEBEN"
+      },
+      {
+        "telefonkodu": "374",
+        "adi": "YENİÇAĞA"
+      }
+    ]
+  },
+  {
+    "plaka": "15",
+    "adi": "BURDUR",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "248",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "AĞLASUN"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "ALTINYAYLA"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "BUCAK"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "ÇAVDIR"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "ÇELTİKÇİ"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "GÖLHİSAR"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "KARAMANLI"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "KEMER"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "TEFENNİ"
+      },
+      {
+        "telefonkodu": "248",
+        "adi": "YEŞİLOVA"
+      }
+    ]
+  },
+  {
+    "plaka": "16",
+    "adi": "BURSA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "224",
+        "adi": "BÜYÜKORHAN"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "GEMLİK"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "GÜRSU"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "HARMANCIK"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "İNEGÖL"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "İZNİK"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "KARACABEY"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "KELES"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "KESTEL"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "MUDANYA"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "MUSTAFAKEMALPAŞA"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "NİLÜFER"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "ORHANELİ"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "ORHANGAZİ"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "OSMANGAZİ"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "YENİŞEHİR"
+      },
+      {
+        "telefonkodu": "224",
+        "adi": "YILDIRIM"
+      }
+    ]
+  },
+  {
+    "plaka": "17",
+    "adi": "ÇANAKKALE",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "286",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "AYVACIK"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "BAYRAMİÇ"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "BİGA"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "BOZCAADA"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "ÇAN"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "ECEABAT"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "EZİNE"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "GELİBOLU"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "GÖKÇEADA"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "LAPSEKİ"
+      },
+      {
+        "telefonkodu": "286",
+        "adi": "YENİCE"
+      }
+    ]
+  },
+  {
+    "plaka": "18",
+    "adi": "ÇANKIRI",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "376",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "ATKARACALAR"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "BAYRAMÖREN"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "ÇERKEŞ"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "ELDİVAN"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "ILGAZ"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "KIZILIRMAK"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "KORGUN"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "KURŞUNLU"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "ORTA"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "ŞABANÖZÜ"
+      },
+      {
+        "telefonkodu": "376",
+        "adi": "YAPRAKLI"
+      }
+    ]
+  },
+  {
+    "plaka": "19",
+    "adi": "ÇORUM",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "364",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "ALACA"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "BAYAT"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "BOĞAZKALE"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "DODURGA"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "İSKİLİP"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "KARGI"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "LAÇİN"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "MECİTÖZÜ"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "OĞUZLAR"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "ORTAKÖY"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "OSMANCIK"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "SUNGURLU"
+      },
+      {
+        "telefonkodu": "364",
+        "adi": "UĞURLUDAĞ"
+      }
+    ]
+  },
+  {
+    "plaka": "20",
+    "adi": "DENİZLİ",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "258",
+        "adi": "ACIPAYAM"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "BABADAĞ"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "BAKLAN"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "BEKİLLİ"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "BEYAĞAÇ"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "BOZKURT"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "BULDAN"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "ÇAL"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "ÇAMELİ"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "ÇARDAK"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "ÇİVRİL"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "GÜNEY"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "HONAZ"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "KALE"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "MERKEZEFENDİ"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "PAMUKKALE"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "SARAYKÖY"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "SERİNHİSAR"
+      },
+      {
+        "telefonkodu": "258",
+        "adi": "TAVAS"
+      }
+    ]
+  },
+  {
+    "plaka": "21",
+    "adi": "DİYARBAKIR",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "412",
+        "adi": "BAĞLAR"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "BİSMİL"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "ÇERMİK"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "ÇINAR"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "ÇÜNGÜŞ"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "DİCLE"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "EĞİL"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "ERGANİ"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "HANİ"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "HAZRO"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "KAYAPINAR"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "KOCAKÖY"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "KULP"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "LİCE"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "SİLVAN"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "SUR"
+      },
+      {
+        "telefonkodu": "412",
+        "adi": "YENİŞEHİR"
+      }
+    ]
+  },
+  {
+    "plaka": "22",
+    "adi": "EDİRNE",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "284",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "284",
+        "adi": "ENEZ"
+      },
+      {
+        "telefonkodu": "284",
+        "adi": "HAVSA"
+      },
+      {
+        "telefonkodu": "284",
+        "adi": "İPSALA"
+      },
+      {
+        "telefonkodu": "284",
+        "adi": "KEŞAN"
+      },
+      {
+        "telefonkodu": "284",
+        "adi": "LALAPAŞA"
+      },
+      {
+        "telefonkodu": "284",
+        "adi": "MERİÇ"
+      },
+      {
+        "telefonkodu": "284",
+        "adi": "SÜLOĞLU"
+      },
+      {
+        "telefonkodu": "284",
+        "adi": "UZUNKÖPRÜ"
+      }
+    ]
+  },
+  {
+    "plaka": "23",
+    "adi": "ELAZIĞ",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "424",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "AĞIN"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "ALACAKAYA"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "ARICAK"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "BASKİL"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "KARAKOÇAN"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "KEBAN"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "KOVANCILAR"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "MADEN"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "PALU"
+      },
+      {
+        "telefonkodu": "424",
+        "adi": "SİVRİCE"
+      }
+    ]
+  },
+  {
+    "plaka": "24",
+    "adi": "ERZİNCAN",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "446",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "446",
+        "adi": "ÇAYIRLI"
+      },
+      {
+        "telefonkodu": "446",
+        "adi": "İLİÇ"
+      },
+      {
+        "telefonkodu": "446",
+        "adi": "KEMAH"
+      },
+      {
+        "telefonkodu": "446",
+        "adi": "KEMALİYE"
+      },
+      {
+        "telefonkodu": "446",
+        "adi": "OTLUKBELİ"
+      },
+      {
+        "telefonkodu": "446",
+        "adi": "REFAHİYE"
+      },
+      {
+        "telefonkodu": "446",
+        "adi": "TERCAN"
+      },
+      {
+        "telefonkodu": "446",
+        "adi": "ÜZÜMLÜ"
+      }
+    ]
+  },
+  {
+    "plaka": "25",
+    "adi": "ERZURUM",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "42",
+        "adi": "AŞKALE"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "AZİZİYE"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "ÇAT"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "HINIS"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "HORASAN"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "İSPİR"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "KARAÇOBAN"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "KARAYAZI"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "KÖPRÜKÖY"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "NARMAN"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "OLTU"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "OLUR"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "PALANDÖKEN"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "PASİNLER"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "PAZARYOLU"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "ŞENKAYA"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "TEKMAN"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "TORTUM"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "UZUNDERE"
+      },
+      {
+        "telefonkodu": "42",
+        "adi": "YAKUTİYE"
+      }
+    ]
+  },
+  {
+    "plaka": "26",
+    "adi": "ESKİŞEHİR",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "222",
+        "adi": "ALPU"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "BEYLİKOVA"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "ÇİFTELER"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "GÜNYÜZÜ"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "HAN"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "İNÖNÜ"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "MAHMUDİYE"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "MİHALGAZİ"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "MİHALIÇÇIK"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "ODUNPAZARI"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "SARICAKAYA"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "SEYİTGAZİ"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "SİVRİHİSAR"
+      },
+      {
+        "telefonkodu": "222",
+        "adi": "TEPEBAŞI"
+      }
+    ]
+  },
+  {
+    "plaka": "27",
+    "adi": "GAZİANTEP",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "342",
+        "adi": "ARABAN"
+      },
+      {
+        "telefonkodu": "342",
+        "adi": "İSLAHİYE"
+      },
+      {
+        "telefonkodu": "342",
+        "adi": "KARKAMIŞ"
+      },
+      {
+        "telefonkodu": "342",
+        "adi": "NİZİP"
+      },
+      {
+        "telefonkodu": "342",
+        "adi": "NURDAĞI"
+      },
+      {
+        "telefonkodu": "342",
+        "adi": "OĞUZELİ"
+      },
+      {
+        "telefonkodu": "342",
+        "adi": "ŞAHİNBEY"
+      },
+      {
+        "telefonkodu": "342",
+        "adi": "ŞEHİTKAMİL"
+      },
+      {
+        "telefonkodu": "342",
+        "adi": "YAVUZELİ"
+      }
+    ]
+  },
+  {
+    "plaka": "28",
+    "adi": "GİRESUN",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "454",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "ALUCRA"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "BULANCAK"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "ÇAMOLUK"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "ÇANAKÇI"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "DERELİ"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "DOĞANKENT"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "ESPİYE"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "EYNESİL"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "GÖRELE"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "GÜCE"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "KEŞAP"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "PİRAZİZ"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "ŞEBİNKARAHİSAR"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "TİREBOLU"
+      },
+      {
+        "telefonkodu": "454",
+        "adi": "YAĞLIDERE"
+      }
+    ]
+  },
+  {
+    "plaka": "29",
+    "adi": "GÜMÜŞHANE",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "456",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "456",
+        "adi": "KELKİT"
+      },
+      {
+        "telefonkodu": "456",
+        "adi": "KÖSE"
+      },
+      {
+        "telefonkodu": "456",
+        "adi": "KÜRTÜN"
+      },
+      {
+        "telefonkodu": "456",
+        "adi": "ŞİRAN"
+      },
+      {
+        "telefonkodu": "456",
+        "adi": "TORUL"
+      }
+    ]
+  },
+  {
+    "plaka": "30",
+    "adi": "HAKKARİ",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "438",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "438",
+        "adi": "ÇUKURCA"
+      },
+      {
+        "telefonkodu": "438",
+        "adi": "DERECİK"
+      },
+      {
+        "telefonkodu": "438",
+        "adi": "ŞEMDİNLİ"
+      },
+      {
+        "telefonkodu": "438",
+        "adi": "YÜKSEKOVA"
+      }
+    ]
+  },
+  {
+    "plaka": "31",
+    "adi": "HATAY",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "326",
+        "adi": "ALTINÖZÜ"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "ANTAKYA"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "ARSUZ"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "BELEN"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "DEFNE"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "DÖRTYOL"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "ERZİN"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "HASSA"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "İSKENDERUN"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "KIRIKHAN"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "KUMLU"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "PAYAS"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "REYHANLI"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "SAMANDAĞ"
+      },
+      {
+        "telefonkodu": "326",
+        "adi": "YAYLADAĞI"
+      }
+    ]
+  },
+  {
+    "plaka": "32",
+    "adi": "ISPARTA",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "246",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "AKSU"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "ATABEY"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "EĞİRDİR"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "GELENDOST"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "GÖNEN"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "KEÇİBORLU"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "SENİRKENT"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "SÜTÇÜLER"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "ŞARKİKARAAĞAÇ"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "ULUBORLU"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "YALVAÇ"
+      },
+      {
+        "telefonkodu": "246",
+        "adi": "YENİŞARBADEMLİ"
+      }
+    ]
+  },
+  {
+    "plaka": "33",
+    "adi": "MERSİN",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "324",
+        "adi": "AKDENİZ"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "ANAMUR"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "AYDINCIK"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "BOZYAZI"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "ÇAMLIYAYLA"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "ERDEMLİ"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "GÜLNAR"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "MEZİTLİ"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "MUT"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "SİLİFKE"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "TARSUS"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "TOROSLAR"
+      },
+      {
+        "telefonkodu": "324",
+        "adi": "YENİŞEHİR"
+      }
+    ]
+  },
+  {
+    "plaka": "34",
+    "adi": "İSTANBUL",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "216",
+        "adi": "ADALAR"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "ARNAVUTKÖY"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "ATAŞEHİR"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "AVCILAR"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BAĞCILAR"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BAHÇELİEVLER"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BAKIRKÖY"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BAŞAKŞEHİR"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BAYRAMPAŞA"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BEŞİKTAŞ"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "BEYKOZ"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BEYLİKDÜZÜ"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BEYOĞLU"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "BÜYÜKÇEKMECE"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "ÇATALCA"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "ÇEKMEKÖY"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "ESENLER"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "ESENYURT"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "EYÜPSULTAN"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "FATİH"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "GAZİOSMANPAŞA"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "GÜNGÖREN"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "KADIKÖY"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "KAĞITHANE"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "KARTAL"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "KÜÇÜKÇEKMECE"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "MALTEPE"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "PENDİK"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "SANCAKTEPE"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "SARIYER"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "SİLİVRİ"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "SULTANBEYLİ"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "SULTANGAZİ"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "ŞİLE"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "ŞİŞLİ"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "TUZLA"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "ÜMRANİYE"
+      },
+      {
+        "telefonkodu": "216",
+        "adi": "ÜSKÜDAR"
+      },
+      {
+        "telefonkodu": "212",
+        "adi": "ZEYTİNBURNU"
+      }
+    ]
+  },
+  {
+    "plaka": "35",
+    "adi": "İZMİR",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "232",
+        "adi": "ALİAĞA"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "BALÇOVA"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "BAYINDIR"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "BAYRAKLI"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "BERGAMA"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "BEYDAĞ"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "BORNOVA"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "BUCA"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "ÇEŞME"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "ÇİĞLİ"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "DİKİLİ"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "FOÇA"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "GAZİEMİR"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "GÜZELBAHÇE"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "KARABAĞLAR"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "KARABURUN"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "KARŞIYAKA"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "KEMALPAŞA"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "KINIK"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "KİRAZ"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "KONAK"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "MENDERES"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "MENEMEN"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "NARLIDERE"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "ÖDEMİŞ"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "SEFERİHİSAR"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "SELÇUK"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "TİRE"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "TORBALI"
+      },
+      {
+        "telefonkodu": "232",
+        "adi": "URLA"
+      }
+    ]
+  },
+  {
+    "plaka": "36",
+    "adi": "KARS",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "474",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "474",
+        "adi": "AKYAKA"
+      },
+      {
+        "telefonkodu": "474",
+        "adi": "ARPAÇAY"
+      },
+      {
+        "telefonkodu": "474",
+        "adi": "DİGOR"
+      },
+      {
+        "telefonkodu": "474",
+        "adi": "KAĞIZMAN"
+      },
+      {
+        "telefonkodu": "474",
+        "adi": "SARIKAMIŞ"
+      },
+      {
+        "telefonkodu": "474",
+        "adi": "SELİM"
+      },
+      {
+        "telefonkodu": "474",
+        "adi": "SUSUZ"
+      }
+    ]
+  },
+  {
+    "plaka": "37",
+    "adi": "KASTAMONU",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "366",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "ABANA"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "AĞLI"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "ARAÇ"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "AZDAVAY"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "BOZKURT"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "CİDE"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "ÇATALZEYTİN"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "DADAY"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "DEVREKANİ"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "DOĞANYURT"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "HANÖNÜ"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "İHSANGAZİ"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "İNEBOLU"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "KÜRE"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "PINARBAŞI"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "SEYDİLER"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "ŞENPAZAR"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "TAŞKÖPRÜ"
+      },
+      {
+        "telefonkodu": "366",
+        "adi": "TOSYA"
+      }
+    ]
+  },
+  {
+    "plaka": "38",
+    "adi": "KAYSERİ",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "352",
+        "adi": "AKKIŞLA"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "BÜNYAN"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "DEVELİ"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "FELAHİYE"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "HACILAR"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "İNCESU"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "KOCASİNAN"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "MELİKGAZİ"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "ÖZVATAN"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "PINARBAŞI"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "SARIOĞLAN"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "SARIZ"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "TALAS"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "TOMARZA"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "YAHYALI"
+      },
+      {
+        "telefonkodu": "352",
+        "adi": "YEŞİLHİSAR"
+      }
+    ]
+  },
+  {
+    "plaka": "39",
+    "adi": "KIRKLARELİ",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "",
+        "adi": "BABAESKİ"
+      },
+      {
+        "telefonkodu": "",
+        "adi": "DEMİRKÖY"
+      },
+      {
+        "telefonkodu": "",
+        "adi": "KOFÇAZ"
+      },
+      {
+        "telefonkodu": "",
+        "adi": "LÜLEBURGAZ"
+      },
+      {
+        "telefonkodu": "",
+        "adi": "PEHLİVANKÖY"
+      },
+      {
+        "telefonkodu": "",
+        "adi": "PINARHİSAR"
+      },
+      {
+        "telefonkodu": "",
+        "adi": "VİZE"
+      }
+    ]
+  },
+  {
+    "plaka": "40",
+    "adi": "KIRŞEHİR",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "386",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "386",
+        "adi": "AKÇAKENT"
+      },
+      {
+        "telefonkodu": "386",
+        "adi": "AKPINAR"
+      },
+      {
+        "telefonkodu": "386",
+        "adi": "BOZTEPE"
+      },
+      {
+        "telefonkodu": "386",
+        "adi": "ÇİÇEKDAĞI"
+      },
+      {
+        "telefonkodu": "386",
+        "adi": "KAMAN"
+      },
+      {
+        "telefonkodu": "386",
+        "adi": "MUCUR"
+      }
+    ]
+  },
+  {
+    "plaka": "41",
+    "adi": "KOCAELİ",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "262",
+        "adi": "BAŞİSKELE"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "ÇAYIROVA"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "DARICA"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "DERİNCE"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "DİLOVASI"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "GEBZE"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "GÖLCÜK"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "İZMİT"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "KANDIRA"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "KARAMÜRSEL"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "KARTEPE"
+      },
+      {
+        "telefonkodu": "262",
+        "adi": "KÖRFEZ"
+      }
+    ]
+  },
+  {
+    "plaka": "42",
+    "adi": "KONYA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "332",
+        "adi": "AHIRLI"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "AKÖREN"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "AKŞEHİR"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "ALTINEKİN"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "BEYŞEHİR"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "BOZKIR"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "CİHANBEYLİ"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "ÇELTİK"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "ÇUMRA"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "DERBENT"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "DEREBUCAK"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "DOĞANHİSAR"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "EMİRGAZİ"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "EREĞLİ"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "GÜNEYSINIR"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "HADİM"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "HALKAPINAR"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "HÜYÜK"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "ILGIN"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "KADINHANI"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "KARAPINAR"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "KARATAY"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "KULU"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "MERAM"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "SARAYÖNÜ"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "SELÇUKLU"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "SEYDİŞEHİR"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "TAŞKENT"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "TUZLUKÇU"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "YALIHÜYÜK"
+      },
+      {
+        "telefonkodu": "332",
+        "adi": "YUNAK"
+      }
+    ]
+  },
+  {
+    "plaka": "43",
+    "adi": "KÜTAHYA",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "274",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "ALTINTAŞ"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "ASLANAPA"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "ÇAVDARHİSAR"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "DOMANİÇ"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "DUMLUPINAR"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "EMET"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "GEDİZ"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "HİSARCIK"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "PAZARLAR"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "SİMAV"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "ŞAPHANE"
+      },
+      {
+        "telefonkodu": "274",
+        "adi": "TAVŞANLI"
+      }
+    ]
+  },
+  {
+    "plaka": "44",
+    "adi": "MALATYA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "422",
+        "adi": "AKÇADAĞ"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "ARAPGİR"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "ARGUVAN"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "BATTALGAZİ"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "DARENDE"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "DOĞANŞEHİR"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "DOĞANYOL"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "HEKİMHAN"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "KALE"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "KULUNCAK"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "PÜTÜRGE"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "YAZIHAN"
+      },
+      {
+        "telefonkodu": "422",
+        "adi": "YEŞİLYURT"
+      }
+    ]
+  },
+  {
+    "plaka": "45",
+    "adi": "MANİSA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "236",
+        "adi": "AHMETLİ"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "AKHİSAR"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "ALAŞEHİR"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "DEMİRCİ"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "GÖLMARMARA"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "GÖRDES"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "KIRKAĞAÇ"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "KÖPRÜBAŞI"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "KULA"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "SALİHLİ"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "SARIGÖL"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "SARUHANLI"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "SELENDİ"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "SOMA"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "ŞEHZADELER"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "TURGUTLU"
+      },
+      {
+        "telefonkodu": "236",
+        "adi": "YUNUSEMRE"
+      }
+    ]
+  },
+  {
+    "plaka": "46",
+    "adi": "KAHRAMANMARAŞ",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "344",
+        "adi": "AFŞİN"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "ANDIRIN"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "ÇAĞLAYANCERİT"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "DULKADİROĞLU"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "EKİNÖZÜ"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "ELBİSTAN"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "GÖKSUN"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "NURHAK"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "ONİKİŞUBAT"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "PAZARCIK"
+      },
+      {
+        "telefonkodu": "344",
+        "adi": "TÜRKOĞLU"
+      }
+    ]
+  },
+  {
+    "plaka": "47",
+    "adi": "MARDİN",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "482",
+        "adi": "ARTUKLU"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "DARGEÇİT"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "DERİK"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "KIZILTEPE"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "MAZIDAĞI"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "MİDYAT"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "NUSAYBİN"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "ÖMERLİ"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "SAVUR"
+      },
+      {
+        "telefonkodu": "482",
+        "adi": "YEŞİLLİ"
+      }
+    ]
+  },
+  {
+    "plaka": "48",
+    "adi": "MUĞLA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "252",
+        "adi": "BODRUM"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "DALAMAN"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "DATÇA"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "FETHİYE"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "KAVAKLIDERE"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "KÖYCEĞİZ"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "MARMARİS"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "MENTEŞE"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "MİLAS"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "ORTACA"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "SEYDİKEMER"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "ULA"
+      },
+      {
+        "telefonkodu": "252",
+        "adi": "YATAĞAN"
+      }
+    ]
+  },
+  {
+    "plaka": "49",
+    "adi": "MUŞ",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "436",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "436",
+        "adi": "BULANIK"
+      },
+      {
+        "telefonkodu": "436",
+        "adi": "HASKÖY"
+      },
+      {
+        "telefonkodu": "436",
+        "adi": "KORKUT"
+      },
+      {
+        "telefonkodu": "436",
+        "adi": "MALAZGİRT"
+      },
+      {
+        "telefonkodu": "436",
+        "adi": "VARTO"
+      }
+    ]
+  },
+  {
+    "plaka": "50",
+    "adi": "NEVŞEHİR",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "384",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "384",
+        "adi": "ACIGÖL"
+      },
+      {
+        "telefonkodu": "384",
+        "adi": "AVANOS"
+      },
+      {
+        "telefonkodu": "384",
+        "adi": "DERİNKUYU"
+      },
+      {
+        "telefonkodu": "384",
+        "adi": "GÜLŞEHİR"
+      },
+      {
+        "telefonkodu": "384",
+        "adi": "HACIBEKTAŞ"
+      },
+      {
+        "telefonkodu": "384",
+        "adi": "KOZAKLI"
+      },
+      {
+        "telefonkodu": "384",
+        "adi": "ÜRGÜP"
+      }
+    ]
+  },
+  {
+    "plaka": "51",
+    "adi": "NİĞDE",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "388",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "388",
+        "adi": "ALTUNHİSAR"
+      },
+      {
+        "telefonkodu": "388",
+        "adi": "BOR"
+      },
+      {
+        "telefonkodu": "388",
+        "adi": "ÇAMARDI"
+      },
+      {
+        "telefonkodu": "388",
+        "adi": "ÇİFTLİK"
+      },
+      {
+        "telefonkodu": "388",
+        "adi": "ULUKIŞLA"
+      }
+    ]
+  },
+  {
+    "plaka": "52",
+    "adi": "ORDU",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "452",
+        "adi": "AKKUŞ"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "ALTINORDU"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "AYBASTI"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "ÇAMAŞ"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "ÇATALPINAR"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "ÇAYBAŞI"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "FATSA"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "GÖLKÖY"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "GÜLYALI"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "GÜRGENTEPE"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "İKİZCE"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "KABADÜZ"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "KABATAŞ"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "KORGAN"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "KUMRU"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "MESUDİYE"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "PERŞEMBE"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "ULUBEY"
+      },
+      {
+        "telefonkodu": "452",
+        "adi": "ÜNYE"
+      }
+    ]
+  },
+  {
+    "plaka": "53",
+    "adi": "RİZE",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "464",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "ARDEŞEN"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "ÇAMLIHEMŞİN"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "ÇAYELİ"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "DEREPAZARI"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "FINDIKLI"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "GÜNEYSU"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "HEMŞİN"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "İKİZDERE"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "İYİDERE"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "KALKANDERE"
+      },
+      {
+        "telefonkodu": "464",
+        "adi": "PAZAR"
+      }
+    ]
+  },
+  {
+    "plaka": "54",
+    "adi": "SAKARYA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "264",
+        "adi": "ADAPAZARI"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "AKYAZI"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "ARİFİYE"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "ERENLER"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "FERİZLİ"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "GEYVE"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "HENDEK"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "KARAPÜRÇEK"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "KARASU"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "KAYNARCA"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "KOCAALİ"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "PAMUKOVA"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "SAPANCA"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "SERDİVAN"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "SÖĞÜTLÜ"
+      },
+      {
+        "telefonkodu": "264",
+        "adi": "TARAKLI"
+      }
+    ]
+  },
+  {
+    "plaka": "55",
+    "adi": "SAMSUN",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "362",
+        "adi": "ALAÇAM"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "ASARCIK"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "ATAKUM"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "AYVACIK"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "BAFRA"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "CANİK"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "ÇARŞAMBA"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "HAVZA"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "İLKADIM"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "KAVAK"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "LADİK"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "19 MAYIS"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "SALIPAZARI"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "TEKKEKÖY"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "TERME"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "VEZİRKÖPRÜ"
+      },
+      {
+        "telefonkodu": "362",
+        "adi": "YAKAKENT"
+      }
+    ]
+  },
+  {
+    "plaka": "56",
+    "adi": "SİİRT",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "484",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "484",
+        "adi": "BAYKAN"
+      },
+      {
+        "telefonkodu": "484",
+        "adi": "ERUH"
+      },
+      {
+        "telefonkodu": "484",
+        "adi": "KURTALAN"
+      },
+      {
+        "telefonkodu": "484",
+        "adi": "PERVARİ"
+      },
+      {
+        "telefonkodu": "484",
+        "adi": "ŞİRVAN"
+      },
+      {
+        "telefonkodu": "484",
+        "adi": "TİLLO"
+      }
+    ]
+  },
+  {
+    "plaka": "57",
+    "adi": "SİNOP",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "368",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "368",
+        "adi": "AYANCIK"
+      },
+      {
+        "telefonkodu": "368",
+        "adi": "BOYABAT"
+      },
+      {
+        "telefonkodu": "368",
+        "adi": "DİKMEN"
+      },
+      {
+        "telefonkodu": "368",
+        "adi": "DURAĞAN"
+      },
+      {
+        "telefonkodu": "368",
+        "adi": "ERFELEK"
+      },
+      {
+        "telefonkodu": "368",
+        "adi": "GERZE"
+      },
+      {
+        "telefonkodu": "368",
+        "adi": "SARAYDÜZÜ"
+      },
+      {
+        "telefonkodu": "368",
+        "adi": "TÜRKELİ"
+      }
+    ]
+  },
+  {
+    "plaka": "58",
+    "adi": "SİVAS",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "346",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "AKINCILAR"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "ALTINYAYLA"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "DİVRİĞİ"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "DOĞANŞAR"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "GEMEREK"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "GÖLOVA"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "GÜRÜN"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "HAFİK"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "İMRANLI"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "KANGAL"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "KOYULHİSAR"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "SUŞEHRİ"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "ŞARKIŞLA"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "ULAŞ"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "YILDIZELİ"
+      },
+      {
+        "telefonkodu": "346",
+        "adi": "ZARA"
+      }
+    ]
+  },
+  {
+    "plaka": "59",
+    "adi": "TEKİRDAĞ",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "282",
+        "adi": "ÇERKEZKÖY"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "ÇORLU"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "ERGENE"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "HAYRABOLU"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "KAPAKLI"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "MALKARA"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "MARMARAEREĞLİSİ"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "MURATLI"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "SARAY"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "SÜLEYMANPAŞA"
+      },
+      {
+        "telefonkodu": "282",
+        "adi": "ŞARKÖY"
+      }
+    ]
+  },
+  {
+    "plaka": "60",
+    "adi": "TOKAT",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "356",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "ALMUS"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "ARTOVA"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "BAŞÇİFTLİK"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "ERBAA"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "NİKSAR"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "PAZAR"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "REŞADİYE"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "SULUSARAY"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "TURHAL"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "YEŞİLYURT"
+      },
+      {
+        "telefonkodu": "356",
+        "adi": "ZİLE"
+      }
+    ]
+  },
+  {
+    "plaka": "61",
+    "adi": "TRABZON",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "462",
+        "adi": "AKÇAABAT"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "ARAKLI"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "ARSİN"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "BEŞİKDÜZÜ"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "ÇARŞIBAŞI"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "ÇAYKARA"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "DERNEKPAZARI"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "DÜZKÖY"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "HAYRAT"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "KÖPRÜBAŞI"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "MAÇKA"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "OF"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "ORTAHİSAR"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "SÜRMENE"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "ŞALPAZARI"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "TONYA"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "VAKFIKEBİR"
+      },
+      {
+        "telefonkodu": "462",
+        "adi": "YOMRA"
+      }
+    ]
+  },
+  {
+    "plaka": "62",
+    "adi": "TUNCELİ",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "428",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "428",
+        "adi": "ÇEMİŞGEZEK"
+      },
+      {
+        "telefonkodu": "428",
+        "adi": "HOZAT"
+      },
+      {
+        "telefonkodu": "428",
+        "adi": "MAZGİRT"
+      },
+      {
+        "telefonkodu": "428",
+        "adi": "NAZIMİYE"
+      },
+      {
+        "telefonkodu": "428",
+        "adi": "OVACIK"
+      },
+      {
+        "telefonkodu": "428",
+        "adi": "PERTEK"
+      },
+      {
+        "telefonkodu": "428",
+        "adi": "PÜLÜMÜR"
+      }
+    ]
+  },
+  {
+    "plaka": "63",
+    "adi": "ŞANLIURFA",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "414",
+        "adi": "AKÇAKALE"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "BİRECİK"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "BOZOVA"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "CEYLANPINAR"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "EYYÜBİYE"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "HALFETİ"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "HALİLİYE"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "HARRAN"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "HİLVAN"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "KARAKÖPRÜ"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "SİVEREK"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "SURUÇ"
+      },
+      {
+        "telefonkodu": "414",
+        "adi": "VİRANŞEHİR"
+      }
+    ]
+  },
+  {
+    "plaka": "64",
+    "adi": "UŞAK",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "276",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "276",
+        "adi": "BANAZ"
+      },
+      {
+        "telefonkodu": "276",
+        "adi": "EŞME"
+      },
+      {
+        "telefonkodu": "276",
+        "adi": "KARAHALLI"
+      },
+      {
+        "telefonkodu": "276",
+        "adi": "SİVASLI"
+      },
+      {
+        "telefonkodu": "276",
+        "adi": "ULUBEY"
+      }
+    ]
+  },
+  {
+    "plaka": "65",
+    "adi": "VAN",
+    "buyuksehir": true,
+    "ilceler": [
+      {
+        "telefonkodu": "432",
+        "adi": "BAHÇESARAY"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "BAŞKALE"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "ÇALDIRAN"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "ÇATAK"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "EDREMİT"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "ERCİŞ"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "GEVAŞ"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "GÜRPINAR"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "İPEKYOLU"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "MURADİYE"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "ÖZALP"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "SARAY"
+      },
+      {
+        "telefonkodu": "432",
+        "adi": "TUŞBA"
+      }
+    ]
+  },
+  {
+    "plaka": "66",
+    "adi": "YOZGAT",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "354",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "AKDAĞMADENİ"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "AYDINCIK"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "BOĞAZLIYAN"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "ÇANDIR"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "ÇAYIRALAN"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "ÇEKEREK"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "KADIŞEHRİ"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "SARAYKENT"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "SARIKAYA"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "SORGUN"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "ŞEFAATLİ"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "YENİFAKILI"
+      },
+      {
+        "telefonkodu": "354",
+        "adi": "YERKÖY"
+      }
+    ]
+  },
+  {
+    "plaka": "67",
+    "adi": "ZONGULDAK",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "372",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "372",
+        "adi": "ALAPLI"
+      },
+      {
+        "telefonkodu": "372",
+        "adi": "ÇAYCUMA"
+      },
+      {
+        "telefonkodu": "372",
+        "adi": "DEVREK"
+      },
+      {
+        "telefonkodu": "372",
+        "adi": "EREĞLİ"
+      },
+      {
+        "telefonkodu": "372",
+        "adi": "GÖKÇEBEY"
+      },
+      {
+        "telefonkodu": "372",
+        "adi": "KİLİMLİ"
+      },
+      {
+        "telefonkodu": "372",
+        "adi": "KOZLU"
+      }
+    ]
+  },
+  {
+    "plaka": "68",
+    "adi": "AKSARAY",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "382",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "382",
+        "adi": "AĞAÇÖREN"
+      },
+      {
+        "telefonkodu": "382",
+        "adi": "ESKİL"
+      },
+      {
+        "telefonkodu": "382",
+        "adi": "GÜLAĞAÇ"
+      },
+      {
+        "telefonkodu": "382",
+        "adi": "GÜZELYURT"
+      },
+      {
+        "telefonkodu": "382",
+        "adi": "ORTAKÖY"
+      },
+      {
+        "telefonkodu": "382",
+        "adi": "SARIYAHŞİ"
+      },
+      {
+        "telefonkodu": "382",
+        "adi": "SULTANHANI"
+      }
+    ]
+  },
+  {
+    "plaka": "69",
+    "adi": "BAYBURT",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "458",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "458",
+        "adi": "AYDINTEPE"
+      },
+      {
+        "telefonkodu": "458",
+        "adi": "DEMİRÖZÜ"
+      }
+    ]
+  },
+  {
+    "plaka": "70",
+    "adi": "KARAMAN",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "338",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "338",
+        "adi": "AYRANCI"
+      },
+      {
+        "telefonkodu": "338",
+        "adi": "BAŞYAYLA"
+      },
+      {
+        "telefonkodu": "338",
+        "adi": "ERMENEK"
+      },
+      {
+        "telefonkodu": "338",
+        "adi": "KAZIMKARABEKİR"
+      },
+      {
+        "telefonkodu": "338",
+        "adi": "SARIVELİLER"
+      }
+    ]
+  },
+  {
+    "plaka": "71",
+    "adi": "KIRIKKALE",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "318",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "318",
+        "adi": "BAHŞILI"
+      },
+      {
+        "telefonkodu": "318",
+        "adi": "BALIŞEYH"
+      },
+      {
+        "telefonkodu": "318",
+        "adi": "ÇELEBİ"
+      },
+      {
+        "telefonkodu": "318",
+        "adi": "DELİCE"
+      },
+      {
+        "telefonkodu": "318",
+        "adi": "KARAKEÇİLİ"
+      },
+      {
+        "telefonkodu": "318",
+        "adi": "KESKİN"
+      },
+      {
+        "telefonkodu": "318",
+        "adi": "SULAKYURT"
+      },
+      {
+        "telefonkodu": "318",
+        "adi": "YAHŞİHAN"
+      }
+    ]
+  },
+  {
+    "plaka": "72",
+    "adi": "BATMAN",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "488",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "488",
+        "adi": "BEŞİRİ"
+      },
+      {
+        "telefonkodu": "488",
+        "adi": "GERCÜŞ"
+      },
+      {
+        "telefonkodu": "488",
+        "adi": "HASANKEYF"
+      },
+      {
+        "telefonkodu": "488",
+        "adi": "KOZLUK"
+      },
+      {
+        "telefonkodu": "488",
+        "adi": "SASON"
+      }
+    ]
+  },
+  {
+    "plaka": "73",
+    "adi": "ŞIRNAK",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "486",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "486",
+        "adi": "BEYTÜŞŞEBAP"
+      },
+      {
+        "telefonkodu": "486",
+        "adi": "CİZRE"
+      },
+      {
+        "telefonkodu": "486",
+        "adi": "GÜÇLÜKONAK"
+      },
+      {
+        "telefonkodu": "486",
+        "adi": "İDİL"
+      },
+      {
+        "telefonkodu": "486",
+        "adi": "SİLOPİ"
+      },
+      {
+        "telefonkodu": "486",
+        "adi": "ULUDERE"
+      }
+    ]
+  },
+  {
+    "plaka": "74",
+    "adi": "BARTIN",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "378",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "378",
+        "adi": "AMASRA"
+      },
+      {
+        "telefonkodu": "378",
+        "adi": "KURUCAŞİLE"
+      },
+      {
+        "telefonkodu": "378",
+        "adi": "ULUS"
+      }
+    ]
+  },
+  {
+    "plaka": "75",
+    "adi": "ARDAHAN",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "478",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "478",
+        "adi": "ÇILDIR"
+      },
+      {
+        "telefonkodu": "478",
+        "adi": "DAMAL"
+      },
+      {
+        "telefonkodu": "478",
+        "adi": "GÖLE"
+      },
+      {
+        "telefonkodu": "478",
+        "adi": "HANAK"
+      },
+      {
+        "telefonkodu": "478",
+        "adi": "POSOF"
+      }
+    ]
+  },
+  {
+    "plaka": "76",
+    "adi": "IĞDIR",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "476",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "476",
+        "adi": "ARALIK"
+      },
+      {
+        "telefonkodu": "476",
+        "adi": "KARAKOYUNLU"
+      },
+      {
+        "telefonkodu": "476",
+        "adi": "TUZLUCA"
+      }
+    ]
+  },
+  {
+    "plaka": "77",
+    "adi": "YALOVA",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "226",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "226",
+        "adi": "ALTINOVA"
+      },
+      {
+        "telefonkodu": "226",
+        "adi": "ARMUTLU"
+      },
+      {
+        "telefonkodu": "226",
+        "adi": "ÇINARCIK"
+      },
+      {
+        "telefonkodu": "226",
+        "adi": "ÇİFTLİKKÖY"
+      },
+      {
+        "telefonkodu": "226",
+        "adi": "TERMAL"
+      }
+    ]
+  },
+  {
+    "plaka": "78",
+    "adi": "KARABÜK",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "370",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "370",
+        "adi": "EFLANİ"
+      },
+      {
+        "telefonkodu": "370",
+        "adi": "ESKİPAZAR"
+      },
+      {
+        "telefonkodu": "370",
+        "adi": "OVACIK"
+      },
+      {
+        "telefonkodu": "370",
+        "adi": "SAFRANBOLU"
+      },
+      {
+        "telefonkodu": "370",
+        "adi": "YENİCE"
+      }
+    ]
+  },
+  {
+    "plaka": "79",
+    "adi": "KİLİS",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "348",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "348",
+        "adi": "ELBEYLİ"
+      },
+      {
+        "telefonkodu": "348",
+        "adi": "MUSABEYLİ"
+      },
+      {
+        "telefonkodu": "348",
+        "adi": "POLATELİ"
+      }
+    ]
+  },
+  {
+    "plaka": "80",
+    "adi": "OSMANİYE",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "328",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "328",
+        "adi": "BAHÇE"
+      },
+      {
+        "telefonkodu": "328",
+        "adi": "DÜZİÇİ"
+      },
+      {
+        "telefonkodu": "328",
+        "adi": "HASANBEYLİ"
+      },
+      {
+        "telefonkodu": "328",
+        "adi": "KADİRLİ"
+      },
+      {
+        "telefonkodu": "328",
+        "adi": "SUMBAS"
+      },
+      {
+        "telefonkodu": "328",
+        "adi": "TOPRAKKALE"
+      }
+    ]
+  },
+  {
+    "plaka": "81",
+    "adi": "DÜZCE",
+    "buyuksehir": false,
+    "ilceler": [
+      {
+        "telefonkodu": "380",
+        "adi": "MERKEZ"
+      },
+      {
+        "telefonkodu": "380",
+        "adi": "AKÇAKOCA"
+      },
+      {
+        "telefonkodu": "380",
+        "adi": "CUMAYERİ"
+      },
+      {
+        "telefonkodu": "380",
+        "adi": "ÇİLİMLİ"
+      },
+      {
+        "telefonkodu": "380",
+        "adi": "GÖLYAKA"
+      },
+      {
+        "telefonkodu": "380",
+        "adi": "GÜMÜŞOVA"
+      },
+      {
+        "telefonkodu": "380",
+        "adi": "KAYNAŞLI"
+      },
+      {
+        "telefonkodu": "380",
+        "adi": "YIĞILCA"
+      }
+    ]
+  }
+]

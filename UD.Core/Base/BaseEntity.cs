@@ -1,0 +1,73 @@
+﻿namespace UD.Core.Base
+{
+    using System;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using UD.Core.Extensions;
+    /// <summary>
+    /// Genel varlık nesneleri için temel arayüzü tanımlar. Bu arayüz, varlıkların durumunu, ekleme, güncelleme ve silme bilgilerini içerir.
+    /// </summary>
+    /// <typeparam name="TKey">Kullanıcı kimliğini temsil eden tür (ör. int, Guid vb.).</typeparam>
+    public interface IBaseEntity<TKey> : IDisposable where TKey : struct
+    {
+        bool Durum { get; set; }
+        TKey AddUser { get; set; }
+        DateTime AddDate { get; set; }
+        TKey? UptUser { get; set; }
+        DateTime? UptDate { get; set; }
+        bool IsDeleted { get; set; }
+        TKey? DeleteUser { get; set; }
+        DateTime? DeleteDate { get; set; }
+        void Set_UpdateInfo(TKey uptuser);
+        void Set_DeleteInfo(TKey deleteuser);
+    }
+    /// <summary>
+    /// Genel varlık nesneleri için temel sınıf. IBaseEntity arayüzünü uygular.
+    /// </summary>
+    /// <typeparam name="TKey">Kullanıcı kimliğini temsil eden tür (ör. int, Guid vb.).</typeparam>
+    public abstract class BaseEntity<TKey> : IBaseEntity<TKey> where TKey : struct
+    {
+        public void Dispose() { GC.SuppressFinalize(this); }
+        private bool _durum;
+        private TKey _addUser;
+        private DateTime _addDate;
+        private TKey? _uptUser;
+        private DateTime? _uptDate;
+        private bool _isDeleted;
+        private TKey? _deleteUser;
+        private DateTime? _deleteDate;
+        public BaseEntity() : this(default, default, default, default, default, default, default, default) { }
+        public BaseEntity(bool durum, TKey addUser, DateTime addDate, TKey? uptUser, DateTime? uptDate, bool isDeleted, TKey? deleteUser, DateTime? deleteDate)
+        {
+            this.Durum = durum;
+            this.AddUser = addUser;
+            this.AddDate = addDate;
+            this.UptUser = uptUser;
+            this.UptDate = uptDate;
+            this.IsDeleted = isDeleted;
+            this.DeleteUser = deleteUser;
+            this.DeleteDate = deleteDate;
+        }
+        public bool Durum { get { return _durum; } set { _durum = value; } }
+        public TKey AddUser { get { return _addUser; } set { _addUser = value; } }
+        [Column(TypeName = "datetime")]
+        public DateTime AddDate { get { return _addDate; } set { _addDate = value; } }
+        public TKey? UptUser { get { return _uptUser; } set { _uptUser = value.NullOrDefault(); } }
+        [Column(TypeName = "datetime")]
+        public DateTime? UptDate { get { return _uptDate; } set { _uptDate = value.NullOrDefault(); } }
+        public bool IsDeleted { get { return _isDeleted; } set { _isDeleted = value; } }
+        public TKey? DeleteUser { get { return _deleteUser; } set { _deleteUser = value.NullOrDefault(); } }
+        [Column(TypeName = "datetime")]
+        public DateTime? DeleteDate { get { return _deleteDate; } set { _deleteDate = value.NullOrDefault(); } }
+        public void Set_UpdateInfo(TKey uptuser)
+        {
+            this.UptUser = uptuser;
+            this.UptDate = DateTime.Now;
+        }
+        public void Set_DeleteInfo(TKey deleteuser)
+        {
+            this.IsDeleted = true;
+            this.DeleteUser = deleteuser;
+            this.DeleteDate = DateTime.Now;
+        }
+    }
+}
