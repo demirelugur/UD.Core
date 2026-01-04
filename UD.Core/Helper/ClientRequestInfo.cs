@@ -1,11 +1,11 @@
 ﻿namespace UD.Core.Helper
 {
-    using UD.Core.Attributes.DataAnnotations;
-    using UD.Core.Extensions;
     using Microsoft.AspNetCore.Http;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Net;
+    using UD.Core.Attributes.DataAnnotations;
+    using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
     public class ClientRequestInfo : IEquatable<ClientRequestInfo>
     {

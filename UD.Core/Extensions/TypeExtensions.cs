@@ -1,10 +1,10 @@
 ﻿namespace UD.Core.Extensions
 {
-    using UD.Core.Helper;
-    using UD.Core.Helper.Results;
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+    using UD.Core.Helper;
+    using UD.Core.Helper.Results;
     using static UD.Core.Helper.OrtakTools;
     public static class TypeExtensions
     {

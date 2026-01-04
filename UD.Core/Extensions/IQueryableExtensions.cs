@@ -1,11 +1,11 @@
 ﻿namespace UD.Core.Extensions
 {
-    using UD.Core.Helper;
-    using UD.Core.Helper.Results;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+    using UD.Core.Helper;
+    using UD.Core.Helper.Results;
     public static class IQueryableExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>

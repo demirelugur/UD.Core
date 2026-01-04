@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Caching.Memory;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Specialized;
@@ -16,7 +15,6 @@
     using System.Reflection;
     using System.Web;
     using UD.Core.Helper;
-    using UD.Core.Helper.Results;
     using static UD.Core.Helper.OrtakTools;
     public static class OtherExtensions
     {

@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Attributes.DataAnnotations
 {
-    using UD.Core.Extensions;
     using System.ComponentModel.DataAnnotations;
+    using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
     using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]

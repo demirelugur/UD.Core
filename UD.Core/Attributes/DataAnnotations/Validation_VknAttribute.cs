@@ -1,8 +1,8 @@
 ﻿namespace UD.Core.Attributes.DataAnnotations
 {
-    using UD.Core.Extensions;
     using System;
     using System.ComponentModel.DataAnnotations;
+    using UD.Core.Extensions;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class Validation_VknAttribute : ValidationAttribute
     {

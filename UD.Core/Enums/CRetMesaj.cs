@@ -1,8 +1,8 @@
 ﻿namespace UD.Core.Enums
 {
+    using System.ComponentModel;
     using UD.Core.Extensions;
     using UD.Core.Helper;
-    using System.ComponentModel;
     using static UD.Core.Helper.OrtakTools;
     public sealed class CRetMesaj
     {

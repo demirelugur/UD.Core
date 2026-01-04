@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Helper
 {
-    using UD.Core.Extensions;
     using System.Net.Mail;
+    using UD.Core.Extensions;
     using static UD.Core.Helper.OrtakTools;
     public sealed class MailHelper
     {

@@ -1,13 +1,12 @@
 ﻿namespace UD.Core.Helper
 {
-    using UD.Core.Extensions;
     using Bogus;
     using System;
     using System.Collections;
     using System.Linq;
     using System.Net;
     using System.Net.Mail;
-    using static UD.Core.Helper.GlobalConstants;
+    using UD.Core.Extensions;
     using static UD.Core.Helper.OrtakTools;
     /// <summary>
     /// Sahte veri üretimi için kullanılan genel bir sınıf. Bogus kütüphanesini kullanarak farklı veri türlerinde özelleştirilebilir sahte veriler üretir.

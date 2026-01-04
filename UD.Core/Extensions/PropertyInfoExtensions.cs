@@ -1,10 +1,10 @@
 ﻿namespace UD.Core.Extensions
 {
-    using UD.Core.Helper;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Reflection;
+    using UD.Core.Helper;
     using static UD.Core.Helper.OrtakTools;
     public static class PropertyInfoExtensions
     {

@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Helper
 {
-    using UD.Core.Extensions;
     using System;
+    using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class ISBNHelper
     {

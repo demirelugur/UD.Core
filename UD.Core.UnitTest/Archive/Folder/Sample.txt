@@ -13,7 +13,7 @@
     internal class Sample
     {
         [Validation_Required]
-        [DefaultValueGuidEmptyAttribute]
+        [DefaultValue_GuidEmpty]
         public Guid baglantiuploadid { get; set; }
 
         [Validation_Required]

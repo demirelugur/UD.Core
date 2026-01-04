@@ -1,9 +1,9 @@
 ﻿namespace UD.Core.Extensions
 {
-    using UD.Core.Helper;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using UD.Core.Helper;
     public static class UriExtensions
     {
         /// <summary>

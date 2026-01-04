@@ -1,8 +1,8 @@
 ﻿namespace UD.Core.Helper
 {
-    using UD.Core.Extensions;
     using System.Text;
     using System.Text.RegularExpressions;
+    using UD.Core.Extensions;
     public sealed class PasswordGenerator
     {
         /// <summary>

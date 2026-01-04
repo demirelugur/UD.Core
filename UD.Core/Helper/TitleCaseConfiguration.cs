@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Helper
 {
-    using UD.Core.Extensions;
     using System.Text.RegularExpressions;
+    using UD.Core.Extensions;
     /// <summary>
     /// Metinleri başlık formatına (title case) dönüştürmek için yapılandırma sağlayan bir sınıftır. Türkçe ve İngilizce gibi diller için özel kurallar ve özelleştirilebilir ayarlar sunar.
     /// </summary>

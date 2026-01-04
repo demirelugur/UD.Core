@@ -1,7 +1,5 @@
 ﻿namespace UD.Core.Base
 {
-    using UD.Core.Extensions;
-    using UD.Core.Helper;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +7,8 @@
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
+    using UD.Core.Extensions;
+    using UD.Core.Helper;
     using static UD.Core.Helper.OrtakTools;
     public interface IUnitOfWork<TContext> where TContext : DbContext
     {

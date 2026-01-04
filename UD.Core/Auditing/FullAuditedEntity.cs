@@ -15,7 +15,7 @@
         AuditKey? DeleterId { get; set; }
         void SetDeleter(AuditKey deleterId);
     }
-    public interface IFullAuditedObject<AuditKey> : IAuditedObject<AuditKey>, IDeletionAuditedObject<AuditKey> where AuditKey: struct { }
+    public interface IFullAuditedObject<AuditKey> : IAuditedObject<AuditKey>, IDeletionAuditedObject<AuditKey> where AuditKey : struct { }
     [Serializable]
     public abstract class FullAuditedEntity<TKey, AuditKey> : AuditedEntity<TKey, AuditKey>, IFullAuditedObject<AuditKey> where AuditKey : struct
     {

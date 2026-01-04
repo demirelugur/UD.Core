@@ -1,7 +1,5 @@
 ﻿namespace UD.Core.Helper
 {
-    using UD.Core.Attributes.DataAnnotations;
-    using UD.Core.Extensions;
     using Microsoft.AspNetCore.Http;
     using System;
     using System.ComponentModel;
@@ -9,6 +7,8 @@
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Text.Json.Serialization;
+    using UD.Core.Attributes.DataAnnotations;
+    using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class FileSettingsHelper : IEquatable<FileSettingsHelper>
     {

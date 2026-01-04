@@ -1,13 +1,11 @@
 ﻿namespace UD.Core.Base
 {
-    using FaturaBilgileri.DAL.Entities;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using UD.Core.Extensions;
     using UD.Core.Helper.Results;
     using static UD.Core.Helper.OrtakTools;
-
     /// <summary>
     /// Enum&#39;lar için temel bir sınıf.
     /// </summary>

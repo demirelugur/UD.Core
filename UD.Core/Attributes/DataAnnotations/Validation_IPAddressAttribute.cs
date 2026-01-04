@@ -1,9 +1,9 @@
 ﻿namespace UD.Core.Attributes.DataAnnotations
 {
-    using UD.Core.Extensions;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Net;
+    using UD.Core.Extensions;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class Validation_IPAddressAttribute : ValidationAttribute
     {

@@ -1,7 +1,5 @@
 ﻿namespace UD.Core.Extensions
 {
-    using UD.Core.Helper;
-    using UD.Core.Helper.Results;
     using Newtonsoft.Json.Linq;
     using System;
     using System.ComponentModel;
@@ -12,6 +10,7 @@
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
+    using UD.Core.Helper;
     using static UD.Core.Helper.OrtakTools;
     public static class StringExtensions
     {
