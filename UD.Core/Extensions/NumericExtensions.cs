@@ -62,7 +62,7 @@
         /// <para>
         /// VKN doğrulama algoritması şu adımlarla çalışır:
         /// <list type="bullet">
-        ///   <item><description>Eğer sayı 9 haneliyse, başına sıfır(lar) eklenerek 10 haneye tamamlanır.</description></item>
+        ///   <item><description>Eğer sayı 10 haneli değilse, başına sıfır(lar) eklenerek 10 haneye tamamlanır.</description></item>
         ///   <item><description>10 haneli VKN için her haneye özel matematiksel işlem uygulanır.</description></item>
         ///   <item><description>İlk 9 haneden elde edilen ara sonuçların toplamı hesaplanır.</description></item>
         ///   <item><description>Son hanenin (kontrol basamağı) doğruluğu algoritmaya göre kontrol edilir.</description></item>

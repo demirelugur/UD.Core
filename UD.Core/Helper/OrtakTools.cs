@@ -24,7 +24,6 @@
     using UD.Core.Enums;
     using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
-
     public sealed class OrtakTools
     {
         public sealed class _file
@@ -147,7 +146,7 @@
                 if (_type.FullName.StartsWith("System.Tuple") || _type.FullName.StartsWith("System.ValueTuple"))
                 {
                     var _args = _type.GetGenericArguments();
-                    if (_args.Length == 2)
+                    if (_args.Length >= 2)
                     {
                         if (_args[0] == typeof(DateTime) && _args[1] == typeof(string))
                         {

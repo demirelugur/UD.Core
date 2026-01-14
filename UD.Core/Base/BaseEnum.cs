@@ -21,6 +21,7 @@
             set { this.Id = value.ToLong().ToString().ParseOrDefault<TKey>(); }
         }
     }
+    [Serializable]
     public abstract class BaseEnum<TKey> : BaseEntity<TKey>, IBaseEnum, ISoftDelete where TKey : struct
     {
         public const int Name_maxlength = 100;

@@ -168,20 +168,24 @@
         public static string ReplaceTRNSpace(this string value) => value.ToStringOrEmpty().Replace("\t", " ").Replace("\r", " ").Replace("\n", " ").Trim();
         /// <summary> Metin içerisindeki birden fazla ardışık boşluğu tek bir boşluğa indirger ve baştaki ile sondaki gereksiz boşlukları temizler. Null veya boş metinlerde güvenli şekilde çalışır.</summary>
         public static string RemoveMultipleSpace(this string value) => Regex.Replace(value.ToStringOrEmpty(), " +", " ").Trim();
-        /// <summary>
-        /// Verilen dizeyi belirtilen uzunluğa getirir ve eksik kısmı seçilen karakterle doldurur.
-        /// </summary>
-        /// <param name="value">Çoğaltılacak dize.</param>
-        /// <param name="totalvaluelength">Toplam uzunluk.</param>
-        /// <param name="c">Doldurma karakteri.</param>
-        /// <param name="direction">Doldurma yönü (&#39;l&#39; = sol, &#39;r&#39; = sağ).</param>
-        /// <returns>Doldurulmuş dize.</returns>
+        /// <summary> Belirtilen karakter ile doldurarak bir string değerini belirli bir uzunluğa getirir.</summary>
+        /// <param name="value">Uzunluğu ayarlanacak string değeri. </param>
+        /// <param name="totalvaluelength">Hedef toplam uzunluk.  Varsayılan değer 2&#39;dir.</param>
+        /// <param name="c">Dolgu için kullanılacak karakter.  Varsayılan değer 0&#39;dır.</param>
+        /// <param name="direction">Doldurma yönü. &#39;l&#39; sol tarafa (PadLeft), &#39;r&#39; sağ tarafa (PadRight) doldurur.  Varsayılan değer l&#39;dir.</param>
+        /// <returns> Belirtilen uzunluğa getirilmiş string değeri.  Eğer değer boş ise veya mevcut uzunluk hedef uzunluktan büyük/eşitse orijinal değeri döndürür. </returns>
+        /// <exception cref="ArgumentException"><paramref name="totalvaluelength"/> parametresi sıfır veya negatif olduğunda fırlatılır.</exception>
         public static string Replicate(this string value, int totalvaluelength = 2, char c = '0', char direction = 'l')
         {
             value = value.ToStringOrEmpty();
-            if (value == "" || totalvaluelength < 1 || totalvaluelength < value.Length) { return ""; }
-            if (totalvaluelength == value.Length) { return value; }
-            return (direction == 'r' ? value.PadRight(totalvaluelength, c) : value.PadLeft(totalvaluelength, c));
+            if (value != "")
+            {
+                Guard.CheckZeroOrNegative(totalvaluelength, nameof(totalvaluelength));
+                if (totalvaluelength <= value.Length) { return value; }
+                if (direction == 'l') { return value.PadLeft(totalvaluelength, c); }
+                if (direction == 'r') { return value.PadRight(totalvaluelength, c); }
+            }
+            return "";
         }
         /// <summary>Verilen dizeyi belirtilen uzunluğa kadar keser. </summary>
         /// <param name="value">Kesilecek dize.</param>
