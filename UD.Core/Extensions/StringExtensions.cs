@@ -179,7 +179,7 @@
         /// <param name="totalvaluelength">Hedef toplam uzunluk.  Varsayılan değer 2&#39;dir.</param>
         /// <param name="c">Dolgu için kullanılacak karakter.  Varsayılan değer 0&#39;dır.</param>
         /// <param name="direction">Doldurma yönü. &#39;l&#39; sol tarafa (PadLeft), &#39;r&#39; sağ tarafa (PadRight) doldurur.  Varsayılan değer l&#39;dir.</param>
-        /// <returns> Belirtilen uzunluğa getirilmiş string değeri.  Eğer değer boş ise veya mevcut uzunluk hedef uzunluktan büyük/eşitse orijinal değeri döndürür. </returns>
+        /// <returns> Belirtilen uzunluğa getirilmiş string değeri. Eğer değer boş ise veya mevcut uzunluk hedef uzunluktan büyük/eşitse orijinal değeri döndürür. </returns>
         /// <exception cref="ArgumentException"><paramref name="totalvaluelength"/> parametresi sıfır veya negatif olduğunda fırlatılır.</exception>
         public static string Replicate(this string value, int totalvaluelength = 2, char c = '0', char direction = 'l')
         {

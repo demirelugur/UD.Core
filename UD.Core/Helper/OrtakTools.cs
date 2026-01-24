@@ -227,7 +227,7 @@
                 return $"{_d.Substring(0, 2)}.**.{_d.Substring(6, 2)}**";
             }
             /// <summary>
-            /// Türkiye formatına uygun telefon numarasını maskeleme işlemi yapar.
+            /// Türkiye biçimine uygun telefon numarasını maskeleme işlemi yapar.
             /// </summary>
             /// <param name="phonenumberTR">Maske uygulanacak telefon numarası (ülke kodu dahil).</param>
             /// <param name="showfull"><see langword="true"/> ise numara güzelleştirilmiş (biçimlenmiş) haliyle döner; <see langword="false"/> ise numaranın bazı bölümleri * ile gizlenmiş şekilde döner.

@@ -24,11 +24,11 @@
         /// <param name="datetime">Dönüştürülecek tarih/saat.</param>
         /// <returns>ISO 8601 biçiminde dize.</returns>
         public static string ToISO8601(this DateTime datetime) => datetime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-        /// <summary>Gece yarısından (00:00:00.000) itibaren geçen toplam milisaniyeyi döner.</summary>
+        /// <summary>Gece yarısından (00:00:00.000) itibaren geçen toplam milisaniyeyi döner. Alabileceği maksimum değer: 86399999</summary>
         public static int ToMillisecondsSinceMidnight(this DateTime datetime) => (datetime.ToSecondsSinceMidnight() * 1000) + datetime.Millisecond;
-        /// <summary>Gece yarısından (00:00:00) itibaren geçen toplam saniyeyi döner.</summary>
+        /// <summary>Gece yarısından (00:00:00) itibaren geçen toplam saniyeyi döner. Alabileceği maksimum değer: 86399</summary>
         public static int ToSecondsSinceMidnight(this DateTime datetime) => (datetime.ToMinutesSinceMidnight() * 60) + datetime.Second;
-        /// <summary>Gece yarısından (00:00) itibaren geçen toplam dakikayı döner.</summary>
+        /// <summary>Gece yarısından (00:00) itibaren geçen toplam dakikayı döner. Alabileceği maksimum değer: 1439</summary>
         public static int ToMinutesSinceMidnight(this DateTime datetime) => (datetime.Hour * 60) + datetime.Minute;
         /// <summary>Verilen DateTime nesnesini Unix zaman damgası (milisaniye) biçiminde döndürür.</summary>
         /// <param name="datetime">Dönüştürülecek tarih/saat.</param>
