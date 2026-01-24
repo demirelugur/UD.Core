@@ -3,7 +3,7 @@
     /// <summary>
     /// T.C. Kimlik Kartı Kimlik Tipi
     /// </summary>
-    public enum Nvi_KimlikTypes : byte
+    public enum NVI_KimlikTypes : byte
     {
         /// <summary>
         /// Yeni Kimlik Kartı için uygun enum seçeneği

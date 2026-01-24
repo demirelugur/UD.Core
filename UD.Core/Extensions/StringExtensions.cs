@@ -86,6 +86,12 @@
         /// <returns><see langword="true"/>, eğer dize null veya boşsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsNullOrEmpty(this string value) => String.IsNullOrEmpty(value.ToStringOrEmpty());
         /// <summary>
+        /// Verilen dize değerinin null, boş veya yalnızca beyaz boşluk karakterlerinden (space, tab, newline vb.) oluşup oluşmadığını kontrol eder.
+        /// </summary>
+        /// <param name="value">Kontrol edilecek dize.</param>
+        /// <returns><see langword="true"/>, eğer dize null, boş veya yalnızca beyaz boşluk karakterlerinden oluşuyorsa; aksi takdirde <see langword="false"/>.</returns>
+        public static bool IsNullOrWhiteSpace(this string value) => String.IsNullOrWhiteSpace(value.ToStringOrEmpty());
+        /// <summary>
         /// Verilen dize değerinin sayısal bir değere dönüştürülüp dönüştürülemeyeceğini kontrol eder.
         /// </summary>
         /// <param name="value">Kontrol edilecek dize.</param>

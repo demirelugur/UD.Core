@@ -6,9 +6,7 @@
     using static UD.Core.Helper.GlobalConstants;
     public static class NumericExtensions
     {
-        /// <summary>
-        /// Unix zaman damgasını, yerel bir <see cref="DateTime"/> değerine dönüştürür.
-        /// </summary>
+        /// <summary>Unix zaman damgasını, yerel bir <see cref="DateTime"/> değerine dönüştürür.</summary>
         /// <param name="gettime">Unix zaman damgası (milisaniye cinsinden).</param>
         /// <returns>Dönüştürülen yerel <see cref="DateTime"/> değeri.</returns>
         public static DateTime ToJsDate(this long gettime) => DateTime.UnixEpoch.AddMilliseconds(Convert.ToDouble(gettime)).ToLocalTime();
@@ -26,9 +24,7 @@
             try { return DateTime.FromFileTimeUtc(filetime); }
             catch { return null; }
         }
-        /// <summary>
-        /// Verilen değerin geçerli bir T.C. Kimlik Numarası olup olmadığını kontrol eder.
-        /// <para>
+        /// <summary>Verilen değerin geçerli bir T.C. Kimlik Numarası olup olmadığını kontrol eder.<para>
         /// Doğrulama adımları:
         /// <list type="bullet">
         /// <item><description>11 haneli olmalıdır.</description></item>
@@ -57,9 +53,7 @@
             }
             return _r;
         }
-        /// <summary>
-        /// Verilen sayının geçerli bir T.C. Vergi Kimlik Numarası (VKN) olup olmadığını kontrol eder.
-        /// <para>
+        /// <summary>Verilen sayının geçerli bir T.C. Vergi Kimlik Numarası (VKN) olup olmadığını kontrol eder.<para>
         /// VKN doğrulama algoritması şu adımlarla çalışır:
         /// <list type="bullet">
         ///   <item><description>Eğer sayı 10 haneli değilse, başına sıfır(lar) eklenerek 10 haneye tamamlanır.</description></item>
@@ -77,7 +71,7 @@
             if (vkn > 0)
             {
                 var _vkn = vkn.ToString();
-                if (_vkn.Length < _maximumlength.vkn) { _vkn = _vkn.Replicate(_maximumlength.vkn, '0', 'l'); } // Not: 602883151(9 rakamlı) gibi değer gelirse başına 0602883151 yapabilmek için yazılmıştır
+                if (_vkn.Length < _maximumlength.vkn) { _vkn = _vkn.Replicate(_maximumlength.vkn, '0', 'l'); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
                 if (_vkn.Length == _maximumlength.vkn)
                 {
                     int i, t;
@@ -93,9 +87,9 @@
             }
             return _r;
         }
-        /// <summary>
-        /// Verilen sayının asal olup olmadığını kontrol eder.
-        /// </summary>
+        /// <summary> <paramref name="value"/> değeri T.C. Kimlik Numarası (TCK) veya Vergi Kimlik Numarası (VKN) ise <see langword="true"/> döner.</summary>
+        public static bool IsTCKNorVKN(this long value) => (value.IsTCKimlikNo() || value.IsVergiKimlikNo());
+        /// <summary>Verilen sayının asal olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek pozitif tamsayı.</param>
         /// <returns>Asal ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsPrimeNumber(this ulong value)
@@ -109,16 +103,12 @@
             for (_i = 3; _i <= _limit; _i += 2) { if ((value % _i) == 0) { return false; } }
             return true;
         }
-        /// <summary>
-        /// Bir decimal değeri, InvariantCulture kullanarak string&#39;e dönüştürür.
-        /// </summary>
+        /// <summary>Bir decimal değeri, InvariantCulture kullanarak string&#39;e dönüştürür.</summary>
         /// <param name="value">Dönüştürülecek <see cref="Decimal"/> değer.</param>
         /// <returns>Decimal değerin string temsilini döner.</returns>
         /// <remarks>Bu metodun ters işlemi için <code>Convert.ToDecimal(value, CultureInfo.InvariantCulture);</code> kullanılabilir.</remarks>
         public static string ToStringInvariantCulture(this decimal value) => value.ToString(CultureInfo.InvariantCulture);
-        /// <summary>
-        /// Verilen bir ondalık değeri belirtilen ondalık basamak sayısına yuvarlayarak string olarak döndürür. İsteğe bağlı olarak, yuvarlama yöntemi belirtilebilir.
-        /// </summary>
+        /// <summary>Verilen bir ondalık değeri belirtilen ondalık basamak sayısına yuvarlayarak string olarak döndürür. İsteğe bağlı olarak, yuvarlama yöntemi belirtilebilir.</summary>
         /// <param name="d">Yuvarlanacak <see cref="Decimal"/> değeri.</param>
         /// <param name="decimals">Yuvarlanacak ondalık basamak sayısı (varsayılan olarak 2).</param>
         /// <param name="midpointrounding">Yuvarlama yöntemi (varsayılan olarak <see cref="MidpointRounding.AwayFromZero"/>).</param>

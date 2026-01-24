@@ -32,6 +32,7 @@
             public const string yyyyMMdd_HHmmss = "yyyy-MM-dd HH:mm:ss";
             public const string yyyyMMdd_HHmm = "yyyy-MM-dd HH:mm";
             public const string yyyyMMdd = "yyyy-MM-dd";
+            public static readonly DateOnly sqlMinValue = new(1753, 1, 1);
             /// <summary>
             /// OLE Automation için başlangıç tarihi
             /// <para>new DateOnly(1899, 12, 30)</para>
