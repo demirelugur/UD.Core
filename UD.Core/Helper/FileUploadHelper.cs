@@ -40,12 +40,12 @@
             var _addfileany = this._addfiles.Count > 0;
             if (this._deldirectories.Count > 0)
             {
-                foreach (var item in this._deldirectories) { _file.DirectoryExiststhenDelete(item, true); }
+                foreach (var item in this._deldirectories) { _file.DirectoryExistsThenDelete(item, true); }
                 if (_delfileany || _addfileany) { await Task.Delay(300, cancellationtoken); }
             }
             if (_delfileany)
             {
-                foreach (var item in this._delfiles) { _file.FileExiststhenDelete(item); }
+                foreach (var item in this._delfiles) { _file.FileExistsThenDelete(item); }
                 if (_addfileany) { await Task.Delay(300, cancellationtoken); }
             }
             if (_addfileany)

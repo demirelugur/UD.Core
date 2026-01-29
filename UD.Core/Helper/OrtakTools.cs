@@ -32,13 +32,13 @@
             /// Verilen fiziksel dosya yolunda bir dosya varsa onu siler.
             /// </summary>
             /// <param name="physicallypath">Silinecek dosyanın fiziksel yolu.</param>
-            public static void FileExiststhenDelete(string physicallypath) { if (File.Exists(physicallypath)) { File.Delete(physicallypath); } }
+            public static void FileExistsThenDelete(string physicallypath) { if (File.Exists(physicallypath)) { File.Delete(physicallypath); } }
             /// <summary>
             /// Verilen klasör yolunda bir klasör varsa, isteğe bağlı olarak içindekilerle birlikte siler.
             /// </summary>
             /// <param name="physicallypath">Silinecek klasörün fiziksel yolu.</param>
             /// <param name="recursive">Eğer <see langword="true"/> verilirse, dizin ve altındaki tüm dosyalar ve alt dizinler silinir. <see langword="false"/> verilirse, dizin yalnızca boşsa silinir; aksi halde bir <see cref="IOException"/> fırlatılır.</param>
-            public static void DirectoryExiststhenDelete(string physicallypath, bool recursive) { if (Directory.Exists(physicallypath)) { Directory.Delete(physicallypath, recursive); } }
+            public static void DirectoryExistsThenDelete(string physicallypath, bool recursive) { if (Directory.Exists(physicallypath)) { Directory.Delete(physicallypath, recursive); } }
             /// <summary>
             /// Verilen fiziksel dosya yolunda klasör mevcut değilse, ilgili klasörü ve varsa üst dizinlerini oluşturur.
             /// </summary>
@@ -238,16 +238,21 @@
                 if (showfull) { return phonenumberTR.BeautifyPhoneNumberTR(); }
                 return (_try.TryPhoneNumberTR(phonenumberTR, out string _t) ? $"(**{_t.Substring(2, 1)}) {_t.Substring(3, 1)}**-*{_t.Substring(8, 2)}" : "");
             }
-            /// <summary>Verilen T.C. Kimlik numarasını maskeleme işlemi yapar.</summary>
-            /// <param name="tckn">Maske uygulanacak T.C. Kimlik numarası.</param>
-            /// <param name="showfull"><see langword="true"/> ise kimlik numarasının tamamı gösterilir; <see langword="false"/> ise kimlik numarasının ilk 3 ve son 2 hanesi açık,  aradaki 6 hane * ile gizlenmiş şekilde döner.</param>
-            /// <returns>Maske uygulanmış veya tam T.C. Kimlik numarası. Geçersiz ise boş string döner.</returns>
-            public static string MaskedTCKimlikNo(long tckn, bool showfull)
+            /// <summary>
+            /// Verilen sayısal kimlik numarasını (TCKN veya VKN) maskeler. TCKN olarak doğrulanırsa orta kısım 6 adet &#39;*&#39;, VKN olarak doğrulanırsa 5 adet &#39;*&#39; ile gizlenir. Eğer <paramref name="showfull"/> true ise numara olduğu gibi döndürülür. Geçerli bir TCKN veya VKN değilse boş string döndürülür.
+            /// </summary>
+            /// <param name="value">Maskelenecek kimlik numarası.</param>
+            /// <param name="showfull">true ise maskesiz tam numara döndürülür; false ise ilgili kısım maskelenir.</param>
+            /// <returns>Maskelenmiş veya tam kimlik numarası. Geçerli bir TCKN/VKN değilse boş string döner.</returns>
+            public static string MaskedTCKNorVKN(long value, bool showfull)
             {
-                if (!tckn.IsTCKimlikNo()) { return ""; }
-                var _t = tckn.ToString();
+                var count = 0;
+                if (value.IsTCKimlikNo()) { count = 6; }
+                else if (value.IsVergiKimlikNo()) { count = 5; }
+                if (count == 0) { return ""; }
+                var _t = value.ToString();
                 if (showfull) { return _t; }
-                return String.Concat(_t.Substring(0, 3), new String('*', 6), _t.Substring(9, 2));
+                return String.Concat(_t.Substring(0, 3), new('*', count), _t.Substring(9, 2));
             }
             /// <summary>Verilen metindeki Türkçe özel karakterleri (Ç, ç, Ğ, ğ, İ, ı, Ö, ö, Ş, ş, Ü, ü) karşılık gelen İngilizce karakterlerle (C, c, G, g, I, i, O, o, S, s, U, u) değiştirir. Eğer metin null ise, boş bir string döner.</summary>
             /// <param name="value">Türkçe karakterlerin değiştirileceği metin.</param>
