@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Linq.Expressions;
     using UD.Core.Helper;
+    using UD.Core.Helper.Paging;
     using UD.Core.Helper.Results;
     public static class IQueryableExtensions
     {
@@ -73,6 +74,26 @@
             Guard.UnSupportLanguage(dil, nameof(dil));
             if (dil == "en") { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxlength} characters!"); }
             throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxlength} karakterlik maksimum uzunluğu aşıyor!");
+        }
+        /// <summary> IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>
+        /// <typeparam name="T">Sorgu sonucundaki öğelerin tipi.</typeparam>
+        /// <param name="source">Sayfalanacak IQueryable veri kaynağı.</param>
+        /// <param name="page">İstenen sayfa numarası.</param>
+        /// <param name="size">Sayfa başına öğe sayısı.</param>
+        /// <param name="loadInfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
+        /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
+        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int page, int size, bool loadInfo = true, CancellationToken cancellationToken = default)
+        {
+            if (source == null) { return new(); }
+            PagingInfo? p = null;
+            if (loadInfo)
+            {
+                var totalCount = await source.CountAsync(cancellationToken);
+                var totalPage = Convert.ToInt32(Math.Ceiling(totalCount / Convert.ToDouble(size)));
+                p = new(totalCount, totalPage, page);
+            }
+            var items = await source.Paginate(page, size).ToArrayAsync(cancellationToken);
+            return new(page, size, items, p);
         }
     }
 }
