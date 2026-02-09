@@ -23,12 +23,11 @@
         /// </example>
         /// </para>
         /// </summary>
-        /// <typeparam name="T">Sayfalama yapılacak tür.</typeparam>
         /// <param name="source">Sayfalama işlemi yapılacak IQueryable kaynağı.</param>
         /// <param name="pagenumber">Sayfa numarası (1 tabanlı).</param>
         /// <param name="pagesize">Her sayfada gösterilecek kayıt sayısı.</param>
         /// <returns>Paginasyon yapılmış IQueryable kaynak.</returns>
-        public static IQueryable<T> Paginate<T>(this IQueryable<T> source, int pagenumber, int pagesize) where T : class
+        public static IQueryable<T> Paginate<T>(this IQueryable<T> source, int pagenumber, int pagesize)
         {
             Guard.CheckZeroOrNegative(pagenumber, nameof(pagenumber));
             return source.Skip((pagenumber - 1) * pagesize).Take(pagesize);
