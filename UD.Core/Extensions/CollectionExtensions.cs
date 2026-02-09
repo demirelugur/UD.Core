@@ -140,7 +140,7 @@
         /// <typeparam name="T">Koleksiyon tipi.</typeparam>
         /// <param name="values">Kontrol edilecek koleksiyon.</param>
         /// <returns>Boş veya null ise <see langword="true"/>, aksi halde <see langword="false"/> döner.</returns>
-        public static bool IsNullOrCountZero<T>(this ICollection<T> values) => (values == null || values.Count == 0);
+        public static bool IsNullOrCountZero<T>(this ICollection<T> values) => (values == null || values.Count == 0 || values.All(x => x == null));
         /// <summary>
         /// Başka bir koleksiyondan mevcut koleksiyona öğeleri topluca ekler. <see cref="List{T}"/> için optimize edilmiş bir yöntemdir.
         /// </summary>
