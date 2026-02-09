@@ -4,11 +4,10 @@
     using System;
     using System.Linq;
     using System.Net;
+
     public static class HttpContextExtensions
     {
-        /// <summary>
-        /// İstemcinin mobil bir cihaz olup olmadığını kontrol eder.
-        /// </summary>
+        /// <summary> İstemcinin mobil bir cihaz olup olmadığını kontrol eder. </summary>
         /// <param name="context">HttpContext nesnesi.</param>
         /// <returns>Mobil bir cihaz ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsMobileDevice(this HttpContext context)
@@ -17,17 +16,21 @@
             if (_useragent != "") { foreach (var item in new string[] { "android", "iphone", "ipad", "mobile" }) { if (_useragent.Contains(item)) { return true; } } }
             return false;
         }
-        /// <summary>
-        /// Geçerli HTTP isteğine ait tam URL&#39;yi (scheme ve host dahil) döndürür. İsteğe bağlı olarak, URL&#39;ye yol (path) ve sorgu stringi (query string) de dahil edilebilir.
-        /// </summary>
-        /// <param name="context">Geçerli HTTP isteğini içeren HttpContext.</param>
-        /// <param name="includespathandquerystring"><see langword="true"/> ise, URL&#39;nin path ve query string bölümleri de dahil edilir; <see langword="false"/> ise, yalnızca scheme ve host kısmı döndürülür.</param>
-        /// <returns>Geçerli isteğe ait tam bir Uri nesnesi.</returns>
-        public static Uri ToAbsoluteUri(this HttpContext context, bool includespathandquerystring)
+        /// <summary> Mevcut HTTP isteğinin şema (http/https) ve host bilgisini kullanarak uygulamanın temel (base) adresini Uri olarak döner. </summary>
+        public static Uri GetBaseUri(this HttpContext context)
         {
-            var _r = context.Request;
-            if (includespathandquerystring) { return new($"{_r.Scheme}://{_r.Host.Value}{(_r.Path.Value)}{(_r.QueryString.Value)}"); }
-            return new($"{_r.Scheme}://{_r.Host.Value}");
+            var request = context.Request;
+            return new($"{request.Scheme}://{(request.Host.HasValue ? request.Host.Value : "")}");
+        }
+        /// <summary> Mevcut HTTP isteğinin tam adresini (base adres + path + query string) Uri formatında döner. </summary>
+        public static Uri GetFullRequestUri(this HttpContext context)
+        {
+            var request = context.Request;
+            return new(String.Concat(
+                context.GetBaseUri().ToString().TrimEnd('/'),
+                request.Path.HasValue ? request.Path.Value : "",
+                request.QueryString.HasValue ? request.QueryString.Value : ""
+            ));
         }
         /// <summary>
         /// Bearer token&#39;ı HttpContext&#39;den alır.

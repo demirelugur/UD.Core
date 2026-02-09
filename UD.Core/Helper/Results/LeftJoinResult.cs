@@ -8,7 +8,7 @@
     public sealed class LeftJoinResult<T, Y>
     {
         private T _Left;
-        private bool _Righthasvalue;
+        private bool _Hasright;
         private Y _Right;
         /// <summary>
         /// Sol tarafın verisini alır veya ayarlar.
@@ -17,7 +17,7 @@
         /// <summary>
         /// Sağ tarafın var olup olmadığını gösterir.
         /// </summary>
-        public bool righthasvalue { get { return _Righthasvalue; } set { _Righthasvalue = value; } }
+        public bool hasright { get { return _Hasright; } set { _Hasright = value; } }
         /// <summary>
         /// Sağ tarafın verisini alır veya ayarlar.
         /// </summary>

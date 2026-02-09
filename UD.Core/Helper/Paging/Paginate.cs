@@ -4,25 +4,25 @@
     /// <summary> Sayfalanmış veri koleksiyonunu temsil eden arayüz.</summary>
     public interface IPaginate<T>
     {
-        int Page { get; }
-        int Size { get; }
-        T[] Items { get; }
-        PagingInfo? Info { get; }
+        int page { get; }
+        int size { get; }
+        T[] items { get; }
+        PagingInfo? info { get; }
     }
     /// <summary> Sayfalanmış veri koleksiyonunun somut implementasyonu. </summary>
     public class Paginate<T> : IPaginate<T>
     {
+        public int page { get; set; }
+        public int size { get; set; }
+        public T[] items { get; set; }
+        public PagingInfo? info { get; set; }
         public Paginate() : this(default, default, default, default) { }
         public Paginate(int page, int size, T[] items, PagingInfo? info)
         {
-            this.Page = page;
-            this.Size = size;
-            this.Items = items ?? Array.Empty<T>();
-            this.Info = info;
+            this.page = page;
+            this.size = size;
+            this.items = items ?? Array.Empty<T>();
+            this.info = info;
         }
-        public int Page { get; set; }
-        public int Size { get; set; }
-        public T[] Items { get; set; }
-        public PagingInfo? Info { get; set; }
     }
 }
