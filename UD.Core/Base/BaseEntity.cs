@@ -1,4 +1,4 @@
-﻿namespace FaturaBilgileri.DAL.Entities
+﻿namespace UD.Core.Base
 {
     using System;
     using System.ComponentModel.DataAnnotations;
