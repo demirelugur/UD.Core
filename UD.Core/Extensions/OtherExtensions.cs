@@ -132,12 +132,6 @@
             return _result;
         }
         /// <summary>
-        /// Bir Guid&#39;i SQL UNIQUEIDENTIFIER biçimine dönüştürür.
-        /// </summary>
-        /// <param name="guid">Dönüştürülecek Guid.</param>
-        /// <returns>Guid&#39;in SQL biçimindeki string temsilini döner.</returns>
-        public static string ToSqlExpressionUniqueIdentifier(this Guid guid) => $"CONVERT(UNIQUEIDENTIFIER, '{guid.ToString().ToUpper()}')";
-        /// <summary>
         /// Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.
         /// </summary>
         /// <param name="type">Dönüştürülecek <see cref="SqlDbType"/> enum değeri.</param>

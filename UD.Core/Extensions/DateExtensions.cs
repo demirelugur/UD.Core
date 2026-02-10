@@ -4,18 +4,10 @@
     using static UD.Core.Helper.GlobalConstants;
     public static class DateExtensions
     {
-        /// <summary>Verilen <see cref="DateOnly"/> türündeki tarihi, SQL Server tarafından anlaşılabilir bir CONVERT(DATE, ...) ifadesine dönüştürür.</summary>
-        /// <param name="date">SQL&#39;e dönüştürülecek tarih değeri.</param>
-        /// <returns>Örnek çıktı: CONVERT(DATE, &#39;2000-01-01&#39;)</returns>
-        public static string ToSqlExpressionDate(this DateOnly date) => $"CONVERT(DATE, '{date.ToString(_date.yyyyMMdd)}')";
         /// <summary>Belirtilen <see cref="DateTime"/> nesnesini yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesine dönüştürür.</summary>
         /// <param name="datetime">Dönüştürülecek <see cref="DateTime"/> nesnesi.</param>
         /// <returns>Yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesi.</returns>
         public static DateOnly ToDateOnly(this DateTime datetime) => DateOnly.FromDateTime(datetime);
-        /// <summary>Verilen <see cref="DateTime"/> türündeki tarih ve saat bilgisini, SQL Server tarafından anlaşılabilir bir CONVERT(DATETIME, ...) ifadesine dönüştürür.</summary>
-        /// <param name="datetime">SQL&#39;e dönüştürülecek tarih ve saat değeri.</param>
-        /// <returns>Örnek çıktı: CONVERT(DATETIME, &#39;2025-10-16 09:45:32:123&#39;)</returns>
-        public static string ToSqlExpressionDateTime(this DateTime datetime) => $"CONVERT(DATETIME, '{datetime.ToString("yyyy-MM-dd HH:mm:ss:fff")}')";
         /// <summary>Verilen DateTime nesnesini OADate tamsayı biçimine dönüştürür.</summary>
         /// <param name="datetime">Dönüştürülecek tarih/saat.</param>
         /// <returns>OADate tamsayı değeri.</returns>
