@@ -1,8 +1,8 @@
 ﻿namespace UD.Core.Auditing
 {
-    using FaturaBilgileri.DAL.Entities;
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
+    using UD.Core.Base;
     public interface IHasCreationTime
     {
         DateTime CreationTime { get; set; }

@@ -284,7 +284,7 @@
         /// <returns>Sütun değeri başarıyla dönüştürülebilirse <typeparamref name="TKey"/> tipinde değer, aksi durumda varsayılan değer döner.</returns>
         public static TKey ParseOrDefault<TKey>(this IDataReader reader, string key)
         {
-            if (reader == null || key.IsNullOrEmpty()) { return default; }
+            if (reader == null || key.IsNullOrEmpty()) { return default; }  
             try
             {
                 var _value = reader[key];

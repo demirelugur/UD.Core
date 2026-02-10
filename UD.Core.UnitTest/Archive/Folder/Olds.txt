@@ -1,1 +1,77 @@
-﻿
+﻿public static class ApiResultExtensions
+{
+    /// <summary>
+    /// Verilen hata mesajını başarısız sonucu temsil edecek şekilde döndürür.
+    /// </summary>
+    public static ApiResult<T> ReturnFailed<T>(this string error) => new string[] { error }.ReturnFailed<T>();
+    /// <summary>
+    /// Verilen hata mesajlarını başarısız sonucu temsil edecek şekilde döndürür.
+    /// </summary>
+    public static ApiResult<T> ReturnFailed<T>(this string[] errors) => new(default, false, errors);
+    /// <summary>
+    /// Verilen hata mesajını başarısız sonucu temsil edecek şekilde döndürür.
+    /// </summary>
+    public static ApiResult<object[]> ReturnFailedObjectArray(this string error) => new string[] { error }.ReturnFailedObjectArray();
+    /// <summary>
+    /// Verilen hata mesajlarını başarısız sonucu temsil edecek şekilde döndürür.
+    /// </summary>
+    public static ApiResult<object[]> ReturnFailedObjectArray(this string[] errors) => new(default, false, errors);
+    /// <summary>
+    /// <paramref name="data"/> verisini önbelleğe ekler ve başarılı işlem sonucunu (<see cref="ApiResult{T}"/>) döndürür.
+    /// </summary>
+    /// <typeparam name="T">Önbelleğe eklenecek verinin tipi.</typeparam>
+    /// <param name="memorycache">Önbellek nesnesi.</param>
+    /// <param name="cachekey">Önbelleğe eklenecek değerin anahtarı.</param>
+    /// <param name="data">Önbelleğe eklenecek veri.</param>
+    /// <param name="timespan">Önbellekte tutulma süresi. Boş bırakılırsa varsayılan olarak 1 dakika kullanılır.</param>
+    /// <returns>Başarılı işlem sonucunu temsil eden <see cref="ApiResult{T}"/> nesnesi.</returns>
+    public static ApiResult<T> SetCacheAndReturnSuccess<T>(this IMemoryCache memorycache, object cachekey, T data, TimeSpan? timespan = null)
+    {
+        memorycache.Set(cachekey, data, timespan ?? TimeSpan.FromMinutes(1));
+        return new(data, true, default);
+    }
+}
+public class ApiResult
+{
+    public static readonly ApiResult set_Success = new(true, default);
+    public bool status { get; set; }
+    public string[] errors { get; set; }
+    public ApiResult() : this(default, default) { }
+    public ApiResult(bool status, string[] errors)
+    {
+        this.status = status;
+        this.errors = (status ? Array.Empty<string>() : (errors.IsNullOrCountZero() ? new string[] { RetMesaj.hata.GetDescriptionFromEnum() } : errors));
+    }
+    public static ApiResult set_Failed(params string[] errors) => new(false, errors);
+}
+/// <summary>API response dönüşleri için oluşturulmuş yardımcı class</summary>
+public class ApiResult<T> : ApiResult
+{
+    public T response { get; set; }
+    public ApiResult() : this(default, default, default) { }
+    public ApiResult(T response, bool status, string[] errors) : base(status, errors)
+    {
+        this.response = (status ? response : this.getcustomdefault());
+    }
+    private T getcustomdefault()
+    {
+        var _t = typeof(T);
+        if (_t == typeof(string)) { return (T)(object)String.Empty; }
+        if (_t.IsArray) { return (T)(object)Array.CreateInstance(_t.GetElementType(), 0); }
+        if (_t.IsGenericType && _t.GetGenericTypeDefinition() == typeof(Dictionary<,>)) { return (T)Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(_t.GetGenericArguments())); }
+        return default(T);
+    }
+}
+/// <summary>API response dönüşleri için oluşturulmuş yardımcı class</summary>
+public class PagedApiResult<T> : ApiResult
+{
+    public T[] response { get; set; }
+    public long totalcount { get; set; }
+    public PagedApiResult() : this(default, default, default, default) { }
+    public PagedApiResult(T[] response, long totalcount, bool status, string[] errors) : base(status, errors)
+    {
+        this.response = response ?? Array.Empty<T>();
+        this.totalcount = totalcount;
+    }
+    public ApiResult<T[]> ToApiResult() => new(this.response, this.status, this.errors);
+}

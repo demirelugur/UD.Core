@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Base
 {
-    using FaturaBilgileri.DAL.Entities;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
