@@ -82,9 +82,9 @@
         /// <param name="size">Sayfa başına öğe sayısı.</param>
         /// <param name="loadinfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
-        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int page, int size, bool loadinfo = true, CancellationToken cancellationToken = default)
+        public static async Task<IPaginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int page, int size, bool loadinfo = true, CancellationToken cancellationToken = default)
         {
-            if (source == null) { return new(); }
+            if (source == null) { return new Paginate<T>(); }
             PagingInfo? p = null;
             if (loadinfo)
             {
@@ -93,7 +93,7 @@
                 p = new(totalCount, totalPage, page);
             }
             var items = await source.Paginate(page, size).ToArrayAsync(cancellationToken);
-            return new(page, size, items, p);
+            return new Paginate<T>(page, size, items, p);
         }
     }
 }
