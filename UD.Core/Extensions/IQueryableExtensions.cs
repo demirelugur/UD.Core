@@ -20,18 +20,19 @@
         /// <para>
         /// <example>
         /// SQL Örneği: <br/>
-        /// SELECT * FROM [dbo].[LoremIpsum] ORDER BY [Key] OFFSET ((@pagenumber - 1) * @pagesize) ROWS FETCH NEXT @pagesize ROWS ONLY
+        /// SELECT * FROM [dbo].[LoremIpsum] ORDER BY [Key] OFFSET ((@pagenumber - 1) * @size) ROWS FETCH NEXT @size ROWS ONLY
         /// </example>
         /// </para>
         /// </summary>
         /// <param name="source">Sayfalama işlemi yapılacak IQueryable kaynağı.</param>
         /// <param name="pagenumber">Sayfa numarası (1 tabanlı).</param>
-        /// <param name="pagesize">Her sayfada gösterilecek kayıt sayısı.</param>
+        /// <param name="size">Her sayfada gösterilecek kayıt sayısı.</param>
         /// <returns>Paginasyon yapılmış IQueryable kaynak.</returns>
-        public static IQueryable<T> Paginate<T>(this IQueryable<T> source, int pagenumber, int pagesize)
+        public static IQueryable<T> Paginate<T>(this IQueryable<T> source, int pagenumber, int size)
         {
-            Guard.CheckZeroOrNegative(pagenumber, nameof(pagenumber));
-            return source.Skip((pagenumber - 1) * pagesize).Take(pagesize);
+            pagenumber = Math.Max(1, pagenumber);
+            size = Math.Max(1, size);
+            return source.Skip((pagenumber - 1) * size).Take(size);
         }
         /// <summary>İki IQueryable arasında 1-1 sol birleştirme (left join) işlemi gerçekleştirir.</summary>
         /// <typeparam name="TLeft">Sol taraftaki nesne türü.</typeparam>
@@ -78,22 +79,22 @@
         /// <summary> IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>
         /// <typeparam name="T">Sorgu sonucundaki öğelerin tipi.</typeparam>
         /// <param name="source">Sayfalanacak IQueryable veri kaynağı.</param>
-        /// <param name="page">İstenen sayfa numarası. (1 tabanlı)</param>
+        /// <param name="pagenumber">İstenen sayfa numarası. (1 tabanlı)</param>
         /// <param name="size">Sayfa başına öğe sayısı.</param>
         /// <param name="loadinfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
-        public static async Task<IPaginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int page, int size, bool loadinfo = true, CancellationToken cancellationToken = default)
+        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pagenumber, int size, bool loadinfo = true, CancellationToken cancellationToken = default)
         {
-            if (source == null) { return new Paginate<T>(); }
+            if (source == null) { return new(); }
             PagingInfo? p = null;
             if (loadinfo)
             {
                 var totalCount = await source.CountAsync(cancellationToken);
                 var totalPage = Convert.ToInt32(Math.Ceiling(totalCount / Convert.ToDouble(size)));
-                p = new(totalCount, totalPage, page);
+                p = new(totalCount, totalPage, pagenumber);
             }
-            var items = await source.Paginate(page, size).ToArrayAsync(cancellationToken);
-            return new Paginate<T>(page, size, items, p);
+            var items = await source.Paginate(pagenumber, size).ToArrayAsync(cancellationToken);
+            return new(pagenumber, size, items, p);
         }
     }
 }

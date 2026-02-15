@@ -7,7 +7,7 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\UD.Core.xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <PackageId>UD.Core</PackageId>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
     <Authors>Uğur DEMİREL</Authors>
     <Company>UD</Company>
     <Product>UD.Core</Product>
@@ -24,6 +24,7 @@
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.0.0" />
     <PackageReference Include="Bogus" Version="35.6.5" />
     <PackageReference Include="Dapper.SqlBuilder" Version="2.1.66" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.3" />
@@ -33,5 +34,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Drawing.Common" Version="10.0.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.7.1" />
   </ItemGroup>
 </Project>

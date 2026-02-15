@@ -7,7 +7,6 @@
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
     using System.Data;
     using System.Diagnostics;
     using System.Linq.Expressions;
@@ -18,61 +17,6 @@
     using static UD.Core.Helper.OrtakTools;
     public static class OtherExtensions
     {
-        /// <summary>
-        /// Belirtilen varlığın (entity) bir veya daha fazla özelliğinin değiştirilip değiştirilmediğini kontrol eder.
-        /// </summary>
-        /// <typeparam name="T">Kontrol edilecek varlık türü.</typeparam>
-        /// <param name="dbcontext">DbContext örneği.</param>
-        /// <param name="entity">Değişiklik durumu kontrol edilecek varlık.</param>
-        /// <param name="expressions">Kontrol edilecek özelliklerin ifadeleri.</param>
-        /// <returns>Değiştirilmişse <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsModified<T>(this DbContext dbcontext, T entity, params Expression<Func<T, object>>[] expressions) where T : class
-        {
-            var _entry = dbcontext.Entry(entity);
-            var _ie = typeof(T).GetProperties().Where(x => x.IsMapped() && _entry.Property(x.Name).IsModified).ToArray();
-            var _columns = (expressions ?? Array.Empty<Expression<Func<T, object>>>()).Select(x => x.GetExpressionName()).ToArray();
-            if (_columns.Length == 0) { return _ie.Length > 0; }
-            return _ie.Any(x => _columns.Contains(x.Name));
-        }
-        /// <summary>
-        /// Belirli bir bileşik anahtar(composite key) özelliği ile eski varlığın güncellenmesini sağlar.
-        /// </summary>
-        public static async Task<T> SetCompositeKeyAsync<T, CompositeKey>(this DbContext dbcontext, bool issavechanges, T oldentity, Expression<Func<T, CompositeKey>> compositekey, CompositeKey compositekeynewvalue, string dil, CancellationToken cancellationtoken = default) where T : class, new()
-        {
-            var _t = typeof(T);
-            var _tablename = _t.GetTableName(false);
-            var _c = compositekey.GetExpressionName();
-            var _props = _t.GetProperties().Where(x => x.IsMapped()).Select(x => new
-            {
-                name = x.Name,
-                setcolumn = x.Name == _c,
-                iscompositekey = x.IsPK() && x.GetDatabaseGeneratedOption() == DatabaseGeneratedOption.None
-            }).ToArray();
-            Guard.UnSupportLanguage(dil, nameof(dil));
-            if (_props.Where(x => x.iscompositekey).Count() < 2)
-            {
-                if (dil == "en") { throw new KeyNotFoundException($"The \"{_tablename}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
-                throw new KeyNotFoundException($"İşleme devam edebilmek için \"{_tablename}\" tablosunda en az 2 özelliğin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" içermesi gerekmektedir!");
-            }
-            if (_props.Any(x => x.setcolumn && x.iscompositekey))
-            {
-                var _newentity = new T();
-                var _entry = dbcontext.Entry(oldentity);
-                var _dbset = dbcontext.Set<T>();
-                _dbset.Attach(oldentity);
-                foreach (var item in _props.Select(x => new
-                {
-                    x.name,
-                    x.setcolumn
-                }).ToArray()) { _other.SetPropertyValue(_newentity, item.name, (item.setcolumn ? compositekeynewvalue : _entry.Property(item.name).OriginalValue), dil); }
-                await _dbset.AddAsync(_newentity, cancellationtoken);
-                _dbset.Remove(oldentity);
-                if (issavechanges) { await dbcontext.SaveChangesAsync(cancellationtoken); }
-                return _newentity;
-            }
-            if (dil == "en") { throw new Exception($"The property \"{_c}\" in table \"{_tablename}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
-            throw new Exception($"\"{_tablename}\" tablosundaki \"{_c}\" özelliğinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
-        }
         /// <summary>
         /// Verilen e-Posta adresindeki &quot;@&quot; karakterini &quot;[at]&quot; ile değiştirir.
         /// </summary>

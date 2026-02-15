@@ -75,3 +75,128 @@ public class PagedApiResult<T> : ApiResult
     }
     public ApiResult<T[]> ToApiResult() => new(this.response, this.status, this.errors);
 }
+/// <summary>
+/// Generic bir repository arayüzü.
+/// </summary>
+/// <typeparam name="T">Repository tarafından yönetilecek entity türü.</typeparam>
+/// <typeparam name="TContext">DbContext türü.</typeparam>
+public interface IGenericRepository<T, TContext> where T : class where TContext : DbContext
+{
+    TContext Context { get; }
+    DbSet<T> DbSet { get; }
+    Task DeleteAsync(T entity, CancellationToken cancellationtoken = default);
+    Task DeleteByKeyAsync(CancellationToken cancellationtoken, params object[] keyvalues);
+    Task DeleteByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationtoken = default);
+    Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationtoken = default);
+}
+/// <summary>
+/// Generic bir repository&#39;nin temel implementasyonu.
+/// </summary>
+/// <typeparam name="T">Repository tarafından yönetilecek entity türü.</typeparam>
+/// <typeparam name="TContext">DbContext türü.</typeparam>
+public abstract class BaseGenericRepository<T, TContext> : IGenericRepository<T, TContext> where T : class where TContext : DbContext, new()
+{
+    public BaseGenericRepository(TContext context)
+    {
+        this.Context = context;
+    }
+    public TContext Context { get; }
+    public DbSet<T> DbSet => this.Context.Set<T>();
+    public virtual Task DeleteAsync(T entity, CancellationToken cancellationtoken = default) // Not: cancellationtoken kullanılmasa da, override edilen yerlerde gerektiğinde kullanılabilmesi için eklenmesi gerekiyor.
+    {
+        if (entity != null)
+        {
+            if (this.Context.Entry(entity).State == EntityState.Detached) { this.DbSet.Attach(entity); }
+            this.DbSet.Remove(entity);
+        }
+        return Task.CompletedTask;
+    }
+    public async Task DeleteByKeyAsync(CancellationToken cancellationtoken, params object[] keyvalues) => await this.DeleteAsync(await this.DbSet.FindAsync(keyvalues, cancellationtoken), cancellationtoken);
+    public async Task DeleteByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationtoken = default) => await this.DeleteRangeAsync(await this.DbSet.Where(predicate).ToArrayAsync(cancellationtoken), cancellationtoken);
+    public async Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationtoken = default)
+    {
+        if (entities != null) { foreach (var entity in entities) { await this.DeleteAsync(entity, cancellationtoken); } }
+    }
+}
+public interface IUnitOfWork<TContext> where TContext : DbContext
+{
+    TContext Context { get; }
+    IDapperHelper Dapper { get; }
+    DbConnection GetDbConnection();
+    Task<SqlServerProperties> ServerPropertyAsync(CancellationToken cancellationtoken = default);
+    Task<int> ExecuteRawAsync(string query, object parameters, CancellationToken cancellationtoken = default);
+    Task<int> TableReseedAsync(bool isdebug, CancellationToken cancellationtoken = default, params Type[] mappedtables);
+}
+public class BaseUnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
+{
+    /*
+    IDisposable
+    #region Dispose
+    private bool _disposed;
+    ~BaseUnitOfWork()
+    {
+        this.Dispose(false);
+    }
+    public void Dispose()
+    {
+        this.Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing) { this.Context.Dispose(); }
+            _disposed = true;
+        }
+    }
+    #endregion
+    */
+    public BaseUnitOfWork(TContext context)
+    {
+        this.Context = context;
+    }
+    public TContext Context { get; }
+    public IDapperHelper Dapper => new DapperHelper(this.Context);
+    public DbConnection GetDbConnection() => this.Context.Database.GetDbConnection();
+    public Task<SqlServerProperties> ServerPropertyAsync(CancellationToken cancellationtoken = default) => this.Context.Database.SqlQueryRaw<SqlServerProperties>(SqlServerProperties.query()).FirstOrDefaultAsync(cancellationtoken);
+    public Task<int> ExecuteRawAsync(string sql, object parameters, CancellationToken cancellationtoken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, _to.ToSqlParameterFromObject(parameters), cancellationtoken);
+    /// <summary>
+    /// Identity (sıralı artan) sayısal PK değerine sahip tablolarda kimlik değerini resetlemek için kullanılan metot.
+    /// <code>DBCC CHECKIDENT (&#39;[dbo].[LoremIpsum]&#39;, RESEED, 0)</code>
+    /// </summary>
+    public Task<int> TableReseedAsync(bool isdebug, CancellationToken cancellationtoken = default, params Type[] mappedtables)
+    {
+        mappedtables = mappedtables ?? Array.Empty<Type>();
+        if (isdebug || mappedtables.Length == 0 || !mappedtables.All(x => x.IsMappedTable())) { return Task.FromResult(0); }
+        var _sb = new StringBuilder();
+        var _index = 0;
+        foreach (var type in mappedtables)
+        {
+            var _pkinfo = this.getprimarykeyinfo(type);
+            if (_pkinfo.columnname == "" || _pkinfo.sqldbtypename == "") { continue; }
+            var _tablename = type.GetTableName(true);
+            var _variablename = $"@MAXID_{_index}";
+            _sb.AppendLine($"DECLARE {_variablename} {_pkinfo.sqldbtypename}");
+            _sb.AppendLine($"SELECT {_variablename} = MAX([{_pkinfo.columnname}]) FROM {_tablename}");
+            _sb.AppendLine($"SET {_variablename} = ISNULL({_variablename}, 0)");
+            _sb.AppendLine($"DBCC CHECKIDENT ('{_tablename}', RESEED, {_variablename})");
+            _index++;
+        }
+        if (_sb.Length == 0) { return Task.FromResult(0); }
+        return this.ExecuteRawAsync(_sb.ToString(), null, cancellationtoken);
+    }
+    private (string columnname, string sqldbtypename) getprimarykeyinfo(Type mappedtabletype)
+    {
+        if (_try.TryTableisKeyAttribute(mappedtabletype, out PropertyInfo[] _pis) && _pis.Length == 1 && _pis[0].IsPK() && _pis[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
+        {
+            var _propertytype = _pis[0].PropertyType;
+            if (_propertytype.IsEnum) { _propertytype = Enum.GetUnderlyingType(_propertytype); }
+            if (_propertytype == typeof(byte)) { return (_pis[0].GetColumnName(), "TINYINT"); }
+            if (_propertytype == typeof(short)) { return (_pis[0].GetColumnName(), "SMALLINT"); }
+            if (_propertytype == typeof(int)) { return (_pis[0].GetColumnName(), "INT"); }
+            if (_propertytype == typeof(long)) { return (_pis[0].GetColumnName(), "BIGINT"); }
+        }
+        return ("", "");
+    }
+}
