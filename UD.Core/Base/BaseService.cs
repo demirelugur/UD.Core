@@ -57,12 +57,7 @@
             var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
             return entity == null ? null : this.mapper.Map<TReturnDto>(entity);
         }
-        public virtual Task<TReturnDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default)
-        {
-            ArgumentNullException.ThrowIfNull(searchDto);
-            var query = ApplyFiltering(this.DbSet, searchDto);
-            return searchDto.Paginate(query).ProjectTo<TReturnDto>(this.mapper.ConfigurationProvider).ToArrayAsync(cancellationToken);
-        }
+        public virtual async Task<TReturnDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default) => (await this.GetAllPaginateAsync(searchDto, false, cancellationToken)).items;
         public virtual Task<Paginate<TReturnDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(searchDto);
@@ -79,8 +74,12 @@
             ArgumentNullException.ThrowIfNull(insertDto);
             var entity = this.mapper.Map<TEntity>(insertDto);
             await this.DbSet.AddAsync(entity, cancellationToken);
-            if (autoSave) { await this.context.SaveChangesAsync(cancellationToken); }
-            return this.GetKeyValue(entity);
+            if (autoSave)
+            {
+                await this.context.SaveChangesAsync(cancellationToken);
+                return this.GetKeyValue(entity);
+            }
+            return default;
         }
         public virtual async Task UpdateAsync(TKey id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
