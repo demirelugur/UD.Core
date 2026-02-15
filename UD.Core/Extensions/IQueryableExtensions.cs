@@ -89,9 +89,9 @@
             PagingInfo? p = null;
             if (loadinfo)
             {
-                var totalCount = await source.CountAsync(cancellationToken);
-                var totalPage = Convert.ToInt32(Math.Ceiling(totalCount / Convert.ToDouble(size)));
-                p = new(totalCount, totalPage, pagenumber);
+                var totalcount = await source.CountAsync(cancellationToken);
+                var totalpage = Convert.ToInt32(Math.Ceiling(totalcount / Convert.ToDouble(size)));
+                p = new(totalcount, totalpage, pagenumber);
             }
             var items = await source.Paginate(pagenumber, size).ToArrayAsync(cancellationToken);
             return new(pagenumber, size, items, p);

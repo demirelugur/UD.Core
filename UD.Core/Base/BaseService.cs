@@ -57,12 +57,11 @@
             var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
             return entity == null ? null : this.mapper.Map<TReturnDto>(entity);
         }
-        public virtual async Task<TReturnDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default)
+        public virtual Task<TReturnDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(searchDto);
             var query = ApplyFiltering(this.DbSet, searchDto);
-            var entities = await searchDto.Paginate(query).ToArrayAsync(cancellationToken);
-            return this.mapper.Map<TReturnDto[]>(entities);
+            return searchDto.Paginate(query).ProjectTo<TReturnDto>(this.mapper.ConfigurationProvider).ToArrayAsync(cancellationToken);
         }
         public virtual Task<Paginate<TReturnDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default)
         {
@@ -115,16 +114,21 @@
         }
         public virtual async Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationtoken = default)
         {
-            if (entities != null) { foreach (var entity in entities) { await this.DeleteAsync(entity, autoSave, cancellationtoken); } }
+            if (entities != null)
+            {
+                foreach (var entity in entities) { await this.DeleteAsync(entity, false, cancellationtoken); }
+                if (autoSave) { await this.context.SaveChangesAsync(cancellationtoken); }
+            }
         }
         protected virtual TKey GetKeyValue(TEntity entity)
         {
-            var properties = this.context.Model.FindEntityType(typeof(TEntity))?.FindPrimaryKey()?.Properties;
+            var t = typeof(TEntity);
+            var properties = this.context.Model.FindEntityType(t)?.FindPrimaryKey()?.Properties;
             var keyname = (properties != null && properties.Count > 0) ? properties[0].Name : "";
             if (keyname.IsNullOrEmpty()) { throw new InvalidOperationException("PK not found."); }
-            var property = typeof(TEntity).GetProperty(keyname);
-            if (property == null) { throw new InvalidOperationException($"Property \"{keyname}\" not found on {typeof(TEntity).Name}."); }
-            return (TKey)property.GetValue(entity)!;
+            var property = t.GetProperty(keyname);
+            if (property == null) { throw new InvalidOperationException($"Property \"{keyname}\" not found on {t.Name}."); }
+            return (TKey)property.GetValue(entity);
         }
         public void Dispose() => this.context.Dispose();
     }
