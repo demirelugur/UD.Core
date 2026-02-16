@@ -9,7 +9,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Paging;
     using static UD.Core.Helper.OrtakTools;
-    public interface IBaseService<TContext, TEntity, TKey, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>
+    public interface IBaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
     where TReturnDto : class
@@ -21,18 +21,13 @@
         DbConnection GetDbConnection();
         IQueryable<T> SqlQueryRaw<T>(string sql, object parameters);
         Task<int> ExecuteSqlRawAsync(string sql, object parameters, CancellationToken cancellationtoken = default);
-        Task<TReturnDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
         Task<TReturnDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default);
         Task<Paginate<TReturnDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default);
-        Task<TKey> InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task UpdateAsync(TKey id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task DeleteByIdAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByPredicateAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationtoken = default);
         Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationtoken = default);
     }
-    /// <summary> Entity Framework Core tabanlı uygulamalarda temel CRUD (Ekle, Getir, Güncelle, Sil) işlemlerini ve listeleme/sayfalama süreçlerini yöneten generic bir servis sınıfıdır. </summary>
-    public abstract class BaseService<TContext, TEntity, TKey, TReturnDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TKey, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>, IDisposable
+    public abstract class BaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>, IDisposable
     where TContext : DbContext
     where TEntity : class
     where TReturnDto : class
@@ -52,11 +47,6 @@
         public DbConnection GetDbConnection() => this.context.Database.GetDbConnection();
         public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.context.Database.SqlQueryRaw<T>(sql, _to.ToSqlParameterFromObject(parameters));
         public Task<int> ExecuteSqlRawAsync(string sql, object parameters, CancellationToken cancellationtoken = default) => this.context.Database.ExecuteSqlRawAsync(sql, _to.ToSqlParameterFromObject(parameters), cancellationtoken);
-        public virtual async Task<TReturnDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
-        {
-            var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
-            return entity == null ? null : this.mapper.Map<TReturnDto>(entity);
-        }
         public virtual async Task<TReturnDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default) => (await this.GetAllPaginateAsync(searchDto, false, cancellationToken)).items;
         public virtual Task<Paginate<TReturnDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default)
         {
@@ -69,28 +59,6 @@
             }
             return query.ProjectTo<TReturnDto>(this.mapper.ConfigurationProvider).ToPagedListAsync(searchDto.pagenumber, searchDto.size, loadinfo, cancellationToken);
         }
-        public virtual async Task<TKey> InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-            ArgumentNullException.ThrowIfNull(insertDto);
-            var entity = this.mapper.Map<TEntity>(insertDto);
-            await this.DbSet.AddAsync(entity, cancellationToken);
-            if (autoSave)
-            {
-                await this.context.SaveChangesAsync(cancellationToken);
-                return this.GetKeyValue(entity);
-            }
-            return default;
-        }
-        public virtual async Task UpdateAsync(TKey id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-            ArgumentNullException.ThrowIfNull(updateDto);
-            var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
-            if (entity != null)
-            {
-                this.mapper.Map(updateDto, entity);
-                if (autoSave) { await this.context.SaveChangesAsync(cancellationToken); }
-            }
-        }
         public virtual async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (entity != null)
@@ -99,11 +67,6 @@
                 this.DbSet.Remove(entity);
                 if (autoSave) { await this.context.SaveChangesAsync(cancellationToken); }
             }
-        }
-        public virtual async Task DeleteByIdAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-            var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
-            await this.DeleteAsync(entity, autoSave, cancellationToken);
         }
         public virtual async Task DeleteByPredicateAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationtoken = default)
         {
@@ -118,16 +81,6 @@
                 foreach (var entity in entities) { await this.DeleteAsync(entity, false, cancellationtoken); }
                 if (autoSave) { await this.context.SaveChangesAsync(cancellationtoken); }
             }
-        }
-        protected virtual TKey GetKeyValue(TEntity entity)
-        {
-            var t = typeof(TEntity);
-            var properties = this.context.Model.FindEntityType(t)?.FindPrimaryKey()?.Properties;
-            var keyname = (properties != null && properties.Count > 0) ? properties[0].Name : "";
-            if (keyname.IsNullOrEmpty()) { throw new InvalidOperationException("PK not found."); }
-            var property = t.GetProperty(keyname);
-            if (property == null) { throw new InvalidOperationException($"Property \"{keyname}\" not found on {t.Name}."); }
-            return (TKey)property.GetValue(entity);
         }
         public void Dispose() => this.context.Dispose();
     }
