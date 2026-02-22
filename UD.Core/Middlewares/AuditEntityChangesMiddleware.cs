@@ -25,7 +25,7 @@
                 return;
             }
             await this.next(context);
-            if (context.Response.StatusCode > (int)HttpStatusCode.OK && context.Response.StatusCode < (int)HttpStatusCode.BadRequest && this.logger.IsEnabled(LogLevel.Trace) && dbContext.ChangeTracker.HasChanges())
+            if (context.Response.StatusCode >= (int)HttpStatusCode.OK && context.Response.StatusCode < (int)HttpStatusCode.BadRequest && this.logger.IsEnabled(LogLevel.Trace) && dbContext.ChangeTracker.HasChanges())
             {
                 var changes = new List<object>();
                 foreach (var entry in dbContext.ChangeTracker.Entries())
