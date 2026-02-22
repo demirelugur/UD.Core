@@ -9,13 +9,13 @@
         public Validation_TcknAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             var _l = value.ToLong();
             if (_l.IsTCKimlikNo())
             {
                 validationContext.SetValidatePropertyValue(_l);
                 return ValidationResult.Success;
             }
-            if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });
         }
     }
