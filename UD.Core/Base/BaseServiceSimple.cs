@@ -4,32 +4,32 @@
     using Microsoft.EntityFrameworkCore;
     using UD.Core.Extensions;
     using UD.Core.Helper.Paging;
-    public interface IBaseServiceSimple<TContext, TEntity, TKey, TReturnDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>
+    public interface IBaseServiceSimple<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
-    where TReturnDto : class
+    where TEntityDto : class
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : class
     where TUpdateDto : class
     {
-        Task<TReturnDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
+        Task<TEntityDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
         Task<TKey> InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task UpdateAsync(TKey id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByIdAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default);
     }
-    public abstract class BaseServiceSimple<TContext, TEntity, TKey, TReturnDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>, IBaseServiceSimple<TContext, TEntity, TKey, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>
+    public abstract class BaseServiceSimple<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>, IBaseServiceSimple<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
-    where TReturnDto : class
+    where TEntityDto : class
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : class
     where TUpdateDto : class
     {
         protected BaseServiceSimple(TContext context, IMapper mapper) : base(context, mapper) { }
-        public virtual async Task<TReturnDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntityDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
         {
             var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
-            return entity == null ? null : this.mapper.Map<TReturnDto>(entity);
+            return entity == null ? null : this.mapper.Map<TEntityDto>(entity);
         }
         public virtual async Task<TKey> InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {

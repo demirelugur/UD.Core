@@ -4,33 +4,33 @@
     using Microsoft.EntityFrameworkCore;
     using UD.Core.Extensions;
     using UD.Core.Helper.Paging;
-    public interface IBaseServiceComposite<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>
+    public interface IBaseServiceComposite<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
-    where TReturnDto : class
+    where TEntityDto : class
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : class
     where TUpdateDto : class
     {
-        Task<TReturnDto?> GetByIdAsync(object[] keyvalues, CancellationToken cancellationToken = default);
+        Task<TEntityDto?> GetByIdAsync(object[] keyvalues, CancellationToken cancellationToken = default);
         Task InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task UpdateAsync(object[] keyvalues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByIdAsync(object[] keyvalues, bool autoSave = false, CancellationToken cancellationToken = default);
     }
-    public abstract class BaseServiceComposite<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>, IBaseServiceComposite<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>
+    public abstract class BaseServiceComposite<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>, IBaseServiceComposite<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
-    where TReturnDto : class
+    where TEntityDto : class
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : class
     where TUpdateDto : class
     {
         protected BaseServiceComposite(TContext context, IMapper mapper) : base(context, mapper) { }
-        public virtual async Task<TReturnDto?> GetByIdAsync(object[] keyvalues, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntityDto?> GetByIdAsync(object[] keyvalues, CancellationToken cancellationToken = default)
         {
             if (keyvalues.IsNullOrCountZero()) { return null; }
             var entity = await this.DbSet.FindAsync(keyvalues, cancellationToken);
-            return entity == null ? null : this.mapper.Map<TReturnDto>(entity);
+            return entity == null ? null : this.mapper.Map<TEntityDto>(entity);
         }
         public virtual async Task InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {

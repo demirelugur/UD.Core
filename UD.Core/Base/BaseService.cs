@@ -9,10 +9,10 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Paging;
     using static UD.Core.Helper.OrtakTools;
-    public interface IBaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>
+    public interface IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
-    where TReturnDto : class
+    where TEntityDto : class
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : class
     where TUpdateDto : class
@@ -21,16 +21,16 @@
         DbConnection GetDbConnection();
         IQueryable<T> SqlQueryRaw<T>(string sql, object parameters);
         Task<int> ExecuteSqlRawAsync(string sql, object parameters, CancellationToken cancellationtoken = default);
-        Task<TReturnDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default);
-        Task<Paginate<TReturnDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default);
+        Task<TEntityDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default);
+        Task<Paginate<TEntityDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default);
         Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByPredicateAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationtoken = default);
         Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationtoken = default);
     }
-    public abstract class BaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TReturnDto, TSearchDto, TInsertDto, TUpdateDto>, IDisposable
+    public abstract class BaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>, IDisposable
     where TContext : DbContext
     where TEntity : class
-    where TReturnDto : class
+    where TEntityDto : class
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : class
     where TUpdateDto : class
@@ -47,8 +47,8 @@
         public DbConnection GetDbConnection() => this.context.Database.GetDbConnection();
         public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.context.Database.SqlQueryRaw<T>(sql, _to.ToSqlParameterFromObject(parameters));
         public Task<int> ExecuteSqlRawAsync(string sql, object parameters, CancellationToken cancellationtoken = default) => this.context.Database.ExecuteSqlRawAsync(sql, _to.ToSqlParameterFromObject(parameters), cancellationtoken);
-        public virtual async Task<TReturnDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default) => (await this.GetAllPaginateAsync(searchDto, false, cancellationToken)).items;
-        public virtual Task<Paginate<TReturnDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntityDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default) => (await this.GetAllPaginateAsync(searchDto, false, cancellationToken)).items;
+        public virtual Task<Paginate<TEntityDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(searchDto);
             var query = ApplyFiltering(this.DbSet, searchDto);
@@ -57,7 +57,7 @@
                 try { query = query.OrderBy(searchDto.sorting); }
                 catch (Exception ex) { throw new InvalidOperationException($"Sorting failed: {searchDto.sorting}", ex); }
             }
-            return query.ProjectTo<TReturnDto>(this.mapper.ConfigurationProvider).ToPagedListAsync(searchDto.pagenumber, searchDto.size, loadinfo, cancellationToken);
+            return query.ProjectTo<TEntityDto>(this.mapper.ConfigurationProvider).ToPagedListAsync(searchDto.pagenumber, searchDto.size, loadinfo, cancellationToken);
         }
         public virtual async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
