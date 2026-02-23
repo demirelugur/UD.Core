@@ -5,7 +5,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
-    using System.Net;
     using UD.Core.Extensions;
     public sealed class AuditEntityChangesMiddleware<TContext> where TContext : DbContext
     {
@@ -18,6 +17,11 @@
         }
         public async Task InvokeAsync(HttpContext context)
         {
+            if (!this.logger.IsEnabled(LogLevel.Trace))
+            {
+                await this.next(context);
+                return;
+            }
             var dbContext = context.RequestServices.GetService<TContext>();
             if (dbContext == null)
             {
@@ -25,7 +29,7 @@
                 return;
             }
             await this.next(context);
-            if (context.Response.StatusCode >= (int)HttpStatusCode.OK && context.Response.StatusCode < (int)HttpStatusCode.BadRequest && this.logger.IsEnabled(LogLevel.Trace) && dbContext.ChangeTracker.HasChanges())
+            if (context.Response.StatusCode >= StatusCodes.Status200OK && context.Response.StatusCode < StatusCodes.Status400BadRequest && dbContext.ChangeTracker.HasChanges())
             {
                 var changes = new List<object>();
                 foreach (var entry in dbContext.ChangeTracker.Entries())

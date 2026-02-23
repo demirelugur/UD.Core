@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using System.Net;
     using UD.Core.Attributes;
     public sealed class TransactionMiddleware<TContext> where TContext : DbContext
     {
@@ -41,7 +40,7 @@
                     {
                         await this.next(httpContext);
                         var status = httpContext.Response.StatusCode;
-                        if (status >= (int)HttpStatusCode.OK && status < (int)HttpStatusCode.BadRequest)
+                        if (status >= StatusCodes.Status200OK && status < StatusCodes.Status400BadRequest)
                         {
                             if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); } // Eğer servisler SaveChanges çağırdıysa HasChanges false olur, gereksiz SaveChanges çağrılmamış olur
                             await tran.CommitAsync(cancellationToken);
