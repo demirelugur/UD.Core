@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using UD.Core.Extensions;
     using UD.Core.Helper.Paging;
-    public interface IBaseServiceComposite<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
+    public interface IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
     where TEntityDto : class
@@ -17,7 +17,7 @@
         Task UpdateAsync(object[] keyvalues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByIdAsync(object[] keyvalues, bool autoSave = false, CancellationToken cancellationToken = default);
     }
-    public abstract class BaseServiceComposite<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>, IBaseServiceComposite<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
+    public abstract class BaseServiceComplexKey<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>, IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
     where TEntityDto : class
@@ -25,7 +25,7 @@
     where TInsertDto : class
     where TUpdateDto : class
     {
-        protected BaseServiceComposite(TContext context, IMapper mapper) : base(context, mapper) { }
+        protected BaseServiceComplexKey(TContext context, IMapper mapper) : base(context, mapper) { }
         public virtual async Task<TEntityDto?> GetByIdAsync(object[] keyvalues, CancellationToken cancellationToken = default)
         {
             if (keyvalues.IsNullOrCountZero()) { return null; }

@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json.Linq;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Net;
     using System.Net.Mail;
@@ -17,44 +16,44 @@
         public override int GetHashCode() => HashCode.Combine(this.email, this.password, this.host, this.port, this.enablessl, this.usedefaultcredentials, this.deliverymethod, this.timeout);
         public bool Equals(SmtpSettingsHelper other) => (other != null && this.email == other.email && this.password == other.password && this.host == other.host && this.port == other.port && this.enablessl == other.enablessl && this.usedefaultcredentials == other.usedefaultcredentials && this.deliverymethod == other.deliverymethod && this.timeout == other.timeout);
         #endregion
+        private string _Email = "";
+        private string _Password = "";
+        private string _Host = "";
+        private int _Port = 25;
+        private bool _Enablessl;
+        private bool _Usedefaultcredentials;
+        private SmtpDeliveryMethod _Deliverymethod;
+        private int _Timeout = 0;
         [Validation_Required]
         [EmailAddress(ErrorMessage = _validationerrormessage.email)]
         [Validation_StringLength(_maximumlength.eposta)]
         [Display(Name = "e-Posta")]
-        [DefaultValue("")]
-        public string email { get; set; }
+        public string email { get { return _Email; } set { _Email = value.ToStringOrEmpty().ToLower(); } }
         [Validation_Required]
         [Validation_StringLength(16, 8)]
         [Display(Name = "Şifre")]
-        [DefaultValue("")]
-        public string password { get; set; }
+        public string password { get { return _Password; } set { _Password = value.ToStringOrEmpty(); } }
         [Validation_Required]
         [Validation_StringLength(30)]
         [Display(Name = "Host")]
-        [DefaultValue("")]
-        public string host { get; set; }
+        public string host { get { return _Host; } set { _Host = value.ToStringOrEmpty(); } }
         [Validation_Required]
         [Validation_RangePositiveInt32]
         [Display(Name = "Port")]
-        [DefaultValue(25)]
-        public int port { get; set; }
+        public int port { get { return _Port; } set { _Port = value; } }
         [Validation_Required]
         [Display(Name = "Enable SSL")]
-        [DefaultValue(false)]
-        public bool enablessl { get; set; }
+        public bool enablessl { get { return _Enablessl; } set { _Enablessl = value; } }
         [Validation_Required]
         [Display(Name = "Use Default Credentials")]
-        [DefaultValue(false)]
-        public bool usedefaultcredentials { get; set; }
+        public bool usedefaultcredentials { get { return _Usedefaultcredentials; } set { _Usedefaultcredentials = value; } }
         [Validation_Required]
         [EnumDataType(typeof(SmtpDeliveryMethod), ErrorMessage = _validationerrormessage.enumdatatype)]
         [Display(Name = "Delivery Method")]
-        [DefaultValue(SmtpDeliveryMethod.Network)]
-        public SmtpDeliveryMethod deliverymethod { get; set; }
+        public SmtpDeliveryMethod deliverymethod { get { return _Deliverymethod; } set { _Deliverymethod = value; } }
         [Validation_Required]
         [Display(Name = "Timeout")]
-        [DefaultValue(0)]
-        public int timeout { get; set; }
+        public int timeout { get { return _Timeout; } set { _Timeout = value; } }
         public SmtpClient toSmtpClient()
         {
             var _sc = new SmtpClient

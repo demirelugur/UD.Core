@@ -4,9 +4,10 @@
     using Microsoft.EntityFrameworkCore;
     using UD.Core.Extensions;
     using UD.Core.Helper.Paging;
-    public interface IBaseServiceSimple<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
+    public interface IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
+    where TKey : struct
     where TEntityDto : class
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : class
@@ -17,15 +18,16 @@
         Task UpdateAsync(TKey id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByIdAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default);
     }
-    public abstract class BaseServiceSimple<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>, IBaseServiceSimple<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
+    public abstract class BaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>, IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class
+    where TKey : struct
     where TEntityDto : class
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : class
     where TUpdateDto : class
     {
-        protected BaseServiceSimple(TContext context, IMapper mapper) : base(context, mapper) { }
+        protected BaseServicePrimary(TContext context, IMapper mapper) : base(context, mapper) { }
         public virtual async Task<TEntityDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
         {
             var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
@@ -66,7 +68,9 @@
             if (keyname.IsNullOrEmpty()) { throw new InvalidOperationException("PK not found."); }
             var property = t.GetProperty(keyname);
             if (property == null) { throw new InvalidOperationException($"Property \"{keyname}\" not found on {t.Name}."); }
-            return (TKey)property.GetValue(entity);
+            var value = property.GetValue(entity);
+            if (value == null) { throw new InvalidOperationException($"Key value is null."); }
+            return (TKey)value;
         }
     }
 }

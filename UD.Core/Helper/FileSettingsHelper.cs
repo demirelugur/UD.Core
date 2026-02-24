@@ -18,25 +18,23 @@
         public bool Equals(FileSettingsHelper other) => (other != null && this.ext.IsEqual(other.ext) && this.size == other.size && this.filecount == other.filecount);
         #endregion
         private string[] _Ext;
-        private long _Size;
-        private byte _Filecount;
+        private long _Size = 1048576;
+        private byte _Filecount = 1;
         [Validation_Required]
         [Validation_ArrayMinLength]
         [Display(Name = "Uzantı")]
-        public string[] ext { get { return _Ext; } set { _Ext = (value ?? Array.Empty<string>()).Select(x => x.ToStringOrEmpty()).Where(x => x.Length > 1).Select(x => x[0] == '.' ? x : $".{x}").Select(x => x.ToLower()).OrderBy(x => x).Distinct().ToArray(); } }
+        public string[] ext { get { return _Ext; } set { _Ext = (value ?? Array.Empty<string>()).Select(x => x.ToStringOrEmpty()).Where(x => x.Length > 1).Select(x => x[0] == '.' ? x : $".{x}").Select(x => x.ToLower()).Distinct().ToArray(); } }
         [Validation_Required]
         [Range(1, Int64.MaxValue, ErrorMessage = _validationerrormessage.range)]
-        [DefaultValue(1048576)]
         [Display(Name = "Belge Boyutu")]
         public long size { get { return _Size; } set { _Size = value; } }
         [Validation_Required]
         [Range(1, Byte.MaxValue, ErrorMessage = _validationerrormessage.range)]
-        [DefaultValue(1)]
         [Display(Name = "Belge Sayısı")]
         public byte filecount { get { return _Filecount; } set { _Filecount = value; } }
         [JsonIgnore]
         [IgnoreDataMember]
-        public string getformatsize => FormatSize(Convert.ToDouble(size));
+        public string getformatsize => FormatSize(Convert.ToDouble(this.size));
         public bool gettryfileisexception(ICollection<IFormFile> files, string dil, out string[] errors) => TryFileisException(files, this, dil, out errors);
         public FileSettingsHelper() : this(default, default, default) { }
         public FileSettingsHelper(string[] ext, long size, byte filecount)

@@ -1,7 +1,6 @@
 ﻿namespace UD.Core.Helper
 {
     using Microsoft.AspNetCore.Http;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Net;
     using UD.Core.Attributes.DataAnnotations;
@@ -14,15 +13,15 @@
         public override int GetHashCode() => HashCode.Combine(this.ismobil, this.ipaddress);
         public bool Equals(ClientRequestInfo other) => (other != null && this.ismobil == other.ismobil && this.ipaddress == other.ipaddress);
         #endregion
+        private bool _Ismobil;
+        private string? _Ipaddress;
         [Validation_Required]
         [Display(Name = "Mobil")]
-        [DefaultValue(false)]
-        public bool ismobil { get; set; }
+        public bool ismobil { get { return _Ismobil; } set { _Ismobil = value; } }
         [Validation_StringLength(_maximumlength.ipaddress)]
         [Validation_IPAddress]
         [Display(Name = "IP Adresi")]
-        [DefaultValue(null)]
-        public string? ipaddress { get; set; }
+        public string? ipaddress { get { return _Ipaddress; } set { _Ipaddress = value.ParseOrDefault<string>(); } }
         public ClientRequestInfo() : this(default, default) { }
         public ClientRequestInfo(bool ismobil, object ipaddress)
         {
