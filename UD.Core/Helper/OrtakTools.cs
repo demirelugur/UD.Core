@@ -148,21 +148,21 @@
                     var _args = _type.GetGenericArguments();
                     if (_args.Length >= 2)
                     {
-                        if (_args[0] == typeof(DateTime) && _args[1] == typeof(string))
+                        if (_args[0].Includes(typeof(DateTime), typeof(DateOnly)) && _args[1] == typeof(string))
                         {
                             dynamic _t = model;
                             return GetIslemInfoFromObject(new
                             {
-                                isldate = (DateTime)_t.Item1,
+                                isldate = (object)_t.Item1,
                                 isluser = (string)_t.Item2
                             }, dateformat);
                         }
-                        if (_args[0] == typeof(string) && _args[1] == typeof(DateTime))
+                        if (_args[0] == typeof(string) && _args[1].Includes(typeof(DateTime), typeof(DateOnly)))
                         {
                             dynamic _t = model;
                             return GetIslemInfoFromObject(new
                             {
-                                isldate = (DateTime)_t.Item2,
+                                isldate = (object)_t.Item2,
                                 isluser = (string)_t.Item1
                             }, dateformat);
                         }
@@ -170,7 +170,7 @@
                 }
                 return model.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new
                 {
-                    isldate = (DateTime)x.isldate,
+                    isldate = _to.ToDateTimeFromObject((object)x.isldate, default),
                     isluser = (string)x.isluser
                 }).Select(x => String.Join(", ", new string[] { (x.isldate.Ticks > 0 ? x.isldate.ToString(dateformat) : ""), x.isluser.ToStringOrEmpty() }.Where(y => y != "").ToArray())).FirstOrDefault() ?? "";
             }
@@ -188,6 +188,16 @@
                     if (new FileExtensionContentTypeProvider().Mappings.TryGetValue(extension, out string _v)) { return _v; }
                 }
                 return "application/octet-stream";
+            }
+            /// <summary>Metni belirtilen maksimum uzunluğa kadar kısaltır. Metin belirtilen uzunluğu aşıyorsa sonuna üç nokta (...) ekler. Metin boş veya null ise boş string döner. </summary>
+            /// <param name="value">İşlem yapılacak metin</param>
+            /// <param name="length">Metnin maksimum uzunluğu</param>
+            /// <returns>Kısaltılmış ve gerekiyorsa üç nokta eklenmiş metin</returns>
+            public static string SubstringUpToLengthWithEllipsis(string value, int length)
+            {
+                value = value.SubstringUpToLength(length);
+                if (value == "") { return ""; }
+                return String.Concat(value, "...");
             }
             /// <summary>
             /// Kimlik kartı veya nüfus cüzdanı seri numarasını maskeleme işlemi yapar. İsteğe bağlı olarak kimlik türü ve dil bilgisi ile birlikte açıklama ekler.
@@ -834,7 +844,7 @@
             /// Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;value&quot; parametresindeki metni &quot;from&quot; dilinden &quot;to&quot; diline çevirir. Varsayılan olarak &quot;from&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve false durumu döner.
             /// </para>
             /// </summary>
-            public static async Task<(bool statuswarning, string value)> TryGoogleTranslateAsync(string value, TimeSpan timeout, CancellationToken cancellationtoken = default, string to = "en", string from = "tr")
+            public static async Task<(bool haserror, string value)> TryGoogleTranslateAsync(string value, TimeSpan timeout, CancellationToken cancellationtoken = default, string to = "en", string from = "tr")
             {
                 value = value.ToStringOrEmpty();
                 if (value == "") { return (false, ""); }

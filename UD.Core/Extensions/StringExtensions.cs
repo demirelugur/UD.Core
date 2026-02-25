@@ -203,16 +203,6 @@
             value = value.ToStringOrEmpty();
             return (value.Length > length ? value.Substring(0, length).Trim() : value);
         }
-        /// <summary>Metni belirtilen maksimum uzunluğa kadar kısaltır. Metin belirtilen uzunluğu aşıyorsa sonuna üç nokta (...) ekler. Metin boş veya null ise boş string döner. </summary>
-        /// <param name="value">İşlem yapılacak metin</param>
-        /// <param name="length">Metnin maksimum uzunluğu</param>
-        /// <returns>Kısaltılmış ve gerekiyorsa üç nokta eklenmiş metin</returns>
-        public static string SubstringUpToLengthWithEllipsis(this string value, int length)
-        {
-            value = value.SubstringUpToLength(length);
-            if (value == "") { return ""; }
-            return String.Concat(value, "...");
-        }
         /// <summary>
         /// Bir string&#39;i belirtilen noktalama işaretleri kurallarına göre Başlık Durumuna dönüştürür.
         /// </summary>
@@ -252,12 +242,12 @@
         /// <returns>Dönüştürülen değeri veya dönüşüm başarısızsa varsayılan değeri döner.</returns>
         public static TKey ParseOrDefault<TKey>(this string value)
         {
-            var _pd = value.parseordefault_private(typeof(TKey));
+            var _pd = parseordefault_private(value, typeof(TKey));
             if (_pd.value == null) { return default; }
             try { return (TKey)Convert.ChangeType(_pd.value, _pd.genericbasetype); }
             catch { return default; }
         }
-        private static (object value, Type genericbasetype) parseordefault_private(this string value, Type propertytype)
+        private static (object value, Type genericbasetype) parseordefault_private(string value, Type propertytype)
         {
             try
             {

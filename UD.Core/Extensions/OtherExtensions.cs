@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Specialized;
@@ -13,6 +14,7 @@
     using System.Net.Mail;
     using System.Reflection;
     using System.Web;
+    using UD.Core.Base;
     using UD.Core.Helper;
     using static UD.Core.Helper.OrtakTools;
     public static class OtherExtensions
@@ -222,7 +224,7 @@
         /// <returns>Sütun değeri başarıyla dönüştürülebilirse <typeparamref name="TKey"/> tipinde değer, aksi durumda varsayılan değer döner.</returns>
         public static TKey ParseOrDefault<TKey>(this IDataReader reader, string key)
         {
-            if (reader == null || key.IsNullOrEmpty()) { return default; }  
+            if (reader == null || key.IsNullOrEmpty()) { return default; }
             try
             {
                 var _value = reader[key];
@@ -255,6 +257,21 @@
                 return _attr == null ? "" : _attr.Description.ToStringOrEmpty();
             }
             catch { return ""; }
+        }
+        /// <summary> Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
+        /// <param name="services">Bağımlılık enjeksiyon konteyneri</param>
+        /// <param name="assembly">Repository sınıflarının bulunduğu assembly</param>
+        /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
+        public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
+        {
+            Guard.CheckNull(assembly, nameof(assembly));
+            var types = assembly.GetTypes().Where(t => !t.IsAbstract && !t.IsInterface).Where(t => typeof(BaseService<,,,,,>).IsAssignableFrom(t)).ToArray();
+            foreach (var implementation in types) // Kullanım şekli: builder.Services.AddRepositories(typeof(Program).Assembly);
+            {
+                var interfaces = implementation.GetInterfaces().Where(i => typeof(IBaseService<,,,,,>).IsAssignableFrom(i)).ToArray();
+                foreach (var service in interfaces) { services.AddScoped(service, implementation); }
+            }
+            return services;
         }
     }
 }
