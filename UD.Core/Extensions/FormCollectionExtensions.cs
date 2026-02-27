@@ -4,9 +4,7 @@
     using Microsoft.Extensions.Primitives;
     public static class FormCollectionExtensions
     {
-        /// <summary>
-        /// Belirtilen anahtar ile form verilerinden bir değeri alır ve belirtilen türde bir nesneye dönüştürür.
-        /// </summary>
+        /// <summary>Belirtilen anahtar ile form verilerinden bir değeri alır ve belirtilen türde bir nesneye dönüştürür.</summary>
         /// <typeparam name="TKey">Dönüştürülecek nesne türü.</typeparam>
         /// <param name="form">Form koleksiyonu.</param>
         /// <param name="key">Anahtar adı.</param>
@@ -16,9 +14,7 @@
             if (form.TryGetStringValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
             return default;
         }
-        /// <summary>
-        /// Form koleksiyonundan belirtilen anahtar ile bir dize değerini alır.
-        /// </summary>
+        /// <summary>Form koleksiyonundan belirtilen anahtar ile bir dize değerini alır.</summary>
         /// <param name="form">Form koleksiyonu.</param>
         /// <param name="key">Anahtar adı.</param>
         /// <param name="outvalue">Dönüştürülen dize değeri.</param>
@@ -35,9 +31,7 @@
             outvalue = "";
             return false;
         }
-        /// <summary>
-        /// Bir IFormCollection nesnesinden belirtilen anahtara karşılık gelen değerleri belirli bir türde dizi olarak elde etmeye çalışır.
-        /// </summary>
+        /// <summary>Bir IFormCollection nesnesinden belirtilen anahtara karşılık gelen değerleri belirli bir türde dizi olarak elde etmeye çalışır.</summary>
         /// <typeparam name="TKey">Dönüştürülmek istenen değerlerin türü.</typeparam>
         /// <param name="form">Değerin aranacağı IFormCollection nesnesi.</param>
         /// <param name="key">Hedef değerin anahtarı. Anahtarın &quot;[]&quot; ile bitmesi beklenir, aksi takdirde otomatik olarak eklenir.</param>

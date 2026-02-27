@@ -1,4 +1,6 @@
-﻿namespace UD.Core.UnitTest
+﻿using UD.Core.Extensions;
+
+namespace UD.Core.UnitTest
 {
     [TestFixture]
     public class Tests

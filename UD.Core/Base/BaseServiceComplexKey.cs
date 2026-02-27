@@ -57,7 +57,7 @@
             if (!keyvalues.IsNullOrCountZero())
             {
                 var entity = await this.DbSet.FindAsync(keyvalues, cancellationToken);
-                await this.DeleteAsync(entity, autoSave, cancellationToken);
+                await base.DeleteAsync(entity, autoSave, cancellationToken);
             }
         }
     }

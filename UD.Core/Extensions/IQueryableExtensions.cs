@@ -3,6 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
+    using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
     using UD.Core.Helper;
     using UD.Core.Helper.Paging;
@@ -81,9 +82,10 @@
         /// <param name="source">Sayfalanacak IQueryable veri kaynağı.</param>
         /// <param name="pagenumber">İstenen sayfa numarası. (1 tabanlı)</param>
         /// <param name="size">Sayfa başına öğe sayısı.</param>
+        /// <param name="sorting">Sorgu sıralaması</param>
         /// <param name="loadinfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
-        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pagenumber, int size, bool loadinfo = true, CancellationToken cancellationToken = default)
+        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pagenumber, int size, string sorting, bool loadinfo = true, CancellationToken cancellationToken = default)
         {
             if (source == null) { return new(); }
             PagingInfo? p = null;
@@ -92,6 +94,11 @@
                 var totalcount = await source.CountAsync(cancellationToken);
                 var totalpage = Convert.ToInt32(Math.Ceiling(totalcount / Convert.ToDouble(size)));
                 p = new(totalcount, totalpage, pagenumber);
+            }
+            if (!sorting.IsNullOrEmpty())
+            {
+                try { source = source.OrderBy(sorting); }
+                catch (Exception ex) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
             }
             var items = await source.Paginate(pagenumber, size).ToArrayAsync(cancellationToken);
             return new(pagenumber, size, items, p);

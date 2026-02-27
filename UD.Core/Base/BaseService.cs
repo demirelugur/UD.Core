@@ -6,7 +6,6 @@
     using System.Data.Common;
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
-    using UD.Core.Extensions;
     using UD.Core.Helper.Paging;
     using static UD.Core.Helper.OrtakTools;
     public interface IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
@@ -50,14 +49,8 @@
         public virtual async Task<TEntityDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default) => (await this.GetAllPaginateAsync(searchDto, false, cancellationToken)).items;
         public virtual Task<Paginate<TEntityDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadinfo = true, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(searchDto);
-            var query = ApplyFiltering(this.DbSet, searchDto);
-            if (!searchDto.sorting.IsNullOrEmpty())
-            {
-                try { query = query.OrderBy(searchDto.sorting); }
-                catch (Exception ex) { throw new InvalidOperationException($"Sorting failed: {searchDto.sorting}", ex); }
-            }
-            return query.ProjectTo<TEntityDto>(this.mapper.ConfigurationProvider).ToPagedListAsync(searchDto.pagenumber, searchDto.size, loadinfo, cancellationToken);
+            ArgumentNullException.ThrowIfNull(searchDto, nameof(searchDto));
+            return searchDto.ToPagedListAsync(this.ApplyFiltering(this.DbSet, searchDto).ProjectTo<TEntityDto>(this.mapper.ConfigurationProvider), loadinfo, cancellationToken);
         }
         public virtual async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {

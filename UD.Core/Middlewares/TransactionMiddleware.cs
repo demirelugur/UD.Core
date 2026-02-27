@@ -42,7 +42,7 @@
                         var status = httpContext.Response.StatusCode;
                         if (status >= StatusCodes.Status200OK && status < StatusCodes.Status400BadRequest)
                         {
-                            if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); } // Eğer servisler SaveChanges çağırdıysa HasChanges false olur, gereksiz SaveChanges çağrılmamış olur
+                            if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
                             await tran.CommitAsync(cancellationToken);
                         }
                         else { await tran.RollbackAsync(cancellationToken); }

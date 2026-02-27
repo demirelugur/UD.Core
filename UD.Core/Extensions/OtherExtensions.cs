@@ -210,7 +210,7 @@
         /// <returns>Başarılıysa sorgu parametresi uygun türe dönüştürülür, aksi halde varsayılan değer döner.</returns>
         public static TKey ParseOrDefault<TKey>(this QueryString querystring, string key)
         {
-            var _querydic = (querystring.HasValue ? HttpUtility.ParseQueryString(querystring.Value) : new NameValueCollection());
+            var _querydic = (querystring.HasValue ? HttpUtility.ParseQueryString(querystring.Value) : new());
             key = key.ToStringOrEmpty();
             if (_querydic.AllKeys.Contains(key)) { return _querydic[key].ParseOrDefault<TKey>(); }
             return default;
@@ -265,10 +265,10 @@
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
             Guard.CheckNull(assembly, nameof(assembly));
-            var types = assembly.GetTypes().Where(t => !t.IsAbstract && !t.IsInterface).Where(t => typeof(BaseService<,,,,,>).IsAssignableFrom(t)).ToArray();
+            var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface).Where(t => typeof(BaseService<,,,,,>).IsAssignableFrom(t)).ToArray();
             foreach (var implementation in types) // Kullanım şekli: builder.Services.AddRepositories(typeof(Program).Assembly);
             {
-                var interfaces = implementation.GetInterfaces().Where(i => typeof(IBaseService<,,,,,>).IsAssignableFrom(i)).ToArray();
+                var interfaces = implementation.GetInterfaces().Where(x => typeof(IBaseService<,,,,,>).IsAssignableFrom(x)).ToArray();
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
             return services;

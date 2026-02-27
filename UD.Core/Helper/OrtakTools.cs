@@ -455,7 +455,7 @@
             public static DateOnly ToDateOnlyFromObject(object obj) => ToDateTimeFromObject(obj, default).ToDateOnly();
             /// <summary>
             /// Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.
-            /// <para>obj için tanımlanan nesneler: DateTime, DateOnly, Int64, String(DateTime, DateOnly, Int64 türlerine uygun biçimde olmalı)</para>
+            /// <para>obj için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı)</para>
             /// </summary>
             /// <param name="obj">Dönüştürülecek nesne.</param>
             /// <param name="timeonly">Zaman bilgisi (isteğe bağlı). <paramref name="obj"/> değeri türü DateOnly iken girilecek değer anlamlıdır</param>
@@ -463,11 +463,13 @@
             public static DateTime ToDateTimeFromObject(object obj, TimeOnly? timeonly)
             {
                 if (obj is DateTime _dt) { return _dt; }
+                if (obj is DateTimeOffset dto) { return dto.DateTime; }
                 if (obj is DateOnly _do) { return _do.ToDateTime(timeonly ?? default); }
                 if (obj is (Byte or Int16 or Int32 or Int64)) { return new(obj.ToLong()); }
                 if (obj is String _s)
                 {
                     if (DateTime.TryParse(_s, out _dt)) { return _dt; }
+                    if (DateTimeOffset.TryParse(_s, out dto)) { return dto.DateTime; }
                     if (DateOnly.TryParse(_s, out _do)) { return _do.ToDateTime(timeonly ?? default); }
                     if (Int64.TryParse(_s, out long _ticks)) { return new(_ticks); }
                 }
@@ -718,7 +720,7 @@
             {
                 try
                 {
-                    outvalue = (type == null ? Array.Empty<PropertyInfo>() : type.GetProperties().Where(x => x.IsPK()).ToArray());
+                    outvalue = (type == null ? Array.Empty<PropertyInfo>() : type.GetProperties()).Where(x => x.IsPK()).ToArray();
                     return outvalue.Length > 0;
                 }
                 catch

@@ -75,6 +75,7 @@ public class PagedApiResult<T> : ApiResult
     }
     public ApiResult<T[]> ToApiResult() => new(this.response, this.status, this.errors);
 }
+***************************************
 /// <summary>
 /// Generic bir repository arayüzü.
 /// </summary>
@@ -118,6 +119,7 @@ public abstract class BaseGenericRepository<T, TContext> : IGenericRepository<T,
         if (entities != null) { foreach (var entity in entities) { await this.DeleteAsync(entity, cancellationtoken); } }
     }
 }
+***************************************
 public interface IUnitOfWork<TContext> where TContext : DbContext
 {
     TContext Context { get; }
@@ -200,3 +202,18 @@ public class BaseUnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : D
         return ("", "");
     }
 }
+***************************************
+/// <summary>
+/// Verilen dize değerinin geçerli bir JSON olup olmadığını kontrol eder.
+/// </summary>
+/// <param name="value">Kontrol edilecek dize (JSON).</param>
+/// <param name="jtokentype">Kontrol edilecek JToken türü.</param>
+/// <param name="haschildrentoken">Çocukların kontrol edilip edilmeyeceğini belirten bir değer.</param>
+/// <returns><see langword="true"/>, eğer dize geçerli bir JSON ise; aksi takdirde <see langword="false"/>.</returns>
+public static bool IsJson(this string value, JTokenType jtokentype, bool haschildrentoken)
+{
+    var _r = _try.TryJson(value, jtokentype, out JToken _jt);
+    if (_r && haschildrentoken) { return _jt.HasValues; }
+    return _r;
+}
+***************************************

@@ -42,14 +42,11 @@
         public static bool IsTCKimlikNo(this long tckn)
         {
             var _r = false;
-            if (tckn > 0)
+            var _tckn = (tckn > 0 ? tckn.ToString() : "");
+            if (_tckn.Length == _maximumlength.tckn)
             {
-                var _tckn = tckn.ToString();
-                if (_tckn.Length == _maximumlength.tckn)
-                {
-                    var _t = _tckn.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
-                    _r = ((((_t[0] + _t[2] + _t[4] + _t[6] + _t[8]) * 7) - (_t[1] + _t[3] + _t[5] + _t[7])) % 10) == _t[9] && (_t.Take(10).Sum() % 10) == _t[10];
-                }
+                var _t = _tckn.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
+                _r = ((((_t[0] + _t[2] + _t[4] + _t[6] + _t[8]) * 7) - (_t[1] + _t[3] + _t[5] + _t[7])) % 10) == _t[9] && (_t.Take(10).Sum() % 10) == _t[10];
             }
             return _r;
         }

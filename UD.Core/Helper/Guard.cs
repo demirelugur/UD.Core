@@ -56,7 +56,7 @@
         public static void CheckJson(string json, JTokenType jtokentype, string argname)
         {
             CheckEmpty(json, argname);
-            if (!json.IsJson(jtokentype, false)) { throw new JsonReaderException($"\"{argname}\" argümanı, \"JSON\" biçimine uygun olmalı ve türü \"{typeof(JTokenType).FullName}\" olmalıdır!"); }
+            if (!_try.TryJson<JToken>(json, jtokentype, out _)) { throw new JsonReaderException($"\"{argname}\" argümanı, \"JSON\" biçimine uygun olmalı ve türü \"{typeof(JTokenType).FullName}\" olmalıdır!"); }
         }
         /// <summary>
         /// Verilen string&#39;in Türkiye&#39;ye ait bir telefon numarası biçiminde olup olmadığını kontrol eder. Geçersizse <see cref="ArgumentException"/> fırlatır.

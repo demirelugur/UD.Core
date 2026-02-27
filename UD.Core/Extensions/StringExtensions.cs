@@ -77,7 +77,7 @@
         {
             value = value.ToStringOrEmpty();
             if (value != "") { return value; }
-            return (defaultvalues ?? Array.Empty<string>()).Select(x => x.ToStringOrEmpty()).Where(x => x != "").FirstOrDefault() ?? "";
+            return (defaultvalues ?? Array.Empty<string>()).Select(x => x.ToStringOrEmpty()).FirstOrDefault(x => x != "") ?? "";
         }
         /// <summary>
         /// Verilen dize değerinin null veya boş olup olmadığını kontrol eder.
@@ -113,19 +113,6 @@
             if (host == "") { return false; }
             if (host[0] == '@') { host = host.Substring(1); }
             return _try.TryMailAddress(value, out MailAddress _ma) && _ma.Host == host;
-        }
-        /// <summary>
-        /// Verilen dize değerinin geçerli bir JSON olup olmadığını kontrol eder.
-        /// </summary>
-        /// <param name="value">Kontrol edilecek dize (JSON).</param>
-        /// <param name="jtokentype">Kontrol edilecek JToken türü.</param>
-        /// <param name="haschildrentoken">Çocukların kontrol edilip edilmeyeceğini belirten bir değer.</param>
-        /// <returns><see langword="true"/>, eğer dize geçerli bir JSON ise; aksi takdirde <see langword="false"/>.</returns>
-        public static bool IsJson(this string value, JTokenType jtokentype, bool haschildrentoken)
-        {
-            var _r = _try.TryJson(value, jtokentype, out JToken _jt);
-            if (_r && haschildrentoken) { return _jt.Children().Any(); }
-            return _r;
         }
         /// <summary>
         /// Verilen dize değerinin geçerli bir URI olup olmadığını kontrol eder.
