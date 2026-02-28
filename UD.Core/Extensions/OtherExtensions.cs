@@ -5,7 +5,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json.Linq;
     using System;
-    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Data;
@@ -258,17 +257,17 @@
             }
             catch { return ""; }
         }
-        /// <summary> Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
+        /// <summary> Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TSearchDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
         /// <param name="services">Bağımlılık enjeksiyon konteyneri</param>
         /// <param name="assembly">Repository sınıflarının bulunduğu assembly</param>
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
             Guard.CheckNull(assembly, nameof(assembly));
-            var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface).Where(t => typeof(BaseService<,,,,,>).IsAssignableFrom(t)).ToArray();
+            var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface).Where(t => typeof(BaseService<,,,>).IsAssignableFrom(t)).ToArray();
             foreach (var implementation in types) // Kullanım şekli: builder.Services.AddRepositories(typeof(Program).Assembly);
             {
-                var interfaces = implementation.GetInterfaces().Where(x => typeof(IBaseService<,,,,,>).IsAssignableFrom(x)).ToArray();
+                var interfaces = implementation.GetInterfaces().Where(x => typeof(IBaseService<,,,>).IsAssignableFrom(x)).ToArray();
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
             return services;

@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Helper.Paging
 {
-    /// <summary> Sayfalama işlemine ait toplam sayı, sayfa bilgisi ve gezinme durumlarını içeren sınıf. </summary>
     public sealed class PagingInfo
     {
         private int _Totalcount;

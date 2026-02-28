@@ -6,15 +6,14 @@
     using System.Data.Common;
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
+    using UD.Core.Helper;
     using UD.Core.Helper.Paging;
     using static UD.Core.Helper.OrtakTools;
-    public interface IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>
+    public interface IBaseService<TContext, TEntity, TEntityDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class
-    where TEntityDto : class
+    where TEntityDto : IEntityDto
     where TSearchDto : ISearchAndPaginateDto
-    where TInsertDto : class
-    where TUpdateDto : class
     {
         DbSet<TEntity> DbSet { get; }
         DbConnection GetDbConnection();
@@ -26,13 +25,11 @@
         Task DeleteByPredicateAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationtoken = default);
         Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationtoken = default);
     }
-    public abstract class BaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto, TInsertDto, TUpdateDto>, IDisposable
+    public abstract class BaseService<TContext, TEntity, TEntityDto, TSearchDto> : IBaseService<TContext, TEntity, TEntityDto, TSearchDto>, IDisposable
     where TContext : DbContext
     where TEntity : class
-    where TEntityDto : class
+    where TEntityDto : IEntityDto
     where TSearchDto : ISearchAndPaginateDto
-    where TInsertDto : class
-    where TUpdateDto : class
     {
         protected readonly TContext context;
         protected readonly IMapper mapper;

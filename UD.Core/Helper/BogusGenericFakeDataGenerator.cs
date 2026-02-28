@@ -51,93 +51,49 @@
             this.arrayminlength = arrayminlength > 0 ? arrayminlength : 0;
             this.arraymaxlength = arraymaxlength > 0 ? arraymaxlength : 0;
         }
-        /// <summary>
-        /// Byte türü için sahte veri üretiminde kullanılacak minimum ve maksimum değerleri belirler.
-        /// </summary>
-        /// <param name="minbyte">Minimum byte değeri.</param>
-        /// <param name="maxbyte">Maksimum byte değeri.</param>
         public BogusGenericFakeDataGenerator WithByteRange(byte minbyte, byte maxbyte)
         {
             this.minbyte = minbyte;
             this.maxbyte = maxbyte;
             return this;
         }
-        /// <summary>
-        /// Short türü için sahte veri üretiminde kullanılacak minimum ve maksimum değerleri belirler.
-        /// </summary>
-        /// <param name="shortminvalue">Minimum short değeri.</param>
-        /// <param name="shortmaxvalue">Maksimum short değeri.</param>
         public BogusGenericFakeDataGenerator WithShortRange(short shortminvalue, short shortmaxvalue)
         {
             this.shortminvalue = shortminvalue;
             this.shortmaxvalue = shortmaxvalue;
             return this;
         }
-        /// <summary>
-        /// Int türü için sahte veri üretiminde kullanılacak minimum ve maksimum değerleri belirler.
-        /// </summary>
-        /// <param name="intminvalue">Minimum int değeri.</param>
-        /// <param name="intmaxvalue">Maksimum int değeri.</param>
         public BogusGenericFakeDataGenerator WithIntegerRange(int intminvalue, int intmaxvalue)
         {
             this.intminvalue = intminvalue;
             this.intmaxvalue = intmaxvalue;
             return this;
         }
-        /// <summary>
-        /// Long türü için sahte veri üretiminde kullanılacak minimum ve maksimum değerleri belirler.
-        /// </summary>
-        /// <param name="longminvalue">Minimum long değeri.</param>
-        /// <param name="longmaxvalue">Maksimum long değeri.</param>
         public BogusGenericFakeDataGenerator WithLongRange(long longminvalue, long longmaxvalue)
         {
             this.longminvalue = longminvalue;
             this.longmaxvalue = longmaxvalue;
             return this;
         }
-        /// <summary>
-        /// Decimal türü için sahte veri üretiminde kullanılacak minimum ve maksimum değerleri belirler.
-        /// </summary>
-        /// <param name="decimalminvalue">Minimum decimal değeri.</param>
-        /// <param name="decimalmaxvalue">Maksimum decimal değeri.</param>
         public BogusGenericFakeDataGenerator WithDecimalRange(decimal decimalminvalue, decimal decimalmaxvalue)
         {
             this.decimalminvalue = decimalminvalue;
             this.decimalmaxvalue = decimalmaxvalue;
             return this;
         }
-        /// <summary>
-        /// DateTime türü için sahte veri üretiminde kullanılacak başlangıç ve bitiş tarihlerini belirler.
-        /// </summary>
-        /// <param name="datetimebasdate">Başlangıç tarihi.</param>
-        /// <param name="datetimebitdate">Bitiş tarihi.</param>
         public BogusGenericFakeDataGenerator WithDateTimeRange(DateTime datetimebasdate, DateTime datetimebitdate)
         {
             this.datetimebasdate = datetimebasdate;
             this.datetimebitdate = datetimebitdate;
             return this;
         }
-        /// <summary>
-        /// DateOnly türü için sahte veri üretiminde kullanılacak başlangıç ve bitiş tarihlerini belirler.
-        /// </summary>
-        /// <param name="dateonlybasdate">Başlangıç tarihi.</param>
-        /// <param name="dateonlybitdate">Bitiş tarihi.</param>
         public BogusGenericFakeDataGenerator WithDateOnlyRange(DateOnly dateonlybasdate, DateOnly dateonlybitdate)
         {
             this.dateonlybasdate = dateonlybasdate;
             this.dateonlybitdate = dateonlybitdate;
             return this;
         }
-        /// <summary>
-        /// Belirtilen türde tek bir sahte veri nesnesi üretir.
-        /// </summary>
-        /// <typeparam name="T">Üretilecek nesnenin türü (sınıf olmalı).</typeparam>
         public T Generate<T>() where T : class => this.GenerateArray<T>(1)[0];
-        /// <summary>
-        /// Belirtilen türde ve sayıda sahte veri nesnesi dizisi üretir.
-        /// </summary>
-        /// <typeparam name="T">Üretilecek nesnelerin türü (sınıf olmalı).</typeparam>
-        /// <param name="count">Üretilecek nesne sayısı.</param>
         public T[] GenerateArray<T>(int count) where T : class
         {
             if (count > 0) { return new Faker<T>(this.locale).CustomInstantiator(faker => (T)this.createfakeinstance("", typeof(T), faker)).Generate(count).ToArray(); }

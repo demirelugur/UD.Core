@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Http;
     using System;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
@@ -43,11 +42,6 @@
             this.size = size;
             this.filecount = filecount;
         }
-        /// <summary>
-        /// Verilen bir değeri uygun boyut biriminde biçimlendirir.
-        /// </summary>
-        /// <param name="value">Biçimlendirilecek boyut değeri.</param>
-        /// <returns>Biçimlendirilmiş boyut.</returns>
         public static string FormatSize(double value)
         {
             if (value < 0 || Double.IsNaN(value)) { value = 0; }
@@ -56,10 +50,6 @@
             while (value > 1024 && _j < _sz) { value /= 1024; _j++; }
             return String.Join(" ", (Math.Ceiling(value * 100) / 100).ToString(), filesizeunits[_j]);
         }
-        /// <summary>
-        /// Verilen bir değeri ayrıntılı biçimde biçimler.
-        /// </summary>
-        /// <param name="value">Biçimlendirilecek boyut değeri.</param>
         public static string FormatSizeDetail(double value)
         {
             if (value < 0 || Double.IsNaN(value)) { return ""; }
@@ -67,14 +57,6 @@
             if (value < 1024 || value % 1024 == 0) { return _fs; }
             return $"{value.ToString()} {filesizeunits[0]} (~ {_fs})";
         }
-        /// <summary>
-        /// Yükleme ayarlarına göre dosyaların geçerliliğini kontrol eder.
-        /// </summary>
-        /// <param name="files">Kontrol edilecek dosyaların koleksiyonu.</param>
-        /// <param name="uploadsettings">Yükleme ayarları.</param>
-        /// <param name="dil">İşlem sırasında kullanılacak dil (örneğin: &quot;tr&quot; veya &quot;en&quot;).</param>
-        /// <param name="errors">Hata mesajlarını içeren bir dizi.</param>
-        /// <returns>Geçersizlik durumu (<see langword="true"/>/<see langword="false"/>).</returns>
         public static bool TryFileisException(ICollection<IFormFile> files, FileSettingsHelper uploadsettings, string dil, out string[] errors)
         {
             Guard.UnSupportLanguage(dil, nameof(dil));

@@ -25,10 +25,7 @@
             this.attachments = attachments ?? Array.Empty<Attachment>();
             this.priority = priority;
         }
-        /// <summary>
-        /// Yapılandırılmış <see cref="MailMessage"/> nesnesini kullanarak asenkron olarak e-Posta gönderir. Bu metod, belirtilen SMTP ayarlarını kullanarak e-Posta gönderim işlemini gerçekleştirir.
-        /// </summary>
-        public async Task<(bool haserror, Exception? ex)> SendAsync(SmtpSettingsHelper smtp, CancellationToken cancellationtoken = default)
+        public async Task<(bool haserror, Exception ex)> SendAsync(SmtpSettingsHelper smtp, CancellationToken cancellationtoken = default)
         {
             try
             {

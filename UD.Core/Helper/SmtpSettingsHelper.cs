@@ -80,25 +80,8 @@
             this.deliverymethod = deliverymethod;
             this.timeout = timeout;
         }
-        /// <summary>
-        /// Gmail için SMTP ayarlarını oluşturur. 
-        /// <code>new(email, password, &quot;smtp.gmail.com&quot;, 587, true, true, SmtpDeliveryMethod.Network, 0);</code>
-        /// </summary>
-        /// <param name="email">e-Posta adresi.</param>
-        /// <param name="password">Parola.</param>
-        /// <returns>Oluşturulan SMTP ayarları.</returns>
         public static SmtpSettingsHelper CreateSmtpSettings_gmail(string email, string password) => new(email, password, "smtp.gmail.com", 587, true, true, SmtpDeliveryMethod.Network, 0);
-        /// <summary>
-        /// Outlook için SMTP ayarlarını oluşturur. 
-        /// <code>new(email, password, &quot;smtp.office365.com&quot;, 587, true, false, SmtpDeliveryMethod.Network, 0);</code>
-        /// </summary>
-        /// <param name="email">e-Posta adresi.</param>
-        /// <param name="password">Parola.</param>
-        /// <returns>Oluşturulan SMTP ayarları.</returns>
         public static SmtpSettingsHelper CreateSmtpSettings_outlook(string email, string password) => new(email, password, "smtp.office365.com", 587, true, false, SmtpDeliveryMethod.Network, 0);
-        /// <summary>
-        /// value için tanımlanan nesneler: SmtpSettingsHelper, IFormCollection, String(JTokenType.Object), AnonymousObjectClass
-        /// </summary>
         public static SmtpSettingsHelper ToEntityFromObject(object value)
         {
             if (value == null) { return new(); }

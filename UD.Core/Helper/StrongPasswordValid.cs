@@ -3,46 +3,14 @@
     using UD.Core.Extensions;
     public sealed class StrongPasswordValid
     {
-        /// <summary>
-        /// Varsayılan güçlü şifre ayarlarını temsil eden örnek. Varsayılan minimum uzunluk 8, maksimum uzunluk 16, ardışık rakam, boşluk ve Türkçe karakter kontrolleri aktif durumdadır. <code>new StrongPasswordValid(8, 16, true, true, true);</code>
-        /// </summary>
         public static readonly StrongPasswordValid Default = new(8, 16, true, true, true);
-        /// <summary>
-        /// Şifrenin minimum uzunluğunu belirtir. Kullanıcı tarafından belirlenen minimum karakter sayısıdır.
-        /// </summary>
         public int minimumlength { get; }
-        /// <summary>
-        /// Şifrenin maksimum uzunluğunu belirtir. Kullanıcı tarafından belirlenen maksimum karakter sayısıdır. Eğer belirtilmezse null değer alır.
-        /// </summary>
         public int? maximumlength { get; }
-        /// <summary>
-        /// Şifre içinde ardışık üç rakam bulunup bulunmadığını kontrol eder. Eğer <see langword="true"/> ise, şifre kontrolü sırasında ardışık rakam kontrolü yapılacaktır.
-        /// </summary>
         public bool isardisiksayi { get; }
-        /// <summary>
-        /// Şifre içinde boşluk karakterinin bulunup bulunmadığını kontrol eder. Eğer <see langword="true"/> ise, şifre kontrolü sırasında boşluk kontrolü yapılacaktır.
-        /// </summary>
         public bool isbosluk { get; }
-        /// <summary>
-        /// Şifre içinde Türkçe karakterlerin bulunup bulunmadığını kontrol eder. Eğer <see langword="true"/> ise, Türkçe karakterler kontrol edilecektir.
-        /// </summary>
         public bool isturkceharf { get; }
-        /// <summary>
-        /// Kullanıcının adını temsil eder. Şifre kontrolü sırasında, adın şifre içinde geçip geçmediği kontrol edilecektir.
-        /// </summary>
         public string ad { get; }
-        /// <summary>
-        /// Kullanıcının soyadını temsil eder. Şifre kontrolü sırasında, soyadın şifre içinde geçip geçmediği kontrol edilecektir.
-        /// </summary>
         public string soyad { get; }
-        /// <summary>
-        /// Yeni bir <see cref="StrongPasswordValid"/> örneği oluşturur.
-        /// </summary>
-        /// <param name="minimumlength">Şifrenin minimum uzunluğu.</param>
-        /// <param name="maximumlength">Şifrenin maksimum uzunluğu. (0 veya negatifse null olarak ayarlanır)</param>
-        /// <param name="isardisiksayi">Ardışık rakam kontrolü yapılacak mı?</param>
-        /// <param name="isbosluk">Boşluk karakteri kontrolü yapılacak mı?</param>
-        /// <param name="isturkceharf">Türkçe karakter kontrolü yapılacak mı?</param>
         public StrongPasswordValid(int minimumlength, int? maximumlength, bool isardisiksayi, bool isbosluk, bool isturkceharf)
         {
             this.minimumlength = minimumlength;
@@ -51,26 +19,6 @@
             this.isbosluk = isbosluk;
             this.isturkceharf = isturkceharf;
         }
-        /// <summary>
-        /// Verilen şifre değerinin güçlü olup olmadığını kontrol eder ve olumsuz durumları bir uyarı dizisi olarak döner.
-        /// <para>Şifre kontrolleri şunları içerir:</para>
-        /// <list type="bullet">
-        ///     <item><description>Minimum uzunluk kontrolü.</description></item>
-        ///     <item><description>Maksimum uzunluk kontrolü.</description></item>
-        ///     <item><description>Ardışık üç rakam kontrolü.</description></item>
-        ///     <item><description>Boş karakter kontrolü.</description></item>
-        ///     <item><description>Türkçe karakter kontrolü.</description></item>
-        ///     <item><description>Doğum yılı kontrolü.</description></item>
-        ///     <item><description>Ad ve Soyad kontrolü.</description></item>
-        /// </list>
-        /// <para>Uyarılar, geçersiz şifre durumlarına göre döner. Eğer şifre güçlü ise uyarılar boş bir dizi olarak dönecektir.</para>
-        /// </summary>
-        /// <param name="value">Kontrol edilecek şifre.</param>
-        /// <param name="ad">Kullanıcının adı.</param>
-        /// <param name="soyad">Kullanıcının soyadı.</param>
-        /// <param name="dil">Dil kodu (örneğin: &quot;tr&quot; veya &quot;en&quot;).</param>
-        /// <param name="errors">Olumsuz durumlara ait uyarıları içeren dizi.</param>
-        /// <returns>Geçerli bir şifre değilse <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public bool TryIsWarning(string value, string ad, string soyad, string dil, out string[] errors)
         {
             Guard.CheckEmpty(value, nameof(value));

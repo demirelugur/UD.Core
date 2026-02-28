@@ -7,31 +7,19 @@
     {
         #region Equals
         public override bool Equals(object other) => this.Equals(other as EnumResult);
-        public override int GetHashCode() => HashCode.Combine(this.vl, this.tx, this.desc);
-        public bool Equals(EnumResult other) => other != null && this.vl == other.vl && this.tx == other.tx && this.desc == other.desc;
+        public override int GetHashCode() => HashCode.Combine(this.value, this.text, this.description);
+        public bool Equals(EnumResult other) => other != null && this.value == other.value && this.text == other.text && this.description == other.description;
         #endregion
-        /// <summary>
-        /// Enum değerinin sayısal karşılığını alır.
-        /// </summary>
-        public long vl { get; }
-        /// <summary>
-        /// Enum değerinin metin karşılığını alır.
-        /// </summary>
-        public string tx { get; }
-        /// <summary>
-        /// Enum değerinin açıklamasını alır.
-        /// </summary>
-        public string desc { get; }
-        /// <summary>
-        /// <see cref="desc"/> değerinin SEO dostu bir dizeye dönüştürür.
-        /// </summary>
-        public string descseo => this.desc.ToSeoFriendly();
+        public long value { get; }
+        public string text { get; }
+        public string description { get; }
+        public string descseo => this.description.ToSeoFriendly();
         public EnumResult() : this(default, "", "") { }
-        public EnumResult(long vl, string tx, string desc)
+        public EnumResult(long value, string text, string description)
         {
-            this.vl = vl;
-            this.tx = tx;
-            this.desc = desc;
+            this.value = value;
+            this.text = text;
+            this.description = description;
         }
         /// <summary>
         /// value için tanımlanan nesneler: EnumResult, IFormCollection, Enum, AnonymousObjectClass
@@ -44,9 +32,9 @@
             {
                 return ToEntityFromObject(new
                 {
-                    vl = _form.ParseOrDefault<long>(nameof(vl)),
-                    tx = _form.ParseOrDefault<string>(nameof(tx)) ?? "",
-                    desc = _form.ParseOrDefault<string>(nameof(desc)) ?? ""
+                    value = _form.ParseOrDefault<long>(nameof(value)),
+                    text = _form.ParseOrDefault<string>(nameof(text)) ?? "",
+                    description = _form.ParseOrDefault<string>(nameof(description)) ?? ""
                 });
             }
             var _t = value.GetType();
@@ -59,7 +47,7 @@
                 }
                 catch { return new(); }
             }
-            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new EnumResult((long)x.vl, (string)x.tx, (string)x.desc)).FirstOrDefault();
+            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new EnumResult((long)x.value, (string)x.text, (string)x.description)).FirstOrDefault();
         }
     }
 }

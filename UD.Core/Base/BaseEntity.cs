@@ -30,6 +30,6 @@
             this.Id = Id;
         }
         public override object[] GetKeys() => new object[] { this.Id };
-        public override string ToString() => $"[ENTITY: {this.GetType().Name}] Id = {this.Id}";
+        public override string ToString() => $"[ENTITY: {this.GetType().Name}] {nameof(this.Id)} = {this.Id}";
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace UD.Core.Helper.Paging
 {
     using System;
-    /// <summary> Sayfalanmış veri koleksiyonunu temsil eden arayüz.</summary>
     public interface IPaginate<T>
     {
         int pagenumber { get; set; }
@@ -9,7 +8,6 @@
         T[] items { get; set; }
         PagingInfo? info { get; set; }
     }
-    /// <summary> Sayfalanmış veri koleksiyonunun somut implementasyonu. </summary>
     public class Paginate<T> : IPaginate<T>
     {
         private int _Pagenumber;

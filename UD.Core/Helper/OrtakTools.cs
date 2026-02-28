@@ -846,10 +846,10 @@
             /// Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;value&quot; parametresindeki metni &quot;from&quot; dilinden &quot;to&quot; diline çevirir. Varsayılan olarak &quot;from&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve false durumu döner.
             /// </para>
             /// </summary>
-            public static async Task<(bool haserror, string value)> TryGoogleTranslateAsync(string value, TimeSpan timeout, CancellationToken cancellationtoken = default, string to = "en", string from = "tr")
+            public static async Task<(bool haserror, string value, Exception ex)> TryGoogleTranslateAsync(string value, TimeSpan timeout, CancellationToken cancellationtoken = default, string to = "en", string from = "tr")
             {
                 value = value.ToStringOrEmpty();
-                if (value == "") { return (false, ""); }
+                if (value == "") { return (false, "", null); }
                 Guard.CheckEmpty(to, nameof(to));
                 Guard.CheckEmpty(from, nameof(from));
                 try
@@ -863,11 +863,11 @@
                         var _response = await client.GetStringAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl={from}&tl={to}&dt=t&q={Uri.EscapeDataString(HttpUtility.HtmlEncode(value))}", cancellationtoken);
                         using (var doc = JsonDocument.Parse(_response))
                         {
-                            return (false, doc.RootElement[0][0][0].GetString().ToStringOrEmpty());
+                            return (false, doc.RootElement[0][0][0].GetString().ToStringOrEmpty(), null);
                         }
                     }
                 }
-                catch { return (true, ""); }
+                catch (Exception ex) { return (true, "", ex); }
             }
         }
     }
