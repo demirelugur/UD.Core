@@ -4,7 +4,6 @@
     using System;
     using System.Linq;
     using System.Net;
-
     public static class HttpContextExtensions
     {
         /// <summary> İstemcinin mobil bir cihaz olup olmadığını kontrol eder. </summary>
