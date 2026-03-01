@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Extensions
 {
-    using Newtonsoft.Json.Linq;
     using System;
     using System.ComponentModel;
     using System.Globalization;
