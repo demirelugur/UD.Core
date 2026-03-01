@@ -5,10 +5,10 @@
     using System.Linq;
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
+    using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
-
     public static class IQueryableExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>
@@ -96,7 +96,12 @@
                 var totalpage = Convert.ToInt32(Math.Ceiling(totalcount / Convert.ToDouble(size)));
                 p = new(totalcount, totalpage, pagenumber);
             }
-            if (!sorting.IsNullOrEmpty())
+            if (sorting.IsNullOrEmpty())
+            {
+                if (typeof(T).IsSubclassOfOpenGeneric(typeof(EntityDto<>))) { source = source.OrderBy(nameof(EntityDto<>.Id)); }
+                else { source = source.OrderBy(e => 0); }
+            }
+            else
             {
                 try { source = source.OrderBy(sorting); }
                 catch (Exception ex) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }

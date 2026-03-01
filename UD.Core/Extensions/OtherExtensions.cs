@@ -257,16 +257,6 @@
             }
             catch { return ""; }
         }
-        private static bool isSubclassOfOpenGeneric(Type type, Type openGeneric)
-        {
-            while (type != null && type != typeof(object))
-            {
-                var cur = (type.IsGenericType ? type.GetGenericTypeDefinition() : type);
-                if (cur == openGeneric) { return true; }
-                type = type.BaseType;
-            }
-            return false;
-        }
         private static bool implementsOpenGenericInterface(Type type, Type openGenericInterface) => type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == openGenericInterface);
         /// <summary> Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TSearchDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
         /// <param name="services">Bağımlılık enjeksiyon konteyneri</param>
@@ -274,7 +264,7 @@
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
-            var types = (assembly == null ? Array.Empty<Type>() : assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && isSubclassOfOpenGeneric(x, typeof(BaseService<,,,>))).ToArray());
+            var types = (assembly == null ? Array.Empty<Type>() : assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,>))).ToArray());
             foreach (var implementation in types)
             {
                 var interfaces = implementation.GetInterfaces().Where(x => implementsOpenGenericInterface(x, typeof(IBaseService<,,,>))).ToArray();

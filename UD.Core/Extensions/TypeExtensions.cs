@@ -51,5 +51,20 @@
         /// <param name="type">Enum türü.</param>
         /// <returns>Enum sonuçları dizisi.</returns>
         public static EnumResult[] ToEnumArray(this Type type) => Enum.GetNames(type).Select((enumname, i) => new EnumResult(Convert.ToInt64(Enum.GetValues(type).GetValue(i)), enumname, type.GetField(enumname).GetDescription())).ToArray();
+        /// <summary>
+        /// Belirtilen <paramref name="type"/> türünün, verilen açık generic (<paramref name="openGeneric"/>) türünden türeyip türemediğini kontrol eder.
+        /// </summary>
+        /// <param name="type">Kontrol edilecek tür.</param>
+        /// <param name="openGeneric">Açık generic taban türü.</param>
+        public static bool IsSubclassOfOpenGeneric(this Type type, Type openGeneric)
+        {
+            while (type != null && type != typeof(object))
+            {
+                var cur = (type.IsGenericType ? type.GetGenericTypeDefinition() : type);
+                if (cur == openGeneric) { return true; }
+                type = type.BaseType;
+            }
+            return false;
+        }
     }
 }
