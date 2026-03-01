@@ -47,6 +47,15 @@
             while (next.DayOfWeek.Includes(DayOfWeek.Saturday, DayOfWeek.Sunday)) { next = next.AddDays(1); }
             return next;
         }
+        /// <summary>Belirtilen tarihten önceki ilk iş gününü döndürür. Cumartesi ve Pazar günleri atlanarak bir önceki hafta içi güne geçer.</summary>
+        /// <param name="datetime">Başlangıç tarihi.</param>
+        /// <returns>Bir önceki iş günü (Pazartesi - Cuma arası) olan DateTime değeri.</returns>
+        public static DateTime PreviousWorkDay(this DateTime datetime)
+        {
+            var previous = datetime.AddDays(-1);
+            while (previous.DayOfWeek.Includes(DayOfWeek.Saturday, DayOfWeek.Sunday)) { previous = previous.AddDays(-1); }
+            return previous;
+        }
         /// <summary>
         /// Verilen <see cref="DateTime"/> değerinin SQL Server&#39;ın kabul ettiği minimum tarihten (1753-01-01) küçük olup olmadığını kontrol eder. Eğer tarih SQL minimumu olan 1753-01-01 (saat 00:00:00) veya daha büyükse aynı <see cref="DateTime"/> değerini döner; aksi halde <c>null</c> döner.
         /// </summary>

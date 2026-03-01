@@ -1,6 +1,4 @@
-﻿using UD.Core.Extensions;
-
-namespace UD.Core.UnitTest
+﻿namespace UD.Core.UnitTest
 {
     [TestFixture]
     public class Tests

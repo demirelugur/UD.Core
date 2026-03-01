@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper
+﻿namespace UD.Core.Helper.Configuration
 {
     using System;
     using UD.Core.Extensions;

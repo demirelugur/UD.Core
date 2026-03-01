@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Reflection;
-    using UD.Core.Helper;
+    using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public static class PropertyInfoExtensions
     {

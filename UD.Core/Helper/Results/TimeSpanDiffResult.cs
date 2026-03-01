@@ -1,6 +1,8 @@
 ﻿namespace UD.Core.Helper.Results
 {
     using UD.Core.Extensions;
+    using UD.Core.Helper.Validation;
+
     public sealed class TimeSpanDiffResult
     {
         private readonly TimeSpan timespan;

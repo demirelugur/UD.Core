@@ -3,7 +3,8 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using UD.Core.Helper;
+    using UD.Core.Helper.Validation;
+
     public static class UriExtensions
     {
         /// <summary>

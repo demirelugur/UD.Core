@@ -1,7 +1,8 @@
-﻿namespace UD.Core.Helper
+﻿namespace UD.Core.Helper.MailManagement
 {
     using System.Net.Mail;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public sealed class MailHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper
+﻿namespace UD.Core.Helper.FileManagement
 {
     using Microsoft.AspNetCore.Http;
     using System.Collections.Generic;

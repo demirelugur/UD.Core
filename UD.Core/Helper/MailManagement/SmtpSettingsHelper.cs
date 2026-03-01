@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper
+﻿namespace UD.Core.Helper.MailManagement
 {
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json.Linq;

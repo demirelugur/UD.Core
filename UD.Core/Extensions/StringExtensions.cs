@@ -10,7 +10,7 @@
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
-    using UD.Core.Helper;
+    using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public static class StringExtensions
     {

@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper
+﻿namespace UD.Core.Helper.FileManagement
 {
     using Microsoft.AspNetCore.Http;
     using System;
@@ -8,6 +8,7 @@
     using System.Text.Json.Serialization;
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Validation;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class FileSettingsHelper : IEquatable<FileSettingsHelper>
     {

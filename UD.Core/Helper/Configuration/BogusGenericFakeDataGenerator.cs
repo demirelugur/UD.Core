@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper
+﻿namespace UD.Core.Helper.Configuration
 {
     using Bogus;
     using System;
@@ -100,15 +100,16 @@
             return Array.Empty<T>();
         }
         private string createuri() => this.faker_en.Internet.Url().TrimEnd('/');
-        private MailAddress createmail(Faker faker) => new(this.faker_en.Internet.ExampleEmail().ToLower(), String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper()));
+        private string createfullname(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper());
+        private MailAddress createmail(Faker faker) => new(this.faker_en.Internet.ExampleEmail().ToLower(), this.createfullname(faker));
         private IPAddress createipadress() => this.faker_en.Internet.IpAddress().MapToIPv4();
         private object createfakeinstance(string parametername, Type type, Faker faker)
         {
             if (_try.TryTypeIsNullable(type, out Type _genericbasetype)) { return faker.Random.Bool(this.nullchange) ? null : this.createfakeinstance(parametername, _genericbasetype, faker); }
             if (type == typeof(string))
             {
-                if (parametername == "seo") { return this.createmail(faker).DisplayName.ToSeoFriendly(); }
-                if (parametername == "nms") { return this.createmail(faker).DisplayName; }
+                if (parametername == "seo") { return this.createfullname(faker).ToSeoFriendly(); }
+                if (parametername == "nms") { return this.createfullname(faker); }
                 if (parametername == "src") { return this.createuri(); }
                 if (parametername == "ipaddress") { return this.createipadress().ToString(); }
                 if (parametername == "color") { return faker.Internet.Color().ToUpper(); }

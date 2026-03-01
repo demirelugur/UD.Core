@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Helper.Results
 {
+    using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public sealed class DateDiffResult
     {

@@ -1,8 +1,9 @@
-﻿namespace UD.Core.Helper
+﻿namespace UD.Core.Helper.Database
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     public sealed class SqlServerProperties
     {
         /// <summary>

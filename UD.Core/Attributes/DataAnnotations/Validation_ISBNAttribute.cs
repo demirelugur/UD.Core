@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
+    using UD.Core.Helper.Configuration;
     using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class Validation_ISBNAttribute : ValidationAttribute

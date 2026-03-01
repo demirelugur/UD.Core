@@ -9,7 +9,8 @@
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Text;
-    using UD.Core.Helper;
+    using UD.Core.Helper.Database;
+    using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public static class DbContextExtensions
     {
