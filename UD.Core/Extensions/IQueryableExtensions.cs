@@ -1,6 +1,7 @@
 ﻿namespace UD.Core.Extensions
 {
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Query;
     using System;
     using System.Linq;
     using System.Linq.Dynamic.Core;
@@ -17,24 +18,14 @@
             if (condition) { return source.Where(predicate); }
             return source;
         }
-        /// <summary>
-        /// IQueryable kaynaklarının sayfalama işlemini gerçekleştirir.
-        /// <para>
-        /// <example>
-        /// SQL Örneği: <br/>
-        /// SELECT * FROM [dbo].[LoremIpsum] ORDER BY [Key] OFFSET ((@pagenumber - 1) * @size) ROWS FETCH NEXT @size ROWS ONLY
-        /// </example>
-        /// </para>
-        /// </summary>
-        /// <param name="source">Sayfalama işlemi yapılacak IQueryable kaynağı.</param>
-        /// <param name="pagenumber">Sayfa numarası (1 tabanlı).</param>
-        /// <param name="size">Her sayfada gösterilecek kayıt sayısı.</param>
-        /// <returns>Paginasyon yapılmış IQueryable kaynak.</returns>
-        public static IQueryable<T> Paginate<T>(this IQueryable<T> source, int pagenumber, int size)
+        /// <summary> IQueryable kaynağını asenkron olarak diziye çevirir. EF Core destekliyorsa ToArrayAsync, değilse ToArray kullanır.</summary>
+        /// <typeparam name="T">Eleman tipi</typeparam>
+        /// <param name="query">Kaynak sorgu</param>
+        /// <param name="cancellationToken">İptal token&#39;ı</param>
+        public static Task<T[]> ToArraySafeAsync<T>(this IQueryable<T> query, CancellationToken cancellationToken = default)
         {
-            pagenumber = Math.Max(1, pagenumber);
-            size = Math.Max(1, size);
-            return source.Skip((pagenumber - 1) * size).Take(size);
+            if (query.Provider is IAsyncQueryProvider) { return query.ToArrayAsync(cancellationToken); }
+            return Task.FromResult(query.ToArray());
         }
         /// <summary>İki IQueryable arasında 1-1 sol birleştirme (left join) işlemi gerçekleştirir.</summary>
         /// <typeparam name="TLeft">Sol taraftaki nesne türü.</typeparam>
@@ -92,22 +83,44 @@
             PagingInfo? p = null;
             if (loadinfo)
             {
-                var totalcount = await source.CountAsync(cancellationToken);
-                var totalpage = Convert.ToInt32(Math.Ceiling(totalcount / Convert.ToDouble(size)));
+                var totalcount = await source.LongCountAsync(cancellationToken);
+                var totalpage = Convert.ToInt64(Math.Ceiling(totalcount / Convert.ToDouble(size)));
                 p = new(totalcount, totalpage, pagenumber);
             }
+            IOrderedQueryable<T> orderedSource;
             if (sorting.IsNullOrEmpty())
             {
-                if (typeof(T).IsSubclassOfOpenGeneric(typeof(EntityDto<>))) { source = source.OrderBy(nameof(EntityDto<>.Id)); }
-                else { source = source.OrderBy(e => 0); }
+                if (typeof(T).IsSubclassOfOpenGeneric(typeof(EntityDto<>))) { orderedSource = source.OrderBy(nameof(EntityDto<>.Id)); }
+                else { orderedSource = source.OrderBy(x => 0); }
             }
             else
             {
-                try { source = source.OrderBy(sorting); }
+                try { orderedSource = source.OrderBy(sorting); }
                 catch (Exception ex) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
             }
-            var items = await source.Paginate(pagenumber, size).ToArrayAsync(cancellationToken);
+            var items = await orderedSource.Paginate(pagenumber, size).ToArrayAsync(cancellationToken);
             return new(pagenumber, size, items, p);
+        }
+        /// <summary>
+        /// IOrderedQueryable kaynaklarının sayfalama işlemini gerçekleştirir.
+        /// <para>
+        /// <example>
+        /// SQL Örneği: <br/>
+        /// SELECT * FROM [dbo].[LoremIpsum] ORDER BY [Key] OFFSET ((@pagenumber - 1) * @size) ROWS FETCH NEXT @size ROWS ONLY
+        /// </example>
+        /// </para>
+        /// </summary>
+        /// <param name="source">Sayfalama işlemi yapılacak IOrderedQueryable kaynağı.</param>
+        /// <param name="pagenumber">Sayfa numarası (1 tabanlı).</param>
+        /// <param name="size">Her sayfada gösterilecek kayıt sayısı.</param>
+        /// <returns>Paginasyon yapılmış IQueryable kaynak.</returns>
+        public static IQueryable<T> Paginate<T>(this IOrderedQueryable<T> source, int pagenumber, int size)
+        {
+            pagenumber = Math.Max(1, pagenumber);
+            size = Math.Max(1, size);
+            if (pagenumber == 1) { return source.Take(size); }
+            var skip = ((pagenumber - 1) * size);
+            return source.Skip(skip).Take(size);
         }
     }
 }

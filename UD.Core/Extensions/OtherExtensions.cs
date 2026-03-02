@@ -37,9 +37,9 @@
         public static bool IsRequiredAttribute(this ValidationContext validationcontext)
         {
             if (validationcontext == null) { return false; }
-            var _pi = validationcontext.ObjectInstance.GetType().GetProperty(validationcontext.MemberName);
-            if (_pi == null) { return false; }
-            return _try.TryCustomAttribute(_pi, out RequiredAttribute _);
+            var pi = validationcontext.ObjectInstance.GetType().GetProperty(validationcontext.MemberName);
+            if (pi == null) { return false; }
+            return _try.TryCustomAttribute(pi, out RequiredAttribute _);
         }
         /// <summary>
         /// Verilen doğrulama bağlamına göre, belirtilen özelliğin değerini günceller. Eğer özellik yazılabilir durumdaysa, yeni değer atanır.
@@ -50,8 +50,8 @@
         public static void SetValidatePropertyValue(this ValidationContext validationcontext, object value)
         {
             if (validationcontext == null) { return; }
-            var _propertyinfo = validationcontext.ObjectType.GetProperty(validationcontext.MemberName);
-            if (_propertyinfo != null && _propertyinfo.CanWrite) { _propertyinfo.SetValue(validationcontext.ObjectInstance, value); }
+            var propertyinfo = validationcontext.ObjectType.GetProperty(validationcontext.MemberName);
+            if (propertyinfo != null && propertyinfo.CanWrite) { propertyinfo.SetValue(validationcontext.ObjectInstance, value); }
         }
         /// <summary>
         /// Verilen ifadenin adını alır.
@@ -62,19 +62,19 @@
         public static string GetExpressionName(this Expression expression)
         {
             if (expression is LambdaExpression _lambda) { expression = _lambda.Body; }
-            var _result = "";
-            if (expression is MemberExpression _me) { _result = _me.Member.Name; }
+            var result = "";
+            if (expression is MemberExpression _me) { result = _me.Member.Name; }
             else if (expression is UnaryExpression _ue)
             {
-                if (_ue.Operand is MemberExpression _ume) { _result = _ume.Member.Name; }
+                if (_ue.Operand is MemberExpression _ume) { result = _ume.Member.Name; }
                 else if (_ue.Operand is MethodCallExpression _umce && _umce.Object is ConstantExpression _uce && _uce.Value != null)
                 {
-                    if (_uce.Value is MemberInfo _mi) { _result = _mi.Name; }
-                    else if (_try.TryGetProperty(_uce.Value, nameof(MemberInfo.Name), out string _name)) { _result = _name; }
+                    if (_uce.Value is MemberInfo _mi) { result = _mi.Name; }
+                    else if (_try.TryGetProperty(_uce.Value, nameof(MemberInfo.Name), out string _name)) { result = _name; }
                 }
             }
-            if (_result.IsNullOrEmpty()) { throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression)); }
-            return _result;
+            if (result.IsNullOrEmpty()) { throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression)); }
+            return result;
         }
         /// <summary>
         /// Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.
@@ -209,9 +209,9 @@
         /// <returns>Başarılıysa sorgu parametresi uygun türe dönüştürülür, aksi halde varsayılan değer döner.</returns>
         public static TKey ParseOrDefault<TKey>(this QueryString querystring, string key)
         {
-            var _querydic = (querystring.HasValue ? HttpUtility.ParseQueryString(querystring.Value) : new());
+            var querydic = (querystring.HasValue ? HttpUtility.ParseQueryString(querystring.Value) : new());
             key = key.ToStringOrEmpty();
-            if (_querydic.AllKeys.Contains(key)) { return _querydic[key].ParseOrDefault<TKey>(); }
+            if (querydic.AllKeys.Contains(key)) { return querydic[key].ParseOrDefault<TKey>(); }
             return default;
         }
         /// <summary>
@@ -226,15 +226,13 @@
             if (reader == null || key.IsNullOrEmpty()) { return default; }
             try
             {
-                var _value = reader[key];
-                if (_value == null || _value == DBNull.Value) { return default; }
-                return _value.ToString().ParseOrDefault<TKey>();
+                var value = reader[key];
+                if (value == null || value == DBNull.Value) { return default; }
+                return value.ToString().ParseOrDefault<TKey>();
             }
             catch { return default; }
         }
-        /// <summary>
-        /// Stopwatch&#39;ı durdurur ve geçen süreyi döner.
-        /// </summary>
+        /// <summary>Stopwatch&#39;ı durdurur ve geçen süreyi döner.</summary>
         /// <param name="stopwatch">Zamanlayıcı nesnesi.</param>
         /// <returns>Durdurulduktan sonra geçen süre.</returns>
         public static TimeSpan StopThenGetElapsed(this Stopwatch stopwatch)
@@ -257,7 +255,6 @@
             }
             catch { return ""; }
         }
-        private static bool implementsOpenGenericInterface(Type type, Type openGenericInterface) => type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == openGenericInterface);
         /// <summary> Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TSearchDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
         /// <param name="services">Bağımlılık enjeksiyon konteyneri</param>
         /// <param name="assembly">Repository sınıflarının bulunduğu assembly</param>
@@ -267,7 +264,7 @@
             var types = (assembly == null ? Array.Empty<Type>() : assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,>))).ToArray());
             foreach (var implementation in types)
             {
-                var interfaces = implementation.GetInterfaces().Where(x => implementsOpenGenericInterface(x, typeof(IBaseService<,,,>))).ToArray();
+                var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeof(IBaseService<,,,>))).ToArray();
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
             return services;
