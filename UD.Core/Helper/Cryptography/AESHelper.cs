@@ -51,20 +51,11 @@
                 }
             }
         }
-        private static byte[] generaterandomkey_private(int length)
-        {
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                var _randombytes = new byte[length];
-                rng.GetBytes(_randombytes);
-                return _randombytes;
-            }
-        }
         private static byte[] generatekey_private(string keystring, int requiredlength)
         {
-            byte[] _keybytes = Encoding.UTF8.GetBytes(keystring), _key = new byte[requiredlength];
-            Array.Copy(_keybytes, _key, Math.Min(_keybytes.Length, _key.Length));
-            return _key;
+            byte[] keybytes = Encoding.UTF8.GetBytes(keystring), key = new byte[requiredlength];
+            Array.Copy(keybytes, key, Math.Min(keybytes.Length, key.Length));
+            return key;
         }
         #endregion
         public static string Encrypt(string value, string key, string iv)
@@ -94,17 +85,17 @@
                 aes.GenerateIV();
                 using (var ms = new MemoryStream())
                 {
-                    var _randomkeylength = randomnumbers[Random.Shared.Next(randomnumbers.Length)];
+                    var randomkeylength = randomnumbers[Random.Shared.Next(randomnumbers.Length)];
                     foreach (var item in new[] {
-                        generaterandomkey_private(_randomkeylength), // randomkeylength değeri kadar rastgele karakter üretiyor
+                        _get.GenerateRandomkey(randomkeylength), // randomkeylength değeri kadar rastgele karakter üretiyor
                         aes.Key,
                         aes.IV,
                         encrypt_private(value, aes), // Veri
-                        new byte[] { _randomkeylength } // Baştan kaç karakterin rastgele olduğunu belirten değer
+                        new byte[] { randomkeylength } // Baştan kaç karakterin rastgele olduğunu belirten değer
                     }) { ms.Write(item.AsSpan()); }
-                    var _r = Convert.ToBase64String(ms.ToArray());
-                    var _firstchar = _r[0]; // İlk değerin char değerine göre CaesarCipherOperation ile karıştırma
-                    return _to.ToReverse(String.Concat(_firstchar.ToString(), _other.CaesarCipherOperation(_r.Substring(1), Convert.ToInt32(_firstchar))));
+                    var r = Convert.ToBase64String(ms.ToArray());
+                    var firstchar = r[0]; // İlk değerin char değerine göre CaesarCipherOperation ile karıştırma
+                    return _to.ToReverse(String.Concat(firstchar.ToString(), _other.CaesarCipherOperation(r.Substring(1), Convert.ToInt32(firstchar))));
                 }
             }
         }
@@ -112,12 +103,12 @@
         {
             Guard.CheckEmpty(encryptedvalue, nameof(encryptedvalue));
             encryptedvalue = _to.ToReverse(encryptedvalue);
-            var _firstchar = encryptedvalue[0];
-            var _combinedbytes = Convert.FromBase64String(String.Concat(_firstchar.ToString(), _other.CaesarCipherOperation(encryptedvalue.Substring(1), -1 * Convert.ToInt32(_firstchar))));
-            var _startindex = _combinedbytes[_combinedbytes.Length - 1];
-            var _sourcespan = _combinedbytes.AsSpan();
-            var _encryptedstartindex = _startindex + key_requiredlength + iv_requiredlength;
-            return decrypt_private(_sourcespan.Slice(_encryptedstartindex, _combinedbytes.Length - (1 + _encryptedstartindex)).ToArray(), _sourcespan.Slice(_startindex, key_requiredlength).ToArray(), _sourcespan.Slice(_startindex + key_requiredlength, iv_requiredlength).ToArray());
+            var firstchar = encryptedvalue[0];
+            var combinedbytes = Convert.FromBase64String(String.Concat(firstchar.ToString(), _other.CaesarCipherOperation(encryptedvalue.Substring(1), -1 * Convert.ToInt32(firstchar))));
+            var startindex = combinedbytes[combinedbytes.Length - 1];
+            var sourcespan = combinedbytes.AsSpan();
+            var encryptedstartindex = startindex + key_requiredlength + iv_requiredlength;
+            return decrypt_private(sourcespan.Slice(encryptedstartindex, combinedbytes.Length - (1 + encryptedstartindex)).ToArray(), sourcespan.Slice(startindex, key_requiredlength).ToArray(), sourcespan.Slice(startindex + key_requiredlength, iv_requiredlength).ToArray());
         }
     }
 }

@@ -16,7 +16,7 @@
         private PagingInfo? _Info;
         public int pagenumber { get { return _Pagenumber; } set { _Pagenumber = value; } }
         public int size { get { return _Size; } set { _Size = value; } }
-        public T[] items { get { return _Items; } set { _Items = value ?? Array.Empty<T>(); } }
+        public T[] items { get { return _Items; } set { _Items = value ?? []; } }
         public PagingInfo? info { get { return _Info; } set { _Info = value; } }
         public Paginate() : this(default, default, default, default) { }
         public Paginate(int pagenumber, int size, T[] items, PagingInfo? info)

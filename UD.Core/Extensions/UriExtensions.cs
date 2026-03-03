@@ -15,8 +15,8 @@
         public static string GenerateVersionedUrl(this Uri uri)
         {
             Guard.CheckNull(uri, nameof(uri));
-            var _separator = (uri.Query.Length > 0 ? "&" : "?");
-            return $"{uri.ToString().TrimEnd('/')}{_separator}v={DateTime.Now.Ticks}";
+            var separator = (uri.Query.Length > 0 ? "&" : "?");
+            return $"{uri.ToString().TrimEnd('/')}{separator}v={DateTime.Now.Ticks}";
         }
         /// <summary>
         /// Verilen URI&#39;nin bir YouTube gömme(embed) bağlantısı olup olmadığını kontrol eder.
@@ -37,8 +37,8 @@
             {
                 try
                 {
-                    var _response = await client.GetAsync(uri, cancellationtoken);
-                    if (_response.IsSuccessStatusCode) { return (false, _response.RequestMessage.RequestUri); }
+                    var response = await client.GetAsync(uri, cancellationtoken);
+                    if (response.IsSuccessStatusCode) { return (false, response.RequestMessage.RequestUri); }
                     return (true, default);
                 }
                 catch { return (true, default); }
@@ -57,9 +57,9 @@
             {
                 try
                 {
-                    var _response = await client.GetAsync(uri, cancellationtoken);
-                    _response.EnsureSuccessStatusCode();
-                    return (false, await _response.Content.ReadAsByteArrayAsync(cancellationtoken), _response.Content.Headers.ContentType?.MediaType.CoalesceOrDefault("application/octet-stream"), null);
+                    var response = await client.GetAsync(uri, cancellationtoken);
+                    response.EnsureSuccessStatusCode();
+                    return (false, await response.Content.ReadAsByteArrayAsync(cancellationtoken), response.Content.Headers.ContentType?.MediaType.CoalesceOrDefault("application/octet-stream"), null);
                 }
                 catch (Exception ex) { return (true, default, "", ex); }
             }
@@ -87,12 +87,12 @@
         public static string SetHttpsAndRemoveWww(this Uri uri)
         {
             Guard.CheckNull(uri, nameof(uri));
-            var _host = uri.Host;
-            if (_host.StartsWith("www.", StringComparison.OrdinalIgnoreCase)) { _host = _host.Substring(4); }
+            var host = uri.Host;
+            if (host.StartsWith("www.", StringComparison.OrdinalIgnoreCase)) { host = host.Substring(4); }
             return new UriBuilder(uri)
             {
                 Scheme = Uri.UriSchemeHttps,
-                Host = _host,
+                Host = host,
                 Port = -1
             }.Uri.ToString().TrimEnd('/');
         }

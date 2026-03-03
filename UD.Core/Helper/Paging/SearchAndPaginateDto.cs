@@ -22,7 +22,6 @@
         [Validation_RangePositiveInt32]
         [DefaultValue(20)]
         public int size { get { return _Size; } set { _Size = value; } }
-        [DefaultValue(null)]
         public string? sorting { get { return _Sorting; } set { _Sorting = value.ParseOrDefault<string>(); } }
         public SearchAndPaginateDto() : this(default, default, default) { }
         public SearchAndPaginateDto(int pagenumber, int size, string? sorting)

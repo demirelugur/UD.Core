@@ -26,14 +26,14 @@
             Guard.CheckEmpty(this.digits, nameof(this.digits));
             Guard.CheckEmpty(this.punctuations, nameof(this.punctuations));
             int i, _minlength = 4, _maxlength = Random.Shared.Next(_minlength * 2, (_minlength * 4) + 1);
-            var _sb = new StringBuilder();
-            if (_maxlength % _minlength == 0) { this.set_private(_sb, _maxlength / _minlength); }
+            var sb = new StringBuilder();
+            if (_maxlength % _minlength == 0) { this.set_private(sb, _maxlength / _minlength); }
             else
             {
-                this.set_private(_sb, 1);
-                for (i = _minlength; i < _maxlength; i++) { _sb.Append(this.allchars[Random.Shared.Next(this.allchars.Length)]); }
+                this.set_private(sb, 1);
+                for (i = _minlength; i < _maxlength; i++) { sb.Append(this.allchars[Random.Shared.Next(this.allchars.Length)]); }
             }
-            return new(_sb.ToString().ToCharArray().Shuffle().ToArray());
+            return new(sb.ToString().ToCharArray().Shuffle().ToArray());
         }
         private void set_private(StringBuilder sb, int count)
         {
@@ -49,12 +49,12 @@
         public static bool IsStrongPassword(string value, int minimumlength = 8)
         {
             value = value.ToStringOrEmpty();
-            var _r = value.Length >= minimumlength;
-            if (_r) { _r = Regex.IsMatch(value, @"[\d]"); }
-            if (_r) { _r = Regex.IsMatch(value, @"[a-z]"); }
-            if (_r) { _r = Regex.IsMatch(value, @"[A-Z]"); }
-            if (_r) { _r = Regex.IsMatch(value, @"[!@#$%^&*()_+\-=\[\]{}|;:',.<>?]"); }
-            return _r;
+            var r = value.Length >= minimumlength;
+            if (r) { r = Regex.IsMatch(value, @"[\d]"); }
+            if (r) { r = Regex.IsMatch(value, @"[a-z]"); }
+            if (r) { r = Regex.IsMatch(value, @"[A-Z]"); }
+            if (r) { r = Regex.IsMatch(value, @"[!@#$%^&*()_+\-=\[\]{}|;:',.<>?]"); }
+            return r;
         }
     }
 }

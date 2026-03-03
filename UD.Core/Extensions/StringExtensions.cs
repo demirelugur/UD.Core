@@ -25,7 +25,7 @@
         /// <param name="value">Dönüştürülecek tarih içeren dize.</param>
         /// <returns>Geçerli bir <see cref="DateTime"/> nesnesi veya varsayılan <see cref="DateTime"/> değeri.</returns>
         public static DateTime ToDate(this string value) => value.ParseOrDefault<DateTime>();
-        private static readonly Dictionary<char, char> _charreplacements = new Dictionary<char, char>
+        private static readonly Dictionary<char, char> charreplacements = new Dictionary<char, char>
         {
             { 'ş', 's' }, { 'Ş', 's' },
             { 'ö', 'o' }, { 'Ö', 'o' },
@@ -34,7 +34,7 @@
             { 'ğ', 'g' }, { 'Ğ', 'g' },
             { 'ı', 'i' }, { 'I', 'i' }, { 'İ', 'i' }
         };
-        private static readonly char[] _charstoremove = new char[] { '?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+' };
+        private static readonly char[] charstoremove = new char[] { '?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+' };
         /// <summary>
         /// Verilen dizeyi SEO dostu bir hale getirir.
         /// </summary>
@@ -44,14 +44,14 @@
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
-            var _sb = new StringBuilder(value.Length);
+            var sb = new StringBuilder(value.Length);
             foreach (var item in value.ToCharArray())
             {
-                if (_charreplacements.TryGetValue(item, out char _v)) { _sb.Append(_v); }
-                else if (item == ' ') { _sb.Append('-'); }
-                else if (Array.IndexOf(_charstoremove, item) == -1) { _sb.Append(item); }
+                if (charreplacements.TryGetValue(item, out char _v)) { sb.Append(_v); }
+                else if (item == ' ') { sb.Append('-'); }
+                else if (Array.IndexOf(charstoremove, item) == -1) { sb.Append(item); }
             }
-            value = _sb.ToString().ToLower().Trim();
+            value = sb.ToString().ToLower().Trim();
             value = Regex.Replace(value, @"[^a-z0-9-]", "-");
             value = Regex.Replace(value, @"-+", "-");
             return value.Trim('-');
@@ -76,7 +76,7 @@
         {
             value = value.ToStringOrEmpty();
             if (value != "") { return value; }
-            return (defaultvalues ?? Array.Empty<string>()).Select(x => x.ToStringOrEmpty()).FirstOrDefault(x => x != "") ?? "";
+            return (defaultvalues ?? []).Select(x => x.ToStringOrEmpty()).FirstOrDefault(x => x != "") ?? "";
         }
         /// <summary>
         /// Verilen dize değerinin null veya boş olup olmadığını kontrol eder.
@@ -128,17 +128,17 @@
         /// <returns>Biçimlendirilmiş dize.</returns>
         public static string FormatVar<TArgument>(this string value, TArgument argument) where TArgument : class
         {
-            HashSet<string> _arm;
-            string _p;
+            HashSet<string> arm;
+            string p;
             foreach (var pi in typeof(TArgument).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).ToArray())
             {
-                _arm = new HashSet<string>();
+                arm = new HashSet<string>();
                 foreach (Match item in Regex.Matches(value, String.Concat(@"\{", pi.Name, @"(\:.*?)?\}")))
                 {
-                    if (_arm.Contains(item.Value)) { continue; }
-                    _arm.Add(item.Value);
-                    _p = String.Concat("{0", item.Groups[1].Value, "}");
-                    value = value.Replace(item.Value, String.Format(_p, pi.GetValue(argument)));
+                    if (arm.Contains(item.Value)) { continue; }
+                    arm.Add(item.Value);
+                    p = String.Concat("{0", item.Groups[1].Value, "}");
+                    value = value.Replace(item.Value, String.Format(p, pi.GetValue(argument)));
                 }
             }
             return value;
@@ -201,24 +201,24 @@
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
             if (value.Length == 1) { return value.ToUpper(); }
-            punctuations = (punctuations ?? Array.Empty<char>()).Where(Char.IsPunctuation).ToArray();
-            bool _haspunc = punctuations.Length > 0, _newword = true;
-            var _sb = new StringBuilder();
+            punctuations = (punctuations ?? []).Where(Char.IsPunctuation).ToArray();
+            bool haspunc = punctuations.Length > 0, newword = true;
+            var sb = new StringBuilder();
             foreach (var item in value.ToCharArray())
             {
-                if ((iswhitespace && Char.IsWhiteSpace(item)) || (_haspunc && punctuations.Contains(item)))
+                if ((iswhitespace && Char.IsWhiteSpace(item)) || (haspunc && punctuations.Contains(item)))
                 {
-                    _sb.Append(item);
-                    _newword = true;
+                    sb.Append(item);
+                    newword = true;
                 }
-                else if (_newword)
+                else if (newword)
                 {
-                    _sb.Append(Convert.ToString(item).ToUpper());
-                    _newword = false;
+                    sb.Append(Convert.ToString(item).ToUpper());
+                    newword = false;
                 }
-                else { _sb.Append(Convert.ToString(item).ToLower()); }
+                else { sb.Append(Convert.ToString(item).ToLower()); }
             }
-            return _sb.ToString();
+            return sb.ToString();
         }
         /// <summary>
         /// Verilen bir dizeyi, belirtilen türde bir değere dönüştürür. Dönüşüm başarısız olursa, varsayılan değeri döner.
@@ -228,9 +228,9 @@
         /// <returns>Dönüştürülen değeri veya dönüşüm başarısızsa varsayılan değeri döner.</returns>
         public static TKey ParseOrDefault<TKey>(this string value)
         {
-            var _pd = parseordefault_private(value, typeof(TKey));
-            if (_pd.value == null) { return default; }
-            try { return (TKey)Convert.ChangeType(_pd.value, _pd.genericbasetype); }
+            var pd = parseordefault_private(value, typeof(TKey));
+            if (pd.value == null) { return default; }
+            try { return (TKey)Convert.ChangeType(pd.value, pd.genericbasetype); }
             catch { return default; }
         }
         private static (object value, Type genericbasetype) parseordefault_private(string value, Type propertytype)
@@ -255,8 +255,8 @@
                 if (_genericbasetype == typeof(DateOnly))
                 {
                     if (DateOnly.TryParse(value, out DateOnly _da)) { return (_da, _genericbasetype); }
-                    var _date = value.ParseOrDefault<DateTime?>();
-                    if (_date.HasValue) { return (_date.Value.ToDateOnly(), _genericbasetype); }
+                    var date = value.ParseOrDefault<DateTime?>();
+                    if (date.HasValue) { return (date.Value.ToDateOnly(), _genericbasetype); }
                     return (default, _genericbasetype);
                 }
                 if (_genericbasetype == typeof(Uri))

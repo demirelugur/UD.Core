@@ -35,12 +35,13 @@
             return null;
         }
         /// <summary>
-        /// value için tanımlanan nesneler: ClientRequestInfo, HttpContext, IFormCollection, AnonymousObjectClass
+        /// value için tanımlanan nesneler: ClientRequestInfo, IHttpContextAccessor, HttpContext, IFormCollection, AnonymousObjectClass
         /// </summary>
         public static ClientRequestInfoResult ToEntityFromObject(object value)
         {
             if (value == null) { return new(); }
             if (value is ClientRequestInfoResult _c) { return _c; }
+            if (value is IHttpContextAccessor _hc) { return ToEntityFromObject(_hc.HttpContext); }
             if (value is HttpContext _context) { return new(_context.IsMobileDevice(), _context.GetIPAddress()); }
             if (value is IFormCollection _form) { return new(_form.ParseOrDefault<bool>(nameof(ismobil)), _form.ParseOrDefault<string>(nameof(ipaddress)) ?? ""); }
             return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ClientRequestInfoResult((bool)x.ismobil, (object)x.ipaddress)).FirstOrDefault();

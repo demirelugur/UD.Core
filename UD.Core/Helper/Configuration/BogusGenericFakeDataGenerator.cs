@@ -42,7 +42,7 @@
         /// <param name="locale">Kullanılacak yerel ayar (örneğin, &quot;tr&quot; için Türkçe, &quot;en&quot; için İngilizce).</param>
         /// <param name="nullchange">0 ile 1 arasında bir olasılık değeri (0: asla null, 1: her zaman null).</param>
         /// <param name="arrayminlength">Array türünde propertylerin minimum oluşabileceği eleman sayısı.</param>
-        /// <param name="arraymaxlength">Array türünde propertylerin maksimum oluşabileceği eleman sayısı. Değer 0 olursa Array.Empty oluşur</param>
+        /// <param name="arraymaxlength">Array türünde propertylerin maksimum oluşabileceği eleman sayısı. Değer 0 olursa [] oluşur</param>
         public BogusGenericFakeDataGenerator(string locale = "tr", float nullchange = 0.25f, int arrayminlength = 0, int arraymaxlength = 10)
         {
             this.faker_en = new("en");
@@ -97,7 +97,7 @@
         public T[] GenerateArray<T>(int count) where T : class
         {
             if (count > 0) { return new Faker<T>(this.locale).CustomInstantiator(faker => (T)this.createfakeinstance("", typeof(T), faker)).Generate(count).ToArray(); }
-            return Array.Empty<T>();
+            return [];
         }
         private string createuri() => this.faker_en.Internet.Url().TrimEnd('/');
         private string createfullname(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper());
@@ -146,32 +146,32 @@
             if (type.IsEnum) { return faker.PickRandom(Enum.GetValues(type).Cast<object>().ToArray()); }
             if (type.IsArray)
             {
-                int i, _count = (this.arraymaxlength > 0 ? faker.Random.Int(this.arrayminlength, this.arraymaxlength) : 0);
-                var _elemtype = type.GetElementType();
-                var _array = Array.CreateInstance(_elemtype, _count);
-                for (i = 0; i < _count; i++) { _array.SetValue(this.createfakeinstance(parametername, _elemtype, faker), i); }
-                return _array;
+                int i, count = (this.arraymaxlength > 0 ? faker.Random.Int(this.arrayminlength, this.arraymaxlength) : 0);
+                var elemtype = type.GetElementType();
+                var array = Array.CreateInstance(elemtype, count);
+                for (i = 0; i < count; i++) { array.SetValue(this.createfakeinstance(parametername, elemtype, faker), i); }
+                return array;
             }
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
-                var _keytype = type.GetGenericArguments()[0];
-                var _valuetype = type.GetGenericArguments()[1];
-                int i, _count = (this.arraymaxlength > 0 ? faker.Random.Int(this.arrayminlength, this.arraymaxlength) : 0);
-                var _dict = (IDictionary)Activator.CreateInstance(type);
-                for (i = 0; i < _count; i++)
+                var keytype = type.GetGenericArguments()[0];
+                var valuetype = type.GetGenericArguments()[1];
+                int i, count = (this.arraymaxlength > 0 ? faker.Random.Int(this.arrayminlength, this.arraymaxlength) : 0);
+                var dict = (IDictionary)Activator.CreateInstance(type);
+                for (i = 0; i < count; i++)
                 {
-                    var _key = this.createfakeinstance(parametername, _keytype, faker);
-                    if (_dict.Contains(_key)) { continue; }
-                    _dict.Add(_key, this.createfakeinstance(parametername, _valuetype, faker));
+                    var key = this.createfakeinstance(parametername, keytype, faker);
+                    if (dict.Contains(key)) { continue; }
+                    dict.Add(key, this.createfakeinstance(parametername, valuetype, faker));
                 }
-                return _dict;
+                return dict;
             }
             if (type.IsClass)
             {
-                var _ctor = type.GetConstructors().FirstOrDefault();
-                if (_ctor == null) { throw new InvalidOperationException($"\"{type.FullName}\" için genel bir kurucu (Constructors) bulunamadı!"); }
-                var _args = _ctor.GetParameters().Select(x => this.createfakeinstance(x.Name, x.ParameterType, faker)).ToArray();
-                return _ctor.Invoke(_args);
+                var ctor = type.GetConstructors().FirstOrDefault();
+                if (ctor == null) { throw new InvalidOperationException($"\"{type.FullName}\" için genel bir kurucu (Constructors) bulunamadı!"); }
+                var args = ctor.GetParameters().Select(x => this.createfakeinstance(x.Name, x.ParameterType, faker)).ToArray();
+                return ctor.Invoke(args);
             }
             return null;
         }

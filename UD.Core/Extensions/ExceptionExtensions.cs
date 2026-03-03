@@ -42,13 +42,13 @@
         /// <returns>Exception nesnelerinden oluşan bir yığın (Stack).</returns>
         public static Stack<Exception> AllException(this Exception exception)
         {
-            var _r = new Stack<Exception>();
+            var r = new Stack<Exception>();
             do
             {
-                _r.Push(exception);
+                r.Push(exception);
                 exception = exception.InnerException;
             } while (exception != null);
-            return _r;
+            return r;
         }
         /// <summary>Belirtilen hatanın ve varsa iç içe geçmiş tüm hata nesnelerinin mesajlarını bir dizi (string[]) olarak döndürür. Bu yöntem, hata zincirindeki her bir Exception nesnesinin mesajına erişim sağlar.</summary>
         /// <param name="exception">Kök hata (Exception) nesnesi.</param>
@@ -61,21 +61,21 @@
         {
             try
             {
-                var _r = new List<object>();
+                var r = new List<object>();
                 if (exception is DbUpdateException _due)
                 {
                     foreach (var entry in _due.Entries)
                     {
                         if (entry?.Entity == null) { continue; }
-                        var _vrs = new List<ValidationResult>();
-                        Validator.TryValidateObject(entry.Entity, new(entry.Entity), _vrs, true);
+                        var vrs = new List<ValidationResult>();
+                        Validator.TryValidateObject(entry.Entity, new(entry.Entity), vrs, true);
                         var tablefullname = entry.Entity.GetType().FullName;
-                        foreach (var item in _vrs)
+                        foreach (var item in vrs)
                         {
                             if (item.ErrorMessage.IsNullOrEmpty()) { continue; }
                             foreach (var propertyname in item.MemberNames)
                             {
-                                _r.Add(new
+                                r.Add(new
                                 {
                                     tablefullname,
                                     propertyname,
@@ -85,9 +85,9 @@
                         }
                     }
                 }
-                return _r.ToArray();
+                return r.ToArray();
             }
-            catch { return Array.Empty<object>(); }
+            catch { return []; }
         }
     }
 }

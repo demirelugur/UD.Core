@@ -58,5 +58,20 @@
             }
             return false;
         }
+        /// <summary>
+        /// Belirtilen enum türündeki değerleri ve karşılık gelen long değerlerini içeren bir sözlük oluşturur.
+        /// </summary>
+        /// <param name="type">Enum türü.</param>
+        /// <returns>Enum isimlerini ve long karşılıklarını içeren sözlük.</returns>
+        public static Dictionary<string, long> ToDictionaryFromEnum(this Type type)
+        {
+            if (type == null || !type.IsEnum) { return new(); }
+            var values = Enum.GetValues(type);
+            var names = Enum.GetNames(type);
+            int i, vl = values.Length;
+            var dict = new Dictionary<string, long>(vl);
+            for (i = 0; i < vl; i++) { dict.Add(names[i], Convert.ToInt64(values.GetValue(i))); }
+            return dict;
+        }
     }
 }

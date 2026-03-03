@@ -8,7 +8,7 @@
         public ISBNHelper(string isbn) => this.setisbn(isbn);
         public string Isbn10
         {
-            get { return _isbn10; }
+            get { return isbn10; }
             set
             {
                 if (TryIsValid(value, out string _c)) { this.setisbn(_c); }
@@ -17,7 +17,7 @@
         }
         public string Isbn13
         {
-            get { return _isbn13; }
+            get { return isbn13; }
             set
             {
                 if (TryIsValid(value, out string _c)) { this.setisbn(_c); }
@@ -54,25 +54,25 @@
             return false;
         }
         #region Private
-        private string _isbn10;
-        private string _isbn13;
+        private string isbn10;
+        private string isbn13;
         private void setisbn(string isbn)
         {
             isbn = cleanisbn(isbn);
             if (isbn.Length == 10)
             {
-                this._isbn10 = isbn;
-                this._isbn13 = Convert10to13(isbn);
+                this.isbn10 = isbn;
+                this.isbn13 = Convert10to13(isbn);
             }
             else if (isbn.Length == 13)
             {
-                this._isbn10 = Convert13to10(isbn);
-                this._isbn13 = isbn;
+                this.isbn10 = Convert13to10(isbn);
+                this.isbn13 = isbn;
             }
             else
             {
-                this._isbn10 = "";
-                this._isbn13 = "";
+                this.isbn10 = "";
+                this.isbn13 = "";
             }
         }
         private static string cleanisbn(string isbn) => isbn.ToStringOrEmpty().Replace("-", "").Replace(" ", "");

@@ -83,9 +83,9 @@
         public static dynamic ToDynamic(this object value)
         {
             Guard.CheckNull(value, nameof(value));
-            IDictionary<string, object> _e = new ExpandoObject();
-            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType())) { _e.Add(property.Name, property.GetValue(value)); }
-            return _e as ExpandoObject;
+            IDictionary<string, object> e = new ExpandoObject();
+            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType())) { e.Add(property.Name, property.GetValue(value)); }
+            return e as ExpandoObject;
         }
     }
 }

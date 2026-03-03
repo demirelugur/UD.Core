@@ -46,9 +46,9 @@
             /// <param name="physicallypath">Oluşturulacak klasörün fiziksel yolu.</param>
             public static void DirectoryCreate(string physicallypath)
             {
-                var _di = new DirectoryInfo(physicallypath);
-                if (_di.Parent != null) { DirectoryCreate(_di.Parent.FullName); }
-                if (!_di.Exists) { _di.Create(); }
+                var di = new DirectoryInfo(physicallypath);
+                if (di.Parent != null) { DirectoryCreate(di.Parent.FullName); }
+                if (!di.Exists) { di.Create(); }
             }
         }
         public sealed class _get
@@ -102,7 +102,7 @@
             /// <returns>Verilen isimlerin baş harflerinden oluşan kısaltma. Eğer parametreler boş veya geçersizse boş string döner.</returns>
             public static string GetNameInitials(params string[] names)
             {
-                names = (names ?? Array.Empty<string>()).Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
+                names = (names ?? []).Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
                 if (names.Length == 0) { return ""; }
                 return String.Join(".", names.Select(x => String.Join("", x.ToUpper().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x[0]).ToArray())));
             }
@@ -143,13 +143,13 @@
                         isluser = _j["isluser"].ToEnumerable().Select(x => (x != null && x.Type == JTokenType.String) ? Convert.ToString(x) : "").FirstOrDefault()
                     }, dateformat);
                 }
-                var _type = model.GetType();
-                if (_type.FullName.StartsWith("System.Tuple") || _type.FullName.StartsWith("System.ValueTuple"))
+                var type = model.GetType();
+                if (type.FullName.StartsWith("System.Tuple") || type.FullName.StartsWith("System.ValueTuple"))
                 {
-                    var _args = _type.GetGenericArguments();
-                    if (_args.Length >= 2)
+                    var args = type.GetGenericArguments();
+                    if (args.Length >= 2)
                     {
-                        if (_args[0].Includes(typeof(DateTime), typeof(DateOnly)) && _args[1] == typeof(string))
+                        if (args[0].Includes(typeof(DateTime), typeof(DateOnly)) && args[1] == typeof(string))
                         {
                             dynamic _t = model;
                             return GetIslemInfoFromObject(new
@@ -158,7 +158,7 @@
                                 isluser = (string)_t.Item2
                             }, dateformat);
                         }
-                        if (_args[0] == typeof(string) && _args[1].Includes(typeof(DateTime), typeof(DateOnly)))
+                        if (args[0] == typeof(string) && args[1].Includes(typeof(DateTime), typeof(DateOnly)))
                         {
                             dynamic _t = model;
                             return GetIslemInfoFromObject(new
@@ -190,6 +190,18 @@
                 }
                 return "application/octet-stream";
             }
+            /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
+            /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
+            /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
+            public static byte[] GenerateRandomkey(int length)
+            {
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    var randombytes = new byte[length];
+                    rng.GetBytes(randombytes);
+                    return randombytes;
+                }
+            }
             /// <summary>Metni belirtilen maksimum uzunluğa kadar kısaltır. Metin belirtilen uzunluğu aşıyorsa sonuna üç nokta (...) ekler. Metin boş veya null ise boş string döner. </summary>
             /// <param name="value">İşlem yapılacak metin</param>
             /// <param name="length">Metnin maksimum uzunluğu</param>
@@ -211,19 +223,19 @@
             /// <returns>Maske uygulanmış cüzdan seri numarası, opsiyonel olarak kimlik türü bilgisiyle birlikte. Geçersizse boş string döner.</returns>
             public static string MaskedCuzdanSeriNo(string cuzdanserino, NVI_KimlikTypes? kimliktipi, bool showfull, string dil)
             {
-                var _cs = cuzdanserino.ToStringOrEmpty();
-                if (_cs == "") { return ""; }
-                if (!showfull) { _cs = String.Concat(_cs.Substring(0, 3), new('*', _cs.Length - 3)); }
-                if (!kimliktipi.HasValue) { return _cs; }
+                var cs = cuzdanserino.ToStringOrEmpty();
+                if (cs == "") { return ""; }
+                if (!showfull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
+                if (!kimliktipi.HasValue) { return cs; }
                 Guard.UnSupportLanguage(dil, nameof(dil));
-                string _t;
+                string t;
                 switch (kimliktipi.Value)
                 {
-                    case NVI_KimlikTypes.yeni: _t = (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"); break;
-                    case NVI_KimlikTypes.eski: _t = (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"); break;
+                    case NVI_KimlikTypes.yeni: t = (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"); break;
+                    case NVI_KimlikTypes.eski: t = (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"); break;
                     default: throw _other.ThrowNotSupportedForEnum<NVI_KimlikTypes>();
                 }
-                return $"{_cs} ({_t})";
+                return $"{cs} ({t})";
             }
             /// <summary>
             /// Doğum tarihini maskeler veya tam tarih olarak döndürür.
@@ -233,9 +245,9 @@
             /// <returns>Maskelenmiş veya tam doğum tarihi stringi.</returns>
             public static string MaskedDogumTarih(DateOnly dogumtarih, bool showfull)
             {
-                var _d = dogumtarih.ToString(_date.ddMMyyyy);
-                if (showfull) { return _d; }
-                return $"{_d.Substring(0, 2)}.**.{_d.Substring(6, 2)}**";
+                var d = dogumtarih.ToString(_date.ddMMyyyy);
+                if (showfull) { return d; }
+                return $"{d.Substring(0, 2)}.**.{d.Substring(6, 2)}**";
             }
             /// <summary>
             /// Türkiye biçimine uygun telefon numarasını maskeleme işlemi yapar.
@@ -261,9 +273,9 @@
                 if (value.IsTCKimlikNo()) { count = 6; }
                 else if (value.IsVergiKimlikNo()) { count = 5; }
                 if (count == 0) { return ""; }
-                var _t = value.ToString();
-                if (showfull) { return _t; }
-                return String.Concat(_t.Substring(0, 3), new('*', count), _t.Substring(9, 2));
+                var t = value.ToString();
+                if (showfull) { return t; }
+                return String.Concat(t.Substring(0, 3), new('*', count), t.Substring(9, 2));
             }
             /// <summary>Verilen metindeki Türkçe özel karakterleri (Ç, ç, Ğ, ğ, İ, ı, Ö, ö, Ş, ş, Ü, ü) karşılık gelen İngilizce karakterlerle (C, c, G, g, I, i, O, o, S, s, U, u) değiştirir. Eğer metin null ise, boş bir string döner.</summary>
             /// <param name="value">Türkçe karakterlerin değiştirileceği metin.</param>
@@ -289,9 +301,9 @@
                 if (path.IsNullOrEmpty()) { return false; }
                 try
                 {
-                    var _uzn = Path.GetExtension(path).ToLower();
-                    if (_uzn == ".pdf") { return false; }
-                    if (new FileExtensionContentTypeProvider().Mappings.Any(x => x.Key == _uzn && x.Value.StartsWith("image/"))) { return false; }
+                    var uzn = Path.GetExtension(path).ToLower();
+                    if (uzn == ".pdf") { return false; }
+                    if (new FileExtensionContentTypeProvider().Mappings.Any(x => x.Key == uzn && x.Value.StartsWith("image/"))) { return false; }
                     return true;
                 }
                 catch { return false; }
@@ -312,10 +324,10 @@
             /// <returns>Dönüştürülmüş değer</returns>
             public static object ChangeType(object value, Type type)
             {
-                var _t = _try.TryTypeIsNullable(type, out Type _genericbasetype);
-                if (_t && value == null) { return null; }
+                var t = _try.TryTypeIsNullable(type, out Type _genericbasetype);
+                if (t && value == null) { return null; }
                 if (_genericbasetype.IsEnum) { return Enum.ToObject(_genericbasetype, value); }
-                return Convert.ChangeType(value, _t ? Nullable.GetUnderlyingType(type) : _genericbasetype);
+                return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericbasetype);
             }
             /// <summary>
             /// Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.
@@ -326,14 +338,14 @@
             public static string CaesarCipherOperation(string value, int key)
             {
                 if (key < 0) { return CaesarCipherOperation(value, key + 26); }
-                var _r = "";
+                var r = "";
                 foreach (var item in value.ToStringOrEmpty().ToCharArray())
                 {
-                    if ((item >= 'A' && item <= 'Z')) { _r = String.Concat(_r, Convert.ToChar(((item - 'A' + key) % 26) + 'A').ToString()); }
-                    else if ((item >= 'a' && item <= 'z')) { _r = String.Concat(_r, Convert.ToChar(((item - 'a' + key) % 26) + 'a').ToString()); }
-                    else { _r = String.Concat(_r, item.ToString()); }
+                    if ((item >= 'A' && item <= 'Z')) { r = String.Concat(r, Convert.ToChar(((item - 'A' + key) % 26) + 'A').ToString()); }
+                    else if ((item >= 'a' && item <= 'z')) { r = String.Concat(r, Convert.ToChar(((item - 'a' + key) % 26) + 'a').ToString()); }
+                    else { r = String.Concat(r, item.ToString()); }
                 }
-                return _r;
+                return r;
             }
             /// <summary>
             /// Belirtilen nesnenin property adını kullanarak ilgili property&#39;sine değer atar.
@@ -350,12 +362,12 @@
                 Guard.CheckNull(value, nameof(value));
                 Guard.CheckEmpty(propertyname, nameof(propertyname));
                 Guard.UnSupportLanguage(dil, nameof(dil));
-                var _type = value.GetType();
-                if (!_type.IsCustomClass()) { throw new ArgumentException(dil == "en" ? $"The \"{nameof(value)}\" argument type must be class!" : $"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value)); }
-                var _pi = _type.GetProperty(propertyname);
-                Guard.CheckNull(_pi, nameof(_pi));
-                if (!_pi.CanWrite) { throw new InvalidOperationException(dil == "en" ? $"The \"{nameof(propertyname)}\" property is not writable!" : $"\"{nameof(propertyname)}\" özelliği yazılabilir değil!"); }
-                _pi.SetValue(value, data == null ? null : ChangeType(data, _pi.PropertyType));
+                var type = value.GetType();
+                if (!type.IsCustomClass()) { throw new ArgumentException(dil == "en" ? $"The \"{nameof(value)}\" argument type must be class!" : $"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value)); }
+                var pi = type.GetProperty(propertyname);
+                Guard.CheckNull(pi, nameof(pi));
+                if (!pi.CanWrite) { throw new InvalidOperationException(dil == "en" ? $"The \"{nameof(propertyname)}\" property is not writable!" : $"\"{nameof(propertyname)}\" özelliği yazılabilir değil!"); }
+                pi.SetValue(value, data == null ? null : ChangeType(data, pi.PropertyType));
             }
             /// <summary>
             /// Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.
@@ -365,9 +377,9 @@
             /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
             public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : Enum
             {
-                var _r = new HashSet<string> { typeof(TEnum).FullName, $"{nameof(Enum)} değeri uyumsuzdur!" };
-                if (!details.IsNullOrCountZero()) { _r.AddRangeOptimized(details); }
-                return new(String.Join(" ", _r));
+                var r = new HashSet<string> { typeof(TEnum).FullName, $"{nameof(Enum)} değeri uyumsuzdur!" };
+                if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
+                return new(String.Join(" ", r));
             }
         }
         public sealed class _to
@@ -387,12 +399,12 @@
             {
                 value = value.ToStringOrEmpty();
                 if (value == "") { return ""; }
-                var _si = new StringInfo(value);
-                int _i, _length = _si.LengthInTextElements;
-                var _elements = new string[_length];
-                for (_i = 0; _i < _length; _i++) { _elements[_i] = _si.SubstringByTextElements(_i, 1); }
-                Array.Reverse(_elements);
-                return String.Concat(_elements);
+                var si = new StringInfo(value);
+                int i, length = si.LengthInTextElements;
+                var elements = new string[length];
+                for (i = 0; i < length; i++) { elements[i] = si.SubstringByTextElements(i, 1); }
+                Array.Reverse(elements);
+                return String.Concat(elements);
             }
             /// <summary>
             /// Verilen nesneyi <see cref="SHA256"/> hash string formatına dönüştürür. Eğer değer null ise boş string döner.
@@ -403,20 +415,16 @@
             public static string ToHashSHA256FromObject(object value)
             {
                 if (value == null) { return ""; } // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
-                var _r = new List<string>();
-                foreach (var item in SHA256.HashData(Encoding.UTF8.GetBytes(value is String _s ? _s.Trim() : ToJSON(value)))) { _r.Add(item.ToString("x2")); }
-                return String.Join("", _r);
+                var r = new List<string>();
+                foreach (var item in SHA256.HashData(Encoding.UTF8.GetBytes(value is String _s ? _s.Trim() : ToJSON(value)))) { r.Add(item.ToString("x2")); }
+                return String.Join("", r);
             }
             /// <summary>
             /// Belirtilen enum türündeki değerleri ve karşılık gelen long değerlerini içeren bir sözlük oluşturur.
             /// </summary>
             /// <typeparam name="TEnum">Enum türü.</typeparam>
             /// <returns>Enum isimlerini ve long karşılıklarını içeren sözlük.</returns>
-            public static Dictionary<string, long> ToDictionaryFromEnum<TEnum>() where TEnum : Enum
-            {
-                var _t = typeof(TEnum);
-                return ((TEnum[])Enum.GetValues(_t)).Select(x => Convert.ToInt64(_other.ChangeType(x, typeof(long)))).ToDictionary(x => Enum.GetName(_t, x));
-            }
+            public static Dictionary<string, long> ToDictionaryFromEnum<TEnum>() where TEnum : Enum => typeof(TEnum).ToDictionaryFromEnum();
             /// <summary>
             /// Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.
             /// </summary>
@@ -426,8 +434,8 @@
             {
                 if (obj == null) { return new(); }
                 if (obj is Dictionary<string, object> _d) { return _d; }
-                var _t = obj.GetType();
-                if (_t.IsCustomClass()) { return _t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
+                var t = obj.GetType();
+                if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
                 throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
             }
             /// <summary>
@@ -438,8 +446,8 @@
             /// <returns>Nesneyi temsil eden SQL parametrelerinin dizisi.</returns>
             public static SqlParameter[] ToSqlParameterFromObject(object obj)
             {
-                if (obj == null) { return Array.Empty<SqlParameter>(); }
-                if (obj is SqlParameter _sp) { return new SqlParameter[] { _sp }; }
+                if (obj == null) { return []; }
+                if (obj is SqlParameter _sp) { return new[] { _sp }; }
                 if (obj is IEnumerable<SqlParameter> _sps) { return _sps.ToArray(); }
                 return (obj is IDictionary<string, object> _dic ? _dic : ToDictionaryFromObject(obj)).Select(x => new SqlParameter
                 {
@@ -491,17 +499,17 @@
                 Guard.CheckEmpty(filepath, nameof(filepath));
                 Guard.CheckEmpty(name, nameof(name));
                 if (!File.Exists(filepath)) { throw new FileNotFoundException("Belirtilen dosya bulunamadı!", filepath); }
-                var _ms = new MemoryStream();
+                var ms = new MemoryStream();
                 using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
                 {
-                    await fs.CopyToAsync(_ms, cancellationtoken);
+                    await fs.CopyToAsync(ms, cancellationtoken);
                 }
-                _ms.Position = 0;
-                var _provider = new FileExtensionContentTypeProvider();
-                return new(_ms, 0, _ms.Length, name, Path.GetFileName(filepath))
+                ms.Position = 0;
+                var provider = new FileExtensionContentTypeProvider();
+                return new(ms, 0, ms.Length, name, Path.GetFileName(filepath))
                 {
                     Headers = headerdictionary ?? new HeaderDictionary(),
-                    ContentType = (_provider.TryGetContentType(filepath, out string _contenttype) ? _contenttype : "application/octet-stream")
+                    ContentType = (provider.TryGetContentType(filepath, out string _contenttype) ? _contenttype : "application/octet-stream")
                 };
             }
             /// <summary>
@@ -556,9 +564,9 @@
                 Guard.UnSupportLanguage(dil, nameof(dil));
                 datauri = datauri.ToStringOrEmpty();
                 if (datauri == "" || !datauri.StartsWith("data:")) { throw new ArgumentException(dil == "en" ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
-                var _parts = datauri.Substring(5).Split(new string[] { ";base64," }, StringSplitOptions.None);
-                if (_parts.Length != 2) { throw new ArgumentException(dil == "en" ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
-                return (Convert.FromBase64String(_parts[1]), _parts[0]);
+                var parts = datauri.Substring(5).Split(new string[] { ";base64," }, StringSplitOptions.None);
+                if (parts.Length != 2) { throw new ArgumentException(dil == "en" ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
+                return (Convert.FromBase64String(parts[1]), parts[0]);
             }
         }
         public sealed class _try
@@ -571,10 +579,10 @@
             /// <returns>Doğrulama işlemi sonucunu belirtir; geçerli ise <see langword="true"/>, geçersiz ise <see langword="false"/> döner.</returns>
             public static bool TryValidateObject(object instance, out string[] outvalue)
             {
-                var _vrs = new List<ValidationResult>();
-                Validator.TryValidateObject(instance, new(instance), _vrs, true); // Not: TryValidateObject kontrolünde instance içerisinde her hangi bir problem yoksa sonuç true gelmekte
-                outvalue = _vrs.Select(x => x.ErrorMessage).ToArray();
-                return _vrs.Count > 0;
+                var vrs = new List<ValidationResult>();
+                Validator.TryValidateObject(instance, new(instance), vrs, true); // Not: TryValidateObject kontrolünde instance içerisinde her hangi bir problem yoksa sonuç true gelmekte
+                outvalue = vrs.Select(x => x.ErrorMessage).ToArray();
+                return vrs.Count > 0;
             }
             /// <summary>
             /// Verilen JSON dizisini belirli bir JToken türüne (<see cref="JTokenType"/>) dönüştürmeye çalışır. Dönüşüm başarılı olursa, dönüştürülen değeri döner.
@@ -588,10 +596,10 @@
             {
                 try
                 {
-                    var _jt = JToken.Parse(json.ToStringOrEmpty());
-                    var _r = _jt.Type == jtokentype;
-                    outvalue = _r ? (TJToken)_jt : default;
-                    return _r;
+                    var jt = JToken.Parse(json.ToStringOrEmpty());
+                    var r = jt.Type == jtokentype;
+                    outvalue = r ? (TJToken)jt : default;
+                    return r;
                 }
                 catch
                 {
@@ -642,11 +650,11 @@
                             outvalue = _tdic;
                             return true;
                         }
-                        var _pi = value.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                        if (_pi != null)
+                        var pi = value.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                        if (pi != null)
                         {
-                            var _pivalue = _pi.GetValue(value);
-                            if (_pivalue is TKey _tpi)
+                            var pivalue = pi.GetValue(value);
+                            if (pivalue is TKey _tpi)
                             {
                                 outvalue = _tpi;
                                 return true;
@@ -683,9 +691,9 @@
                 else if (phonenumberTR.Length == 13 && phonenumberTR.StartsWith("+90")) { phonenumberTR = phonenumberTR.Substring(3); }
                 else if (phonenumberTR.Length == 12 && phonenumberTR.StartsWith("90")) { phonenumberTR = phonenumberTR.Substring(2); }
                 else if (phonenumberTR.Length == 11 && phonenumberTR[0] == '0') { phonenumberTR = phonenumberTR.Substring(1); }
-                var _r = phonenumberTR.Length == 10 && Regex.IsMatch(phonenumberTR, @"^\d+$");
-                outvalue = _r ? phonenumberTR : "";
-                return _r;
+                var r = phonenumberTR.Length == 10 && Regex.IsMatch(phonenumberTR, @"^\d+$");
+                outvalue = r ? phonenumberTR : "";
+                return r;
             }
             /// <summary>
             /// Verilen türün Nullable (null değeri alabilen) olup olmadığını kontrol eder. Eğer tür nullable ise, outvalue parametresine nullable olmayan tür atanır.
@@ -695,9 +703,9 @@
             /// <returns>Tür nullable ise <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
             public static bool TryTypeIsNullable(Type type, out Type outvalue)
             {
-                var _t = (type != null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
-                outvalue = (_t ? type.GenericTypeArguments[0] : type);
-                return _t;
+                var t = (type != null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
+                outvalue = (t ? type.GenericTypeArguments[0] : type);
+                return t;
             }
             /// <summary>
             /// Verilen adresin geçerli bir URI olup olmadığını kontrol eder. Geçerli bir URI ise, outvalue parametresine URI değeri atanır. URI&#39;nın HTTP veya HTTPS protokolüne sahip olması gerekmektedir.
@@ -721,7 +729,7 @@
             {
                 try
                 {
-                    outvalue = (type == null ? Array.Empty<PropertyInfo>() : type.GetProperties()).Where(x => x.IsPK()).ToArray();
+                    outvalue = (type == null ? [] : type.GetProperties()).Where(x => x.IsPK()).ToArray();
                     return outvalue.Length > 0;
                 }
                 catch
@@ -825,10 +833,10 @@
             {
                 try
                 {
-                    var _q = (TryUri(value, out Uri _u) && _u.Host.Contains("maps.google.com")) ? (new QueryString(_u.Query).ParseOrDefault<string>("q") ?? "").Split(',') : value.ToStringOrEmpty().Split(',').Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
-                    if (_q.Length == 2 && _q.All(isgooglemapscoordinatecheck_private))
+                    var q = (TryUri(value, out Uri _u) && _u.Host.Contains("maps.google.com")) ? (new QueryString(_u.Query).ParseOrDefault<string>("q") ?? "").Split(',') : value.ToStringOrEmpty().Split(',').Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
+                    if (q.Length == 2 && q.All(isgooglemapscoordinatecheck_private))
                     {
-                        outvalue = new($"https://maps.google.com/?q={String.Join(",", _q)}");
+                        outvalue = new($"https://maps.google.com/?q={String.Join(",", q)}");
                         return true;
                     }
                     outvalue = default;
@@ -861,8 +869,8 @@
                         DefaultRequestHeaders = { UserAgent = { new("Mozilla", "4.0") } }
                     })
                     {
-                        var _response = await client.GetStringAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl={from}&tl={to}&dt=t&q={Uri.EscapeDataString(HttpUtility.HtmlEncode(value))}", cancellationtoken);
-                        using (var doc = JsonDocument.Parse(_response))
+                        var response = await client.GetStringAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl={from}&tl={to}&dt=t&q={Uri.EscapeDataString(HttpUtility.HtmlEncode(value))}", cancellationtoken);
+                        using (var doc = JsonDocument.Parse(response))
                         {
                             return (false, doc.RootElement[0][0][0].GetString().ToStringOrEmpty(), null);
                         }

@@ -35,8 +35,8 @@
         /// <returns>Diziler aynıysa <see langword="true"/>, farklıysa <see langword="false"/> döner.</returns>
         public static bool IsFileBytesEqual(this byte[] file1, byte[] file2)
         {
-            file1 = file1 ?? Array.Empty<byte>();
-            file2 = file2 ?? Array.Empty<byte>();
+            file1 = file1 ?? [];
+            file2 = file2 ?? [];
             if (file1.Length == 0 && file2.Length == 0) { return true; }
             if (file1.Length != file2.Length) { return false; }
             int i, _l = file1.Length;
@@ -97,14 +97,14 @@
         public static Bitmap Resize(this Image image, Size size)
         {
             if (size.IsEmpty) { throw new ArgumentException($"{nameof(size)} parametresi geçerli olmalıdır!", nameof(size)); }
-            var _bm = new Bitmap(size.Width, size.Height); // Not: using kullanılırsa bitmap değerleri iletilmemekte
-            using (var g = Graphics.FromImage(_bm))
+            var bm = new Bitmap(size.Width, size.Height); // Not: using kullanılırsa bitmap değerleri iletilmemekte
+            using (var g = Graphics.FromImage(bm))
             {
                 g.CompositingQuality = CompositingQuality.HighQuality;
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 g.DrawImage(image, 0, 0, size.Width, size.Height);
-                return _bm;
+                return bm;
             }
         }
         /// <summary>Verilen yeni genişlik(width) değerine göre resmin yüksekliğini(height), en boy oranını koruyarak hesaplar.</summary>

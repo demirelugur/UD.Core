@@ -22,8 +22,8 @@
         public static bool TryGetStringValue(this IFormCollection form, string key, out string outvalue)
         {
             if (form == null) { form = FormCollection.Empty; }
-            var _r = form.TryGetValue(key, out StringValues _sv);
-            if (_r)
+            var r = form.TryGetValue(key, out StringValues _sv);
+            if (r)
             {
                 outvalue = _sv.ToStringOrEmpty();
                 return true;
@@ -55,7 +55,7 @@
                     return true;
                 }
             }
-            outvalues = Array.Empty<TKey>();
+            outvalues = [];
             return false;
         }
     }

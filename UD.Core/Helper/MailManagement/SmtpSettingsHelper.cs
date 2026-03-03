@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json.Linq;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Net;
     using System.Net.Mail;
@@ -16,14 +17,14 @@
         public override int GetHashCode() => HashCode.Combine(this.email, this.password, this.host, this.port, this.enablessl, this.usedefaultcredentials, this.deliverymethod, this.timeout);
         public bool Equals(SmtpSettingsHelper other) => (other != null && this.email == other.email && this.password == other.password && this.host == other.host && this.port == other.port && this.enablessl == other.enablessl && this.usedefaultcredentials == other.usedefaultcredentials && this.deliverymethod == other.deliverymethod && this.timeout == other.timeout);
         #endregion
-        private string _Email = "";
-        private string _Password = "";
-        private string _Host = "";
-        private int _Port = 25;
+        private string _Email;
+        private string _Password;
+        private string _Host;
+        private int _Port;
         private bool _Enablessl;
         private bool _Usedefaultcredentials;
         private SmtpDeliveryMethod _Deliverymethod;
-        private int _Timeout = 0;
+        private int _Timeout;
         [Validation_Required]
         [EmailAddress(ErrorMessage = _validationerrormessage.email)]
         [Validation_StringLength(_maximumlength.eposta)]
@@ -40,6 +41,7 @@
         [Validation_Required]
         [Validation_RangePositiveInt32]
         [Display(Name = "Port")]
+        [DefaultValue(25)]
         public int port { get { return _Port; } set { _Port = value; } }
         [Validation_Required]
         [Display(Name = "Enable SSL")]
@@ -56,7 +58,7 @@
         public int timeout { get { return _Timeout; } set { _Timeout = value; } }
         public SmtpClient toSmtpClient()
         {
-            var _sc = new SmtpClient
+            var sc = new SmtpClient
             {
                 Port = this.port,
                 Host = this.host,
@@ -65,8 +67,8 @@
                 Credentials = new NetworkCredential(this.email, this.password),
                 DeliveryMethod = this.deliverymethod
             };
-            if (this.timeout > 0) { _sc.Timeout = this.timeout; }
-            return _sc;
+            if (this.timeout > 0) { sc.Timeout = this.timeout; }
+            return sc;
         }
         public SmtpSettingsHelper() : this("", "", "", default, default, default, default, default) { }
         public SmtpSettingsHelper(string email, string password, string host, int port, bool enablessl, bool usedefaultcredentials, SmtpDeliveryMethod deliverymethod, int timeout)

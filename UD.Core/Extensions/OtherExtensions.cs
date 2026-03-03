@@ -196,7 +196,7 @@
         /// <exception cref="NotSupportedException"><see cref="JToken"/> türü null veya array değilse fırlatılır.</exception>
         public static TKey[] ToArrayFromJToken<TKey>(this JToken jtoken)
         {
-            if (jtoken == null || jtoken.Type == JTokenType.Null) { return Array.Empty<TKey>(); }
+            if (jtoken == null || jtoken.Type == JTokenType.Null) { return []; }
             if (jtoken.Type == JTokenType.Array) { return jtoken.Select(x => x.Value<TKey>()).ToArray(); }
             throw new NotSupportedException($"\"{nameof(jtoken)}\" türü uyumsuzdur!");
         }
@@ -250,8 +250,8 @@
             if (memberinfo == null) { return ""; }
             try
             {
-                var _attr = memberinfo.GetCustomAttribute<DescriptionAttribute>();
-                return _attr == null ? "" : _attr.Description.ToStringOrEmpty();
+                var attr = memberinfo.GetCustomAttribute<DescriptionAttribute>();
+                return attr == null ? "" : attr.Description.ToStringOrEmpty();
             }
             catch { return ""; }
         }
@@ -261,7 +261,7 @@
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
-            var types = (assembly == null ? Array.Empty<Type>() : assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,>))).ToArray());
+            var types = (assembly == null ? [] : assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,>))).ToArray());
             foreach (var implementation in types)
             {
                 var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeof(IBaseService<,,,>))).ToArray();

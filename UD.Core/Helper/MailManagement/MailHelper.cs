@@ -20,10 +20,10 @@
             this.subject = subject.ToStringOrEmpty();
             this.body = body.ToStringOrEmpty();
             this.isbodyhtml = isbodyhtml;
-            this.tos = tos ?? Array.Empty<MailAddress>();
-            this.ccs = ccs ?? Array.Empty<MailAddress>();
-            this.bccs = bccs ?? Array.Empty<MailAddress>();
-            this.attachments = attachments ?? Array.Empty<Attachment>();
+            this.tos = tos ?? [];
+            this.ccs = ccs ?? [];
+            this.bccs = bccs ?? [];
+            this.attachments = attachments ?? [];
             this.priority = priority;
         }
         public async Task<(bool haserror, Exception ex)> SendAsync(SmtpSettingsHelper smtp, CancellationToken cancellationtoken = default)

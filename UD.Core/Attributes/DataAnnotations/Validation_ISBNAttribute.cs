@@ -10,13 +10,13 @@
         public Validation_ISBNAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var _isbn = value.ToStringOrEmpty().ToUpper();
-            if (ISBNHelper.IsValid(_isbn))
+            var isbn = value.ToStringOrEmpty().ToUpper();
+            if (ISBNHelper.IsValid(isbn))
             {
-                validationContext.SetValidatePropertyValue(_isbn);
+                validationContext.SetValidatePropertyValue(isbn);
                 return ValidationResult.Success;
             }
-            if (_isbn == "" && !validationContext.IsRequiredAttribute())
+            if (isbn == "" && !validationContext.IsRequiredAttribute())
             {
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;

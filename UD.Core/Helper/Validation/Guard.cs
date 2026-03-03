@@ -75,15 +75,15 @@
         }
         public static void CheckOutOfLength(string value, int maxlength, string argname)
         {
-            var _l = value.ToStringOrEmpty().Length;
-            if (_l > maxlength) { throw new ArgumentException($"\"{argname}\" argümanı, karakter uzunluğu \"{maxlength}\" değerinden uzun olamaz!", argname, new Exception($"Gelen değer: \"{_l}\"")); }
+            var l = value.ToStringOrEmpty().Length;
+            if (l > maxlength) { throw new ArgumentException($"\"{argname}\" argümanı, karakter uzunluğu \"{maxlength}\" değerinden uzun olamaz!", argname, new Exception($"Gelen değer: \"{l}\"")); }
         }
         public static void CheckOutOfLength<T>(string value, Expression<Func<T, string>> expression) where T : class
         {
-            var _p = expression.GetExpressionName();
-            var _m = _get.GetStringOrMaxLength<T>(_p);
-            CheckZeroOrNegative(_m, _p);
-            CheckOutOfLength(value, _m, _p);
+            var p = expression.GetExpressionName();
+            var m = _get.GetStringOrMaxLength<T>(p);
+            CheckZeroOrNegative(m, p);
+            CheckOutOfLength(value, m, p);
         }
         public static void CheckIncludes<T>(string argname, T value, params T[] values)
         {
@@ -127,8 +127,8 @@
         public static void UnSupportLanguage(string value, string argname)
         {
             CheckEmpty(value, argname);
-            var _defaultlanguages = new string[] { "tr", "en" };
-            if (!_defaultlanguages.Contains(value)) { throw new NotSupportedException($"{argname}; {String.Join(", ", _defaultlanguages)} değerlerinden biri olabilir!", new Exception("Yönetici ile iletişime geçiniz!")); }
+            var defaultlanguages = new string[] { "tr", "en" };
+            if (!defaultlanguages.Contains(value)) { throw new NotSupportedException($"{argname}; {String.Join(", ", defaultlanguages)} değerlerinden biri olabilir!", new Exception("Yönetici ile iletişime geçiniz!")); }
         }
     }
 }

@@ -55,16 +55,16 @@
         /// <summary>Verilen metin için benzersiz bir SEO dostu string oluşturur.</summary>
         public static async Task<string> GenerateUniqueSEOStringAsync(this IQueryable<string> source, string text, int maxlength, string dil, CancellationToken cancellationtoken = default)
         {
-            var _i = 0;
-            string _r, _t = text.ToSeoFriendly();
-            Guard.CheckEmpty(_t, nameof(_t));
+            var i = 0;
+            string r, t = text.ToSeoFriendly();
+            Guard.CheckEmpty(t, nameof(t));
             while (true)
             {
-                _r = (_i == 0 ? _t : String.Join("-", _t, _i.ToString()));
-                if (!await source.ContainsAsync(_r, cancellationtoken)) { break; }
-                _i++;
+                r = (i == 0 ? t : String.Join("-", t, i.ToString()));
+                if (!await source.ContainsAsync(r, cancellationtoken)) { break; }
+                i++;
             }
-            if (_r.Length <= maxlength) { return _r; }
+            if (r.Length <= maxlength) { return r; }
             Guard.UnSupportLanguage(dil, nameof(dil));
             if (dil == "en") { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxlength} characters!"); }
             throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxlength} karakterlik maksimum uzunluğu aşıyor!");

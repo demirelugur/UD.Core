@@ -37,13 +37,13 @@
                     description = _form.ParseOrDefault<string>(nameof(description)) ?? ""
                 });
             }
-            var _t = value.GetType();
-            if (_t.IsEnum)
+            var t = value.GetType();
+            if (t.IsEnum)
             {
                 try
                 {
-                    var _tx = Enum.GetName(_t, value);
-                    return new(Convert.ToInt64(value), _tx, _t.GetField(_tx).GetDescription());
+                    var tx = Enum.GetName(t, value);
+                    return new(Convert.ToInt64(value), tx, t.GetField(tx).GetDescription());
                 }
                 catch { return new(); }
             }

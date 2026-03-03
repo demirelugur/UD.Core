@@ -6,6 +6,7 @@
     using static UD.Core.Helper.GlobalConstants;
     public static class NumericExtensions
     {
+
         /// <summary>Unix zaman damgasını, yerel bir <see cref="DateTime"/> değerine dönüştürür.</summary>
         /// <param name="gettime">Unix zaman damgası (milisaniye cinsinden).</param>
         /// <returns>Dönüştürülen yerel <see cref="DateTime"/> değeri.</returns>
@@ -41,14 +42,14 @@
         /// </returns>
         public static bool IsTCKimlikNo(this long tckn)
         {
-            var _r = false;
-            var _tckn = (tckn > 0 ? tckn.ToString() : "");
-            if (_tckn.Length == _maximumlength.tckn)
+            var r = false;
+            var tcknstring = (tckn > 0 ? tckn.ToString() : "");
+            if (tcknstring.Length == _maximumlength.tckn)
             {
-                var _t = _tckn.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
-                _r = ((((_t[0] + _t[2] + _t[4] + _t[6] + _t[8]) * 7) - (_t[1] + _t[3] + _t[5] + _t[7])) % 10) == _t[9] && (_t.Take(10).Sum() % 10) == _t[10];
+                var t = tcknstring.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
+                r = ((((t[0] + t[2] + t[4] + t[6] + t[8]) * 7) - (t[1] + t[3] + t[5] + t[7])) % 10) == t[9] && (t.Take(10).Sum() % 10) == t[10];
             }
-            return _r;
+            return r;
         }
         /// <summary>Verilen sayının geçerli bir T.C. Vergi Kimlik Numarası (VKN) olup olmadığını kontrol eder.<para>
         /// VKN doğrulama algoritması şu adımlarla çalışır:
@@ -64,25 +65,25 @@
         /// <returns>VKN geçerliyse <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsVergiKimlikNo(this long vkn)
         {
-            var _r = false;
+            var r = false;
             if (vkn > 0)
             {
-                var _vkn = vkn.ToString();
-                if (_vkn.Length < _maximumlength.vkn) { _vkn = _vkn.Replicate(_maximumlength.vkn, '0', 'l'); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
-                if (_vkn.Length == _maximumlength.vkn)
+                var vknstring = vkn.ToString();
+                if (vknstring.Length < _maximumlength.vkn) { vknstring = vknstring.Replicate(_maximumlength.vkn, '0', 'l'); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
+                if (vknstring.Length == _maximumlength.vkn)
                 {
                     int i, t;
-                    var _numbers = new int[9];
+                    var numbers = new int[9];
                     for (i = 0; i < 9; i++)
                     {
-                        t = (Convert.ToInt32(_vkn[i].ToString()) + (9 - i)) % 10;
-                        _numbers[i] = (t * Convert.ToInt32(Math.Pow(2, (9 - i)))) % 9;
-                        if (t != 0 && _numbers[i] == 0) { _numbers[i] = 9; }
+                        t = (Convert.ToInt32(vknstring[i].ToString()) + (9 - i)) % 10;
+                        numbers[i] = (t * Convert.ToInt32(Math.Pow(2, (9 - i)))) % 9;
+                        if (t != 0 && numbers[i] == 0) { numbers[i] = 9; }
                     }
-                    _r = (((10 - ((_numbers.Sum() % 10) % 10)) % 10) == Convert.ToInt32(_vkn[9].ToString()));
+                    r = (((10 - ((numbers.Sum() % 10) % 10)) % 10) == Convert.ToInt32(vknstring[9].ToString()));
                 }
             }
-            return _r;
+            return r;
         }
         /// <summary> <paramref name="value"/> değeri T.C. Kimlik Numarası (TCK) veya Vergi Kimlik Numarası (VKN) ise <see langword="true"/> döner.</summary>
         public static bool IsTCKNorVKN(this long value) => (value.IsTCKimlikNo() || value.IsVergiKimlikNo());
@@ -96,8 +97,8 @@
             if ((value % 2) == 0) { return false; }
             if (value == 5) { return true; }
             if ((value % 5) == 0) { return false; }
-            ulong _i, _limit = Convert.ToUInt64(Math.Sqrt(value));
-            for (_i = 3; _i <= _limit; _i += 2) { if ((value % _i) == 0) { return false; } }
+            ulong i, _limit = Convert.ToUInt64(Math.Sqrt(value));
+            for (i = 3; i <= _limit; i += 2) { if ((value % i) == 0) { return false; } }
             return true;
         }
         /// <summary>Bir decimal değeri, InvariantCulture kullanarak string&#39;e dönüştürür.</summary>

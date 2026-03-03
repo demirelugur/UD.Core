@@ -22,15 +22,15 @@
         /// <param name="value">Değer.</param>
         /// <param name="values">Kontrol edilecek değerler.</param>
         /// <returns>True, eğer değer belirtilen değerler arasında ise; aksi halde false döner.</returns>
-        public static bool Includes<T>(this T value, params T[] values) => (values ?? Array.Empty<T>()).Contains(value);
+        public static bool Includes<T>(this T value, params T[] values) => (values ?? []).Contains(value);
         /// <summary>Verilen enum değerinin açıklamasını döner.</summary>
         /// <typeparam name="TEnum">Enum türü.</typeparam>
         /// <param name="value">Enum değeri.</param>
         /// <returns>Enum açıklaması; açıklama yoksa boş dize döner.</returns>
         public static string GetDescriptionFromEnum<TEnum>(this TEnum value) where TEnum : Enum
         {
-            var _t = typeof(TEnum);
-            try { return _t.GetField(Enum.GetName(_t, value)).GetDescription(); }
+            var t = typeof(TEnum);
+            try { return t.GetField(Enum.GetName(t, value)).GetDescription(); }
             catch { return ""; }
         }
         /// <summary>Tekil bir değeri enumerable (koleksiyon) olarak döner.</summary>

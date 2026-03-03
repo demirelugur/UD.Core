@@ -12,22 +12,22 @@
         public Validation_JsonAttribute(JTokenType jtokentype) { this.jtokentype = jtokentype; }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var _jsondata = value.ToStringOrEmpty();
-            var _r = validationContext.IsRequiredAttribute();
-            if (_try.TryJson(_jsondata, this.jtokentype, out JToken _jt))
+            var jsondata = value.ToStringOrEmpty();
+            var r = validationContext.IsRequiredAttribute();
+            if (_try.TryJson(jsondata, this.jtokentype, out JToken _jt))
             {
-                if (_jt.Children().Any())
+                if (_jt.HasValues)
                 {
                     validationContext.SetValidatePropertyValue(_jt.ToString(Formatting.None));
                     return ValidationResult.Success;
                 }
-                if (!_r)
+                if (!r)
                 {
                     validationContext.SetValidatePropertyValue(null);
                     return ValidationResult.Success;
                 }
             }
-            if (_jsondata == "" && !_r)
+            if (jsondata == "" && !r)
             {
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;

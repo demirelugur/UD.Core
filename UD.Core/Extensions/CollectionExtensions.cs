@@ -105,17 +105,17 @@
         /// </remarks>
         public static ICollection<T> Shuffle<T>(this IEnumerable<T> source)
         {
-            T _temp;
-            var _r = source.ToList();
-            int i, j, _count = (_r.Count - 1);
+            T temp;
+            var r = source.ToList();
+            int i, j, _count = (r.Count - 1);
             for (i = _count; i > 0; i--)
             {
                 j = Random.Shared.Next(0, i + 1);
-                _temp = _r[i];
-                _r[i] = _r[j];
-                _r[j] = _temp;
+                temp = r[i];
+                r[i] = r[j];
+                r[j] = temp;
             }
-            return _r;
+            return r;
         }
         #endregion
         #region ICollection
@@ -128,10 +128,10 @@
         /// <returns>İki koleksiyon eşitse <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool IsEqual<T>(this ICollection<T> left, ICollection<T> right)
         {
-            var _leftisnull = left == null;
-            var _rightisnull = right == null;
-            if (((_leftisnull || _rightisnull) && _leftisnull == _rightisnull)) { return true; }
-            if (!_leftisnull && !_rightisnull && left.Count == right.Count && left.All(right.Contains)) { return true; }
+            var leftisnull = left == null;
+            var rightisnull = right == null;
+            if (((leftisnull || rightisnull) && leftisnull == rightisnull)) { return true; }
+            if (!leftisnull && !rightisnull && left.Count == right.Count && left.All(right.Contains)) { return true; }
             return false;
         }
         /// <summary>
@@ -164,17 +164,17 @@
         /// <returns>İç içe geçmiş <see cref="Exception"/> nesnesi.</returns>
         public static Exception ToNestedException(this string[] errors)
         {
-            errors = (errors ?? Array.Empty<string>()).Reverse().ToArray();
+            errors = (errors ?? []).Reverse().ToArray();
             if (errors.Length == 0) { return new(); }
-            Exception _ex = null;
-            var _i = errors.Length - 1;
-            while (_i >= 0)
+            Exception ex = null;
+            var i = errors.Length - 1;
+            while (i >= 0)
             {
-                if (_ex == null) { _ex = new(errors[_i]); }
-                else { _ex = new(errors[_i], _ex); }
-                _i--;
+                if (ex == null) { ex = new(errors[i]); }
+                else { ex = new(errors[i], ex); }
+                i--;
             }
-            return _ex;
+            return ex;
         }
         #endregion
     }

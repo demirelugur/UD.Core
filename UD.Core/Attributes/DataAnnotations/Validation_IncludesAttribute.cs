@@ -11,49 +11,49 @@
         public Validation_IncludesAttribute(bool isequal, params object[] values)
         {
             this.isequal = isequal;
-            this.values = values ?? Array.Empty<object>();
+            this.values = values ?? [];
         }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var _isrequired = validationContext.IsRequiredAttribute();
+            var isrequired = validationContext.IsRequiredAttribute();
             if (value == null)
             {
-                if (_isrequired) { return this.tovalidationresult(validationContext); }
+                if (isrequired) { return this.tovalidationresult(validationContext); }
                 return ValidationResult.Success;
             }
-            bool _contains;
+            bool contains;
             if (value is String _s)
             {
                 _s = _s.Trim();
                 if (_s == "")
                 {
-                    if (_isrequired) { _contains = false; }
+                    if (isrequired) { contains = false; }
                     else
                     {
                         validationContext.SetValidatePropertyValue(null);
                         return ValidationResult.Success;
                     }
                 }
-                else { _contains = this.values.Select(x => x.ToString()).Contains(_s); }
+                else { contains = this.values.Select(x => x.ToString()).Contains(_s); }
             }
             else if (value is (Byte or Int16 or Int32 or Int64))
             {
-                var _longval = Convert.ToInt64(value);
-                _contains = this.values.Any(v => Convert.ToInt64(v) == _longval);
+                var longval = Convert.ToInt64(value);
+                contains = this.values.Any(v => Convert.ToInt64(v) == longval);
             }
-            else { _contains = this.values.Any(v => v.ToString() == value.ToString()); }
-            if (_contains == this.isequal) { return ValidationResult.Success; }
+            else { contains = this.values.Any(v => v.ToString() == value.ToString()); }
+            if (contains == this.isequal) { return ValidationResult.Success; }
             return this.tovalidationresult(validationContext);
         }
         private ValidationResult tovalidationresult(ValidationContext validationContext)
         {
-            var _r = this.ErrorMessage.ToStringOrEmpty();
-            if (_r == "")
+            var r = this.ErrorMessage.ToStringOrEmpty();
+            if (r == "")
             {
-                if (this.isequal) { _r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerlerinden biri olmalıdır!"; }
-                else { _r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerleri dışında farklı bir değer olmalıdır!"; }
+                if (this.isequal) { r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerlerinden biri olmalıdır!"; }
+                else { r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerleri dışında farklı bir değer olmalıdır!"; }
             }
-            return new(_r, new string[] { validationContext.MemberName });
+            return new(r, new string[] { validationContext.MemberName });
         }
     }
 }
