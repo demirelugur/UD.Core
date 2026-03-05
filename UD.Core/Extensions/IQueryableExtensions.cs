@@ -18,14 +18,32 @@
             if (condition) { return source.Where(predicate); }
             return source;
         }
-        /// <summary> IQueryable kaynağını asenkron olarak diziye çevirir. EF Core destekliyorsa ToArrayAsync, değilse ToArray kullanır.</summary>
-        /// <typeparam name="T">Eleman tipi</typeparam>
-        /// <param name="query">Kaynak sorgu</param>
-        /// <param name="cancellationToken">İptal token&#39;ı</param>
-        public static Task<T[]> ToArraySafeAsync<T>(this IQueryable<T> query, CancellationToken cancellationToken = default)
+        /// <summary>Seçilen string alanda, verilen değeri büyük/küçük harf duyarsız şekilde (ToLower + Contains) arayarak filtre uygular. Değer boşsa sorguyu olduğu gibi döndürür.</summary>
+        public static IQueryable<T> WhereContainsLower<T>(this IQueryable<T> source, Expression<Func<T, string>> selector, string value)
         {
-            if (query.Provider is IAsyncQueryProvider) { return query.ToArrayAsync(cancellationToken); }
-            return Task.FromResult(query.ToArray());
+            ArgumentNullException.ThrowIfNull(selector, nameof(selector));
+            value = value.ToStringOrEmpty().ToLower();
+            if (value == "") { return source; }
+            var param = selector.Parameters[0];
+            var body = Expression.AndAlso(
+                Expression.NotEqual(selector.Body, Expression.Constant(null, typeof(string))),
+                Expression.Call(
+                    Expression.Call(selector.Body, nameof(String.ToLower), Type.EmptyTypes), 
+                    nameof(String.Contains), 
+                    Type.EmptyTypes, 
+                    Expression.Constant(value))
+            );
+            var predicate = Expression.Lambda<Func<T, bool>>(body, param);
+            return source.Where(predicate);
+        }
+        /// <summary>IQueryable kaynağını asenkron olarak diziye çevirir. EF Core destekliyorsa ToArrayAsync, değilse ToArray kullanır.</summary>
+        /// <typeparam name="T">Eleman tipi</typeparam>
+        /// <param name="source">Kaynak sorgu</param>
+        /// <param name="cancellationToken">İptal token&#39;ı</param>
+        public static Task<T[]> ToArraySafeAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
+        {
+            if (source.Provider is IAsyncQueryProvider) { return source.ToArrayAsync(cancellationToken); }
+            return Task.FromResult(source.ToArray());
         }
         /// <summary>İki IQueryable arasında 1-1 sol birleştirme (left join) işlemi gerçekleştirir.</summary>
         /// <typeparam name="TLeft">Sol taraftaki nesne türü.</typeparam>
