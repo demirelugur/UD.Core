@@ -19,22 +19,16 @@
             return source;
         }
         /// <summary>Seçilen string alanda, verilen değeri büyük/küçük harf duyarsız şekilde (ToLower + Contains) arayarak filtre uygular. Değer boşsa sorguyu olduğu gibi döndürür.</summary>
-        public static IQueryable<T> WhereContainsLower<T>(this IQueryable<T> source, Expression<Func<T, string>> selector, string value)
+        public static IQueryable<T> WhereContainsLower<T>(this IQueryable<T> source, Expression<Func<T, string>> selector, string searchTerm)
         {
-            ArgumentNullException.ThrowIfNull(selector, nameof(selector));
-            value = value.ToStringOrEmpty().ToLower();
-            if (value == "") { return source; }
-            var param = selector.Parameters[0];
-            var body = Expression.AndAlso(
-                Expression.NotEqual(selector.Body, Expression.Constant(null, typeof(string))),
-                Expression.Call(
-                    Expression.Call(selector.Body, nameof(String.ToLower), Type.EmptyTypes), 
-                    nameof(String.Contains), 
-                    Type.EmptyTypes, 
-                    Expression.Constant(value))
-            );
-            var predicate = Expression.Lambda<Func<T, bool>>(body, param);
-            return source.Where(predicate);
+            searchTerm = searchTerm.ToStringOrEmpty().ToLower();
+            if (searchTerm == "") { return source; }
+            var parameter = selector.Parameters.FirstOrDefault();
+            var s = typeof(string);
+            var toLowerCall = Expression.Call(selector.Body, s.GetMethod(nameof(String.ToLower), Type.EmptyTypes));
+            var containsCall = Expression.Call(toLowerCall, s.GetMethod(nameof(String.Contains), new[] { s }), Expression.Constant(searchTerm));
+            var lambda = Expression.Lambda<Func<T, bool>>(containsCall, parameter);
+            return source.Where(lambda);
         }
         /// <summary>IQueryable kaynağını asenkron olarak diziye çevirir. EF Core destekliyorsa ToArrayAsync, değilse ToArray kullanır.</summary>
         /// <typeparam name="T">Eleman tipi</typeparam>
