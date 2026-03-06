@@ -6,7 +6,7 @@
     using static UD.Core.Enums.CRetMesaj;
     public class ApiResult
     {
-        public static readonly ApiResult set_Success = new(true, default);
+        public static readonly ApiResult setSuccess = new(true, default);
         public bool status { get; set; }
         public string[] errors { get; set; }
         public ApiResult() : this(default, default) { }
@@ -15,7 +15,7 @@
             this.status = status;
             this.errors = (status ? [] : (errors.IsNullOrCountZero() ? new string[] { RetMesaj.hata.GetDescriptionFromEnum() } : errors));
         }
-        public static ApiResult set_Failed(params string[] errors) => new(false, errors);
+        public static ApiResult setFailed(params string[] errors) => new(false, errors);
     }
     public class ApiResult<T> : ApiResult
     {
@@ -23,9 +23,9 @@
         public ApiResult() : this(default, default, default) { }
         public ApiResult(T response, bool status, string[] errors) : base(status, errors)
         {
-            this.response = (status ? response : this.getcustomdefault());
+            this.response = (status ? response : this.getCustomDefaultValue());
         }
-        private T getcustomdefault()
+        private T getCustomDefaultValue()
         {
             var t = typeof(T);
             if (t == typeof(string)) { return (T)(object)String.Empty; }

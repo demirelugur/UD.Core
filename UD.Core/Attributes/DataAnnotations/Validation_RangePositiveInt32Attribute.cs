@@ -8,7 +8,7 @@
     {
         public Validation_RangePositiveInt32Attribute() : base(1, Int32.MaxValue)
         {
-            this.ErrorMessage = _validationerrormessage.rangepositive;
+            this.ErrorMessage = ValidationErrorMessageConstants.RangePositive;
         }
     }
 }

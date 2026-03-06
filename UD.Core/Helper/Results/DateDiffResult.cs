@@ -4,27 +4,27 @@
     using static UD.Core.Helper.OrtakTools;
     public sealed class DateDiffResult
     {
-        private readonly DateTime basdate;
-        private readonly DateTime bitdate;
-        public DateDiffResult(object basdate, object bitdate)
+        private readonly DateTime basDate;
+        private readonly DateTime bitDate;
+        public DateDiffResult(object basDate, object bitDate)
         {
-            this.basdate = _to.ToDateTimeFromObject(basdate, default);
-            this.bitdate = (bitdate == null ? DateTime.Today : _to.ToDateTimeFromObject(bitdate, default));
+            this.basDate = _to.ToDateTimeFromObject(basDate, default);
+            this.bitDate = (bitDate == null ? DateTime.Today : _to.ToDateTimeFromObject(bitDate, default));
         }
         public (int yil, int ay, int gun, TimeSpan ts) CalculateDateDifference()
         {
-            if (this.basdate == this.bitdate || Math.Abs(this.bitdate.Ticks - this.basdate.Ticks) < TimeSpan.TicksPerMillisecond) { return (0, 0, 0, TimeSpan.Zero); }
-            int yil = this.bitdate.Year - this.basdate.Year, ay = this.bitdate.Month - this.basdate.Month, gun = this.bitdate.Day - this.basdate.Day;
-            var ts = (this.bitdate.TimeOfDay - this.basdate.TimeOfDay);
-            var tsisnegative = ts < TimeSpan.Zero;
-            if (tsisnegative) { gun--; }
+            if (this.basDate == this.bitDate || Math.Abs(this.bitDate.Ticks - this.basDate.Ticks) < TimeSpan.TicksPerMillisecond) { return (0, 0, 0, TimeSpan.Zero); }
+            int yil = this.bitDate.Year - this.basDate.Year, ay = this.bitDate.Month - this.basDate.Month, gun = this.bitDate.Day - this.basDate.Day;
+            var ts = (this.bitDate.TimeOfDay - this.basDate.TimeOfDay);
+            var isNegative = ts < TimeSpan.Zero;
+            if (isNegative) { gun--; }
             if (gun < 0)
             {
                 if (yil == 0 && ay == 0) { gun = 0; }
                 else
                 {
                     ay--;
-                    gun = (DateTime.DaysInMonth(this.basdate.Year, this.basdate.Month) - this.basdate.Day + this.bitdate.Day);
+                    gun = (DateTime.DaysInMonth(this.basDate.Year, this.basDate.Month) - this.basDate.Day + this.bitDate.Day);
                 }
             }
             if (ay < 0)
@@ -32,7 +32,7 @@
                 yil--;
                 ay = 12 + ay;
             }
-            return (yil, ay, gun, ((this.bitdate > this.basdate && tsisnegative) ? new TimeSpan(TimeSpan.TicksPerDay - ts.Negate().Ticks) : ts));
+            return (yil, ay, gun, ((this.bitDate > this.basDate && isNegative) ? new TimeSpan(TimeSpan.TicksPerDay - ts.Negate().Ticks) : ts));
         }
         public string FormatDateDifference(string p0 = "yıl", string p1 = "ay", string p2 = "gün")
         {

@@ -13,8 +13,8 @@
         }
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            var endpoint = httpContext.GetEndpoint();
-            if (endpoint?.Metadata?.GetMetadata<DisableTransactionAttribute>() != null)
+            var endPoint = httpContext.GetEndpoint();
+            if (endPoint?.Metadata?.GetMetadata<DisableTransactionAttribute>() != null)
             {
                 await this.next(httpContext);
                 return;

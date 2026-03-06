@@ -91,7 +91,7 @@
         }).SelectMany(x => x.r.DefaultIfEmpty(), (l, r) => new LeftJoinResult<TLeft, TRight>
         {
             left = l.l,
-            hasright = r != null,
+            hasRight = r != null,
             right = r
         });
         /// <summary>

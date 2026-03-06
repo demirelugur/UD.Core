@@ -61,7 +61,7 @@
         /// </summary>
         public static DateTime? SafeSqlDateTimeMin(this DateTime datetime)
         {
-            if (datetime >= _date.sqlMinValue.ToDateTime(default)) { return datetime; }
+            if (datetime >= DateConstants.SqlMinValue.ToDateTime(default)) { return datetime; }
             return null;
         }
     }

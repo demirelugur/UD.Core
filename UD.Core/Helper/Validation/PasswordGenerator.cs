@@ -3,53 +3,52 @@
     using System.Text;
     using System.Text.RegularExpressions;
     using UD.Core.Extensions;
-
     public sealed class PasswordGenerator
     {
         public static readonly PasswordGenerator Default = new("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "0123456789", "!@#$%^*()_+[]{}|;:,.?");
-        private string uppercasechars { get; }
-        private string lowercasechars { get; }
+        private string upperCases { get; }
+        private string lowerCases { get; }
         private string digits { get; }
         private string punctuations { get; }
-        private string allchars => String.Join("", this.uppercasechars, this.lowercasechars, this.digits, this.punctuations);
-        public PasswordGenerator(string uppercasechars, string lowercasechars, string digits, string punctuations)
+        private string all => String.Join("", this.upperCases, this.lowerCases, this.digits, this.punctuations);
+        public PasswordGenerator(string upperCases, string lowerCases, string digits, string punctuations)
         {
-            this.uppercasechars = uppercasechars;
-            this.lowercasechars = lowercasechars;
+            this.upperCases = upperCases;
+            this.lowerCases = lowerCases;
             this.digits = digits;
             this.punctuations = punctuations;
         }
         public string Generate()
         {
-            Guard.CheckEmpty(this.uppercasechars, nameof(this.uppercasechars));
-            Guard.CheckEmpty(this.lowercasechars, nameof(this.lowercasechars));
+            Guard.CheckEmpty(this.upperCases, nameof(this.upperCases));
+            Guard.CheckEmpty(this.lowerCases, nameof(this.lowerCases));
             Guard.CheckEmpty(this.digits, nameof(this.digits));
             Guard.CheckEmpty(this.punctuations, nameof(this.punctuations));
-            int i, _minlength = 4, _maxlength = Random.Shared.Next(_minlength * 2, (_minlength * 4) + 1);
+            int i, minLength = 4, maxLength = Random.Shared.Next(minLength * 2, (minLength * 4) + 1);
             var sb = new StringBuilder();
-            if (_maxlength % _minlength == 0) { this.set_private(sb, _maxlength / _minlength); }
+            if (maxLength % minLength == 0) { this.set(sb, maxLength / minLength); }
             else
             {
-                this.set_private(sb, 1);
-                for (i = _minlength; i < _maxlength; i++) { sb.Append(this.allchars[Random.Shared.Next(this.allchars.Length)]); }
+                this.set(sb, 1);
+                for (i = minLength; i < maxLength; i++) { sb.Append(this.all[Random.Shared.Next(this.all.Length)]); }
             }
             return new(sb.ToString().ToCharArray().Shuffle().ToArray());
         }
-        private void set_private(StringBuilder sb, int count)
+        private void set(StringBuilder sb, int count)
         {
             int i;
-            foreach (var item in new string[] { this.uppercasechars, this.lowercasechars, this.digits, this.punctuations }) { for (i = 0; i < count; i++) { sb.Append(item[Random.Shared.Next(item.Length)]); } }
+            foreach (var item in new string[] { this.upperCases, this.lowerCases, this.digits, this.punctuations }) { for (i = 0; i < count; i++) { sb.Append(item[Random.Shared.Next(item.Length)]); } }
         }
-        public static string GenerateRandomChars(int length, string element = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+        public static string GenerateRandomChars(int length, string elements = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
         {
             Guard.CheckZeroOrNegative(length, nameof(length));
-            Guard.CheckEmpty(element, nameof(element));
-            return new(Enumerable.Repeat(element, length).Select(x => x[Random.Shared.Next(x.Length)]).ToArray());
+            Guard.CheckEmpty(elements, nameof(elements));
+            return new(Enumerable.Repeat(elements, length).Select(x => x[Random.Shared.Next(x.Length)]).ToArray());
         }
-        public static bool IsStrongPassword(string value, int minimumlength = 8)
+        public static bool IsStrongPassword(string value, int minimumLength = 8)
         {
             value = value.ToStringOrEmpty();
-            var r = value.Length >= minimumlength;
+            var r = value.Length >= minimumLength;
             if (r) { r = Regex.IsMatch(value, @"[\d]"); }
             if (r) { r = Regex.IsMatch(value, @"[a-z]"); }
             if (r) { r = Regex.IsMatch(value, @"[A-Z]"); }

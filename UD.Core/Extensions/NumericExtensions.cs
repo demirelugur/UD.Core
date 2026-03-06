@@ -44,7 +44,7 @@
         {
             var r = false;
             var tcknstring = (tckn > 0 ? tckn.ToString() : "");
-            if (tcknstring.Length == _maximumlength.tckn)
+            if (tcknstring.Length == MaximumLengthConstants.TCKN)
             {
                 var t = tcknstring.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
                 r = ((((t[0] + t[2] + t[4] + t[6] + t[8]) * 7) - (t[1] + t[3] + t[5] + t[7])) % 10) == t[9] && (t.Take(10).Sum() % 10) == t[10];
@@ -69,8 +69,8 @@
             if (vkn > 0)
             {
                 var vknstring = vkn.ToString();
-                if (vknstring.Length < _maximumlength.vkn) { vknstring = vknstring.Replicate(_maximumlength.vkn, '0', 'l'); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
-                if (vknstring.Length == _maximumlength.vkn)
+                if (vknstring.Length < MaximumLengthConstants.VKN) { vknstring = vknstring.Replicate(MaximumLengthConstants.VKN, '0', 'l'); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
+                if (vknstring.Length == MaximumLengthConstants.VKN)
                 {
                     int i, t;
                     var numbers = new int[9];

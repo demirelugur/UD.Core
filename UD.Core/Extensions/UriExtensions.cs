@@ -27,17 +27,17 @@
         /// <summary>
         /// Verilen URI&#39;nin bağlantı durumunu kontrol eder.
         /// </summary>
-        public static async Task<(bool haserror, Uri requesturi)> IsConnectionStatusAsync(this Uri uri, TimeSpan timeout, CancellationToken cancellationtoken = default)
+        public static async Task<(bool hasError, Uri requestUri)> IsConnectionStatusAsync(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
             if (uri == null) { return (true, default); }
             using (var client = new HttpClient
             {
-                Timeout = timeout
+                Timeout = timeSpan
             })
             {
                 try
                 {
-                    var response = await client.GetAsync(uri, cancellationtoken);
+                    var response = await client.GetAsync(uri, cancellationToken);
                     if (response.IsSuccessStatusCode) { return (false, response.RequestMessage.RequestUri); }
                     return (true, default);
                 }
@@ -47,19 +47,19 @@
         /// <summary>
         /// Belirtilen <see cref="Uri"/> adresinden byte[] veri almaya çalışır.
         /// </summary>
-        public static async Task<(bool haserror, byte[] databinary, string mimetype, Exception ex)> GetBinaryDataAsync(this Uri uri, TimeSpan timeout, CancellationToken cancellationtoken = default)
+        public static async Task<(bool hasError, byte[] dataBinary, string mimeType, Exception ex)> GetBinaryDataAsync(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
             Guard.CheckNull(uri, nameof(uri));
             using (var client = new HttpClient
             {
-                Timeout = timeout
+                Timeout = timeSpan
             })
             {
                 try
                 {
-                    var response = await client.GetAsync(uri, cancellationtoken);
+                    var response = await client.GetAsync(uri, cancellationToken);
                     response.EnsureSuccessStatusCode();
-                    return (false, await response.Content.ReadAsByteArrayAsync(cancellationtoken), response.Content.Headers.ContentType?.MediaType.CoalesceOrDefault("application/octet-stream"), null);
+                    return (false, await response.Content.ReadAsByteArrayAsync(cancellationToken), response.Content.Headers.ContentType?.MediaType.CoalesceOrDefault("application/octet-stream"), null);
                 }
                 catch (Exception ex) { return (true, default, "", ex); }
             }

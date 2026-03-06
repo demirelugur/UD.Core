@@ -2,73 +2,70 @@
 {
     using UD.Core.Extensions;
     using UD.Core.Helper;
-
     public sealed class StrongPasswordValid
     {
         public static readonly StrongPasswordValid Default = new(8, 16, true, true, true);
-        public int minimumlength { get; }
-        public int? maximumlength { get; }
-        public bool isardisiksayi { get; }
-        public bool isbosluk { get; }
-        public bool isturkceharf { get; }
-        public string ad { get; }
-        public string soyad { get; }
-        public StrongPasswordValid(int minimumlength, int? maximumlength, bool isardisiksayi, bool isbosluk, bool isturkceharf)
+        public int minimumLength { get; }
+        public int? maximumLength { get; }
+        public bool isConsecutive { get; }
+        public bool isEmpty { get; }
+        public bool isTurkishSpecialCharacter { get; }
+        public StrongPasswordValid(int minimumLength, int? maximumLength, bool isConsecutive, bool isEmpty, bool isTurkishSpecialCharacter)
         {
-            this.minimumlength = minimumlength;
-            this.maximumlength = maximumlength.NullOrDefault();
-            this.isardisiksayi = isardisiksayi;
-            this.isbosluk = isbosluk;
-            this.isturkceharf = isturkceharf;
+            this.minimumLength = minimumLength;
+            this.maximumLength = maximumLength.NullOrDefault();
+            this.isConsecutive = isConsecutive;
+            this.isEmpty = isEmpty;
+            this.isTurkishSpecialCharacter = isTurkishSpecialCharacter;
         }
-        public bool TryIsWarning(string value, string ad, string soyad, string dil, out string[] errors)
+        public bool TryIsWarning(string value, string name, string surname, string dil, out string[] errors)
         {
             Guard.CheckEmpty(value, nameof(value));
             Guard.UnSupportLanguage(dil, nameof(dil));
-            if (this.maximumlength.HasValue) { Guard.CheckZeroOrNegative(this.maximumlength.Value, nameof(this.maximumlength)); }
+            if (this.maximumLength.HasValue) { Guard.CheckZeroOrNegative(this.maximumLength.Value, nameof(this.maximumLength)); }
             var r = new List<string>();
-            var isen = dil == "en";
-            if (!PasswordGenerator.IsStrongPassword(value, this.minimumlength))
+            var isEn = dil == "en";
+            if (!PasswordGenerator.IsStrongPassword(value, this.minimumLength))
             {
-                if (isen) { r.Add($"The password must have a minimum of {this.minimumlength.ToString()} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
-                else { r.Add($"Şifre minimum {this.minimumlength.ToString()} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }
+                if (isEn) { r.Add($"The password must have a minimum of {this.minimumLength.ToString()} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
+                else { r.Add($"Şifre minimum {this.minimumLength.ToString()} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }
             }
-            if (this.maximumlength.HasValue && value.Length > this.maximumlength.Value)
+            if (this.maximumLength.HasValue && value.Length > this.maximumLength.Value)
             {
-                if (isen) { r.Add($"Password can be maximum {this.maximumlength.Value.ToString()} characters!"); }
-                else { r.Add($"Şifre maksimum {this.maximumlength.Value.ToString()} karakter olabilir!"); }
+                if (isEn) { r.Add($"Password can be maximum {this.maximumLength.Value.ToString()} characters!"); }
+                else { r.Add($"Şifre maksimum {this.maximumLength.Value.ToString()} karakter olabilir!"); }
             }
-            if (this.isardisiksayi && this.ardisiksayikontrol_private(value))
+            if (this.isConsecutive && this.checkConsecutive(value))
             {
-                if (isen) { r.Add("The password must not contain 3 consecutive numbers! (123, 987 etc...)"); }
+                if (isEn) { r.Add("The password must not contain 3 consecutive numbers! (123, 987 etc...)"); }
                 else { r.Add("Şifre içerisinde 3 ardışık sayı (123, 987 vb...) bulunmamalıdır!"); }
             }
-            if (this.isbosluk && value.Contains(' '))
+            if (this.isEmpty && value.Contains(' '))
             {
-                if (isen) { r.Add("There should be no empty characters in the password!"); }
+                if (isEn) { r.Add("There should be no empty characters in the password!"); }
                 else { r.Add("Şifre içerisinde boş karakter bulunmamalıdır!"); }
             }
-            if (this.isturkceharf && value.Any(GlobalConstants.turkishcharacters.Contains))
+            if (this.isTurkishSpecialCharacter && value.Any(GlobalConstants.TurkishSpecialCharacters.Contains))
             {
-                var t = String.Join(", ", GlobalConstants.turkishcharacters);
-                if (isen) { r.Add($"The password must not contain any letters specific to the Turkish language! ({t})"); }
+                var t = String.Join(", ", GlobalConstants.TurkishSpecialCharacters);
+                if (isEn) { r.Add($"The password must not contain any letters specific to the Turkish language! ({t})"); }
                 else { r.Add($"Şifre içerisinde Türk diline özgü harf ({t}) bulunmamalıdır!"); }
             }
-            var password_seo = value.ToSeoFriendly();
-            if (this.adsoyadkontrol_private(password_seo, ad))
+            var passwordSeo = value.ToSeoFriendly();
+            if (this.checkNameSurname(passwordSeo, name))
             {
-                if (isen) { r.Add("Your name(s) must not appear in the password!"); }
+                if (isEn) { r.Add("Your name(s) must not appear in the password!"); }
                 else { r.Add("Şifre içerisinde adınız/adlarınız geçmemelidir!"); }
             }
-            if (this.adsoyadkontrol_private(password_seo, soyad))
+            if (this.checkNameSurname(passwordSeo, surname))
             {
-                if (isen) { r.Add("Your surname(s) must not appear in the password!"); }
+                if (isEn) { r.Add("Your surname(s) must not appear in the password!"); }
                 else { r.Add("Şifre içerisinde soyadınız/soyadlarınız geçmemelidir!"); }
             }
             errors = r.ToArray();
             return r.Count > 0;
         }
-        private bool ardisiksayikontrol_private(string password)
+        private bool checkConsecutive(string password)
         {
             if (password.Length > 2)
             {
@@ -86,10 +83,10 @@
             }
             return false;
         }
-        private bool adsoyadkontrol_private(string passwordseo, string value)
+        private bool checkNameSurname(string passwordSeo, string value)
         {
             var values = value.ToStringOrEmpty().ToEnumerable().Select(x => (x == "" ? [] : x.Split(' ').Select(y => y.ToSeoFriendly()).Where(y => y != "").ToArray())).FirstOrDefault();
-            if (values.Length > 0) { foreach (var item in values) { if (passwordseo.Contains(item)) { return true; } } }
+            if (values.Length > 0) { foreach (var item in values) { if (passwordSeo.Contains(item)) { return true; } } }
             return false;
         }
     }

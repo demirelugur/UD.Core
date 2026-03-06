@@ -19,7 +19,7 @@
         /// <summary>Verilen byte dizisini belirtilen fiziksel yola asenkron olarak yükler.</summary>
         public static async Task FileUploadAsync(this byte[] bytes, string physicallypath, CancellationToken cancellationtoken = default)
         {
-            Guard.CheckEmpty(bytes, nameof(bytes));
+            Guard.CheckEmptyOrCountZero(bytes, nameof(bytes));
             Guard.CheckEmpty(physicallypath, nameof(physicallypath));
             _file.DirectoryCreate(new FileInfo(physicallypath).DirectoryName);
             using (var fs = new FileStream(physicallypath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true))

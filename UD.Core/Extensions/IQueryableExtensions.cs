@@ -43,7 +43,7 @@
         }).SelectMany(x => x.r.DefaultIfEmpty(), (l, r) => new LeftJoinResult<TLeft, TRight>
         {
             left = l.l,
-            hasright = r != null,
+            hasRight = r != null,
             right = r
         });
         /// <summary>Seçilen ifadeye göre ilk kayıt veya varsayılan değeri asenkron olarak getirir.</summary>

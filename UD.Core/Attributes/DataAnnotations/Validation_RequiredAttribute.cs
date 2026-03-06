@@ -9,7 +9,7 @@
         public Validation_RequiredAttribute()
         {
             this.AllowEmptyStrings = false;
-            this.ErrorMessage = _validationerrormessage.required;
+            this.ErrorMessage = ValidationErrorMessageConstants.Required;
         }
     }
 }
