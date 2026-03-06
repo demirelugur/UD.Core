@@ -14,7 +14,7 @@
         {
             var jsondata = value.ToStringOrEmpty();
             var r = validationContext.IsRequiredAttribute();
-            if (_try.TryJson(jsondata, this.jtokentype, out JToken _jt))
+            if (Validators.TryJson(jsondata, this.jtokentype, out JToken _jt))
             {
                 if (_jt.HasValues)
                 {

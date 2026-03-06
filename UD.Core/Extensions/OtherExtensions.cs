@@ -21,37 +21,37 @@
         /// <summary>
         /// Verilen e-Posta adresindeki &quot;@&quot; karakterini &quot;[at]&quot; ile değiştirir.
         /// </summary>
-        /// <param name="mailaddress">MailAddress nesnesi.</param>
+        /// <param name="mailAddress">MailAddress nesnesi.</param>
         /// <returns>Dönüştürülmüş e-Posta adresi.</returns>
         /// <exception cref="ArgumentNullException">Verilen e-Posta adresi null ise fırlatılır.</exception>
-        public static string ReplaceAT(this MailAddress mailaddress)
+        public static string ReplaceAT(this MailAddress mailAddress)
         {
-            Guard.CheckNull(mailaddress, nameof(mailaddress));
-            return mailaddress.Address.Replace("@", "[at]");
+            Guard.CheckNull(mailAddress, nameof(mailAddress));
+            return mailAddress.Address.Replace("@", "[at]");
         }
         /// <summary>
         /// Verilen validation bağlamında bir özelliğin gerekli olup olmadığını kontrol eder.
         /// </summary>
-        /// <param name="validationcontext">ValidationContext nesnesi.</param>
+        /// <param name="validationContext">ValidationContext nesnesi.</param>
         /// <returns>Gerekli ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsRequiredAttribute(this ValidationContext validationcontext)
+        public static bool IsRequiredAttribute(this ValidationContext validationContext)
         {
-            if (validationcontext == null) { return false; }
-            var pi = validationcontext.ObjectInstance.GetType().GetProperty(validationcontext.MemberName);
-            if (pi == null) { return false; }
-            return _try.TryCustomAttribute(pi, out RequiredAttribute _);
+            if (validationContext == null) { return false; }
+            var property = validationContext.ObjectInstance.GetType().GetProperty(validationContext.MemberName);
+            if (property == null) { return false; }
+            return Validators.TryCustomAttribute(property, out RequiredAttribute _);
         }
         /// <summary>
         /// Verilen doğrulama bağlamına göre, belirtilen özelliğin değerini günceller. Eğer özellik yazılabilir durumdaysa, yeni değer atanır.
         /// </summary>
-        /// <param name="validationcontext">Doğrulama işlemi sırasında bağlam bilgilerini içeren nesne.</param>
+        /// <param name="validationContext">Doğrulama işlemi sırasında bağlam bilgilerini içeren nesne.</param>
         /// <param name="value">Güncellenmek istenen yeni değer.</param>
-        /// <exception cref="ArgumentNullException">Eğer <paramref name="validationcontext"/> null ise tetiklenir.</exception>
-        public static void SetValidatePropertyValue(this ValidationContext validationcontext, object value)
+        /// <exception cref="ArgumentNullException">Eğer <paramref name="validationContext"/> null ise tetiklenir.</exception>
+        public static void SetValidatePropertyValue(this ValidationContext validationContext, object value)
         {
-            if (validationcontext == null) { return; }
-            var propertyinfo = validationcontext.ObjectType.GetProperty(validationcontext.MemberName);
-            if (propertyinfo != null && propertyinfo.CanWrite) { propertyinfo.SetValue(validationcontext.ObjectInstance, value); }
+            if (validationContext == null) { return; }
+            var property = validationContext.ObjectType.GetProperty(validationContext.MemberName);
+            if (property != null && property.CanWrite) { property.SetValue(validationContext.ObjectInstance, value); }
         }
         /// <summary>
         /// Verilen ifadenin adını alır.
@@ -70,7 +70,7 @@
                 else if (_ue.Operand is MethodCallExpression _umce && _umce.Object is ConstantExpression _uce && _uce.Value != null)
                 {
                     if (_uce.Value is MemberInfo _mi) { result = _mi.Name; }
-                    else if (_try.TryGetProperty(_uce.Value, nameof(MemberInfo.Name), out string _name)) { result = _name; }
+                    else if (Validators.TryGetProperty(_uce.Value, nameof(MemberInfo.Name), out string _name)) { result = _name; }
                 }
             }
             if (result.IsNullOrEmpty()) { throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression)); }
@@ -115,7 +115,7 @@
                 case SqlDbType.NVarChar: return 231;
                 case SqlDbType.NChar: return 239;
                 case SqlDbType.Xml: return 241;
-                default: throw _other.ThrowNotSupportedForEnum<SqlDbType>();
+                default: throw Utilities.ThrowNotSupportedForEnum<SqlDbType>();
             }
         }
         /// <summary>
@@ -150,7 +150,7 @@
                 case SqlDbType.NVarChar: return DbType.String;
                 case SqlDbType.NChar: return DbType.StringFixedLength;
                 case SqlDbType.Xml: return DbType.Xml;
-                default: throw _other.ThrowNotSupportedForEnum<SqlDbType>();
+                default: throw Utilities.ThrowNotSupportedForEnum<SqlDbType>();
             }
         }
         /// <summary>
@@ -184,32 +184,32 @@
                 case DbType.String: return SqlDbType.NVarChar;
                 case DbType.StringFixedLength: return SqlDbType.NChar;
                 case DbType.Xml: return SqlDbType.Xml;
-                default: throw _other.ThrowNotSupportedForEnum<DbType>();
+                default: throw Utilities.ThrowNotSupportedForEnum<DbType>();
             }
         }
         /// <summary>
         /// Bir <see cref="JToken"/> nesnesini belirtilen <typeparamref name="TKey"/> türündeki bir diziye dönüştürür. Eğer <see cref="JToken"/> null ise boş bir dizi döner, array türünde ise içindeki değerleri <typeparamref name="TKey"/> türüne çevirip dizi olarak döner. Diğer durumlarda bir istisna fırlatır.
         /// </summary>
         /// <typeparam name="TKey">Dönüştürülecek hedef veri türü.</typeparam>
-        /// <param name="jtoken">Dönüştürülecek <see cref="JToken"/> nesnesi.</param>
+        /// <param name="jToken">Dönüştürülecek <see cref="JToken"/> nesnesi.</param>
         /// <returns><typeparamref name="TKey"/> türünden bir dizi.</returns>
         /// <exception cref="NotSupportedException"><see cref="JToken"/> türü null veya array değilse fırlatılır.</exception>
-        public static TKey[] ToArrayFromJToken<TKey>(this JToken jtoken)
+        public static TKey[] ToArrayFromJToken<TKey>(this JToken jToken)
         {
-            if (jtoken == null || jtoken.Type == JTokenType.Null) { return []; }
-            if (jtoken.Type == JTokenType.Array) { return jtoken.Select(x => x.Value<TKey>()).ToArray(); }
-            throw new NotSupportedException($"\"{nameof(jtoken)}\" türü uyumsuzdur!");
+            if (jToken == null || jToken.Type == JTokenType.Null) { return []; }
+            if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
+            throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
         /// <summary>
         /// <see cref="QueryString"/> içindeki belirtilen anahtarı alır ve uygun türde bir değere dönüştürür. Eğer anahtar bulunamazsa veya dönüştürme başarısız olursa, varsayılan değeri döner.
         /// </summary>
         /// <typeparam name="TKey">Dönüştürülecek hedef tür.</typeparam>
-        /// <param name="querystring">İçinde sorgu parametrelerini barındıran <see cref="QueryString"/> nesnesi.</param>
+        /// <param name="queryString">İçinde sorgu parametrelerini barındıran <see cref="QueryString"/> nesnesi.</param>
         /// <param name="key">Alınacak sorgu parametresinin adı (anahtar).</param>
         /// <returns>Başarılıysa sorgu parametresi uygun türe dönüştürülür, aksi halde varsayılan değer döner.</returns>
-        public static TKey ParseOrDefault<TKey>(this QueryString querystring, string key)
+        public static TKey ParseOrDefault<TKey>(this QueryString queryString, string key)
         {
-            var querydic = (querystring.HasValue ? HttpUtility.ParseQueryString(querystring.Value) : new());
+            var querydic = (queryString.HasValue ? HttpUtility.ParseQueryString(queryString.Value) : new());
             key = key.ToStringOrEmpty();
             if (querydic.AllKeys.Contains(key)) { return querydic[key].ParseOrDefault<TKey>(); }
             return default;
@@ -233,24 +233,24 @@
             catch { return default; }
         }
         /// <summary>Stopwatch&#39;ı durdurur ve geçen süreyi döner.</summary>
-        /// <param name="stopwatch">Zamanlayıcı nesnesi.</param>
+        /// <param name="stopWatch">Zamanlayıcı nesnesi.</param>
         /// <returns>Durdurulduktan sonra geçen süre.</returns>
-        public static TimeSpan StopThenGetElapsed(this Stopwatch stopwatch)
+        public static TimeSpan StopThenGetElapsed(this Stopwatch stopWatch)
         {
-            stopwatch.Stop();
-            return stopwatch.Elapsed;
+            stopWatch.Stop();
+            return stopWatch.Elapsed;
         }
         /// <summary>
         /// Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DescriptionAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.
         /// </summary>
-        /// <param name="memberinfo">Üzerinde <see cref="DescriptionAttribute"/> aranacak üye bilgisi (sınıf, property, metod vb.).</param>
+        /// <param name="memberInfo">Üzerinde <see cref="DescriptionAttribute"/> aranacak üye bilgisi (sınıf, property, metod vb.).</param>
         /// <returns><see cref="DescriptionAttribute"/> içindeki açıklama metni, yoksa boş string (&quot;&quot;).</returns>
-        public static string GetDescription(this MemberInfo memberinfo)
+        public static string GetDescription(this MemberInfo memberInfo)
         {
-            if (memberinfo == null) { return ""; }
+            if (memberInfo == null) { return ""; }
             try
             {
-                var attr = memberinfo.GetCustomAttribute<DescriptionAttribute>();
+                var attr = memberInfo.GetCustomAttribute<DescriptionAttribute>();
                 return attr == null ? "" : attr.Description.ToStringOrEmpty();
             }
             catch { return ""; }

@@ -27,31 +27,7 @@
     using static UD.Core.Helper.GlobalConstants;
     public sealed class OrtakTools
     {
-        public sealed class _file
-        {
-            /// <summary>
-            /// Verilen fiziksel dosya yolunda bir dosya varsa onu siler.
-            /// </summary>
-            /// <param name="physicallyPath">Silinecek dosyanın fiziksel yolu.</param>
-            public static void FileExistsThenDelete(string physicallyPath) { if (File.Exists(physicallyPath)) { File.Delete(physicallyPath); } }
-            /// <summary>
-            /// Verilen klasör yolunda bir klasör varsa, isteğe bağlı olarak içindekilerle birlikte siler.
-            /// </summary>
-            /// <param name="physicallyPath">Silinecek klasörün fiziksel yolu.</param>
-            /// <param name="recursive">Eğer <see langword="true"/> verilirse, dizin ve altındaki tüm dosyalar ve alt dizinler silinir. <see langword="false"/> verilirse, dizin yalnızca boşsa silinir; aksi halde bir <see cref="IOException"/> fırlatılır.</param>
-            public static void DirectoryExistsThenDelete(string physicallyPath, bool recursive) { if (Directory.Exists(physicallyPath)) { Directory.Delete(physicallyPath, recursive); } }
-            /// <summary>
-            /// Verilen fiziksel dosya yolunda klasör mevcut değilse, ilgili klasörü ve varsa üst dizinlerini oluşturur.
-            /// </summary>
-            /// <param name="physicallyPath">Oluşturulacak klasörün fiziksel yolu.</param>
-            public static void DirectoryCreate(string physicallyPath)
-            {
-                var di = new DirectoryInfo(physicallyPath);
-                if (di.Parent != null) { DirectoryCreate(di.Parent.FullName); }
-                if (!di.Exists) { di.Create(); }
-            }
-        }
-        public sealed class _get
+        public sealed class Accessors
         {
             /// <summary>
             /// Veritabanı bağlantı dizesi oluşturur. 
@@ -171,7 +147,7 @@
                 }
                 return model.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new
                 {
-                    isldate = _to.ToDateTimeFromObject((object)x.isldate, default),
+                    isldate = Converters.ToDateTimeFromObject((object)x.isldate, default),
                     isluser = (string)x.isluser
                 }).Select(x => String.Join(", ", new string[] { (x.isldate.Ticks > 0 ? x.isldate.ToString(dateFormat) : ""), x.isluser.ToStringOrEmpty() }.Where(y => y != "").ToArray())).FirstOrDefault() ?? "";
             }
@@ -233,7 +209,7 @@
                 {
                     case NVIKimlikTypes.yeni: t = (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"); break;
                     case NVIKimlikTypes.eski: t = (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"); break;
-                    default: throw _other.ThrowNotSupportedForEnum<NVIKimlikTypes>();
+                    default: throw Utilities.ThrowNotSupportedForEnum<NVIKimlikTypes>();
                 }
                 return $"{cs} ({t})";
             }
@@ -259,7 +235,7 @@
             public static string MaskedPhoneNumberTR(string phoneNumberTR, bool showFull)
             {
                 if (showFull) { return phoneNumberTR.BeautifyPhoneNumberTR(); }
-                return (_try.TryPhoneNumberTR(phoneNumberTR, out string _t) ? $"(**{_t.Substring(2, 1)}) {_t.Substring(3, 1)}**-*{_t.Substring(8, 2)}" : "");
+                return (Validators.TryPhoneNumberTR(phoneNumberTR, out string _t) ? $"(**{_t.Substring(2, 1)}) {_t.Substring(3, 1)}**-*{_t.Substring(8, 2)}" : "");
             }
             /// <summary>
             /// Verilen sayısal kimlik numarasını (TCKN veya VKN) maskeler. TCKN olarak doğrulanırsa orta kısım 6 adet &#39;*&#39;, VKN olarak doğrulanırsa 5 adet &#39;*&#39; ile gizlenir. Eğer <paramref name="showFull"/> true ise numara olduğu gibi döndürülür. Geçerli bir TCKN veya VKN değilse boş string döndürülür.
@@ -282,107 +258,7 @@
             /// <returns>Değiştirilmiş metni döner.</returns>
             public static string ReplaceTurkishChars(string value) => value.ToStringOrEmpty().Replace('Ç', 'C').Replace('ç', 'c').Replace('Ğ', 'G').Replace('ğ', 'g').Replace('İ', 'I').Replace('ı', 'i').Replace('Ö', 'O').Replace('ö', 'o').Replace('Ş', 'S').Replace('ş', 's').Replace('Ü', 'U').Replace('ü', 'u');
         }
-        public sealed class _is
-        {
-            /// <summary>
-            /// Verilen string&#39;in HTML tag&#39;leri içerip içermediğini kontrol eder. String null, boş veya yalnızca boşluklardan oluşuyorsa <see langword="false"/> döner. HTML tag&#39;leri, düzenli ifade (regex) kullanılarak tespit edilir.
-            /// <code>(!s.IsNullOrEmpty_string() &amp;&amp; Regex.IsMatch(s, @&quot;&lt;/?\w+\s*[^&gt;]*&gt;&quot;, RegexOptions.Compiled))</code>
-            /// </summary>
-            /// <param name="value">Kontrol edilecek string.</param>
-            /// <returns>String HTML tag&#39;i içeriyorsa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
-            public static bool IsHtml(string value) => (!value.IsNullOrEmpty() && Regex.IsMatch(value, @"</?\w+\s*[^>]*>", RegexOptions.Compiled));
-            /// <summary>
-            /// Belirtilen dosyanın tarayıcı tarafından indirilebilir olup olmadığını kontrol eder. PDF veya görüntü dosyaları (image/*) indirme işlemi için uygun değilse <see langword="false"/> döner. Aksi takdirde <see langword="true"/> döner.
-            /// </summary>
-            /// <param name="path">Kontrol edilecek dosyanın yolu.</param>
-            /// <returns>Dosya indirilebilir ise <see langword="true"/>, değilse <see langword="false"/>.</returns>
-            public static bool IsDownloadableFile(string path)
-            {
-                try
-                {
-                    if (path.IsNullOrEmpty()) { return false; }
-                    var uzn = Path.GetExtension(path).ToLower();
-                    if (uzn == ".pdf") { return false; }
-                    if (new FileExtensionContentTypeProvider().Mappings.Any(x => x.Key == uzn && x.Value.StartsWith("image/"))) { return false; }
-                    return true;
-                }
-                catch { return false; }
-            }
-        }
-        public sealed class _other
-        {
-            /// <summary>
-            /// Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır.
-            /// <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code>
-            /// </summary>
-            public static TransactionScope TransactionScopeForAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
-            /// <summary>
-            /// Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.
-            /// </summary>
-            /// <param name="value">Dönüştürülecek değer</param>
-            /// <param name="type">Dönüştürülecek hedef tür</param>
-            /// <returns>Dönüştürülmüş değer</returns>
-            public static object ChangeType(object value, Type type)
-            {
-                var t = _try.TryTypeIsNullable(type, out Type _genericBaseType);
-                if (t && value == null) { return null; }
-                if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
-                return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericBaseType);
-            }
-            /// <summary>
-            /// Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.
-            /// </summary>
-            /// <param name="value">Şifrelenecek metin</param>
-            /// <param name="key">Harflerin kaydırılacağı değer</param>
-            /// <returns>Şifrelenmiş metin</returns>
-            public static string CaesarCipherOperation(string value, int key)
-            {
-                if (key < 0) { return CaesarCipherOperation(value, key + 26); }
-                var r = "";
-                foreach (var item in value.ToStringOrEmpty().ToCharArray())
-                {
-                    if ((item >= 'A' && item <= 'Z')) { r = String.Concat(r, Convert.ToChar(((item - 'A' + key) % 26) + 'A').ToString()); }
-                    else if ((item >= 'a' && item <= 'z')) { r = String.Concat(r, Convert.ToChar(((item - 'a' + key) % 26) + 'a').ToString()); }
-                    else { r = String.Concat(r, item.ToString()); }
-                }
-                return r;
-            }
-            /// <summary>
-            /// Belirtilen nesnenin property adını kullanarak ilgili property&#39;sine değer atar.
-            /// </summary>
-            /// <param name="value">Değeri atanac nesne.</param>
-            /// <param name="propertyName">Değeri atanacak property&#39;sinin adı.</param>
-            /// <param name="data">Property&#39;ye atanacak değer.</param>
-            /// <param name="dil">Hata mesajlarının döndürüleceği dil.</param>
-            /// <exception cref="ArgumentException"><paramref name="value"/> nesnesi sınıf türünde değilse fırlatılır.</exception>
-            /// <exception cref="InvalidOperationException">Property yazılabilir değilse fırlatılır.</exception>
-            /// <exception cref="ArgumentNullException"><paramref name="value"/> veya <paramref name="propertyName"/> null ise fırlatılır.</exception>
-            public static void SetPropertyValue(object value, string propertyName, object data, string dil)
-            {
-                Guard.CheckNull(value, nameof(value));
-                Guard.CheckEmpty(propertyName, nameof(propertyName));
-                Guard.UnSupportLanguage(dil, nameof(dil));
-                var type = value.GetType();
-                if (!type.IsCustomClass()) { throw new ArgumentException(dil == "en" ? $"The \"{nameof(value)}\" argument type must be class!" : $"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value)); }
-                var pi = type.GetProperty(propertyName);
-                Guard.CheckNull(pi, nameof(pi));
-                if (!pi.CanWrite) { throw new InvalidOperationException(dil == "en" ? $"The \"{nameof(propertyName)}\" property is not writable!" : $"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
-                pi.SetValue(value, data == null ? null : ChangeType(data, pi.PropertyType));
-            }
-            /// <summary>
-            /// Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.
-            /// </summary>
-            /// <typeparam name="TEnum">Enum türü (generic).</typeparam>
-            /// <param name="details">Hata mesajına eklenecek isteğe bağlı ek detaylar.</param>
-            /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
-            public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : Enum
-            {
-                var r = new HashSet<string> { typeof(TEnum).FullName, $"{nameof(Enum)} değeri uyumsuzdur!" };
-                if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
-                return new(String.Join(" ", r));
-            }
-        }
-        public sealed class _to
+        public sealed class Converters
         {
             /// <summary>
             /// Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.
@@ -419,12 +295,6 @@
                 foreach (var item in SHA256.HashData(Encoding.UTF8.GetBytes(value is String _s ? _s.Trim() : ToJSON(value)))) { r.Add(item.ToString("x2")); }
                 return String.Join("", r);
             }
-            /// <summary>
-            /// Belirtilen enum türündeki değerleri ve karşılık gelen long değerlerini içeren bir sözlük oluşturur.
-            /// </summary>
-            /// <typeparam name="TEnum">Enum türü.</typeparam>
-            /// <returns>Enum isimlerini ve long karşılıklarını içeren sözlük.</returns>
-            public static Dictionary<string, long> ToDictionaryFromEnum<TEnum>() where TEnum : Enum => typeof(TEnum).ToDictionaryFromEnum();
             /// <summary>
             /// Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.
             /// </summary>
@@ -569,7 +439,131 @@
                 return (Convert.FromBase64String(parts[1]), parts[0]);
             }
         }
-        public sealed class _try
+        public sealed class Files
+        {
+            /// <summary>
+            /// Verilen fiziksel dosya yolunda bir dosya varsa onu siler.
+            /// </summary>
+            /// <param name="physicallyPath">Silinecek dosyanın fiziksel yolu.</param>
+            public static void FileExistsThenDelete(string physicallyPath) { if (File.Exists(physicallyPath)) { File.Delete(physicallyPath); } }
+            /// <summary>
+            /// Verilen klasör yolunda bir klasör varsa, isteğe bağlı olarak içindekilerle birlikte siler.
+            /// </summary>
+            /// <param name="physicallyPath">Silinecek klasörün fiziksel yolu.</param>
+            /// <param name="recursive">Eğer <see langword="true"/> verilirse, dizin ve altındaki tüm dosyalar ve alt dizinler silinir. <see langword="false"/> verilirse, dizin yalnızca boşsa silinir; aksi halde bir <see cref="IOException"/> fırlatılır.</param>
+            public static void DirectoryExistsThenDelete(string physicallyPath, bool recursive) { if (Directory.Exists(physicallyPath)) { Directory.Delete(physicallyPath, recursive); } }
+            /// <summary>
+            /// Verilen fiziksel dosya yolunda klasör mevcut değilse, ilgili klasörü ve varsa üst dizinlerini oluşturur.
+            /// </summary>
+            /// <param name="physicallyPath">Oluşturulacak klasörün fiziksel yolu.</param>
+            public static void DirectoryCreate(string physicallyPath)
+            {
+                var di = new DirectoryInfo(physicallyPath);
+                if (di.Parent != null) { DirectoryCreate(di.Parent.FullName); }
+                if (!di.Exists) { di.Create(); }
+            }
+        }
+        public sealed class Guards
+        {
+            /// <summary>
+            /// Verilen string&#39;in HTML tag&#39;leri içerip içermediğini kontrol eder. String null, boş veya yalnızca boşluklardan oluşuyorsa <see langword="false"/> döner. HTML tag&#39;leri, düzenli ifade (regex) kullanılarak tespit edilir.
+            /// <code>(!s.IsNullOrEmpty_string() &amp;&amp; Regex.IsMatch(s, @&quot;&lt;/?\w+\s*[^&gt;]*&gt;&quot;, RegexOptions.Compiled))</code>
+            /// </summary>
+            /// <param name="value">Kontrol edilecek string.</param>
+            /// <returns>String HTML tag&#39;i içeriyorsa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
+            public static bool IsHtml(string value) => (!value.IsNullOrEmpty() && Regex.IsMatch(value, @"</?\w+\s*[^>]*>", RegexOptions.Compiled));
+            /// <summary>
+            /// Belirtilen dosyanın tarayıcı tarafından indirilebilir olup olmadığını kontrol eder. PDF veya görüntü dosyaları (image/*) indirme işlemi için uygun değilse <see langword="false"/> döner. Aksi takdirde <see langword="true"/> döner.
+            /// </summary>
+            /// <param name="path">Kontrol edilecek dosyanın yolu.</param>
+            /// <returns>Dosya indirilebilir ise <see langword="true"/>, değilse <see langword="false"/>.</returns>
+            public static bool IsDownloadableFile(string path)
+            {
+                try
+                {
+                    if (path.IsNullOrEmpty()) { return false; }
+                    var uzn = Path.GetExtension(path).ToLower();
+                    if (uzn == ".pdf") { return false; }
+                    if (new FileExtensionContentTypeProvider().Mappings.Any(x => x.Key == uzn && x.Value.StartsWith("image/"))) { return false; }
+                    return true;
+                }
+                catch { return false; }
+            }
+        }
+        public sealed class Utilities
+        {
+            /// <summary>
+            /// Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır.
+            /// <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code>
+            /// </summary>
+            public static TransactionScope TransactionScopeForAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
+            /// <summary>
+            /// Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.
+            /// </summary>
+            /// <param name="value">Dönüştürülecek değer</param>
+            /// <param name="type">Dönüştürülecek hedef tür</param>
+            /// <returns>Dönüştürülmüş değer</returns>
+            public static object ChangeType(object value, Type type)
+            {
+                var t = Validators.TryTypeIsNullable(type, out Type _genericBaseType);
+                if (t && value == null) { return null; }
+                if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
+                return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericBaseType);
+            }
+            /// <summary>
+            /// Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.
+            /// </summary>
+            /// <param name="value">Şifrelenecek metin</param>
+            /// <param name="key">Harflerin kaydırılacağı değer</param>
+            /// <returns>Şifrelenmiş metin</returns>
+            public static string CaesarCipherOperation(string value, int key)
+            {
+                if (key < 0) { return CaesarCipherOperation(value, key + 26); }
+                var r = "";
+                foreach (var item in value.ToStringOrEmpty().ToCharArray())
+                {
+                    if ((item >= 'A' && item <= 'Z')) { r = String.Concat(r, Convert.ToChar(((item - 'A' + key) % 26) + 'A').ToString()); }
+                    else if ((item >= 'a' && item <= 'z')) { r = String.Concat(r, Convert.ToChar(((item - 'a' + key) % 26) + 'a').ToString()); }
+                    else { r = String.Concat(r, item.ToString()); }
+                }
+                return r;
+            }
+            /// <summary>
+            /// Belirtilen nesnenin property adını kullanarak ilgili property&#39;sine değer atar.
+            /// </summary>
+            /// <param name="value">Değeri atanac nesne.</param>
+            /// <param name="propertyName">Değeri atanacak property&#39;sinin adı.</param>
+            /// <param name="data">Property&#39;ye atanacak değer.</param>
+            /// <param name="dil">Hata mesajlarının döndürüleceği dil.</param>
+            /// <exception cref="ArgumentException"><paramref name="value"/> nesnesi sınıf türünde değilse fırlatılır.</exception>
+            /// <exception cref="InvalidOperationException">Property yazılabilir değilse fırlatılır.</exception>
+            /// <exception cref="ArgumentNullException"><paramref name="value"/> veya <paramref name="propertyName"/> null ise fırlatılır.</exception>
+            public static void SetPropertyValue(object value, string propertyName, object data, string dil)
+            {
+                Guard.CheckNull(value, nameof(value));
+                Guard.CheckEmpty(propertyName, nameof(propertyName));
+                Guard.UnSupportLanguage(dil, nameof(dil));
+                var type = value.GetType();
+                if (!type.IsCustomClass()) { throw new ArgumentException(dil == "en" ? $"The \"{nameof(value)}\" argument type must be class!" : $"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value)); }
+                var pi = type.GetProperty(propertyName);
+                Guard.CheckNull(pi, nameof(pi));
+                if (!pi.CanWrite) { throw new InvalidOperationException(dil == "en" ? $"The \"{nameof(propertyName)}\" property is not writable!" : $"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
+                pi.SetValue(value, data == null ? null : ChangeType(data, pi.PropertyType));
+            }
+            /// <summary>
+            /// Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.
+            /// </summary>
+            /// <typeparam name="TEnum">Enum türü (generic).</typeparam>
+            /// <param name="details">Hata mesajına eklenecek isteğe bağlı ek detaylar.</param>
+            /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
+            public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : Enum
+            {
+                var r = new HashSet<string> { typeof(TEnum).FullName, $"{nameof(Enum)} değeri uyumsuzdur!" };
+                if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
+                return new(String.Join(" ", r));
+            }
+        }
+        public sealed class Validators
         {
             /// <summary>
             /// Verilen nesnenin doğrulama kurallarına göre geçerliliğini kontrol eder. Eğer nesne geçerli değilse, doğrulama hatalarını içeren bir dizi döner.

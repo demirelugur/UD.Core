@@ -228,3 +228,11 @@ public static IQueryable<T> WhereContainsLower<T>(this IQueryable<T> source, Exp
     var lambda = Expression.Lambda<Func<T, bool>>(containsCall, parameter);
     return source.Where(lambda);
 }
+***************************************
+/// <summary>
+/// Belirtilen enum türündeki değerleri ve karşılık gelen long değerlerini içeren bir sözlük oluşturur.
+/// </summary>
+/// <typeparam name="TEnum">Enum türü.</typeparam>
+/// <returns>Enum isimlerini ve long karşılıklarını içeren sözlük.</returns>
+public static Dictionary<string, long> ToDictionaryFromEnum<TEnum>() where TEnum : Enum => typeof(TEnum).ToDictionaryFromEnum();
+***************************************

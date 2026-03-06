@@ -87,7 +87,7 @@
                 {
                     var randomKeyLength = randomNumbers[Random.Shared.Next(randomNumbers.Length)];
                     foreach (var item in new[] {
-                        _get.GenerateRandomkey(randomKeyLength), // randomkeylength değeri kadar rastgele karakter üretiyor
+                        Accessors.GenerateRandomkey(randomKeyLength), // randomkeylength değeri kadar rastgele karakter üretiyor
                         aes.Key,
                         aes.IV,
                         encryptProcess(value, aes), // Veri
@@ -95,16 +95,16 @@
                     }) { ms.Write(item.AsSpan()); }
                     var r = Convert.ToBase64String(ms.ToArray());
                     var firstChar = r[0]; // İlk değerin char değerine göre CaesarCipherOperation ile karıştırma
-                    return _to.ToReverse(String.Concat(firstChar.ToString(), _other.CaesarCipherOperation(r.Substring(1), Convert.ToInt32(firstChar))));
+                    return Converters.ToReverse(String.Concat(firstChar.ToString(), Utilities.CaesarCipherOperation(r.Substring(1), Convert.ToInt32(firstChar))));
                 }
             }
         }
         public static string ObfuscatorDecrypt(string encryptedValue)
         {
             Guard.CheckEmpty(encryptedValue, nameof(encryptedValue));
-            encryptedValue = _to.ToReverse(encryptedValue);
+            encryptedValue = Converters.ToReverse(encryptedValue);
             var firstChar = encryptedValue[0];
-            var combinedBytes = Convert.FromBase64String(String.Concat(firstChar.ToString(), _other.CaesarCipherOperation(encryptedValue.Substring(1), -1 * Convert.ToInt32(firstChar))));
+            var combinedBytes = Convert.FromBase64String(String.Concat(firstChar.ToString(), Utilities.CaesarCipherOperation(encryptedValue.Substring(1), -1 * Convert.ToInt32(firstChar))));
             var startIndex = combinedBytes[combinedBytes.Length - 1];
             var sourceSpan = combinedBytes.AsSpan();
             var encryptedStartIndex = startIndex + keyRequiredLength + ivRequiredLength;

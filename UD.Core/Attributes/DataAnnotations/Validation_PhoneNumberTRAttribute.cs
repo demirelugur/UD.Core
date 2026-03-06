@@ -10,7 +10,7 @@
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var phoneTR = value.ToStringOrEmpty();
-            if (_try.TryPhoneNumberTR(phoneTR, out string _phonetr))
+            if (Validators.TryPhoneNumberTR(phoneTR, out string _phonetr))
             {
                 validationContext.SetValidatePropertyValue(_phonetr);
                 return ValidationResult.Success;

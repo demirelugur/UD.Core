@@ -6,9 +6,9 @@
     public sealed class Validation_ArrayMinLengthAttribute : MinLengthAttribute
     {
         public Validation_ArrayMinLengthAttribute() : this(1) { }
-        public Validation_ArrayMinLengthAttribute(int minimumlength) : base(minimumlength)
+        public Validation_ArrayMinLengthAttribute(int minimumLength) : base(minimumLength)
         {
-            this.ErrorMessage = minimumlength > 1 ? ValidationErrorMessageConstants.ArrayMinLength : ValidationErrorMessageConstants.Required;
+            this.ErrorMessage = minimumLength > 1 ? ValidationErrorMessageConstants.ArrayMinLength : ValidationErrorMessageConstants.Required;
         }
     }
 }

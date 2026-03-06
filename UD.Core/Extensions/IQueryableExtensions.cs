@@ -33,10 +33,10 @@
         /// <typeparam name="TKey">Birleştirme için anahtar türü.</typeparam>
         /// <param name="left">Sol IQueryable kaynak.</param>
         /// <param name="right">Sağ IQueryable kaynak.</param>
-        /// <param name="leftkey">Sol kaynak için anahtar ifadesi.</param>
-        /// <param name="rightkey">Sağ kaynak için anahtar ifadesi.</param>
+        /// <param name="leftKey">Sol kaynak için anahtar ifadesi.</param>
+        /// <param name="rightKey">Sağ kaynak için anahtar ifadesi.</param>
         /// <returns>Birleştirilmiş sonuçları içeren IQueryable kaynak.</returns>
-        public static IQueryable<LeftJoinResult<TLeft, TRight>> LeftJoinQueryable<TLeft, TRight, TKey>(this IQueryable<TLeft> left, IQueryable<TRight> right, Expression<Func<TLeft, TKey>> leftkey, Expression<Func<TRight, TKey>> rightkey) where TLeft : class where TRight : class => left.GroupJoin(right, leftkey, rightkey, (l, r) => new
+        public static IQueryable<LeftJoinResult<TLeft, TRight>> LeftJoinQueryable<TLeft, TRight, TKey>(this IQueryable<TLeft> left, IQueryable<TRight> right, Expression<Func<TLeft, TKey>> leftKey, Expression<Func<TRight, TKey>> rightKey) where TLeft : class where TRight : class => left.GroupJoin(right, leftKey, rightKey, (l, r) => new
         {
             l,
             r
@@ -47,45 +47,45 @@
             right = r
         });
         /// <summary>Seçilen ifadeye göre ilk kayıt veya varsayılan değeri asenkron olarak getirir.</summary>
-        public static Task<TObject> SelectThenFirstOrDefaultAsync<T, TObject>(this IQueryable<T> source, Expression<Func<T, TObject>> selector, CancellationToken cancellationtoken = default) where T : class => source.Select(selector).FirstOrDefaultAsync(cancellationtoken);
+        public static Task<TObject> SelectThenFirstOrDefaultAsync<T, TObject>(this IQueryable<T> source, Expression<Func<T, TObject>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).FirstOrDefaultAsync(cancellationToken);
         /// <summary>Verilen ifade ile maksimum değeri asenkron olarak getirir, yoksa varsayılan değeri döner.</summary>
-        public static async Task<TKey> MaxOrDefaultAsync<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationtoken = default) where T : class => (await source.AnyAsync(cancellationtoken) ? await source.MaxAsync(selector, cancellationtoken) : default(TKey));
+        public static async Task<TKey> MaxOrDefaultAsync<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => (await source.AnyAsync(cancellationToken) ? await source.MaxAsync(selector, cancellationToken) : default(TKey));
         /// <summary>Verilen ifade ile minimum değeri asenkron olarak getirir, yoksa varsayılan değeri döner.</summary>
-        public static async Task<TKey> MinOrDefaultAsync<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationtoken = default) where T : class => (await source.AnyAsync(cancellationtoken) ? await source.MinAsync(selector, cancellationtoken) : default(TKey));
+        public static async Task<TKey> MinOrDefaultAsync<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => (await source.AnyAsync(cancellationToken) ? await source.MinAsync(selector, cancellationToken) : default(TKey));
         /// <summary>Verilen metin için benzersiz bir SEO dostu string oluşturur.</summary>
-        public static async Task<string> GenerateUniqueSEOStringAsync(this IQueryable<string> source, string text, int maxlength, string dil, CancellationToken cancellationtoken = default)
+        public static async Task<string> GenerateUniqueSEOStringAsync(this IQueryable<string> source, string text, int maxLength, string dil, CancellationToken cancellationToken = default)
         {
             var i = 0;
-            string r, t = text.ToSeoFriendly();
-            Guard.CheckEmpty(t, nameof(t));
+            string r, textSeo = text.ToSeoFriendly();
+            Guard.CheckEmpty(textSeo, nameof(textSeo));
             while (true)
             {
-                r = (i == 0 ? t : String.Join("-", t, i.ToString()));
-                if (!await source.ContainsAsync(r, cancellationtoken)) { break; }
+                r = (i == 0 ? textSeo : String.Join("-", textSeo, i.ToString()));
+                if (!await source.ContainsAsync(r, cancellationToken)) { break; }
                 i++;
             }
-            if (r.Length <= maxlength) { return r; }
+            if (r.Length <= maxLength) { return r; }
             Guard.UnSupportLanguage(dil, nameof(dil));
-            if (dil == "en") { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxlength} characters!"); }
-            throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxlength} karakterlik maksimum uzunluğu aşıyor!");
+            if (dil == "en") { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
+            throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxLength} karakterlik maksimum uzunluğu aşıyor!");
         }
         /// <summary> IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>
         /// <typeparam name="T">Sorgu sonucundaki öğelerin tipi.</typeparam>
         /// <param name="source">Sayfalanacak IQueryable veri kaynağı.</param>
-        /// <param name="pagenumber">İstenen sayfa numarası. (1 tabanlı)</param>
+        /// <param name="pageNumber">İstenen sayfa numarası. (1 tabanlı)</param>
         /// <param name="size">Sayfa başına öğe sayısı.</param>
         /// <param name="sorting">Sorgu sıralaması</param>
-        /// <param name="loadinfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
+        /// <param name="loadInfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
-        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pagenumber, int size, string sorting, bool loadinfo = true, CancellationToken cancellationToken = default)
+        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageNumber, int size, string sorting, bool loadInfo = true, CancellationToken cancellationToken = default)
         {
             if (source == null) { return new(); }
             PagingInfo? p = null;
-            if (loadinfo)
+            if (loadInfo)
             {
                 var totalcount = await source.LongCountAsync(cancellationToken);
                 var totalpage = Convert.ToInt64(Math.Ceiling(totalcount / Convert.ToDouble(size)));
-                p = new(totalcount, totalpage, pagenumber);
+                p = new(totalcount, totalpage, pageNumber);
             }
             IOrderedQueryable<T> orderedSource;
             if (sorting.IsNullOrEmpty())
@@ -98,8 +98,8 @@
                 try { orderedSource = source.OrderBy(sorting); }
                 catch (Exception ex) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
             }
-            var items = await orderedSource.Paginate(pagenumber, size).ToArrayAsync(cancellationToken);
-            return new(pagenumber, size, items, p);
+            var items = await orderedSource.Paginate(pageNumber, size).ToArrayAsync(cancellationToken);
+            return new(pageNumber, size, items, p);
         }
         /// <summary>
         /// IOrderedQueryable kaynaklarının sayfalama işlemini gerçekleştirir.
@@ -111,15 +111,15 @@
         /// </para>
         /// </summary>
         /// <param name="source">Sayfalama işlemi yapılacak IOrderedQueryable kaynağı.</param>
-        /// <param name="pagenumber">Sayfa numarası (1 tabanlı).</param>
+        /// <param name="pageNumber">Sayfa numarası (1 tabanlı).</param>
         /// <param name="size">Her sayfada gösterilecek kayıt sayısı.</param>
         /// <returns>Paginasyon yapılmış IQueryable kaynak.</returns>
-        public static IQueryable<T> Paginate<T>(this IOrderedQueryable<T> source, int pagenumber, int size)
+        public static IQueryable<T> Paginate<T>(this IOrderedQueryable<T> source, int pageNumber, int size)
         {
-            pagenumber = Math.Max(1, pagenumber);
+            pageNumber = Math.Max(1, pageNumber);
             size = Math.Max(1, size);
-            if (pagenumber == 1) { return source.Take(size); }
-            var skip = ((pagenumber - 1) * size);
+            if (pageNumber == 1) { return source.Take(size); }
+            var skip = ((pageNumber - 1) * size);
             return source.Skip(skip).Take(size);
         }
     }

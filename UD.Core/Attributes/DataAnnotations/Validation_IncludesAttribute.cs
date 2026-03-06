@@ -15,10 +15,10 @@
         }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var isrequired = validationContext.IsRequiredAttribute();
+            var isRequired = validationContext.IsRequiredAttribute();
             if (value == null)
             {
-                if (isrequired) { return this.tovalidationresult(validationContext); }
+                if (isRequired) { return this.tovalidationresult(validationContext); }
                 return ValidationResult.Success;
             }
             bool contains;
@@ -27,7 +27,7 @@
                 _s = _s.Trim();
                 if (_s == "")
                 {
-                    if (isrequired) { contains = false; }
+                    if (isRequired) { contains = false; }
                     else
                     {
                         validationContext.SetValidatePropertyValue(null);

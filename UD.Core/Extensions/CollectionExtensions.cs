@@ -29,7 +29,7 @@
         /// <param name="predicate">Kaldırılacak öğeleri belirleyen bir koşul.</param>
         public static void RemoveWhere<K, V>(this IDictionary<K, V> dictionary, Func<KeyValuePair<K, V>, bool> predicate)
         {
-            foreach (var itemkey in dictionary.Where(predicate).Select(x => x.Key).ToArray()) { dictionary.Remove(itemkey); }
+            foreach (var itemKey in dictionary.Where(predicate).Select(x => x.Key).ToArray()) { dictionary.Remove(itemKey); }
         }
         /// <summary>
         /// Belirtilen anahtara (key) göre bir sözlükten (IDictionary) değer çekip, belirli bir türe <typeparamref name="TKey"/> dönüştürür. Eğer sözlük veya anahtar geçersizse, varsayılan değeri döndürür.
@@ -81,10 +81,10 @@
         /// <typeparam name="TKey">Anahtar tipi.</typeparam>
         /// <param name="left">Sol koleksiyon.</param>
         /// <param name="right">Sağ koleksiyon.</param>
-        /// <param name="leftkey">Sol koleksiyondaki anahtar için bir seçici.</param>
-        /// <param name="rightkey">Sağ koleksiyondaki anahtar için bir seçici.</param>
+        /// <param name="leftKey">Sol koleksiyondaki anahtar için bir seçici.</param>
+        /// <param name="rightKey">Sağ koleksiyondaki anahtar için bir seçici.</param>
         /// <returns>Sol dış birleşim sonucu içeren bir IEnumerable.</returns>
-        public static IEnumerable<LeftJoinResult<TLeft, TRight>> LeftJoinEnumerable<TLeft, TRight, TKey>(this IEnumerable<TLeft> left, IEnumerable<TRight> right, Func<TLeft, TKey> leftkey, Func<TRight, TKey> rightkey) where TLeft : class where TRight : class => left.GroupJoin(right, leftkey, rightkey, (l, r) => new
+        public static IEnumerable<LeftJoinResult<TLeft, TRight>> LeftJoinEnumerable<TLeft, TRight, TKey>(this IEnumerable<TLeft> left, IEnumerable<TRight> right, Func<TLeft, TKey> leftKey, Func<TRight, TKey> rightKey) where TLeft : class where TRight : class => left.GroupJoin(right, leftKey, rightKey, (l, r) => new
         {
             l,
             r
@@ -128,10 +128,10 @@
         /// <returns>İki koleksiyon eşitse <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool IsEqual<T>(this ICollection<T> left, ICollection<T> right)
         {
-            var leftisnull = left == null;
-            var rightisnull = right == null;
-            if (((leftisnull || rightisnull) && leftisnull == rightisnull)) { return true; }
-            if (!leftisnull && !rightisnull && left.Count == right.Count && left.All(right.Contains)) { return true; }
+            var leftIsNull = left == null;
+            var rightIsNull = right == null;
+            if (((leftIsNull || rightIsNull) && leftIsNull == rightIsNull)) { return true; }
+            if (!leftIsNull && !rightIsNull && left.Count == right.Count && left.All(right.Contains)) { return true; }
             return false;
         }
         /// <summary>

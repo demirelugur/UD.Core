@@ -5,63 +5,63 @@
     public static class DateExtensions
     {
         /// <summary>Belirtilen <see cref="DateTime"/> nesnesini yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesine dönüştürür.</summary>
-        /// <param name="datetime">Dönüştürülecek <see cref="DateTime"/> nesnesi.</param>
+        /// <param name="dateTime">Dönüştürülecek <see cref="DateTime"/> nesnesi.</param>
         /// <returns>Yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesi.</returns>
-        public static DateOnly ToDateOnly(this DateTime datetime) => DateOnly.FromDateTime(datetime);
+        public static DateOnly ToDateOnly(this DateTime dateTime) => DateOnly.FromDateTime(dateTime);
         /// <summary>Verilen DateTime nesnesini OADate tamsayı biçimine dönüştürür.</summary>
-        /// <param name="datetime">Dönüştürülecek tarih/saat.</param>
+        /// <param name="dateTime">Dönüştürülecek tarih/saat.</param>
         /// <returns>OADate tamsayı değeri.</returns>
-        public static int ToOADateInteger(this DateTime datetime) => Convert.ToInt32(datetime.Date.ToOADate());
+        public static int ToOADateInteger(this DateTime dateTime) => Convert.ToInt32(dateTime.Date.ToOADate());
         /// <summary>Verilen DateTime nesnesini ISO 8601 biçiminde dizeye dönüştürür.</summary>
-        /// <param name="datetime">Dönüştürülecek tarih/saat.</param>
+        /// <param name="dateTime">Dönüştürülecek tarih/saat.</param>
         /// <returns>ISO 8601 biçiminde dize.</returns>
-        public static string ToISO8601(this DateTime datetime) => datetime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+        public static string ToISO8601(this DateTime dateTime) => dateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
         /// <summary>Gece yarısından (00:00:00.000) itibaren geçen toplam milisaniyeyi döner. Alabileceği maksimum değer: 86399999</summary>
-        public static int ToMillisecondsSinceMidnight(this DateTime datetime) => (datetime.ToSecondsSinceMidnight() * 1000) + datetime.Millisecond;
+        public static int ToMillisecondsSinceMidnight(this DateTime dateTime) => (dateTime.ToSecondsSinceMidnight() * 1000) + dateTime.Millisecond;
         /// <summary>Gece yarısından (00:00:00) itibaren geçen toplam saniyeyi döner. Alabileceği maksimum değer: 86399</summary>
-        public static int ToSecondsSinceMidnight(this DateTime datetime) => (datetime.ToMinutesSinceMidnight() * 60) + datetime.Second;
+        public static int ToSecondsSinceMidnight(this DateTime dateTime) => (dateTime.ToMinutesSinceMidnight() * 60) + dateTime.Second;
         /// <summary>Gece yarısından (00:00) itibaren geçen toplam dakikayı döner. Alabileceği maksimum değer: 1439</summary>
-        public static int ToMinutesSinceMidnight(this DateTime datetime) => (datetime.Hour * 60) + datetime.Minute;
+        public static int ToMinutesSinceMidnight(this DateTime dateTime) => (dateTime.Hour * 60) + dateTime.Minute;
         /// <summary>Verilen DateTime nesnesini Unix zaman damgası (milisaniye) biçiminde döndürür.</summary>
-        /// <param name="datetime">Dönüştürülecek tarih/saat.</param>
+        /// <param name="dateTime">Dönüştürülecek tarih/saat.</param>
         /// <returns>Unix zaman damgası milisaniye değeri.</returns>
-        public static long ToUnixTimestampMilliseconds(this DateTime datetime) => ((datetime.ToUniversalTime().Ticks - DateTime.UnixEpoch.Ticks) / TimeSpan.TicksPerMillisecond);
+        public static long ToUnixTimestampMilliseconds(this DateTime dateTime) => ((dateTime.ToUniversalTime().Ticks - DateTime.UnixEpoch.Ticks) / TimeSpan.TicksPerMillisecond);
         /// <summary>Verilen DateTime nesnesinin ait olduğu ayın ilk gününü döndürür.</summary>
-        /// <param name="datetime">İlgili tarih.</param>
+        /// <param name="dateTime">İlgili tarih.</param>
         /// <returns>Ayın ilk günü.</returns>
-        public static DateTime GetFirstDayOfMonth(this DateTime datetime) => new(datetime.Year, datetime.Month, 1);
+        public static DateTime GetFirstDayOfMonth(this DateTime dateTime) => new(dateTime.Year, dateTime.Month, 1);
         /// <summary>Verilen DateTime nesnesinin ait olduğu ayın son gününü döndürür.</summary>
-        /// <param name="datetime">İlgili tarih.</param>
+        /// <param name="dateTime">İlgili tarih.</param>
         /// <returns>Ayın son günü.</returns>
-        public static DateTime GetLastDayOfMonth(this DateTime datetime) => new(datetime.Year, datetime.Month, DateTime.DaysInMonth(datetime.Year, datetime.Month));
+        public static DateTime GetLastDayOfMonth(this DateTime dateTime) => new(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));
         /// <summary>Belirtilen tarihin gün sonunu (23:59:59.9999999) döndürür.</summary>
-        /// <param name="datetime">Gün sonu hesaplanacak tarih ve saat değeri. </param>
+        /// <param name="dateTime">Gün sonu hesaplanacak tarih ve saat değeri. </param>
         /// <returns>Belirtilen günün son anını temsil eden DateTime değeri.</returns>
-        public static DateTime EndOfDay(this DateTime datetime) => datetime.Date.AddDays(1).AddTicks(-1);
+        public static DateTime EndOfDay(this DateTime dateTime) => dateTime.Date.AddDays(1).AddTicks(-1);
         /// <summary>Belirtilen tarihten sonraki ilk iş gününü döndürür. Cumartesi ve Pazar günleri atlanarak bir sonraki hafta içi güne geçer.</summary>
-        /// <param name="datetime">Başlangıç tarihi.</param>
+        /// <param name="dateTime">Başlangıç tarihi.</param>
         /// <returns>Bir sonraki iş günü (Pazartesi - Cuma arası) olan DateTime değeri.</returns>
-        public static DateTime NextWorkDay(this DateTime datetime)
+        public static DateTime NextWorkDay(this DateTime dateTime)
         {
-            var next = datetime.AddDays(1);
+            var next = dateTime.AddDays(1);
             while (next.DayOfWeek.Includes(DayOfWeek.Saturday, DayOfWeek.Sunday)) { next = next.AddDays(1); }
             return next;
         }
         /// <summary>Belirtilen tarihten önceki ilk iş gününü döndürür. Cumartesi ve Pazar günleri atlanarak bir önceki hafta içi güne geçer.</summary>
-        /// <param name="datetime">Başlangıç tarihi.</param>
+        /// <param name="dateTime">Başlangıç tarihi.</param>
         /// <returns>Bir önceki iş günü (Pazartesi - Cuma arası) olan DateTime değeri.</returns>
-        public static DateTime PreviousWorkDay(this DateTime datetime)
+        public static DateTime PreviousWorkDay(this DateTime dateTime)
         {
-            var previous = datetime.AddDays(-1);
+            var previous = dateTime.AddDays(-1);
             while (previous.DayOfWeek.Includes(DayOfWeek.Saturday, DayOfWeek.Sunday)) { previous = previous.AddDays(-1); }
             return previous;
         }
         /// <summary>
         /// Verilen <see cref="DateTime"/> değerinin SQL Server&#39;ın kabul ettiği minimum tarihten (1753-01-01) küçük olup olmadığını kontrol eder. Eğer tarih SQL minimumu olan 1753-01-01 (saat 00:00:00) veya daha büyükse aynı <see cref="DateTime"/> değerini döner; aksi halde <c>null</c> döner.
         /// </summary>
-        public static DateTime? SafeSqlDateTimeMin(this DateTime datetime)
+        public static DateTime? SafeSqlDateTimeMin(this DateTime dateTime)
         {
-            if (datetime >= DateConstants.SqlMinValue.ToDateTime(default)) { return datetime; }
+            if (dateTime >= DateConstants.SqlMinValue.ToDateTime(default)) { return dateTime; }
             return null;
         }
     }

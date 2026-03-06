@@ -10,7 +10,7 @@
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var uri = value.ToStringOrEmpty();
-            if (_try.TryUri(uri, out Uri _uri))
+            if (Validators.TryUri(uri, out Uri _uri))
             {
                 validationContext.SetValidatePropertyValue(_uri.ToString().TrimEnd('/'));
                 return ValidationResult.Success;

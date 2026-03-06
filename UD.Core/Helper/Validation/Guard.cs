@@ -30,12 +30,12 @@
         public static void CheckJson(string json, JTokenType jTokenType, string argName)
         {
             CheckEmpty(json, argName);
-            if (!_try.TryJson<JToken>(json, jTokenType, out _)) { throw new JsonReaderException($"\"{argName}\" argümanı, \"JSON\" biçimine uygun olmalı ve türü \"{typeof(JTokenType).FullName}\" olmalıdır!"); }
+            if (!Validators.TryJson<JToken>(json, jTokenType, out _)) { throw new JsonReaderException($"\"{argName}\" argümanı, \"JSON\" biçimine uygun olmalı ve türü \"{typeof(JTokenType).FullName}\" olmalıdır!"); }
         }
         public static void CheckPhoneNumberTR(string phoneNumberTR, string argName)
         {
             CheckEmpty(phoneNumberTR, phoneNumberTR);
-            if (!_try.TryPhoneNumberTR(phoneNumberTR, out _)) { throw new ArgumentException($"\"{argName}\" argümanının değeri telefon numarası \"(5xx) (xxx-xxxx)\" biçimine uygun olmalıdır!", argName, new Exception($"Gelen değer: \"{phoneNumberTR}\"")); }
+            if (!Validators.TryPhoneNumberTR(phoneNumberTR, out _)) { throw new ArgumentException($"\"{argName}\" argümanının değeri telefon numarası \"(5xx) (xxx-xxxx)\" biçimine uygun olmalıdır!", argName, new Exception($"Gelen değer: \"{phoneNumberTR}\"")); }
         }
         public static void CheckTCKN(long tckn, string argName)
         {
@@ -81,7 +81,7 @@
         public static void CheckOutOfLength<T>(string value, Expression<Func<T, string>> expression) where T : class
         {
             var p = expression.GetExpressionName();
-            var m = _get.GetStringOrMaxLength<T>(p);
+            var m = Accessors.GetStringOrMaxLength<T>(p);
             CheckZeroOrNegative(m, p);
             CheckOutOfLength(value, m, p);
         }

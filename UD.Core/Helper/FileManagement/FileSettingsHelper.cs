@@ -66,7 +66,7 @@
                 return false;
             }
             fileSettingsHelper ??= new();
-            if (_try.TryValidateObject(fileSettingsHelper, out errors)) { return false; }
+            if (Validators.TryValidateObject(fileSettingsHelper, out errors)) { return false; }
             Guard.UnSupportLanguage(dil, nameof(dil));
             try
             {

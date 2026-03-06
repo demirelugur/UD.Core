@@ -48,7 +48,7 @@
                     case RetMesaj.unauthority: return "You are not authorized for the transaction! Contact the administrator.";
                     case RetMesaj.unconnection: return "Cannot communicate with the server computer! Contact the administrator.";
                     case RetMesaj.maxlength: return "The maximum character limit that can be entered has been exceeded! Contact the administrator.";
-                    default: throw _other.ThrowNotSupportedForEnum<RetMesaj>();
+                    default: throw Utilities.ThrowNotSupportedForEnum<RetMesaj>();
                 }
             }
             return value.GetDescriptionFromEnum();

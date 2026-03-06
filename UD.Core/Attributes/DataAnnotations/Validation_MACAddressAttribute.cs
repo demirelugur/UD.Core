@@ -11,7 +11,7 @@
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var mac = value.ToStringOrEmpty();
-            if (_try.TryMACAddress(mac, out string _mac))
+            if (Validators.TryMACAddress(mac, out string _mac))
             {
                 validationContext.SetValidatePropertyValue(_mac);
                 return ValidationResult.Success;

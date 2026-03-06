@@ -38,7 +38,7 @@
                     case DayOfWeekTR.per: return "Thursday";
                     case DayOfWeekTR.cuma: return "Friday";
                     case DayOfWeekTR.cmrts: return "Saturday";
-                    default: throw _other.ThrowNotSupportedForEnum<DayOfWeekTR>();
+                    default: throw Utilities.ThrowNotSupportedForEnum<DayOfWeekTR>();
                 }
             }
             return value.GetDescriptionFromEnum();

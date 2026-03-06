@@ -5,15 +5,14 @@
     using System.Linq;
     using UD.Core.Extensions;
     using UD.Core.Helper.Results;
-    using static UD.Core.Helper.OrtakTools;
     public class BaseEnumCache<TEnum> where TEnum : Enum
     {
-        private static readonly Type _type = typeof(TEnum);
-        public static readonly Type UnderlyingType = _type.GetEnumUnderlyingType();
-        public static readonly TEnum[] EnumArray = (TEnum[])Enum.GetValues(_type);
-        public static readonly EnumResult[] EnumArrayDetail = _type.ToEnumArray();
-        public static readonly Dictionary<string, long> ToDictionaryFromEnum = _to.ToDictionaryFromEnum<TEnum>();
-        public static bool IsDefined(object value) => Enum.IsDefined(_type, value);
-        public static TEnum[] FlagEnumArray(TEnum flagvalue) => EnumArray.Where(x => flagvalue.HasFlag(x)).ToArray();
+        private static readonly Type type = typeof(TEnum);
+        public static readonly Type UnderlyingType = type.GetEnumUnderlyingType();
+        public static readonly TEnum[] EnumArray = (TEnum[])Enum.GetValues(type);
+        public static readonly EnumResult[] EnumArrayDetail = type.ToEnumArray();
+        public static readonly Dictionary<string, long> ToDictionaryFromEnum = type.ToDictionaryFromEnum();
+        public static bool IsDefined(object value) => Enum.IsDefined(type, value);
+        public static TEnum[] FlagEnumArray(TEnum flagValue) => EnumArray.Where(x => flagValue.HasFlag(x)).ToArray();
     }
 }

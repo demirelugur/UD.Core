@@ -8,21 +8,21 @@
     {
 
         /// <summary>Unix zaman damgasını, yerel bir <see cref="DateTime"/> değerine dönüştürür.</summary>
-        /// <param name="gettime">Unix zaman damgası (milisaniye cinsinden).</param>
+        /// <param name="getTime">Unix zaman damgası (milisaniye cinsinden).</param>
         /// <returns>Dönüştürülen yerel <see cref="DateTime"/> değeri.</returns>
-        public static DateTime ToJsDate(this long gettime) => DateTime.UnixEpoch.AddMilliseconds(Convert.ToDouble(gettime)).ToLocalTime();
+        public static DateTime ToJsDate(this long getTime) => DateTime.UnixEpoch.AddMilliseconds(Convert.ToDouble(getTime)).ToLocalTime();
         /// <summary>
         /// Active Directory&#39;de kullanılan FILETIME biçimindeki bir değeri (1 Ocak 1601&#39;den itibaren 100 nanosaniye cinsinden tick) UTC zaman diliminde bir DateTime nesnesine çevirir. 
         /// <para>
         /// Eğer filetime değeri 0 veya <see cref="Int64.MaxValue"/> ise, hesap süresiz kabul edilir ve <see cref="DateTime.MaxValue"/> döndürülür. Geçersiz bir filetime değeri durumunda null döner.
         /// </para>
         /// </summary>
-        /// <param name="filetime">Çevrilecek 64 bitlik FILETIME değeri.</param>
+        /// <param name="fileTime">Çevrilecek 64 bitlik FILETIME değeri.</param>
         /// <returns>Başarılı olursa DateTime nesnesi, süresiz hesaplar için DateTime.MaxValue, geçersiz değerler için null.</returns>
-        public static DateTime? ToFileTimeUTC(this long filetime)
+        public static DateTime? ToFileTimeUTC(this long fileTime)
         {
-            if (filetime.Includes(0, Int64.MaxValue)) { return DateTime.MaxValue; }
-            try { return DateTime.FromFileTimeUtc(filetime); }
+            if (fileTime.Includes(0, Int64.MaxValue)) { return DateTime.MaxValue; }
+            try { return DateTime.FromFileTimeUtc(fileTime); }
             catch { return null; }
         }
         /// <summary>Verilen değerin geçerli bir T.C. Kimlik Numarası olup olmadığını kontrol eder.<para>
@@ -43,10 +43,10 @@
         public static bool IsTCKimlikNo(this long tckn)
         {
             var r = false;
-            var tcknstring = (tckn > 0 ? tckn.ToString() : "");
-            if (tcknstring.Length == MaximumLengthConstants.TCKN)
+            var tcknString = (tckn > 0 ? tckn.ToString() : "");
+            if (tcknString.Length == MaximumLengthConstants.TCKN)
             {
-                var t = tcknstring.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
+                var t = tcknString.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
                 r = ((((t[0] + t[2] + t[4] + t[6] + t[8]) * 7) - (t[1] + t[3] + t[5] + t[7])) % 10) == t[9] && (t.Take(10).Sum() % 10) == t[10];
             }
             return r;
@@ -68,19 +68,19 @@
             var r = false;
             if (vkn > 0)
             {
-                var vknstring = vkn.ToString();
-                if (vknstring.Length < MaximumLengthConstants.VKN) { vknstring = vknstring.Replicate(MaximumLengthConstants.VKN, '0', 'l'); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
-                if (vknstring.Length == MaximumLengthConstants.VKN)
+                var vknString = vkn.ToString();
+                if (vknString.Length < MaximumLengthConstants.VKN) { vknString = vknString.Replicate(MaximumLengthConstants.VKN, '0', 'l'); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
+                if (vknString.Length == MaximumLengthConstants.VKN)
                 {
                     int i, t;
                     var numbers = new int[9];
                     for (i = 0; i < 9; i++)
                     {
-                        t = (Convert.ToInt32(vknstring[i].ToString()) + (9 - i)) % 10;
+                        t = (Convert.ToInt32(vknString[i].ToString()) + (9 - i)) % 10;
                         numbers[i] = (t * Convert.ToInt32(Math.Pow(2, (9 - i)))) % 9;
                         if (t != 0 && numbers[i] == 0) { numbers[i] = 9; }
                     }
-                    r = (((10 - ((numbers.Sum() % 10) % 10)) % 10) == Convert.ToInt32(vknstring[9].ToString()));
+                    r = (((10 - ((numbers.Sum() % 10) % 10)) % 10) == Convert.ToInt32(vknString[9].ToString()));
                 }
             }
             return r;
@@ -109,8 +109,8 @@
         /// <summary>Verilen bir ondalık değeri belirtilen ondalık basamak sayısına yuvarlayarak string olarak döndürür. İsteğe bağlı olarak, yuvarlama yöntemi belirtilebilir.</summary>
         /// <param name="d">Yuvarlanacak <see cref="Decimal"/> değeri.</param>
         /// <param name="decimals">Yuvarlanacak ondalık basamak sayısı (varsayılan olarak 2).</param>
-        /// <param name="midpointrounding">Yuvarlama yöntemi (varsayılan olarak <see cref="MidpointRounding.AwayFromZero"/>).</param>
+        /// <param name="midpointRounding">Yuvarlama yöntemi (varsayılan olarak <see cref="MidpointRounding.AwayFromZero"/>).</param>
         /// <returns>Yuvarlanmış değerin string temsili.</returns>
-        public static string ToRound(this decimal d, int decimals = 2, MidpointRounding midpointrounding = MidpointRounding.AwayFromZero) => Decimal.Round(d, decimals, midpointrounding).ToString();
+        public static string ToRound(this decimal d, int decimals = 2, MidpointRounding midpointRounding = MidpointRounding.AwayFromZero) => Decimal.Round(d, decimals, midpointRounding).ToString();
     }
 }

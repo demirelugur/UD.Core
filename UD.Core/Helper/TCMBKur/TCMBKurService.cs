@@ -20,8 +20,8 @@ namespace UD.Core.Helper.TCMBKur
         {
             if (this.cachedXml != null && this.cachedDate == date) { return this.cachedXml; }
             var dataTuple = await this.GetUrl(date).GetBinaryDataAsync(TimeSpan.FromSeconds(5), cancellationToken);
-            if (dataTuple.haserror) { throw dataTuple.ex; }
-            this.cachedXml = XDocument.Parse(Encoding.UTF8.GetString(dataTuple.databinary));
+            if (dataTuple.hasError) { throw dataTuple.ex; }
+            this.cachedXml = XDocument.Parse(Encoding.UTF8.GetString(dataTuple.dataBinary));
             this.cachedDate = date;
             return cachedXml;
         }

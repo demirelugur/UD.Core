@@ -1,7 +1,6 @@
 ﻿namespace UD.Core.Helper.Configuration
 {
     using System;
-
     public interface IEntityDto { }
     public interface IEntityDto<TKey> : IEntityDto
     {

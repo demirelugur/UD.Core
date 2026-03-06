@@ -11,21 +11,21 @@
     public static class IOExtensions
     {
         #region byte[]
-        /// <summary>İkili verileri base64 biçiminde bir dizeye dönüştürür. <see cref="_to.ToBinaryFromBase64String(string, string)"/> işleminin tersidir</summary>
+        /// <summary>İkili verileri base64 biçiminde bir dizeye dönüştürür. <see cref="Converters.ToBinaryFromBase64String(string, string)"/> işleminin tersidir</summary>
         /// <param name="bytes">Dönüştürülecek byte dizisi.</param>
-        /// <param name="mimetype">Mime türü.</param>
+        /// <param name="mimeType">Mime türü.</param>
         /// <returns>Base64 biçimindeki dize.</returns>
-        public static string ToBase64StringFromBinary(this byte[] bytes, string mimetype) => $"data:{mimetype};base64,{Convert.ToBase64String(bytes)}";
+        public static string ToBase64StringFromBinary(this byte[] bytes, string mimeType) => $"data:{mimeType};base64,{Convert.ToBase64String(bytes)}";
         /// <summary>Verilen byte dizisini belirtilen fiziksel yola asenkron olarak yükler.</summary>
-        public static async Task FileUploadAsync(this byte[] bytes, string physicallypath, CancellationToken cancellationtoken = default)
+        public static async Task FileUploadAsync(this byte[] bytes, string physicallyPath, CancellationToken cancellationToken = default)
         {
             Guard.CheckEmptyOrCountZero(bytes, nameof(bytes));
-            Guard.CheckEmpty(physicallypath, nameof(physicallypath));
-            _file.DirectoryCreate(new FileInfo(physicallypath).DirectoryName);
-            using (var fs = new FileStream(physicallypath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true))
+            Guard.CheckEmpty(physicallyPath, nameof(physicallyPath));
+            Files.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
+            using (var fs = new FileStream(physicallyPath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true))
             {
-                await fs.WriteAsync(bytes.AsMemory(0, bytes.Length), cancellationtoken);
-                await fs.FlushAsync(cancellationtoken);
+                await fs.WriteAsync(bytes.AsMemory(0, bytes.Length), cancellationToken);
+                await fs.FlushAsync(cancellationToken);
                 fs.Close();
             }
         }
@@ -54,23 +54,23 @@
         /// <returns>Dosya uzantısı (ilk karater &quot;.&quot; olacak biçimde).</returns>
         public static string GetFileExtension(this IFormFile file) => Path.GetExtension(file.FileName).ToLower();
         /// <summary>Verilen IFormFile nesnesini belirtilen fiziksel yola asenkron olarak yükler.</summary>
-        public static async Task FileUploadAsync(this IFormFile file, string physicallypath, CancellationToken cancellationtoken = default)
+        public static async Task FileUploadAsync(this IFormFile file, string physicallyPath, CancellationToken cancellationToken = default)
         {
             Guard.CheckNull(file, nameof(file));
-            Guard.CheckEmpty(physicallypath, nameof(physicallypath));
-            _file.DirectoryCreate(new FileInfo(physicallypath).DirectoryName);
-            using (var fs = new FileStream(physicallypath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+            Guard.CheckEmpty(physicallyPath, nameof(physicallyPath));
+            Files.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
+            using (var fs = new FileStream(physicallyPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
             {
-                await file.CopyToAsync(fs, cancellationtoken);
+                await file.CopyToAsync(fs, cancellationToken);
             }
         }
         /// <summary>Bir IFormFile nesnesini byte dizisine dönüştürür.</summary>
-        public static async Task<byte[]> ToByteArrayAsync(this IFormFile file, CancellationToken cancellationtoken = default)
+        public static async Task<byte[]> ToByteArrayAsync(this IFormFile file, CancellationToken cancellationToken = default)
         {
             Guard.CheckNull(file, nameof(file));
             using (var ms = new MemoryStream())
             {
-                await file.CopyToAsync(ms, cancellationtoken);
+                await file.CopyToAsync(ms, cancellationToken);
                 return ms.ToArray();
             }
         }
@@ -78,13 +78,13 @@
         #region Image
         /// <summary>Görüntüyü belirtilen biçimde bayt dizisine dönüştürür.</summary>
         /// <param name="image">Dönüştürülecek görüntü.</param>
-        /// <param name="imageformat">Görüntünün kaydedileceği biçim.</param>
+        /// <param name="imageFormat">Görüntünün kaydedileceği biçim.</param>
         /// <returns>Görüntünün bayt dizisi temsilini döndürür.</returns>
-        public static byte[] ToByteArray(this Image image, ImageFormat imageformat)
+        public static byte[] ToByteArray(this Image image, ImageFormat imageFormat)
         {
             using (var ms = new MemoryStream())
             {
-                image.Save(ms, imageformat);
+                image.Save(ms, imageFormat);
                 return ms.ToArray();
             }
         }
@@ -124,7 +124,7 @@
         /// <param name="target">Hedef dizini temsil eden DirectoryInfo nesnesi.</param>
         public static void CopyAll(this DirectoryInfo source, DirectoryInfo target)
         {
-            _file.DirectoryCreate(target.FullName);
+            Files.DirectoryCreate(target.FullName);
             foreach (var item in source.GetFiles()) { item.CopyTo(Path.Combine(target.FullName, item.Name), true); }
             foreach (var item in source.GetDirectories()) { item.CopyAll(target.CreateSubdirectory(item.Name)); }
         }

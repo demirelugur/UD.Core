@@ -53,7 +53,7 @@
                     case MonthTR.eki: return "October";
                     case MonthTR.kas: return "November";
                     case MonthTR.ara: return "December";
-                    default: throw _other.ThrowNotSupportedForEnum<MonthTR>();
+                    default: throw Utilities.ThrowNotSupportedForEnum<MonthTR>();
                 }
             }
             return value.GetDescriptionFromEnum();

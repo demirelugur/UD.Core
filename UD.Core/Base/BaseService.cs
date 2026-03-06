@@ -41,8 +41,8 @@
         protected abstract IQueryable<TEntity> ApplyFiltering(IQueryable<TEntity> query, TSearchDto searchDto);
         public DbSet<TEntity> DbSet => this.context.Set<TEntity>();
         public DbConnection GetDbConnection() => this.context.Database.GetDbConnection();
-        public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.context.Database.SqlQueryRaw<T>(sql, _to.ToSqlParameterFromObject(parameters));
-        public Task<int> ExecuteSqlRawAsync(string sql, object parameters, CancellationToken cancellationtoken = default) => this.context.Database.ExecuteSqlRawAsync(sql, _to.ToSqlParameterFromObject(parameters), cancellationtoken);
+        public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.context.Database.SqlQueryRaw<T>(sql, Converters.ToSqlParameterFromObject(parameters));
+        public Task<int> ExecuteSqlRawAsync(string sql, object parameters, CancellationToken cancellationtoken = default) => this.context.Database.ExecuteSqlRawAsync(sql, Converters.ToSqlParameterFromObject(parameters), cancellationtoken);
         public virtual async Task<TEntityListDto[]> GetAllAsync(TSearchDto searchDto, QueryTrackingBehavior track = QueryTrackingBehavior.NoTracking, CancellationToken cancellationToken = default) => (await this.GetAllPaginateAsync(searchDto, track, false, cancellationToken)).items;
         public virtual Task<Paginate<TEntityListDto>> GetAllPaginateAsync(TSearchDto searchDto, QueryTrackingBehavior track = QueryTrackingBehavior.NoTracking, bool loadinfo = true, CancellationToken cancellationToken = default)
         {

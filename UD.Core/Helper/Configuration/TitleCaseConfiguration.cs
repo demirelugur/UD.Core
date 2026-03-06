@@ -11,7 +11,7 @@
         /// <summary>
         /// Desteklenen dil türlerini temsil eden bir enum yapısıdır.
         /// </summary>
-        public enum conjunction_diltypes
+        public enum ConjunctionDilTypes
         {
             /// <summary>
             /// Küçük harfe çevirilecek bağlaçlar: <c>Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya</c>
@@ -26,7 +26,7 @@
         /// Dönüştürme işlemi için kullanılacak dillerin listesidir.
         /// Varsayılan olarak yalnızca Türkçe (tr) içerir.
         /// </summary>
-        private conjunction_diltypes[] dils = new[] { conjunction_diltypes.tr };
+        private ConjunctionDilTypes[] dils = new[] { ConjunctionDilTypes.tr };
         /// <summary>
         /// Başlık formatında kelime ayırıcı olarak kullanılacak noktalama işaretlerinin listesidir. Varsayılan olarak &#39;(&#39;, &#39;-&#39;, &#39;/&#39;, &#39;:&#39;, &#39;.&#39; içerir.
         /// </summary>
@@ -44,7 +44,7 @@
         /// Dönüştürme işlemi için kullanılacak dilleri ayarlar.
         /// </summary>
         /// <param name="dils">Kullanılacak dil türlerinin listesidir. Null ise boş bir dizi kullanılır.</param>
-        public TitleCaseConfiguration WithDils(params conjunction_diltypes[] dils)
+        public TitleCaseConfiguration WithDils(params ConjunctionDilTypes[] dils)
         {
             this.dils = (dils ?? []).Distinct().ToArray();
             return this;
@@ -80,8 +80,8 @@
             if (this.dils.Length > 0)
             {
                 var l = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                if (this.dils.Contains(conjunction_diltypes.tr)) { l.UnionWith("Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya".Split(',')); }
-                if (this.dils.Contains(conjunction_diltypes.en)) { l.UnionWith("A,An,And,As,By,For,In,İn,Of,On,Or,The,To,With".Split(',')); }
+                if (this.dils.Contains(ConjunctionDilTypes.tr)) { l.UnionWith("Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya".Split(',')); }
+                if (this.dils.Contains(ConjunctionDilTypes.en)) { l.UnionWith("A,An,And,As,By,For,In,İn,Of,On,Or,The,To,With".Split(',')); }
                 value = Regex.Replace(value, $@"\b({String.Join("|", l)})\b", x => x.Value.ToLower(), RegexOptions.IgnoreCase);
             }
             foreach (var item in this.upperkeys) { value = value.Replace(item, item.ToUpper()); }

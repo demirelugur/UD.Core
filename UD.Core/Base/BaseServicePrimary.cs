@@ -72,12 +72,12 @@
         }
         protected virtual TKey GetKeyValue(TEntity entity)
         {
-            var t = typeof(TEntity);
-            var properties = this.context.Model.FindEntityType(t)?.FindPrimaryKey()?.Properties;
-            var keyname = (properties != null && properties.Count > 0) ? properties[0].Name : "";
-            if (keyname.IsNullOrEmpty()) { throw new InvalidOperationException("PK not found"); }
-            var property = t.GetProperty(keyname);
-            if (property == null) { throw new InvalidOperationException($"Property \"{keyname}\" not found on {t.Name}"); }
+            var type = typeof(TEntity);
+            var properties = this.context.Model.FindEntityType(type)?.FindPrimaryKey()?.Properties;
+            var keyName = (properties != null && properties.Count > 0) ? properties[0].Name : "";
+            if (keyName.IsNullOrEmpty()) { throw new InvalidOperationException("PK not found"); }
+            var property = type.GetProperty(keyName);
+            if (property == null) { throw new InvalidOperationException($"Property \"{keyName}\" not found on {type.Name}"); }
             var value = property.GetValue(entity);
             if (value == null) { throw new InvalidOperationException($"Key value is null"); }
             return (TKey)value;

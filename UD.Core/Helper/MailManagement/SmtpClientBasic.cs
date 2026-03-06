@@ -98,7 +98,7 @@
             }
             if (value is String _json)
             {
-                if (_try.TryJson(_json, JTokenType.Object, out JObject _jo)) { return _jo.ToObject<SmtpClientBasic>(); }
+                if (Validators.TryJson(_json, JTokenType.Object, out JObject _jo)) { return _jo.ToObject<SmtpClientBasic>(); }
                 return new();
             }
             return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new SmtpClientBasic((string)x.email, (string)x.password, (string)x.host, (int)x.port, (bool)x.enablessl, (bool)x.usedefaultcredentials, (SmtpDeliveryMethod)x.deliverymethod, (int)x.timeout)).FirstOrDefault();

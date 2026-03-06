@@ -36,7 +36,7 @@
                 Guard.CheckEmptyOrCountZero(this.Tos, nameof(this.Tos));
                 Guard.CheckEnumDefined<MailPriority>(this.Priority, nameof(this.Priority));
                 smtpClientBasic ??= new();
-                if (_try.TryValidateObject(smtpClientBasic, out string[] _errors)) { throw _errors.ToNestedException(); }
+                if (Validators.TryValidateObject(smtpClientBasic, out string[] _errors)) { throw _errors.ToNestedException(); }
                 using (var mm = new MailMessage())
                 {
                     mm.Subject = this.Subject;

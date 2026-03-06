@@ -8,8 +8,8 @@
         private readonly DateTime bitDate;
         public DateDiffResult(object basDate, object bitDate)
         {
-            this.basDate = _to.ToDateTimeFromObject(basDate, default);
-            this.bitDate = (bitDate == null ? DateTime.Today : _to.ToDateTimeFromObject(bitDate, default));
+            this.basDate = Converters.ToDateTimeFromObject(basDate, default);
+            this.bitDate = (bitDate == null ? DateTime.Today : Converters.ToDateTimeFromObject(bitDate, default));
         }
         public (int yil, int ay, int gun, TimeSpan ts) CalculateDateDifference()
         {
