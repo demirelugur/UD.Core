@@ -221,7 +221,7 @@
             /// </param>
             /// <param name="dil">Kimlik türü açıklamasının dili (&quot;tr&quot; veya &quot;en&quot;).</param>
             /// <returns>Maske uygulanmış cüzdan seri numarası, opsiyonel olarak kimlik türü bilgisiyle birlikte. Geçersizse boş string döner.</returns>
-            public static string MaskedCuzdanSeriNo(string cuzdanserino, NVI_KimlikTypes? kimliktipi, bool showfull, string dil)
+            public static string MaskedCuzdanSeriNo(string cuzdanserino, NVIKimlikTypes? kimliktipi, bool showfull, string dil)
             {
                 var cs = cuzdanserino.ToStringOrEmpty();
                 if (cs == "") { return ""; }
@@ -231,9 +231,9 @@
                 string t;
                 switch (kimliktipi.Value)
                 {
-                    case NVI_KimlikTypes.yeni: t = (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"); break;
-                    case NVI_KimlikTypes.eski: t = (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"); break;
-                    default: throw _other.ThrowNotSupportedForEnum<NVI_KimlikTypes>();
+                    case NVIKimlikTypes.yeni: t = (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"); break;
+                    case NVIKimlikTypes.eski: t = (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"); break;
+                    default: throw _other.ThrowNotSupportedForEnum<NVIKimlikTypes>();
                 }
                 return $"{cs} ({t})";
             }

@@ -35,17 +35,17 @@
         /// Belirtilen anahtara (key) göre bir sözlükten (IDictionary) değer çekip, belirli bir türe <typeparamref name="TKey"/> dönüştürür. Eğer sözlük veya anahtar geçersizse, varsayılan değeri döndürür.
         /// </summary>
         /// <typeparam name="TKey">Dönüştürülecek veri türü.</typeparam>
-        /// <param name="dic">Anahtar - Değer çiftleri içeren sözlük.</param>
+        /// <param name="dictionary">Anahtar - Değer çiftleri içeren sözlük.</param>
         /// <param name="key">Sözlükte aranan anahtar (key).</param>
         /// <returns>
         /// Sözlükte belirtilen anahtara karşılık gelen değeri <typeparamref name="TKey"/> türüne dönüştürülmüş şekilde döndürür. Anahtar yoksa veya geçersizse, <typeparamref name="TKey"/> türünün varsayılan değerini döndürür.
         /// </returns>
-        public static TKey ParseOrDefault<TKey>(this IDictionary<string, string> dic, string key)
+        public static TKey ParseOrDefault<TKey>(this IDictionary<string, string> dictionary, string key)
         {
             if (!key.IsNullOrEmpty())
             {
-                dic = dic ?? new Dictionary<string, string>();
-                if (dic.TryGetValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
+                dictionary = dictionary ?? new Dictionary<string, string>();
+                if (dictionary.TryGetValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
             }
             return default;
         }
@@ -68,10 +68,10 @@
         /// <summary>
         /// Verilen koleksiyondaki tüm nesneleri temizler ve dispose eder.
         /// </summary>
-        /// <param name="values">Dispose edilecek nesneleri içeren koleksiyon.</param>
-        public static void DisposeAll<T>(this IEnumerable<T> values) where T : IDisposable
+        /// <param name="source">Dispose edilecek nesneleri içeren koleksiyon.</param>
+        public static void DisposeAll<T>(this IEnumerable<T> source) where T : IDisposable
         {
-            if (values != null) { foreach (var value in values) { value.Dispose(); } }
+            if (source != null) { foreach (var value in source) { value.Dispose(); } }
         }
         /// <summary>
         /// İki koleksiyon arasında bir sol dış birleşim (left join) gerçekleştiren bir yöntemdir. Her öğe için bir anahtar kullanır ve sağdaki koleksiyondan bir eşleşme olup olmadığını kontrol eder.
@@ -138,9 +138,9 @@
         /// Verilen koleksiyonun boş veya null olup olmadığını kontrol eder.
         /// </summary>
         /// <typeparam name="T">Koleksiyon tipi.</typeparam>
-        /// <param name="values">Kontrol edilecek koleksiyon.</param>
+        /// <param name="source">Kontrol edilecek koleksiyon.</param>
         /// <returns>Boş veya null ise <see langword="true"/>, aksi halde <see langword="false"/> döner.</returns>
-        public static bool IsNullOrCountZero<T>(this ICollection<T> values) => (values == null || values.Count == 0 || values.All(x => x == null));
+        public static bool IsNullOrCountZero<T>(this ICollection<T> source) => (source == null || source.Count == 0 || source.All(x => x == null));
         /// <summary>
         /// Başka bir koleksiyondan mevcut koleksiyona öğeleri topluca ekler. <see cref="List{T}"/> için optimize edilmiş bir yöntemdir.
         /// </summary>

@@ -7,10 +7,10 @@ public interface IGenericRepository<T, TContext> where T : class where TContext 
 {
     TContext Context { get; }
     DbSet<T> DbSet { get; }
-    Task DeleteAsync(T entity, CancellationToken cancellationtoken = default);
+    Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
     Task DeleteByKeyAsync(CancellationToken cancellationtoken, params object[] keyvalues);
-    Task DeleteByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationtoken = default);
-    Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationtoken = default);
+    Task DeleteByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+    Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 }
 /// <summary>
 /// Generic bir repository&#39;nin temel implementasyonu.
@@ -25,7 +25,7 @@ public abstract class BaseGenericRepository<T, TContext> : IGenericRepository<T,
     }
     public TContext Context { get; }
     public DbSet<T> DbSet => this.Context.Set<T>();
-    public virtual Task DeleteAsync(T entity, CancellationToken cancellationtoken = default) // Not: cancellationtoken kullanılmasa da, override edilen yerlerde gerektiğinde kullanılabilmesi için eklenmesi gerekiyor.
+    public virtual Task DeleteAsync(T entity, CancellationToken cancellationToken = default) // Not: cancellationtoken kullanılmasa da, override edilen yerlerde gerektiğinde kullanılabilmesi için eklenmesi gerekiyor.
     {
         if (entity != null)
         {
@@ -35,8 +35,8 @@ public abstract class BaseGenericRepository<T, TContext> : IGenericRepository<T,
         return Task.CompletedTask;
     }
     public async Task DeleteByKeyAsync(CancellationToken cancellationtoken, params object[] keyvalues) => await this.DeleteAsync(await this.DbSet.FindAsync(keyvalues, cancellationtoken), cancellationtoken);
-    public async Task DeleteByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationtoken = default) => await this.DeleteRangeAsync(await this.DbSet.Where(predicate).ToArrayAsync(cancellationtoken), cancellationtoken);
-    public async Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationtoken = default)
+    public async Task DeleteByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) => await this.DeleteRangeAsync(await this.DbSet.Where(predicate).ToArrayAsync(cancellationtoken), cancellationtoken);
+    public async Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
         if (entities != null) { foreach (var entity in entities) { await this.DeleteAsync(entity, cancellationtoken); } }
     }
@@ -47,9 +47,9 @@ public interface IUnitOfWork<TContext> where TContext : DbContext
     TContext Context { get; }
     IDapperHelper Dapper { get; }
     DbConnection GetDbConnection();
-    Task<SqlServerProperties> ServerPropertyAsync(CancellationToken cancellationtoken = default);
-    Task<int> ExecuteRawAsync(string query, object parameters, CancellationToken cancellationtoken = default);
-    Task<int> TableReseedAsync(bool isdebug, CancellationToken cancellationtoken = default, params Type[] mappedtables);
+    Task<SqlServerProperties> ServerPropertyAsync(CancellationToken cancellationToken = default);
+    Task<int> ExecuteRawAsync(string query, object parameters, CancellationToken cancellationToken = default);
+    Task<int> TableReseedAsync(bool isdebug, CancellationToken cancellationToken = default, params Type[] mappedtables);
 }
 public class BaseUnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
 {
@@ -83,13 +83,13 @@ public class BaseUnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : D
     public TContext Context { get; }
     public IDapperHelper Dapper => new DapperHelper(this.Context);
     public DbConnection GetDbConnection() => this.Context.Database.GetDbConnection();
-    public Task<SqlServerProperties> ServerPropertyAsync(CancellationToken cancellationtoken = default) => this.Context.Database.SqlQueryRaw<SqlServerProperties>(SqlServerProperties.query()).FirstOrDefaultAsync(cancellationtoken);
-    public Task<int> ExecuteRawAsync(string sql, object parameters, CancellationToken cancellationtoken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, _to.ToSqlParameterFromObject(parameters), cancellationtoken);
+    public Task<SqlServerProperties> ServerPropertyAsync(CancellationToken cancellationToken = default) => this.Context.Database.SqlQueryRaw<SqlServerProperties>(SqlServerProperties.query()).FirstOrDefaultAsync(cancellationtoken);
+    public Task<int> ExecuteRawAsync(string sql, object parameters, CancellationToken cancellationToken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, _to.ToSqlParameterFromObject(parameters), cancellationtoken);
     /// <summary>
     /// Identity (sıralı artan) sayısal PK değerine sahip tablolarda kimlik değerini resetlemek için kullanılan metot.
     /// <code>DBCC CHECKIDENT (&#39;[dbo].[LoremIpsum]&#39;, RESEED, 0)</code>
     /// </summary>
-    public Task<int> TableReseedAsync(bool isdebug, CancellationToken cancellationtoken = default, params Type[] mappedtables)
+    public Task<int> TableReseedAsync(bool isdebug, CancellationToken cancellationToken = default, params Type[] mappedtables)
     {
         mappedtables = mappedtables ?? [];
         if (isdebug || mappedtables.Length == 0 || !mappedtables.All(x => x.IsMappedTable())) { return Task.FromResult(0); }
@@ -216,3 +216,15 @@ public class Validation_MinDateAttribute : ValidationAttribute
     }
 }
 ***************************************
+/// <summary>Seçilen string alanda, verilen değeri büyük/küçük harf duyarsız şekilde (ToLower + Contains) arayarak filtre uygular. Değer boşsa sorguyu olduğu gibi döndürür.</summary>
+public static IQueryable<T> WhereContainsLower<T>(this IQueryable<T> source, Expression<Func<T, string>> selector, string searchTerm)
+{
+    searchTerm = searchTerm.ToStringOrEmpty().ToLower();
+    if (searchTerm == "") { return source; }
+    var parameter = selector.Parameters.FirstOrDefault();
+    var s = typeof(string);
+    var toLowerCall = Expression.Call(selector.Body, s.GetMethod(nameof(String.ToLower), Type.EmptyTypes));
+    var containsCall = Expression.Call(toLowerCall, s.GetMethod(nameof(String.Contains), new[] { s }), Expression.Constant(searchTerm));
+    var lambda = Expression.Lambda<Func<T, bool>>(containsCall, parameter);
+    return source.Where(lambda);
+}

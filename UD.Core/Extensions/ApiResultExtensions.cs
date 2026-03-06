@@ -1,6 +1,7 @@
 ﻿namespace UD.Core.Extensions
 {
     using UD.Core.Helper.Results;
+    ///<summary><see cref="ApiResult"/> geri dönüşleri için oluşturulmuş yardımcı foksiyonlar</summary>
     public static class ApiResultExtensions
     {
         public static ApiResult<T> ReturnFailed<T>(this string error) => new string[] { error }.ReturnFailed<T>();

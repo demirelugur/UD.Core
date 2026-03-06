@@ -18,18 +18,6 @@
             if (condition) { return source.Where(predicate); }
             return source;
         }
-        /// <summary>Seçilen string alanda, verilen değeri büyük/küçük harf duyarsız şekilde (ToLower + Contains) arayarak filtre uygular. Değer boşsa sorguyu olduğu gibi döndürür.</summary>
-        public static IQueryable<T> WhereContainsLower<T>(this IQueryable<T> source, Expression<Func<T, string>> selector, string searchTerm)
-        {
-            searchTerm = searchTerm.ToStringOrEmpty().ToLower();
-            if (searchTerm == "") { return source; }
-            var parameter = selector.Parameters.FirstOrDefault();
-            var s = typeof(string);
-            var toLowerCall = Expression.Call(selector.Body, s.GetMethod(nameof(String.ToLower), Type.EmptyTypes));
-            var containsCall = Expression.Call(toLowerCall, s.GetMethod(nameof(String.Contains), new[] { s }), Expression.Constant(searchTerm));
-            var lambda = Expression.Lambda<Func<T, bool>>(containsCall, parameter);
-            return source.Where(lambda);
-        }
         /// <summary>IQueryable kaynağını asenkron olarak diziye çevirir. EF Core destekliyorsa ToArrayAsync, değilse ToArray kullanır.</summary>
         /// <typeparam name="T">Eleman tipi</typeparam>
         /// <param name="source">Kaynak sorgu</param>

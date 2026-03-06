@@ -43,7 +43,7 @@
         public static EnumResult[] ToEnumArray(this Type type) => Enum.GetNames(type).Select((enumname, i) => new EnumResult(Convert.ToInt64(Enum.GetValues(type).GetValue(i)), enumname, type.GetField(enumname).GetDescription())).ToArray();
         /// <summary> Belirtilen tipin, verilen açık generic interface'i (open generic interface) implement edip etmediğini kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tip (class, struct, record vs.)</param>
-        /// <param name="openGenericInterface">Açık generic interface tanımı 
+        /// <param name="openGenericInterface">Açık generic interface tanımı</param>
         public static bool IsImplementsOpenGenericInterface(this Type type, Type openGenericInterface) => (type != null && type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == openGenericInterface));
         /// <summary>Belirtilen <paramref name="type"/> türünün, verilen açık generic (<paramref name="openGeneric"/>) türünden türeyip türemediğini kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>

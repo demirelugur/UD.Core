@@ -279,5 +279,71 @@
             }
             catch { return (default, default); }
         }
+        /// <summary>
+        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir
+        /// <br/>
+        /// isLowerCase seçenekleri:
+        /// <list type="bullet">
+        /// <item><c><see langword="true"/>: </c><paramref name="value"/> değerini küçük harfe çevirir (.ToLower()) – varsayılan davranış</item>
+        /// <item><c><see langword="false"/>: </c><paramref name="value"/> değerini büyük harfe çevirir (.ToUpper())</item>
+        /// <item><c>null</c>: <paramref name="value"/> değerini orijinal haliyle (değiştirmeden) bırakır</item>
+        /// </list>
+        /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code>
+        /// </summary>
+        public static string LikeContains(this string value, bool? isLowerCase = true)
+        {
+            value = value.ToStringOrEmpty();
+            if (value == "") { return ""; }
+            if (isLowerCase.HasValue)
+            {
+                if (isLowerCase.Value) { value = value.ToLower(); }
+                else { value = value.ToUpper(); }
+            }
+            return $"%{value}%";
+        }
+        /// <summary>
+        /// Verilen metni SQL LIKE sorgusu için &quot;<paramref name="value"/>%&quot; biçimine getirir
+        /// <br/>
+        /// isLowerCase seçenekleri:
+        /// <list type="bullet">
+        /// <item><c><see langword="true"/>: </c><paramref name="value"/> değerini küçük harfe çevirir (.ToLower()) – varsayılan davranış</item>
+        /// <item><c><see langword="false"/>:</c><paramref name="value"/> değerini büyük harfe çevirir (.ToUpper())</item>
+        /// <item><c>null</c>: <paramref name="value"/> değerini orijinal haliyle (değiştirmeden) bırakır</item>
+        /// </list>
+        /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeStartWith()))</code>
+        /// </summary>
+        public static string LikeStartWith(this string value, bool? isLowerCase = true)
+        {
+            value = value.ToStringOrEmpty();
+            if (value == "") { return ""; }
+            if (isLowerCase.HasValue)
+            {
+                if (isLowerCase.Value) { value = value.ToLower(); }
+                else { value = value.ToUpper(); }
+            }
+            return String.Concat(value, "%");
+        }
+        /// <summary>
+        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>&quot; biçimine getirir.
+        /// <br/>
+        /// isLowerCase seçenekleri:
+        /// <list type="bullet">
+        /// <item><c><see langword="true"/>: </c><paramref name="value"/> değerini küçük harfe çevirir (.ToLower()) – varsayılan davranış</item>
+        /// <item><c><see langword="false"/>: </c><paramref name="value"/> değerini büyük harfe çevirir (.ToUpper())</item>
+        /// <item><c>null</c>: <paramref name="value"/> değerini orijinal haliyle (değiştirmeden) bırakır</item>
+        /// </list>
+        /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeEndsWith()))</code>
+        /// </summary>
+        public static string LikeEndsWith(this string value, bool? isLowerCase = true)
+        {
+            value = value.ToStringOrEmpty();
+            if (value == "") { return ""; }
+            if (isLowerCase.HasValue)
+            {
+                if (isLowerCase.Value) { value = value.ToLower(); }
+                else { value = value.ToUpper(); }
+            }
+            return String.Concat("%", value);
+        }
     }
 }

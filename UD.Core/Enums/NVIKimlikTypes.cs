@@ -1,6 +1,6 @@
 ﻿namespace UD.Core.Enums
 {
-    public enum NVI_KimlikTypes : byte
+    public enum NVIKimlikTypes : byte
     {
         yeni = 1,
         eski
