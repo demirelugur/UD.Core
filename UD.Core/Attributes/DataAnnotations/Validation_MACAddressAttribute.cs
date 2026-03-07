@@ -10,15 +10,15 @@
         public Validation_MACAddressAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var mac = value.ToStringOrEmpty();
-            if (Validators.TryMACAddress(mac, out string _mac))
-            {
-                validationContext.SetValidatePropertyValue(_mac);
-                return ValidationResult.Success;
-            }
-            if (mac == "" && !validationContext.IsRequiredAttribute())
+            var valueString = value.ToStringOrEmpty();
+            if (valueString == "" && !validationContext.IsRequiredAttribute())
             {
                 validationContext.SetValidatePropertyValue(null);
+                return ValidationResult.Success;
+            }
+            if (Validators.TryMACAddress(valueString, out string _mac))
+            {
+                validationContext.SetValidatePropertyValue(_mac);
                 return ValidationResult.Success;
             }
             return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {TitleConstants.MAC} Adresi biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });

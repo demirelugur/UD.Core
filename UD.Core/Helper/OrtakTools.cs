@@ -125,7 +125,8 @@
                     var args = type.GetGenericArguments();
                     if (args.Length >= 2)
                     {
-                        if (args[0].Includes(typeof(DateTime), typeof(DateOnly)) && args[1] == typeof(string))
+                        var types = new[] { typeof(DateTime), typeof(DateOnly), typeof(DateTimeOffset) };
+                        if (types.Contains(args[0]) && args[1] == typeof(string))
                         {
                             dynamic t = model;
                             return GetIslemInfoFromObject(new
@@ -134,7 +135,7 @@
                                 isluser = (string)t.Item2
                             }, dateFormat);
                         }
-                        if (args[0] == typeof(string) && args[1].Includes(typeof(DateTime), typeof(DateOnly)))
+                        if (args[0] == typeof(string) && types.Contains(args[1]))
                         {
                             dynamic t = model;
                             return GetIslemInfoFromObject(new

@@ -13,11 +13,10 @@
         public override int GetHashCode() => HashCode.Combine(this.ismobil, this.ipaddress);
         public bool Equals(ClientRequestInfoResult other) => (other != null && this.ismobil == other.ismobil && this.ipaddress == other.ipaddress);
         #endregion
-        private bool _Ismobil;
         private string? _Ipaddress;
         [Validation_Required]
         [Display(Name = "Mobil")]
-        public bool ismobil { get { return _Ismobil; } set { _Ismobil = value; } }
+        public bool ismobil { get; set; }
         [Validation_StringLength(MaximumLengthConstants.IPAddress)]
         [Validation_IPAddress]
         [Display(Name = "IP Adresi")]
@@ -41,7 +40,7 @@
         {
             if (value == null) { return new(); }
             if (value is ClientRequestInfoResult _c) { return _c; }
-            if (value is IHttpContextAccessor _hca) { return ToEntityFromObject(_hca.HttpContext); }
+            if (value is IHttpContextAccessor _hca) { return ToEntityFromObject(_hca?.HttpContext); }
             if (value is HttpContext _context) { return new(_context.IsMobileDevice(), _context.GetIPAddress()); }
             if (value is IFormCollection _form) { return new(_form.ParseOrDefault<bool>(nameof(ismobil)), _form.ParseOrDefault<string>(nameof(ipaddress)) ?? ""); }
             return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ClientRequestInfoResult((bool)x.ismobil, (object)x.ipaddress)).FirstOrDefault();

@@ -239,43 +239,43 @@
             {
                 value = value.ToStringOrEmpty();
                 if (value == "") { return (default, default); }
-                _ = Validators.TryTypeIsNullable(propertyType, out Type _genericbasetype);
-                if (_genericbasetype.IsEnum)
+                _ = Validators.TryTypeIsNullable(propertyType, out Type _genericBaseType);
+                if (_genericBaseType.IsEnum)
                 {
-                    if (Enum.TryParse(_genericbasetype, value, out object _enum) && Enum.IsDefined(_genericbasetype, _enum)) { return (_enum, _genericbasetype); }
-                    return (default, _genericbasetype);
+                    if (Enum.TryParse(_genericBaseType, value, out object _enum) && Enum.IsDefined(_genericBaseType, _enum)) { return (_enum, _genericBaseType); }
+                    return (default, _genericBaseType);
                 }
-                if (_genericbasetype == typeof(bool))
+                if (_genericBaseType == typeof(bool))
                 {
-                    if (value == "0") { return (false, _genericbasetype); }
-                    if (value == "1") { return (true, _genericbasetype); }
-                    if (Boolean.TryParse(value, out bool _bo)) { return (_bo, _genericbasetype); }
-                    return (default, _genericbasetype);
+                    if (value == "0") { return (false, _genericBaseType); }
+                    if (value == "1") { return (true, _genericBaseType); }
+                    if (Boolean.TryParse(value, out bool _bo)) { return (_bo, _genericBaseType); }
+                    return (default, _genericBaseType);
                 }
-                if (_genericbasetype == typeof(DateOnly))
+                if (_genericBaseType == typeof(DateOnly))
                 {
-                    if (DateOnly.TryParse(value, out DateOnly _da)) { return (_da, _genericbasetype); }
+                    if (DateOnly.TryParse(value, out DateOnly _da)) { return (_da, _genericBaseType); }
                     var date = value.ParseOrDefault<DateTime?>();
-                    if (date.HasValue) { return (date.Value.ToDateOnly(), _genericbasetype); }
-                    return (default, _genericbasetype);
+                    if (date.HasValue) { return (date.Value.ToDateOnly(), _genericBaseType); }
+                    return (default, _genericBaseType);
                 }
-                if (_genericbasetype == typeof(Uri))
+                if (_genericBaseType == typeof(Uri))
                 {
-                    if (Validators.TryUri(value, out Uri _u)) { return (_u, _genericbasetype); }
-                    return (default, _genericbasetype);
+                    if (Validators.TryUri(value, out Uri _u)) { return (_u, _genericBaseType); }
+                    return (default, _genericBaseType);
                 }
-                if (_genericbasetype == typeof(MailAddress))
+                if (_genericBaseType == typeof(MailAddress))
                 {
-                    if (Validators.TryMailAddress(value, out MailAddress _ma)) { return (_ma, _genericbasetype); }
-                    return (default, _genericbasetype);
+                    if (Validators.TryMailAddress(value, out MailAddress _ma)) { return (_ma, _genericBaseType); }
+                    return (default, _genericBaseType);
                 }
-                if (_genericbasetype == typeof(IPAddress))
+                if (_genericBaseType == typeof(IPAddress))
                 {
-                    if (IPAddress.TryParse(value, out IPAddress _ip)) { return (_ip, _genericbasetype); }
-                    return (default, _genericbasetype);
+                    if (IPAddress.TryParse(value, out IPAddress _ip)) { return (_ip, _genericBaseType); }
+                    return (default, _genericBaseType);
                 }
-                if (value.IndexOf('.') > -1 && _genericbasetype.Includes(typeof(float), typeof(double), typeof(decimal))) { value = value.Replace(".", ",", StringComparison.InvariantCulture); }
-                return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(value), _genericbasetype);
+                if (value.IndexOf('.') > -1 && _genericBaseType.Includes(typeof(float), typeof(double), typeof(decimal))) { value = value.Replace(".", ",", StringComparison.InvariantCulture); }
+                return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(value), _genericBaseType);
             }
             catch { return (default, default); }
         }

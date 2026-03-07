@@ -108,11 +108,6 @@
         /// KAZAKİSTAN TENGESİ
         /// </summary>
         [Description("KAZAKİSTAN TENGESİ")]
-        KZT,
-        /// <summary>
-        /// ÖZEL ÇEKME HAKKI (SDR)
-        /// </summary>
-        [Description("ÖZEL ÇEKME HAKKI (SDR)")]
-        XDR
+        KZT
     }
 }

@@ -8,17 +8,22 @@
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class Validation_JsonAttribute : ValidationAttribute
     {
-        public JTokenType jtokentype { get; set; }
-        public Validation_JsonAttribute(JTokenType jtokentype) { this.jtokentype = jtokentype; }
+        public JTokenType jTokenType { get; set; }
+        public Validation_JsonAttribute(JTokenType jTokenType) { this.jTokenType = jTokenType; }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var jsondata = value.ToStringOrEmpty();
+            var valueString = value.ToStringOrEmpty();
             var r = validationContext.IsRequiredAttribute();
-            if (Validators.TryJson(jsondata, this.jtokentype, out JToken _jt))
+            if (valueString == "" && !r)
             {
-                if (_jt.HasValues)
+                validationContext.SetValidatePropertyValue(null);
+                return ValidationResult.Success;
+            }
+            if (Validators.TryJson(valueString, this.jTokenType, out JToken _jToken))
+            {
+                if (_jToken.HasValues)
                 {
-                    validationContext.SetValidatePropertyValue(_jt.ToString(Formatting.None));
+                    validationContext.SetValidatePropertyValue(_jToken.ToString(Formatting.None));
                     return ValidationResult.Success;
                 }
                 if (!r)
@@ -27,12 +32,7 @@
                     return ValidationResult.Success;
                 }
             }
-            if (jsondata == "" && !r)
-            {
-                validationContext.SetValidatePropertyValue(null);
-                return ValidationResult.Success;
-            }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, JSON biçimine ({this.jtokentype.ToString("g")}) uygun olmalıdır!"), new string[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, JSON biçimine ({this.jTokenType.ToString("g")}) uygun olmalıdır!"), new string[] { validationContext.MemberName });
         }
     }
 }

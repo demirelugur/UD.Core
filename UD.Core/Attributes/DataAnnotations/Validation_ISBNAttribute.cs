@@ -11,14 +11,14 @@
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var isbn = value.ToStringOrEmpty().ToUpper();
-            if (ISBNHelper.IsValid(isbn))
-            {
-                validationContext.SetValidatePropertyValue(isbn);
-                return ValidationResult.Success;
-            }
             if (isbn == "" && !validationContext.IsRequiredAttribute())
             {
                 validationContext.SetValidatePropertyValue(null);
+                return ValidationResult.Success;
+            }
+            if (ISBNHelper.IsValid(isbn))
+            {
+                validationContext.SetValidatePropertyValue(isbn);
                 return ValidationResult.Success;
             }
             return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {TitleConstants.ISBN} biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });

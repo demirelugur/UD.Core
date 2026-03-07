@@ -38,8 +38,8 @@
             }
             else if (value is (Byte or Int16 or Int32 or Int64))
             {
-                var longval = Convert.ToInt64(value);
-                contains = this.values.Any(v => Convert.ToInt64(v) == longval);
+                var valueLong = Convert.ToInt64(value);
+                contains = this.values.Any(v => Convert.ToInt64(v) == valueLong);
             }
             else { contains = this.values.Any(v => v.ToString() == value.ToString()); }
             if (contains == this.isequal) { return ValidationResult.Success; }
@@ -53,7 +53,7 @@
                 if (this.isequal) { r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerlerinden biri olmalıdır!"; }
                 else { r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerleri dışında farklı bir değer olmalıdır!"; }
             }
-            return new(r, new string[] { validationContext.MemberName });
+            return new(r, new[] { validationContext.MemberName });
         }
     }
 }

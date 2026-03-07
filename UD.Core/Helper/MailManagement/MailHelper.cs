@@ -29,12 +29,12 @@
         }
         public async Task<(bool hasError, Exception ex)> SendAsync(SmtpClientBasic smtpClientBasic, CancellationToken cancellationToken = default)
         {
+            Guard.CheckEmpty(this.Subject, nameof(this.Subject));
+            Guard.CheckEmpty(this.Body, nameof(this.Body));
+            Guard.CheckEmptyOrCountZero(this.Tos, nameof(this.Tos));
+            Guard.CheckEnumDefined<MailPriority>(this.Priority, nameof(this.Priority));
             try
             {
-                Guard.CheckEmpty(this.Subject, nameof(this.Subject));
-                Guard.CheckEmpty(this.Body, nameof(this.Body));
-                Guard.CheckEmptyOrCountZero(this.Tos, nameof(this.Tos));
-                Guard.CheckEnumDefined<MailPriority>(this.Priority, nameof(this.Priority));
                 smtpClientBasic ??= new();
                 if (Validators.TryValidateObject(smtpClientBasic, out string[] _errors)) { throw _errors.ToNestedException(); }
                 using (var mm = new MailMessage())

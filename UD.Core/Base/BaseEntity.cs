@@ -20,10 +20,9 @@
     [Serializable]
     public abstract class BaseEntity<TKey> : BaseEntity, IEntity<TKey>
     {
-        private TKey _id;
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public virtual TKey Id { get { return _id; } set { _id = value; } }
+        public virtual TKey Id { get; set; }
         protected BaseEntity() : this(default) { }
         protected BaseEntity(TKey Id)
         {

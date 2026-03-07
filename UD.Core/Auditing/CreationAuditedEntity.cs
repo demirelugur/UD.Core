@@ -16,11 +16,9 @@
     [Serializable]
     public abstract class CreationAuditedEntity<TKey, AuditKey> : BaseEntity<TKey>, ICreationAuditedObject<AuditKey> where AuditKey : struct
     {
-        private DateTime _creationTime;
-        private AuditKey _creatorId;
         [Column(TypeName = "datetime")]
-        public virtual DateTime CreationTime { get { return _creationTime; } set { _creationTime = value; } }
-        public virtual AuditKey CreatorId { get { return _creatorId; } set { _creatorId = value; } }
+        public virtual DateTime CreationTime { get; set; }
+        public virtual AuditKey CreatorId { get; set; }
         public void SetCreator(AuditKey creatorId)
         {
             this.CreationTime = DateTime.UtcNow;

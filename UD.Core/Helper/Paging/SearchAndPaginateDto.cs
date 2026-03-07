@@ -13,15 +13,13 @@
     [Serializable]
     public class SearchAndPaginateDto : ISearchAndPaginateDto
     {
-        private int _PageNumber;
-        private int _Size;
         private string? _Sorting;
         [Validation_RangePositiveInt32]
         [DefaultValue(1)]
-        public int pagenumber { get { return _PageNumber; } set { _PageNumber = value; } }
+        public int pagenumber { get; set; }
         [Validation_RangePositiveInt32]
         [DefaultValue(20)]
-        public int size { get { return _Size; } set { _Size = value; } }
+        public int size { get; set; }
         public string? sorting { get { return _Sorting; } set { _Sorting = value.ParseOrDefault<string>(); } }
         public SearchAndPaginateDto() : this(default, default, default) { }
         public SearchAndPaginateDto(int pagenumber, int size, string? sorting)

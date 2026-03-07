@@ -19,6 +19,7 @@
         #endregion
         private string _email;
         private string _password;
+        private string _host;
         [Validation_Required]
         [EmailAddress(ErrorMessage = ValidationErrorMessageConstants.EMail)]
         [Validation_StringLength(MaximumLengthConstants.EMail)]
@@ -31,7 +32,7 @@
         [Validation_Required]
         [Validation_StringLength(30)]
         [Display(Name = "Host")]
-        public string Host { get; set; }
+        public string Host { get { return _host; } set { _host = value.ToStringOrEmpty(); } }
         [Validation_Required]
         [Validation_RangePositiveInt32]
         [Display(Name = "Port")]
@@ -76,8 +77,11 @@
             this.DeliveryMethod = deliverymethod;
             this.Timeout = timeout;
         }
-        public static SmtpClientBasic CreateSmtpSettings_gmail(string email, string password) => new(email, password, "smtp.gmail.com", 587, true, true, SmtpDeliveryMethod.Network, 0);
-        public static SmtpClientBasic CreateSmtpSettings_outlook(string email, string password) => new(email, password, "smtp.office365.com", 587, true, false, SmtpDeliveryMethod.Network, 0);
+        public static SmtpClientBasic SetGmail(string email, string password) => new(email, password, "smtp.gmail.com", 587, true, true, SmtpDeliveryMethod.Network, 0);
+        public static SmtpClientBasic SetOutlook(string email, string password) => new(email, password, "smtp.office365.com", 587, true, false, SmtpDeliveryMethod.Network, 0);
+        /// <summary>
+        /// value için tanımlanan nesneler: SmtpClientBasic, IFormCollection, String(JTokenType.Object), AnonymousObjectClass
+        /// </summary>
         public static SmtpClientBasic ToEntityFromObject(object value)
         {
             if (value == null) { return new(); }
@@ -86,14 +90,14 @@
             {
                 return ToEntityFromObject(new
                 {
-                    email = _form.ParseOrDefault<string>(nameof(Email)) ?? "",
-                    password = _form.ParseOrDefault<string>(nameof(Password)) ?? "",
-                    host = _form.ParseOrDefault<string>(nameof(Host)) ?? "",
-                    port = _form.ParseOrDefault<int>(nameof(Port)),
-                    enablessl = _form.ParseOrDefault<bool>(nameof(EnableSsl)),
-                    usedefaultcredentials = _form.ParseOrDefault<bool>(nameof(UseDefaultCredentials)),
-                    deliverymethod = _form.ParseOrDefault<SmtpDeliveryMethod>(nameof(DeliveryMethod)),
-                    timeout = _form.ParseOrDefault<int>(nameof(Timeout))
+                    Email = _form.ParseOrDefault<string>(nameof(Email)) ?? "",
+                    Password = _form.ParseOrDefault<string>(nameof(Password)) ?? "",
+                    Host = _form.ParseOrDefault<string>(nameof(Host)) ?? "",
+                    Port = _form.ParseOrDefault<int>(nameof(Port)),
+                    EnableSsl = _form.ParseOrDefault<bool>(nameof(EnableSsl)),
+                    UseDefaultCredentials = _form.ParseOrDefault<bool>(nameof(UseDefaultCredentials)),
+                    DeliveryMethod = _form.ParseOrDefault<SmtpDeliveryMethod>(nameof(DeliveryMethod)),
+                    Timeout = _form.ParseOrDefault<int>(nameof(Timeout))
                 });
             }
             if (value is String _json)
@@ -101,7 +105,7 @@
                 if (Validators.TryJson(_json, JTokenType.Object, out JObject _jo)) { return _jo.ToObject<SmtpClientBasic>(); }
                 return new();
             }
-            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new SmtpClientBasic((string)x.email, (string)x.password, (string)x.host, (int)x.port, (bool)x.enablessl, (bool)x.usedefaultcredentials, (SmtpDeliveryMethod)x.deliverymethod, (int)x.timeout)).FirstOrDefault();
+            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new SmtpClientBasic((string)x.Email, (string)x.Password, (string)x.Host, (int)x.Port, (bool)x.EnableSsl, (bool)x.UseDefaultCredentials, (SmtpDeliveryMethod)x.DeliveryMethod, (int)x.Timeout)).FirstOrDefault();
         }
     }
 }

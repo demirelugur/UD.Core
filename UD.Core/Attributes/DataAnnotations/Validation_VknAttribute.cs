@@ -10,10 +10,10 @@
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
-            var l = value.ToLong();
-            if (l.IsVergiKimlikNo())
+            var valueLong = value.ToLong();
+            if (valueLong.IsVergiKimlikNo())
             {
-                validationContext.SetValidatePropertyValue(l);
+                validationContext.SetValidatePropertyValue(valueLong);
                 return ValidationResult.Success;
             }
             return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, T.C. Vergi Kimlik Numarası biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });

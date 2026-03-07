@@ -19,10 +19,9 @@
     [Serializable]
     public abstract class FullAuditedEntity<TKey, AuditKey> : AuditedEntity<TKey, AuditKey>, IFullAuditedObject<AuditKey> where AuditKey : struct
     {
-        private bool _isDeleted;
         private DateTime? _deletionTime;
         private AuditKey? _deleterId;
-        public virtual bool IsDeleted { get { return _isDeleted; } set { _isDeleted = value; } }
+        public virtual bool IsDeleted { get; set; }
         [Column(TypeName = "datetime")]
         public virtual DateTime? DeletionTime { get { return _deletionTime; } set { _deletionTime = value.NullOrDefault(); } }
         public virtual AuditKey? DeleterId { get { return _deleterId; } set { _deleterId = value.NullOrDefault(); } }

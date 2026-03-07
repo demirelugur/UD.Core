@@ -8,16 +8,11 @@ namespace UD.Core.Helper.TCMBKur
         public override int GetHashCode() => HashCode.Combine(this.Unit, this.ForexBuying, this.ForexSelling, this.BanknoteBuying, this.BanknoteSelling);
         public bool Equals(TCMBKurDto other) => (other != null && this.Unit == other.Unit && this.ForexBuying == other.ForexBuying && this.ForexSelling == other.ForexSelling && this.BanknoteBuying == other.BanknoteBuying && this.BanknoteSelling == other.BanknoteSelling);
         #endregion
-        private int _unit;
-        private decimal _forexBuying;
-        private decimal _forexSelling;
-        private decimal _banknoteBuying;
-        private decimal _banknoteSelling;
-        public int Unit { get { return _unit; } set { _unit = value; } }
-        public decimal ForexBuying { get { return _forexBuying; } set { _forexBuying = value; } }
-        public decimal ForexSelling { get { return _forexSelling; } set { _forexSelling = value; } }
-        public decimal BanknoteBuying { get { return _banknoteBuying; } set { _banknoteBuying = value; } }
-        public decimal BanknoteSelling { get { return _banknoteSelling; } set { _banknoteSelling = value; } }
+        public int Unit { get; set; }
+        public decimal ForexBuying { get; set; }
+        public decimal ForexSelling { get; set; }
+        public decimal BanknoteBuying { get; set; }
+        public decimal BanknoteSelling { get; set; }
         public TCMBKurDto() : this(default, default, default, default, default) { }
         public TCMBKurDto(int Unit, decimal ForexBuying, decimal ForexSelling, decimal BanknoteBuying, decimal BanknoteSelling)
         {
