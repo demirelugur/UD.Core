@@ -5,9 +5,9 @@
     using UD.Core.Helper.Configuration;
     using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class Validation_ISBNAttribute : ValidationAttribute
+    public sealed class UDIsbnAttribute : ValidationAttribute
     {
-        public Validation_ISBNAttribute() { }
+        public UDIsbnAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var isbn = value.ToStringOrEmpty().ToUpper();
@@ -21,7 +21,7 @@
                 validationContext.SetValidatePropertyValue(isbn);
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {TitleConstants.ISBN} biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {TitleConstants.Isbn} biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });
         }
     }
 }

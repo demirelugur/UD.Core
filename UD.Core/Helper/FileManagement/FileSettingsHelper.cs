@@ -20,8 +20,8 @@
         public bool Equals(FileSettingsHelper other) => (other != null && this.accept.IsEqual(other.accept) && this.size == other.size && this.fileCount == other.fileCount);
         #endregion
         private string[] _Accept;
-        [Validation_Required]
-        [Validation_ArrayMinLength]
+        [UDRequired]
+        [UDArrayMinLength]
         [Display(Name = "Uzantılar")]
         public string[] accept { get { return _Accept; } set { _Accept = (value ?? []).Select(x => x.ToStringOrEmpty()).Where(x => x.Length > 1).Select(x => (x[0] == '.' ? x : $".{x}").ToLower()).Distinct().ToArray(); } }
         [Range(1, Int64.MaxValue, ErrorMessage = ValidationErrorMessageConstants.Range)]

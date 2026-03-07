@@ -4,9 +4,9 @@
     using UD.Core.Extensions;
     using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class Validation_UrlHttpAttribute : ValidationAttribute
+    public sealed class UDUrlHttpAttribute : ValidationAttribute
     {
-        public Validation_UrlHttpAttribute() { }
+        public UDUrlHttpAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty();

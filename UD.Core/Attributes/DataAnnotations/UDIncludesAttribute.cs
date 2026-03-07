@@ -4,11 +4,11 @@
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class Validation_IncludesAttribute : ValidationAttribute
+    public sealed class UDIncludesAttribute : ValidationAttribute
     {
-        public bool isequal { get; set; }
-        public object[] values { get; set; }
-        public Validation_IncludesAttribute(bool isequal, params object[] values)
+        public bool isequal { get; }
+        public object[] values { get; }
+        public UDIncludesAttribute(bool isequal, params object[] values)
         {
             this.isequal = isequal;
             this.values = values ?? [];

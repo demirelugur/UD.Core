@@ -4,19 +4,19 @@
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class Validation_TcknAttribute : ValidationAttribute
+    public sealed class UDVknAttribute : ValidationAttribute
     {
-        public Validation_TcknAttribute() { }
+        public UDVknAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             var valueLong = value.ToLong();
-            if (valueLong.IsTCKimlikNo())
+            if (valueLong.IsVergiKimlikNo())
             {
                 validationContext.SetValidatePropertyValue(valueLong);
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, T.C. Vergi Kimlik Numarası biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });
         }
     }
 }

@@ -788,7 +788,7 @@
                 try
                 {
                     value = value.ToStringOrEmpty().ToUpper();
-                    if (value.Length == MaximumLengthConstants.MAC && Regex.IsMatch(value, @"^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$"))
+                    if (value.Length == MaximumLengthConstants.Mac && Regex.IsMatch(value, @"^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$"))
                     {
                         outvalue = value.Replace("-", ":");
                         return true;

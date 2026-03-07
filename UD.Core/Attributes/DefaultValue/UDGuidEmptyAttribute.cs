@@ -3,8 +3,8 @@
     using System;
     using System.ComponentModel;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class GuidEmptyAttribute : DefaultValueAttribute
+    public sealed class UDGuidEmptyAttribute : DefaultValueAttribute
     {
-        public GuidEmptyAttribute() : base(typeof(Guid), Guid.Empty.ToString()) { }
+        public UDGuidEmptyAttribute() : base(typeof(Guid), Guid.Empty.ToString()) { }
     }
 }

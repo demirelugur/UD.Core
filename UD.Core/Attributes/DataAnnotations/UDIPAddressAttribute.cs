@@ -5,9 +5,9 @@
     using System.Net;
     using UD.Core.Extensions;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class Validation_IPAddressAttribute : ValidationAttribute
+    public sealed class UDIPAddressAttribute : ValidationAttribute
     {
-        public Validation_IPAddressAttribute() { }
+        public UDIPAddressAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var ip = value.ToStringOrEmpty();

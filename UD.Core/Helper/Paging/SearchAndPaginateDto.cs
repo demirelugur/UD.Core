@@ -14,10 +14,10 @@
     public class SearchAndPaginateDto : ISearchAndPaginateDto
     {
         private string? _Sorting;
-        [Validation_RangePositiveInt32]
+        [UDRangePositiveInt32]
         [DefaultValue(1)]
         public int pagenumber { get; set; }
-        [Validation_RangePositiveInt32]
+        [UDRangePositiveInt32]
         [DefaultValue(20)]
         public int size { get; set; }
         public string? sorting { get { return _Sorting; } set { _Sorting = value.ParseOrDefault<string>(); } }

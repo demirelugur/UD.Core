@@ -50,7 +50,7 @@
         public static void CheckISBN(string isbn, string argName)
         {
             CheckEmpty(isbn, argName);
-            if (!ISBNHelper.IsValid(isbn)) { throw new ArgumentException($"\"{argName}\" argümanı, {TitleConstants.ISBN} biçimine uygun olmalıdır!", argName, new Exception($"Gelen değer: \"{isbn}\"")); }
+            if (!ISBNHelper.IsValid(isbn)) { throw new ArgumentException($"\"{argName}\" argümanı, {TitleConstants.Isbn} biçimine uygun olmalıdır!", argName, new Exception($"Gelen değer: \"{isbn}\"")); }
         }
         public static void CheckMail(string mail, string argName)
         {

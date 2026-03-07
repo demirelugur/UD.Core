@@ -14,11 +14,11 @@
         public bool Equals(ClientRequestInfoResult other) => (other != null && this.ismobil == other.ismobil && this.ipaddress == other.ipaddress);
         #endregion
         private string? _Ipaddress;
-        [Validation_Required]
+        [UDRequired]
         [Display(Name = "Mobil")]
         public bool ismobil { get; set; }
-        [Validation_StringLength(MaximumLengthConstants.IPAddress)]
-        [Validation_IPAddress]
+        [UDStringLength(MaximumLengthConstants.IPAddress)]
+        [UDIPAddress]
         [Display(Name = "IP Adresi")]
         public string? ipaddress { get { return _Ipaddress; } set { _Ipaddress = value.ParseOrDefault<string>(); } }
         public ClientRequestInfoResult() : this(default, default) { }

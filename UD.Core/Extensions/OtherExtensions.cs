@@ -255,16 +255,16 @@
             }
             catch { return ""; }
         }
-        /// <summary> Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TSearchDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
+        /// <summary> Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
         /// <param name="services">Bağımlılık enjeksiyon konteyneri</param>
         /// <param name="assembly">Repository sınıflarının bulunduğu assembly</param>
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
-            var types = (assembly == null ? [] : assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,>))).ToArray());
+            var types = (assembly == null ? [] : assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,,>))).ToArray());
             foreach (var implementation in types)
             {
-                var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeof(IBaseService<,,,>))).ToArray();
+                var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeof(IBaseService<,,,,>))).ToArray();
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
             return services;

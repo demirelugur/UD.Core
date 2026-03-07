@@ -6,10 +6,10 @@
     using UD.Core.Extensions;
     using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class Validation_JsonAttribute : ValidationAttribute
+    public sealed class UDJsonAttribute : ValidationAttribute
     {
-        public JTokenType jTokenType { get; set; }
-        public Validation_JsonAttribute(JTokenType jTokenType) { this.jTokenType = jTokenType; }
+        public JTokenType jTokenType { get; }
+        public UDJsonAttribute(JTokenType jTokenType) { this.jTokenType = jTokenType; }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty();

@@ -49,18 +49,17 @@
             public const int EMail = 50;
             public const int Hash = 64;
             public const int IPAddress = 15;
-            public const int MAC = 17;
-            public const int TCKN = 11;
+            public const int Mac = 17;
+            public const int Tckn = 11;
             public const int Uri = 255;
-            public const int VKN = 10;
+            public const int Vkn = 10;
             public const int UserName = 20;
-            public const int Password = 255;
         }
         public sealed class TitleConstants
         {
-            public const string ISBN = "ISBN(Uluslararası Standart Kitap Numarası)";
-            public const string MAC = "MAC(Media Access Control)";
-            public const string XSS = "XSS(Cross - Site Scripting)";
+            public const string Isbn = "ISBN(Uluslararası Standart Kitap Numarası)";
+            public const string Mac = "MAC(Media Access Control)";
+            public const string Xss = "XSS(Cross - Site Scripting)";
         }
         public sealed class ValidationErrorMessageConstants
         {

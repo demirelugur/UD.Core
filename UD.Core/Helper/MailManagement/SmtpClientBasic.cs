@@ -20,35 +20,35 @@
         private string _email;
         private string _password;
         private string _host;
-        [Validation_Required]
+        [UDRequired]
         [EmailAddress(ErrorMessage = ValidationErrorMessageConstants.EMail)]
-        [Validation_StringLength(MaximumLengthConstants.EMail)]
+        [UDStringLength(MaximumLengthConstants.EMail)]
         [Display(Name = "e-Posta")]
         public string Email { get { return _email; } set { _email = value.ToStringOrEmpty().ToLower(); } }
-        [Validation_Required]
-        [Validation_StringLength(16, 8)]
+        [UDRequired]
+        [UDStringLength(16, 8)]
         [Display(Name = "Şifre")]
         public string Password { get { return _password; } set { _password = value.ToStringOrEmpty(); } }
-        [Validation_Required]
-        [Validation_StringLength(30)]
+        [UDRequired]
+        [UDStringLength(30)]
         [Display(Name = "Host")]
         public string Host { get { return _host; } set { _host = value.ToStringOrEmpty(); } }
-        [Validation_Required]
-        [Validation_RangePositiveInt32]
+        [UDRequired]
+        [UDRangePositiveInt32]
         [Display(Name = "Port")]
         [DefaultValue(25)]
         public int Port { get; set; }
-        [Validation_Required]
+        [UDRequired]
         [Display(Name = "Enable SSL")]
         public bool EnableSsl { get; set; }
-        [Validation_Required]
+        [UDRequired]
         [Display(Name = "Use Default Credentials")]
         public bool UseDefaultCredentials { get; set; }
-        [Validation_Required]
+        [UDRequired]
         [EnumDataType(typeof(SmtpDeliveryMethod), ErrorMessage = ValidationErrorMessageConstants.EnumDataType)]
         [Display(Name = "Delivery Method")]
         public SmtpDeliveryMethod DeliveryMethod { get; set; }
-        [Validation_Required]
+        [UDRequired]
         [Display(Name = "Timeout")]
         public int Timeout { get; set; }
         public SmtpClient toSmtpClient()

@@ -4,9 +4,9 @@
     using UD.Core.Extensions;
     using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class Validation_PhoneNumberTRAttribute : ValidationAttribute
+    public sealed class UDPhoneNumberTRAttribute : ValidationAttribute
     {
-        public Validation_PhoneNumberTRAttribute() { }
+        public UDPhoneNumberTRAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var phoneTR = value.ToStringOrEmpty();

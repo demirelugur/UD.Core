@@ -12,7 +12,7 @@
             set
             {
                 if (TryIsValid(value, out string _c)) { this.setISBN(_c); }
-                throw new NotSupportedException($"{TitleConstants.ISBN} uyumsuzdur!");
+                throw new NotSupportedException($"{TitleConstants.Isbn} uyumsuzdur!");
             }
         }
         public string Isbn13
@@ -21,7 +21,7 @@
             set
             {
                 if (TryIsValid(value, out string _c)) { this.setISBN(_c); }
-                throw new NotSupportedException($"{TitleConstants.ISBN} uyumsuzdur!");
+                throw new NotSupportedException($"{TitleConstants.Isbn} uyumsuzdur!");
             }
         }
         public static string Convert10to13(string isbn)

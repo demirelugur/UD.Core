@@ -5,7 +5,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
-    public interface IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityListDto, TSearchDto>
+    public interface IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class, IEntity
     where TEntityDto : IEntityDto
@@ -19,7 +19,7 @@
         Task UpdateAsync(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByIdAsync(object[] keyValues, bool autoSave = false, CancellationToken cancellationToken = default);
     }
-    public abstract class BaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityListDto, TSearchDto>, IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
+    public abstract class BaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
     where TEntity : class, IEntity
     where TEntityDto : IEntityDto
