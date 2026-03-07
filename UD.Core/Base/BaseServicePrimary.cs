@@ -13,11 +13,11 @@
     where TEntityListDto : IEntityDto
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : IEntityDto
-    where TUpdateDto : IEntityDto
+    where TUpdateDto : IEntityDto<TKey>
     {
         Task<TEntityDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
         Task<TKey> InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task UpdateAsync(TKey id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task UpdateAsync(TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByIdAsync(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default);
     }
     public abstract class BaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
@@ -28,7 +28,7 @@
     where TEntityListDto : IEntityDto
     where TSearchDto : ISearchAndPaginateDto
     where TInsertDto : IEntityDto
-    where TUpdateDto : IEntityDto
+    where TUpdateDto : IEntityDto<TKey>
     {
         protected BaseServicePrimary(TContext context, IMapper mapper) : base(context, mapper) { }
         public virtual async Task<TEntityDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
@@ -48,10 +48,10 @@
             }
             return default;
         }
-        public virtual async Task UpdateAsync(TKey id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task UpdateAsync(TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(updateDto, nameof(updateDto));
-            var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
+            var entity = await this.DbSet.FindAsync(new object[] { updateDto.Id }, cancellationToken);
             if (entity != null)
             {
                 this.mapper.Map(updateDto, entity);

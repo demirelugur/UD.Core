@@ -15,6 +15,6 @@
     public abstract class EntityDto<TKey> : EntityDto, IEntityDto<TKey>
     {
         public TKey Id { get; set; }
-        public override string ToString() => $"{base.ToString()} {nameof(this.Id)} = {this.Id}";
+        public override string ToString() => $"{base.ToString()}, {nameof(this.Id)} = {this.Id}";
     }
 }

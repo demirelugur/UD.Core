@@ -14,7 +14,7 @@
     [Serializable]
     public abstract class BaseEntity : IEntity
     {
-        public override string ToString() => $"[ENTITY: {this.GetType().Name}] Keys = {String.Join(", ", this.GetKeys())}";
+        public override string ToString() => $"[ENTITY: {this.GetType().Name}], Keys = {String.Join(", ", this.GetKeys())}";
         public abstract object[] GetKeys();
     }
     [Serializable]
@@ -29,6 +29,6 @@
             this.Id = Id;
         }
         public override object[] GetKeys() => new object[] { this.Id };
-        public override string ToString() => $"[ENTITY: {this.GetType().Name}] {nameof(this.Id)} = {this.Id}";
+        public override string ToString() => $"[ENTITY: {this.GetType().Name}], {nameof(this.Id)} = {this.Id}";
     }
 }
