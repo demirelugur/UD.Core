@@ -30,20 +30,20 @@
     where TInsertDto : IEntityDto
     where TUpdateDto : IEntityDto<TKey>
     {
-        protected BaseServicePrimary(TContext context, IMapper mapper) : base(context, mapper) { }
+        protected BaseServicePrimary(TContext Context, IMapper Mapper) : base(Context, Mapper) { }
         public virtual async Task<TEntityDto?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
         {
             var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
-            return entity == null ? default : this.mapper.Map<TEntityDto>(entity);
+            return entity == null ? default : this.Mapper.Map<TEntityDto>(entity);
         }
         public virtual async Task<TKey> InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(insertDto, nameof(insertDto));
-            var entity = this.mapper.Map<TEntity>(insertDto);
+            var entity = this.Mapper.Map<TEntity>(insertDto);
             await this.DbSet.AddAsync(entity, cancellationToken);
             if (autoSave)
             {
-                await this.context.SaveChangesAsync(cancellationToken);
+                await this.Context.SaveChangesAsync(cancellationToken);
                 return this.GetKeyValue(entity);
             }
             return default;
@@ -54,8 +54,8 @@
             var entity = await this.DbSet.FindAsync(new object[] { updateDto.Id }, cancellationToken);
             if (entity != null)
             {
-                this.mapper.Map(updateDto, entity);
-                if (autoSave) { await this.context.SaveChangesAsync(cancellationToken); }
+                this.Mapper.Map(updateDto, entity);
+                if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
             }
         }
         public virtual async Task DeleteByIdAsync(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -67,13 +67,13 @@
                     var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
                     await base.DeleteAsync(entity, false, cancellationToken);
                 }
-                if (autoSave) { await this.context.SaveChangesAsync(cancellationToken); }
+                if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
             }
         }
         protected virtual TKey GetKeyValue(TEntity entity)
         {
             var type = typeof(TEntity);
-            var properties = this.context.Model.FindEntityType(type)?.FindPrimaryKey()?.Properties;
+            var properties = this.Context.Model.FindEntityType(type)?.FindPrimaryKey()?.Properties;
             var keyName = (properties != null && properties.Count > 0) ? properties[0].Name : "";
             if (keyName.IsNullOrEmpty()) { throw new InvalidOperationException("PK not found"); }
             var property = type.GetProperty(keyName);

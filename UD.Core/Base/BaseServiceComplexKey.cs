@@ -28,19 +28,19 @@
     where TInsertDto : IEntityDto
     where TUpdateDto : IEntityDto
     {
-        protected BaseServiceComplexKey(TContext context, IMapper mapper) : base(context, mapper) { }
+        protected BaseServiceComplexKey(TContext Context, IMapper Mapper) : base(Context, Mapper) { }
         public virtual async Task<TEntityDto?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default)
         {
             if (keyValues.IsNullOrCountZero()) { return default; }
             var entity = await this.DbSet.FindAsync(keyValues, cancellationToken);
-            return entity == null ? default : this.mapper.Map<TEntityDto>(entity);
+            return entity == null ? default : this.Mapper.Map<TEntityDto>(entity);
         }
         public virtual async Task InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(insertDto);
-            var entity = this.mapper.Map<TEntity>(insertDto);
+            var entity = this.Mapper.Map<TEntity>(insertDto);
             await this.DbSet.AddAsync(entity, cancellationToken);
-            if (autoSave) { await this.context.SaveChangesAsync(cancellationToken); }
+            if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
         }
         public virtual async Task UpdateAsync(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
@@ -50,8 +50,8 @@
                 var entity = await this.DbSet.FindAsync(keyValues, cancellationToken);
                 if (entity != null)
                 {
-                    this.mapper.Map(updateDto, entity);
-                    if (autoSave) { await this.context.SaveChangesAsync(cancellationToken); }
+                    this.Mapper.Map(updateDto, entity);
+                    if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
                 }
             }
         }

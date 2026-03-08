@@ -170,13 +170,13 @@
             /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
             /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
             /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
-            public static byte[] GenerateRandomkey(int length)
+            public static byte[] GenerateRandomKey(int length)
             {
                 using (var rng = RandomNumberGenerator.Create())
                 {
-                    var randomBytes = new byte[length];
-                    rng.GetBytes(randomBytes);
-                    return randomBytes;
+                    var byteArray = new byte[length];
+                    rng.GetBytes(byteArray);
+                    return byteArray;
                 }
             }
             /// <summary>Metni belirtilen maksimum uzunluğa kadar kısaltır. Metin belirtilen uzunluğu aşıyorsa sonuna üç nokta (...) ekler. Metin boş veya null ise boş string döner. </summary>
