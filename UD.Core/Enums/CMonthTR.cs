@@ -1,8 +1,8 @@
 ﻿namespace UD.Core.Enums
 {
     using System.ComponentModel;
-    using UD.Core.Base;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public sealed class CMonthTR : BaseEnumCache<CMonthTR.MonthTR>

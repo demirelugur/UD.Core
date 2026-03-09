@@ -34,7 +34,7 @@
         /// <summary>
         /// Belirtilen dosyalar yüklenmeden önce, varsa önce silinmesi gereken klasörler ve ardından silinmesi gereken dosyalar kaldırılır.
         /// </summary>
-        public async Task ProcessFileUploadsAndDeletionsAsync(CancellationToken cancellationToken = default)
+        public async Task ProcessFileUploadsAndDeletions(CancellationToken cancellationToken = default)
         {
             var hasDeletedFiles = this.toBeDeletedFiles.Count > 0;
             var hasAddedFile = this.toBeAddedFiles.Count > 0;
@@ -52,8 +52,8 @@
             {
                 foreach (var item in this.toBeAddedFiles)
                 {
-                    if (item.Value is IFormFile _f) { await _f.FileUploadAsync(item.Key, cancellationToken); }
-                    else { await ((byte[])item.Value).FileUploadAsync(item.Key, cancellationToken); }
+                    if (item.Value is IFormFile _f) { await _f.FileUpload(item.Key, cancellationToken); }
+                    else { await ((byte[])item.Value).FileUpload(item.Key, cancellationToken); }
                 }
             }
         }

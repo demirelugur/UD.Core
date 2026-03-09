@@ -21,7 +21,7 @@
                 validationContext.SetValidatePropertyValue(_mac);
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {TitleConstants.Mac} Adresi biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {TitleConstants.Mac} Adresi biçimine uygun olmalıdır!"), new[] { validationContext.MemberName });
         }
     }
 }

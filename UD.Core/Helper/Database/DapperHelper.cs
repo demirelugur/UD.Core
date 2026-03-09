@@ -11,14 +11,14 @@
     {
         DbConnection connection { get; }
         IDbTransaction? dbTransaction { get; set; }
-        Task EnsureConnectionOpenAsync(CancellationToken cancellationToken = default);
-        Task EnsureConnectionCloseAsync();
-        Task<IEnumerable<T>> QueryAsync<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
-        Task<IEnumerable<dynamic>> QueryDynamicAsync(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
-        Task<GridReader> QueryMultipleAsync(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
-        Task<int> ExecuteAsync(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
-        Task<DbDataReader> ExecuteReaderAsync(string commandText, object parameters, int? commandTimeout, CommandType commandType, CommandBehavior commandBehavior, CancellationToken cancellationToken = default);
-        Task<T> ExecuteScalarAsync<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
+        Task EnsureConnectionOpen(CancellationToken cancellationToken = default);
+        Task EnsureConnectionClose();
+        Task<IEnumerable<T>> Query<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
+        Task<IEnumerable<dynamic>> QueryDynamic(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
+        Task<GridReader> QueryMultiple(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
+        Task<int> Execute(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
+        Task<DbDataReader> ExecuteReader(string commandText, object parameters, int? commandTimeout, CommandType commandType, CommandBehavior commandBehavior, CancellationToken cancellationToken = default);
+        Task<T> ExecuteScalar<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
     }
     public sealed class DapperHelper : IDapperHelper
     {
@@ -36,7 +36,7 @@
         {
             if (!this.disposed)
             {
-                await this.EnsureConnectionCloseAsync();
+                await this.EnsureConnectionClose();
                 await this.connection.DisposeAsync();
                 this.disposed = true;
             }
@@ -49,48 +49,48 @@
         }
         public DbConnection connection { get; }
         public IDbTransaction? dbTransaction { get; set; }
-        public async Task EnsureConnectionOpenAsync(CancellationToken cancellationToken = default)
+        public async Task EnsureConnectionOpen(CancellationToken cancellationToken = default)
         {
             if (this.connection.State != ConnectionState.Open)
             {
                 await this.connection.OpenAsync(cancellationToken);
             }
         }
-        public async Task EnsureConnectionCloseAsync()
+        public async Task EnsureConnectionClose()
         {
             if (this.connection.State != ConnectionState.Closed)
             {
                 await this.connection.CloseAsync();
             }
         }
-        public async Task<IEnumerable<T>> QueryAsync<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<T>> Query<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
         {
-            await this.EnsureConnectionOpenAsync(cancellationToken);
+            await this.EnsureConnectionOpen(cancellationToken);
             return await this.connection.QueryAsync<T>(new(commandText, parameters, this.dbTransaction, commandTimeout, commandType, CommandFlags.Buffered, cancellationToken));
         }
-        public async Task<IEnumerable<dynamic>> QueryDynamicAsync(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<dynamic>> QueryDynamic(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
         {
-            await this.EnsureConnectionOpenAsync(cancellationToken);
+            await this.EnsureConnectionOpen(cancellationToken);
             return await this.connection.QueryAsync(new(commandText, parameters, this.dbTransaction, commandTimeout, commandType, CommandFlags.Buffered, cancellationToken));
         }
-        public async Task<GridReader> QueryMultipleAsync(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
+        public async Task<GridReader> QueryMultiple(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
         {
-            await this.EnsureConnectionOpenAsync(cancellationToken);
+            await this.EnsureConnectionOpen(cancellationToken);
             return await this.connection.QueryMultipleAsync(new(commandText, parameters, this.dbTransaction, commandTimeout, commandType, CommandFlags.Buffered, cancellationToken));
         }
-        public async Task<int> ExecuteAsync(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
+        public async Task<int> Execute(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
         {
-            await this.EnsureConnectionOpenAsync(cancellationToken);
+            await this.EnsureConnectionOpen(cancellationToken);
             return await this.connection.ExecuteAsync(new(commandText, parameters, this.dbTransaction, commandTimeout, commandType, CommandFlags.Buffered, cancellationToken));
         }
-        public async Task<DbDataReader> ExecuteReaderAsync(string commandText, object parameters, int? commandTimeout, CommandType commandType, CommandBehavior commandbehavior, CancellationToken cancellationToken = default)
+        public async Task<DbDataReader> ExecuteReader(string commandText, object parameters, int? commandTimeout, CommandType commandType, CommandBehavior commandbehavior, CancellationToken cancellationToken = default)
         {
-            await this.EnsureConnectionOpenAsync(cancellationToken);
+            await this.EnsureConnectionOpen(cancellationToken);
             return await this.connection.ExecuteReaderAsync(new(commandText, parameters, this.dbTransaction, commandTimeout, commandType, CommandFlags.Buffered, cancellationToken), commandbehavior);
         }
-        public async Task<T> ExecuteScalarAsync<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
+        public async Task<T> ExecuteScalar<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
         {
-            await this.EnsureConnectionOpenAsync(cancellationToken);
+            await this.EnsureConnectionOpen(cancellationToken);
             return await this.connection.ExecuteScalarAsync<T>(new(commandText, parameters, this.dbTransaction, commandTimeout, commandType, CommandFlags.Buffered, cancellationToken));
         }
     }

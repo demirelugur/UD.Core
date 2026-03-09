@@ -16,7 +16,7 @@
                 validationContext.SetValidatePropertyValue(valueLong);
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!"), new string[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!"), new[] { validationContext.MemberName });
         }
     }
 }

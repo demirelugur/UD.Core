@@ -22,7 +22,7 @@
         /// <typeparam name="T">Eleman tipi</typeparam>
         /// <param name="source">Kaynak sorgu</param>
         /// <param name="cancellationToken">İptal token&#39;ı</param>
-        public static Task<T[]> ToArraySafeAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
+        public static Task<T[]> ToArraySafe<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
         {
             if (source.Provider is IAsyncQueryProvider) { return source.ToArrayAsync(cancellationToken); }
             return Task.FromResult(source.ToArray());
@@ -47,13 +47,13 @@
             right = r
         });
         /// <summary>Seçilen ifadeye göre ilk kayıt veya varsayılan değeri asenkron olarak getirir.</summary>
-        public static Task<TObject> SelectThenFirstOrDefaultAsync<T, TObject>(this IQueryable<T> source, Expression<Func<T, TObject>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).FirstOrDefaultAsync(cancellationToken);
+        public static Task<TObject> SelectThenFirstOrDefault<T, TObject>(this IQueryable<T> source, Expression<Func<T, TObject>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).FirstOrDefaultAsync(cancellationToken);
         /// <summary>Verilen ifade ile maksimum değeri asenkron olarak getirir, yoksa varsayılan değeri döner.</summary>
-        public static async Task<TKey> MaxOrDefaultAsync<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => (await source.AnyAsync(cancellationToken) ? await source.MaxAsync(selector, cancellationToken) : default(TKey));
+        public static async Task<TKey> MaxOrDefault<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => (await source.AnyAsync(cancellationToken) ? await source.MaxAsync(selector, cancellationToken) : default(TKey));
         /// <summary>Verilen ifade ile minimum değeri asenkron olarak getirir, yoksa varsayılan değeri döner.</summary>
-        public static async Task<TKey> MinOrDefaultAsync<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => (await source.AnyAsync(cancellationToken) ? await source.MinAsync(selector, cancellationToken) : default(TKey));
+        public static async Task<TKey> MinOrDefault<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => (await source.AnyAsync(cancellationToken) ? await source.MinAsync(selector, cancellationToken) : default(TKey));
         /// <summary>Verilen metin için benzersiz bir SEO dostu string oluşturur.</summary>
-        public static async Task<string> GenerateUniqueSEOStringAsync(this IQueryable<string> source, string text, int maxLength, string dil, CancellationToken cancellationToken = default)
+        public static async Task<string> GenerateUniqueSEOString(this IQueryable<string> source, string text, int maxLength, string dil, CancellationToken cancellationToken = default)
         {
             var i = 0;
             string r, textSeo = text.ToSeoFriendly();
@@ -77,7 +77,7 @@
         /// <param name="sorting">Sorgu sıralaması</param>
         /// <param name="loadInfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
-        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageNumber, int size, string sorting, bool loadInfo = true, CancellationToken cancellationToken = default)
+        public static async Task<Paginate<T>> ToPagedList<T>(this IQueryable<T> source, int pageNumber, int size, string sorting, bool loadInfo = true, CancellationToken cancellationToken = default)
         {
             if (source == null) { return new(); }
             PagingInfo? p = null;

@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Base
+﻿namespace UD.Core.Helper.Configuration
 {
     using System;
     using System.Collections.Generic;

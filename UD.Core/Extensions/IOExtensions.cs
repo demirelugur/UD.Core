@@ -17,7 +17,7 @@
         /// <returns>Base64 biçimindeki dize.</returns>
         public static string ToBase64StringFromBinary(this byte[] bytes, string mimeType) => $"data:{mimeType};base64,{Convert.ToBase64String(bytes)}";
         /// <summary>Verilen byte dizisini belirtilen fiziksel yola asenkron olarak yükler.</summary>
-        public static async Task FileUploadAsync(this byte[] bytes, string physicallyPath, CancellationToken cancellationToken = default)
+        public static async Task FileUpload(this byte[] bytes, string physicallyPath, CancellationToken cancellationToken = default)
         {
             Guard.CheckEmptyOrCountZero(bytes, nameof(bytes));
             Guard.CheckEmpty(physicallyPath, nameof(physicallyPath));
@@ -54,7 +54,7 @@
         /// <returns>Dosya uzantısı (ilk karater &quot;.&quot; olacak biçimde).</returns>
         public static string GetFileExtension(this IFormFile file) => Path.GetExtension(file.FileName).ToLower();
         /// <summary>Verilen IFormFile nesnesini belirtilen fiziksel yola asenkron olarak yükler.</summary>
-        public static async Task FileUploadAsync(this IFormFile file, string physicallyPath, CancellationToken cancellationToken = default)
+        public static async Task FileUpload(this IFormFile file, string physicallyPath, CancellationToken cancellationToken = default)
         {
             Guard.CheckNull(file, nameof(file));
             Guard.CheckEmpty(physicallyPath, nameof(physicallyPath));
@@ -65,7 +65,7 @@
             }
         }
         /// <summary>Bir IFormFile nesnesini byte dizisine dönüştürür.</summary>
-        public static async Task<byte[]> ToByteArrayAsync(this IFormFile file, CancellationToken cancellationToken = default)
+        public static async Task<byte[]> ToByteArray(this IFormFile file, CancellationToken cancellationToken = default)
         {
             Guard.CheckNull(file, nameof(file));
             using (var ms = new MemoryStream())

@@ -36,7 +36,7 @@
         /// </summary>
         /// <param name="context">HttpContext nesnesi.</param>
         /// <returns>Bearer token.</returns>
-        public static string GetToken(this HttpContext context) => context.Request.Headers.Authorization.ToString().Replace("Bearer ", "").ToStringOrEmpty();
+        public static string GetToken(this HttpContext context) => context?.Request?.Headers?.Authorization.ToString().Replace("Bearer ", "").ToStringOrEmpty();
         /// <summary>
         /// İstemcinin IP adresini döndürür. Öncelikle <c>X-Forwarded-For</c> HTTP başlığını kontrol eder; eğer geçerli bir IP bulunamazsa bağlantının <see cref="ConnectionInfo.RemoteIpAddress"/> değerini kullanır. Geçerli bir IP adresi elde edilemezse <see cref="IPAddress.None"/> döndürülür.
         /// </summary>

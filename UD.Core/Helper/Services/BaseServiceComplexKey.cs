@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Base
+﻿namespace UD.Core.Helper.Services
 {
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
@@ -14,10 +14,10 @@
     where TInsertDto : IEntityDto
     where TUpdateDto : IEntityDto
     {
-        Task<TEntityDto?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default);
-        Task InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task UpdateAsync(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task DeleteByIdAsync(object[] keyValues, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task<TEntityDto?> GetById(object[] keyValues, CancellationToken cancellationToken = default);
+        Task Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task Update(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteById(object[] keyValues, bool autoSave = false, CancellationToken cancellationToken = default);
     }
     public abstract class BaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
@@ -29,20 +29,20 @@
     where TUpdateDto : IEntityDto
     {
         protected BaseServiceComplexKey(TContext Context, IMapper Mapper) : base(Context, Mapper) { }
-        public virtual async Task<TEntityDto?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntityDto?> GetById(object[] keyValues, CancellationToken cancellationToken = default)
         {
             if (keyValues.IsNullOrCountZero()) { return default; }
             var entity = await this.DbSet.FindAsync(keyValues, cancellationToken);
             return entity == null ? default : this.Mapper.Map<TEntityDto>(entity);
         }
-        public virtual async Task InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(insertDto);
             var entity = this.Mapper.Map<TEntity>(insertDto);
             await this.DbSet.AddAsync(entity, cancellationToken);
             if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
         }
-        public virtual async Task UpdateAsync(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task Update(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (!keyValues.IsNullOrCountZero())
             {
@@ -55,12 +55,12 @@
                 }
             }
         }
-        public virtual async Task DeleteByIdAsync(object[] keyValues, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteById(object[] keyValues, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (!keyValues.IsNullOrCountZero())
             {
                 var entity = await this.DbSet.FindAsync(keyValues, cancellationToken);
-                await base.DeleteAsync(entity, autoSave, cancellationToken);
+                await base.Delete(entity, autoSave, cancellationToken);
             }
         }
     }

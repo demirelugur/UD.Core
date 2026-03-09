@@ -32,7 +32,7 @@
                     return ValidationResult.Success;
                 }
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, JSON biçimine ({this.jTokenType.ToString("g")}) uygun olmalıdır!"), new string[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, JSON biçimine ({this.jTokenType.ToString("g")}) uygun olmalıdır!"), new[] { validationContext.MemberName });
         }
     }
 }

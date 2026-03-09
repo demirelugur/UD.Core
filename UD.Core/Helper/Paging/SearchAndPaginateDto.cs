@@ -8,7 +8,7 @@
         int pagenumber { get; set; }
         int size { get; set; }
         string? sorting { get; set; }
-        Task<Paginate<T>> ToPagedListAsync<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken);
+        Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken);
     }
     [Serializable]
     public class SearchAndPaginateDto : ISearchAndPaginateDto
@@ -28,6 +28,6 @@
             this.size = size;
             this.sorting = sorting;
         }
-        public virtual Task<Paginate<T>> ToPagedListAsync<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedListAsync(this.pagenumber, this.size, this.sorting, loadInfo, cancellationToken);
+        public virtual Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedList(this.pagenumber, this.size, this.sorting, loadInfo, cancellationToken);
     }
 }

@@ -4,9 +4,9 @@
     using UD.Core.Extensions;
     using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class UDUrlHttpAttribute : ValidationAttribute
+    public sealed class UDUrlAttribute : ValidationAttribute
     {
-        public UDUrlHttpAttribute() { }
+        public UDUrlAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty();
@@ -20,7 +20,7 @@
                 validationContext.SetValidatePropertyValue(_uri.ToString().TrimEnd('/'));
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, geçerli bir \"http, https\" protokollerine uygun {nameof(Uri)} adresi olmalıdır!"), new string[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, geçerli bir \"http, https\" protokollerine uygun {nameof(Uri)} adresi olmalıdır!"), new[] { validationContext.MemberName });
         }
     }
 }

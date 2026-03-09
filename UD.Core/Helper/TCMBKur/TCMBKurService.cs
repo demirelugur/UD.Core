@@ -5,32 +5,32 @@ namespace UD.Core.Helper.TCMBKur
     using System.Text;
     using System.Xml.Linq;
     using UD.Core.Extensions;
-    public interface ITCMBKurService
+    public interface ITCMBKurService // AddSingleton
     {
-        Task<TCMBKurDto> GetAsync(TCMBCurrencyCodeTypes type, DateOnly? date = null, CancellationToken cancellationToken = default);
-        Task<TCMBKurDto> GetUSDAsync(DateOnly? date = null, CancellationToken cancellationToken = default);
-        Task<TCMBKurDto> GetEURAsync(DateOnly? date = null, CancellationToken cancellationToken = default);
+        Task<TCMBKurResponse> Get(TCMBKurCodeTypes type, DateOnly? date = null, CancellationToken cancellationToken = default);
+        Task<TCMBKurResponse> GetUSD(DateOnly? date = null, CancellationToken cancellationToken = default);
+        Task<TCMBKurResponse> GetEUR(DateOnly? date = null, CancellationToken cancellationToken = default);
     }
     public sealed class TCMBKurService : ITCMBKurService
     {
         private DateOnly? cachedDate;
         private XDocument? cachedXml;
         public TCMBKurService() { }
-        private async Task<XDocument> GetXmlAsync(DateOnly? date, CancellationToken cancellationToken)
+        private async Task<XDocument> GetXml(DateOnly? date, CancellationToken cancellationToken)
         {
             if (this.cachedXml != null && this.cachedDate == date) { return this.cachedXml; }
-            var dataTuple = await this.GetUrl(date).GetBinaryDataAsync(TimeSpan.FromSeconds(5), cancellationToken);
+            var dataTuple = await this.GetUrl(date).GetBinaryData(TimeSpan.FromSeconds(5), cancellationToken);
             if (dataTuple.hasError) { throw dataTuple.ex; }
             this.cachedXml = XDocument.Parse(Encoding.UTF8.GetString(dataTuple.dataBinary));
             this.cachedDate = date;
             return cachedXml;
         }
         private Uri GetUrl(DateOnly? date) => new((!date.HasValue || date.Value == DateTime.Today.ToDateOnly()) ? "https://www.tcmb.gov.tr/kurlar/today.xml" : $"https://www.tcmb.gov.tr/kurlar/{date:yyyyMM}/{date:ddMMyyyy}.xml");
-        private TCMBKurDto GetRate(XDocument xml, string code)
+        private TCMBKurResponse GetRate(XDocument xml, string code)
         {
             var node = xml.Descendants("Currency").FirstOrDefault(x => x.Attribute("CurrencyCode")?.Value == code);
             if (node == null) { throw new Exception($"Kur bilgisi alınamadı: \"{code}\""); }
-            var data = new TCMBKurDto();
+            var data = new TCMBKurResponse();
             if (Int32.TryParse(node.Element(nameof(data.Unit))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out int _unit)) { data.Unit = _unit; }
             if (Decimal.TryParse(node.Element(nameof(data.ForexBuying))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal _value)) { data.ForexBuying = _value; }
             if (Decimal.TryParse(node.Element(nameof(data.ForexSelling))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _value)) { data.ForexSelling = _value; }
@@ -39,8 +39,8 @@ namespace UD.Core.Helper.TCMBKur
             if (data.Equals(new())) { throw new Exception($"Kur bilgisi alınamadı: \"{code}\""); }
             return data;
         }
-        public async Task<TCMBKurDto> GetAsync(TCMBCurrencyCodeTypes type, DateOnly? date = null, CancellationToken cancellationToken = default) => this.GetRate(await this.GetXmlAsync(date, cancellationToken), type.ToString("g"));
-        public Task<TCMBKurDto> GetUSDAsync(DateOnly? date = null, CancellationToken cancellationToken = default) => this.GetAsync(TCMBCurrencyCodeTypes.USD, date, cancellationToken);
-        public Task<TCMBKurDto> GetEURAsync(DateOnly? date = null, CancellationToken cancellationToken = default) => this.GetAsync(TCMBCurrencyCodeTypes.EUR, date, cancellationToken);
+        public async Task<TCMBKurResponse> Get(TCMBKurCodeTypes type, DateOnly? date = null, CancellationToken cancellationToken = default) => this.GetRate(await this.GetXml(date, cancellationToken), type.ToString("g"));
+        public Task<TCMBKurResponse> GetUSD(DateOnly? date = null, CancellationToken cancellationToken = default) => this.Get(TCMBKurCodeTypes.USD, date, cancellationToken);
+        public Task<TCMBKurResponse> GetEUR(DateOnly? date = null, CancellationToken cancellationToken = default) => this.Get(TCMBKurCodeTypes.EUR, date, cancellationToken);
     }
 }

@@ -27,7 +27,7 @@
             this.Bccs = Bccs ?? [];
             this.Attachments = Attachments ?? [];
         }
-        public async Task<(bool hasError, Exception ex)> SendAsync(SmtpClientBasic smtpClientBasic, CancellationToken cancellationToken = default)
+        public async Task<(bool hasError, Exception ex)> Send(SmtpClientBasic smtpClientBasic, CancellationToken cancellationToken = default)
         {
             Guard.CheckEmpty(this.Subject, nameof(this.Subject));
             Guard.CheckEmpty(this.Body, nameof(this.Body));

@@ -365,7 +365,7 @@
             /// <returns>Oluşturulan IFormFile nesnesini temsil eden bir <see cref="Task{TResult}"/>.</returns>
             /// <exception cref="ArgumentException">FilePath veya Name parametreleri boş veya null ise fırlatılır.</exception>
             /// <exception cref="FileNotFoundException">Belirtilen dosya yolu mevcut değilse fırlatılır.</exception>
-            public static async Task<FormFile> ToIFormFileFromPathAsync(string filePath, CancellationToken cancellationToken = default, string name = "file", HeaderDictionary? headerDictionary = null)
+            public static async Task<FormFile> ToIFormFileFromPath(string filePath, CancellationToken cancellationToken = default, string name = "file", HeaderDictionary? headerDictionary = null)
             {
                 Guard.CheckEmpty(filePath, nameof(filePath));
                 Guard.CheckEmpty(name, nameof(name));
@@ -497,7 +497,7 @@
             /// Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır.
             /// <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code>
             /// </summary>
-            public static TransactionScope TransactionScopeForAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
+            public static TransactionScope TransactionScopeAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
             /// <summary>
             /// Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.
             /// </summary>
@@ -850,7 +850,7 @@
             /// Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;value&quot; parametresindeki metni &quot;from&quot; dilinden &quot;to&quot; diline çevirir. Varsayılan olarak &quot;from&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve false durumu döner.
             /// </para>
             /// </summary>
-            public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslateAsync(string value, TimeSpan timeout, CancellationToken cancellationToken = default, string to = "en", string from = "tr")
+            public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslate(string value, TimeSpan timeout, CancellationToken cancellationToken = default, string to = "en", string from = "tr")
             {
                 value = value.ToStringOrEmpty();
                 if (value == "") { return (false, "", null); }

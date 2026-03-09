@@ -11,13 +11,13 @@
     //        this.logger = logger;
     //        this.env = env;
     //    }
-    //    public async Task InvokeAsync(HttpContext context)
+    //    public async Task Invoke(HttpContext context)
     //    {
     //        try { await this.next(context); }
     //        catch (Exception ex)
     //        {
     //            if (this.logger.IsEnabled(LogLevel.Error)) { this.logger.LogError(ex, "Unhandled exception occurred. TraceId: {TraceId}, Path: {Path}", context.TraceIdentifier, context.Request.Path); }
-    //            await HandleExceptionAsync(context, ex);
+    //            await HandleException(context, ex);
     //        }
     //    }
     //    private static readonly JsonSerializerOptions jsonOptions = new()
@@ -25,7 +25,7 @@
     //        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     //        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     //    };
-    //    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    //    private async Task HandleException(HttpContext context, Exception exception)
     //    {
     //        context.Response.ContentType = "application/problem+json";
     //        ProblemDetails problemDetails;

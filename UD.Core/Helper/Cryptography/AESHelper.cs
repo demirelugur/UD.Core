@@ -87,7 +87,7 @@
                 {
                     var randomKeyLength = randomNumbers[Random.Shared.Next(randomNumbers.Length)];
                     foreach (var item in new[] {
-                        Accessors.GenerateRandomkey(randomKeyLength), // randomkeylength değeri kadar rastgele karakter üretiyor
+                        Accessors.GenerateRandomKey(randomKeyLength), // randomkeylength değeri kadar rastgele karakter üretiyor
                         aes.Key,
                         aes.IV,
                         encryptProcess(value, aes), // Veri
