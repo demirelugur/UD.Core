@@ -45,7 +45,7 @@
         [Display(Name = "Use Default Credentials")]
         public bool UseDefaultCredentials { get; set; }
         [UDRequired]
-        [EnumDataType(typeof(SmtpDeliveryMethod), ErrorMessage = ValidationErrorMessageConstants.EnumDataType)]
+        [UDEnumDataType<SmtpDeliveryMethod>]
         [Display(Name = "Delivery Method")]
         public SmtpDeliveryMethod DeliveryMethod { get; set; }
         [UDRequired]

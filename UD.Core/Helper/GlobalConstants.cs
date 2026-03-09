@@ -65,7 +65,6 @@
         {
             public const string ArrayMinLength = "{0} boş geçilemez! En az {1} adet eleman içermelidir.";
             public const string EMail = "{0}, geçerli bir e-Posta adresi olmalıdır!";
-            public const string EnumDataType = "{0}, geçerli değildir!";
             /// <summary>
             /// 1: minimum, 2: maksimum
             /// </summary>
