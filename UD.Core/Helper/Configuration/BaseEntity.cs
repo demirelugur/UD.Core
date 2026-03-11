@@ -3,22 +3,22 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    public interface IEntity
+    public interface IBaseEntity
     {
         object[] GetKeys();
     }
-    public interface IEntity<TKey> : IEntity
+    public interface IBaseEntity<TKey> : IBaseEntity
     {
         TKey Id { get; set; }
     }
     [Serializable]
-    public abstract class BaseEntity : IEntity
+    public abstract class BaseEntity : IBaseEntity
     {
         public override string ToString() => $"[ENTITY: {this.GetType().Name}], Keys = {String.Join(", ", this.GetKeys())}";
         public abstract object[] GetKeys();
     }
     [Serializable]
-    public abstract class BaseEntity<TKey> : BaseEntity, IEntity<TKey>
+    public abstract class BaseEntity<TKey> : BaseEntity, IBaseEntity<TKey>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

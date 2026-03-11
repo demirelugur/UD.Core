@@ -7,7 +7,7 @@
     using UD.Core.Helper.Paging;
     public interface IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
-    where TEntity : class, IEntity
+    where TEntity : class, IBaseEntity
     where TKey : struct
     where TEntityDto : IEntityDto
     where TEntityListDto : IEntityDto
@@ -22,7 +22,7 @@
     }
     public abstract class BaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
-    where TEntity : class, IEntity
+    where TEntity : class, IBaseEntity
     where TKey : struct
     where TEntityDto : IEntityDto
     where TEntityListDto : IEntityDto

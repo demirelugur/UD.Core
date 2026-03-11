@@ -7,7 +7,7 @@
     using UD.Core.Helper.Paging;
     public interface IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
-    where TEntity : class, IEntity
+    where TEntity : class, IBaseEntity
     where TEntityDto : IEntityDto
     where TEntityListDto : IEntityDto
     where TSearchDto : ISearchAndPaginateDto
@@ -21,7 +21,7 @@
     }
     public abstract class BaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
-    where TEntity : class, IEntity
+    where TEntity : class, IBaseEntity
     where TEntityDto : IEntityDto
     where TEntityListDto : IEntityDto
     where TSearchDto : ISearchAndPaginateDto

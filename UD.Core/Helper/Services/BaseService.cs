@@ -11,7 +11,7 @@
     using static UD.Core.Helper.OrtakTools;
     public interface IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
-    where TEntity : class, IEntity
+    where TEntity : class, IBaseEntity
     where TEntityDto : IEntityDto
     where TEntityListDto : IEntityDto
     where TSearchDto : ISearchAndPaginateDto
@@ -31,7 +31,7 @@
     }
     public abstract class BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto> : IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IDisposable
     where TContext : DbContext
-    where TEntity : class, IEntity
+    where TEntity : class, IBaseEntity
     where TEntityDto : IEntityDto
     where TEntityListDto : IEntityDto
     where TSearchDto : ISearchAndPaginateDto

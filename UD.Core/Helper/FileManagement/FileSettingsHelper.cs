@@ -22,8 +22,8 @@
         private string[] _Accept;
         [UDRequired]
         [UDArrayMinLength]
-        [Display(Name = "Uzantılar")]
-        public string[] accept { get { return _Accept; } set { _Accept = (value ?? []).Select(x => x.ToStringOrEmpty()).Where(x => x.Length > 1).Select(x => (x[0] == '.' ? x : $".{x}").ToLower()).Distinct().ToArray(); } }
+        [Display(Name = "Uzantı")]
+        public string[] accept { get { return _Accept; } set { _Accept = value ?? []; } }
         [Range(1, Int64.MaxValue, ErrorMessage = ValidationErrorMessageConstants.Range)]
         [Display(Name = "Limit Belge Boyutu")]
         [DefaultValue(1048576)]

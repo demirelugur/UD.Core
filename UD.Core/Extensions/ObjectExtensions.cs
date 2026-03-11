@@ -6,7 +6,6 @@
     using System.Dynamic;
     using System.Globalization;
     using UD.Core.Helper.Validation;
-
     public static class ObjectExtensions
     {
         /// <summary> Nesneyi string değere dönüştürür. Nesne null ise boş string döndürür.</summary>

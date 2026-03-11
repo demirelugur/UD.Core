@@ -196,7 +196,7 @@
         /// <exception cref="NotSupportedException"><see cref="JToken"/> türü null veya array değilse fırlatılır.</exception>
         public static TKey[] ToArrayFromJToken<TKey>(this JToken jToken)
         {
-            if (jToken == null || jToken.Type == JTokenType.Null) { return []; }
+            if (jToken == null || jToken.Type.Includes(JTokenType.Null, JTokenType.Undefined)) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
             throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
