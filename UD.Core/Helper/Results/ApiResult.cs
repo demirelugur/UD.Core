@@ -13,7 +13,7 @@
         public ApiResult(bool status, string[] errors)
         {
             this.status = status;
-            this.errors = (status ? [] : (errors.IsNullOrCountZero() ? new[] { RetMesaj.hata.GetDescriptionFromEnum() } : errors));
+            this.errors = (status ? [] : (errors.IsNullOrCountZero() ? [RetMesaj.hata.GetDescriptionFromEnum()] : errors));
         }
         public static ApiResult setFailed(params string[] errors) => new(false, errors);
     }
@@ -31,7 +31,7 @@
             if (t == typeof(string)) { return (T)(object)String.Empty; }
             if (t.IsArray) { return (T)(object)Array.CreateInstance(t.GetElementType(), 0); }
             if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Dictionary<,>)) { return (T)Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(t.GetGenericArguments())); }
-            return default(T);
+            return default;
         }
     }
 }

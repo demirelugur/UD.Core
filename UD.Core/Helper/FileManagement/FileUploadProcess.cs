@@ -6,9 +6,9 @@
     using static UD.Core.Helper.OrtakTools;
     public sealed class FileUploadProcess
     {
-        private readonly HashSet<string> toBeDeletedDirectories = new();
-        private readonly HashSet<string> toBeDeletedFiles = new();
-        private readonly Dictionary<string, object> toBeAddedFiles = new();
+        private readonly HashSet<string> toBeDeletedDirectories = [];
+        private readonly HashSet<string> toBeDeletedFiles = [];
+        private readonly Dictionary<string, object> toBeAddedFiles = [];
         /// <summary>
         /// Silinmesi gereken klasörlerin fiziksel yolunu ekler
         /// </summary>

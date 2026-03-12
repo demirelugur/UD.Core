@@ -33,7 +33,7 @@
         protected BaseServicePrimary(TContext Context, IMapper Mapper) : base(Context, Mapper) { }
         public virtual async Task<TEntityDto?> GetById(TKey id, CancellationToken cancellationToken = default)
         {
-            var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
+            var entity = await this.DbSet.FindAsync([id], cancellationToken);
             return entity == null ? default : this.Mapper.Map<TEntityDto>(entity);
         }
         public virtual async Task<TKey> Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -51,7 +51,7 @@
         public virtual async Task Update(TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(updateDto, nameof(updateDto));
-            var entity = await this.DbSet.FindAsync(new object[] { updateDto.Id }, cancellationToken);
+            var entity = await this.DbSet.FindAsync([updateDto.Id], cancellationToken);
             if (entity != null)
             {
                 this.Mapper.Map(updateDto, entity);
@@ -64,7 +64,7 @@
             {
                 foreach (var id in ids)
                 {
-                    var entity = await this.DbSet.FindAsync(new object[] { id }, cancellationToken);
+                    var entity = await this.DbSet.FindAsync([id], cancellationToken);
                     await base.Delete(entity, false, cancellationToken);
                 }
                 if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }

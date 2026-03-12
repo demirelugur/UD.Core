@@ -44,7 +44,7 @@
         {
             if (!key.IsNullOrEmpty())
             {
-                dictionary = dictionary ?? new Dictionary<string, string>();
+                dictionary ??= new Dictionary<string, string>();
                 if (dictionary.TryGetValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
             }
             return default;

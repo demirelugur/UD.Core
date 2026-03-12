@@ -40,10 +40,10 @@
             Guard.CheckEmpty(p1, nameof(p1));
             Guard.CheckEmpty(p2, nameof(p2));
             var r = new List<string>();
-            var v = this.CalculateDateDifference();
-            if (v.yil > 0) { r.Add(String.Join(" ", v.yil.ToString(), p0)); }
-            if (v.ay > 0) { r.Add(String.Join(" ", v.ay.ToString(), p1)); }
-            if (v.gun > 0) { r.Add(String.Join(" ", v.gun.ToString(), p2)); }
+            var (yil, ay, gun, _) = this.CalculateDateDifference();
+            if (yil > 0) { r.Add(String.Join(" ", yil.ToString(), p0)); }
+            if (ay > 0) { r.Add(String.Join(" ", ay.ToString(), p1)); }
+            if (gun > 0) { r.Add(String.Join(" ", gun.ToString(), p2)); }
             return (r.Count > 0 ? String.Join(", ", r) : "");
         }
     }

@@ -85,38 +85,38 @@
         /// <remarks>SELECT [name], [system_type_id] FROM [sys].[types]</remarks>
         public static int ToSystemTypeId(this SqlDbType type)
         {
-            switch (type)
+            return type switch
             {
-                case SqlDbType.Image: return 34;
-                case SqlDbType.Text: return 35;
-                case SqlDbType.UniqueIdentifier: return 36;
-                case SqlDbType.Date: return 40;
-                case SqlDbType.Time: return 41;
-                case SqlDbType.DateTime2: return 42;
-                case SqlDbType.DateTimeOffset: return 43;
-                case SqlDbType.TinyInt: return 48;
-                case SqlDbType.SmallInt: return 52;
-                case SqlDbType.Int: return 56;
-                case SqlDbType.SmallDateTime: return 58;
-                case SqlDbType.Real: return 59;
-                case SqlDbType.Money: return 60;
-                case SqlDbType.DateTime: return 61;
-                case SqlDbType.Float: return 62;
-                case SqlDbType.NText: return 99;
-                case SqlDbType.Bit: return 104;
-                case SqlDbType.Decimal: return 106;
-                case SqlDbType.SmallMoney: return 122;
-                case SqlDbType.BigInt: return 127;
-                case SqlDbType.VarBinary: return 165;
-                case SqlDbType.VarChar: return 167;
-                case SqlDbType.Binary: return 173;
-                case SqlDbType.Char: return 175;
-                case SqlDbType.Timestamp: return 189;
-                case SqlDbType.NVarChar: return 231;
-                case SqlDbType.NChar: return 239;
-                case SqlDbType.Xml: return 241;
-                default: throw Utilities.ThrowNotSupportedForEnum<SqlDbType>();
-            }
+                SqlDbType.Image => 34,
+                SqlDbType.Text => 35,
+                SqlDbType.UniqueIdentifier => 36,
+                SqlDbType.Date => 40,
+                SqlDbType.Time => 41,
+                SqlDbType.DateTime2 => 42,
+                SqlDbType.DateTimeOffset => 43,
+                SqlDbType.TinyInt => 48,
+                SqlDbType.SmallInt => 52,
+                SqlDbType.Int => 56,
+                SqlDbType.SmallDateTime => 58,
+                SqlDbType.Real => 59,
+                SqlDbType.Money => 60,
+                SqlDbType.DateTime => 61,
+                SqlDbType.Float => 62,
+                SqlDbType.NText => 99,
+                SqlDbType.Bit => 104,
+                SqlDbType.Decimal => 106,
+                SqlDbType.SmallMoney => 122,
+                SqlDbType.BigInt => 127,
+                SqlDbType.VarBinary => 165,
+                SqlDbType.VarChar => 167,
+                SqlDbType.Binary => 173,
+                SqlDbType.Char => 175,
+                SqlDbType.Timestamp => 189,
+                SqlDbType.NVarChar => 231,
+                SqlDbType.NChar => 239,
+                SqlDbType.Xml => 241,
+                _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>(),
+            };
         }
         /// <summary>
         /// Verilen <see cref="SqlDbType"/> enum değerini, ADO.NET&#39;in genel veri türü olan <see cref="DbType"/>&#39;a dönüştürür. SQL Server&#39;a özgü veri türlerini platform bağımsız <see cref="DbType"/> türlerine çevirir.
@@ -126,32 +126,32 @@
         /// <exception cref="NotSupportedException">Desteklenmeyen bir <see cref="SqlDbType"/> değeri verildiğinde fırlatılır.</exception>
         public static DbType ToDbType(this SqlDbType type)
         {
-            switch (type)
+            return type switch
             {
-                case SqlDbType.UniqueIdentifier: return DbType.Guid;
-                case SqlDbType.Date: return DbType.Date;
-                case SqlDbType.Time: return DbType.Time;
-                case SqlDbType.DateTime2: return DbType.DateTime2;
-                case SqlDbType.DateTimeOffset: return DbType.DateTimeOffset;
-                case SqlDbType.TinyInt: return DbType.Byte;
-                case SqlDbType.SmallInt: return DbType.Int16;
-                case SqlDbType.Int: return DbType.Int32;
-                case SqlDbType.Real: return DbType.Single;
-                case SqlDbType.Money: return DbType.Currency;
-                case SqlDbType.DateTime: return DbType.DateTime;
-                case SqlDbType.Float: return DbType.Double;
-                case SqlDbType.Bit: return DbType.Boolean;
-                case SqlDbType.Decimal: return DbType.Decimal;
-                case SqlDbType.BigInt: return DbType.Int64;
-                case SqlDbType.VarChar: return DbType.AnsiString;
-                case SqlDbType.Binary: return DbType.Binary;
-                case SqlDbType.VarBinary: return DbType.Binary;
-                case SqlDbType.Char: return DbType.AnsiStringFixedLength;
-                case SqlDbType.NVarChar: return DbType.String;
-                case SqlDbType.NChar: return DbType.StringFixedLength;
-                case SqlDbType.Xml: return DbType.Xml;
-                default: throw Utilities.ThrowNotSupportedForEnum<SqlDbType>();
-            }
+                SqlDbType.UniqueIdentifier => DbType.Guid,
+                SqlDbType.Date => DbType.Date,
+                SqlDbType.Time => DbType.Time,
+                SqlDbType.DateTime2 => DbType.DateTime2,
+                SqlDbType.DateTimeOffset => DbType.DateTimeOffset,
+                SqlDbType.TinyInt => DbType.Byte,
+                SqlDbType.SmallInt => DbType.Int16,
+                SqlDbType.Int => DbType.Int32,
+                SqlDbType.Real => DbType.Single,
+                SqlDbType.Money => DbType.Currency,
+                SqlDbType.DateTime => DbType.DateTime,
+                SqlDbType.Float => DbType.Double,
+                SqlDbType.Bit => DbType.Boolean,
+                SqlDbType.Decimal => DbType.Decimal,
+                SqlDbType.BigInt => DbType.Int64,
+                SqlDbType.VarChar => DbType.AnsiString,
+                SqlDbType.Binary => DbType.Binary,
+                SqlDbType.VarBinary => DbType.Binary,
+                SqlDbType.Char => DbType.AnsiStringFixedLength,
+                SqlDbType.NVarChar => DbType.String,
+                SqlDbType.NChar => DbType.StringFixedLength,
+                SqlDbType.Xml => DbType.Xml,
+                _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>(),
+            };
         }
         /// <summary>
         /// Verilen <see cref="DbType"/> enum değerini, SQL Server&#39;a özgü <see cref="SqlDbType"/> enum değerine dönüştürür. ADO.NET&#39;in genel veri türleri (<see cref="DbType"/>) ile SQL Server&#39;ın özel veri türleri (<see cref="SqlDbType"/>) arasında eşleme yapar.
@@ -161,31 +161,31 @@
         /// <exception cref="NotSupportedException">Desteklenmeyen bir <see cref="DbType"/> değeri verildiğinde fırlatılır.</exception>
         public static SqlDbType ToSqlDbType(this DbType type)
         {
-            switch (type)
+            return type switch
             {
-                case DbType.Guid: return SqlDbType.UniqueIdentifier;
-                case DbType.Date: return SqlDbType.Date;
-                case DbType.Time: return SqlDbType.Time;
-                case DbType.DateTime2: return SqlDbType.DateTime2;
-                case DbType.DateTimeOffset: return SqlDbType.DateTimeOffset;
-                case DbType.Byte: return SqlDbType.TinyInt;
-                case DbType.Int16: return SqlDbType.SmallInt;
-                case DbType.Int32: return SqlDbType.Int;
-                case DbType.Single: return SqlDbType.Real;
-                case DbType.Currency: return SqlDbType.Money;
-                case DbType.DateTime: return SqlDbType.DateTime;
-                case DbType.Double: return SqlDbType.Float;
-                case DbType.Boolean: return SqlDbType.Bit;
-                case DbType.Decimal: return SqlDbType.Decimal;
-                case DbType.Int64: return SqlDbType.BigInt;
-                case DbType.AnsiString: return SqlDbType.VarChar;
-                case DbType.Binary: return SqlDbType.VarBinary;
-                case DbType.AnsiStringFixedLength: return SqlDbType.Char;
-                case DbType.String: return SqlDbType.NVarChar;
-                case DbType.StringFixedLength: return SqlDbType.NChar;
-                case DbType.Xml: return SqlDbType.Xml;
-                default: throw Utilities.ThrowNotSupportedForEnum<DbType>();
-            }
+                DbType.Guid => SqlDbType.UniqueIdentifier,
+                DbType.Date => SqlDbType.Date,
+                DbType.Time => SqlDbType.Time,
+                DbType.DateTime2 => SqlDbType.DateTime2,
+                DbType.DateTimeOffset => SqlDbType.DateTimeOffset,
+                DbType.Byte => SqlDbType.TinyInt,
+                DbType.Int16 => SqlDbType.SmallInt,
+                DbType.Int32 => SqlDbType.Int,
+                DbType.Single => SqlDbType.Real,
+                DbType.Currency => SqlDbType.Money,
+                DbType.DateTime => SqlDbType.DateTime,
+                DbType.Double => SqlDbType.Float,
+                DbType.Boolean => SqlDbType.Bit,
+                DbType.Decimal => SqlDbType.Decimal,
+                DbType.Int64 => SqlDbType.BigInt,
+                DbType.AnsiString => SqlDbType.VarChar,
+                DbType.Binary => SqlDbType.VarBinary,
+                DbType.AnsiStringFixedLength => SqlDbType.Char,
+                DbType.String => SqlDbType.NVarChar,
+                DbType.StringFixedLength => SqlDbType.NChar,
+                DbType.Xml => SqlDbType.Xml,
+                _ => throw Utilities.ThrowNotSupportedForEnum<DbType>(),
+            };
         }
         /// <summary>
         /// Bir <see cref="JToken"/> nesnesini belirtilen <typeparamref name="TKey"/> türündeki bir diziye dönüştürür. Eğer <see cref="JToken"/> null ise boş bir dizi döner, array türünde ise içindeki değerleri <typeparamref name="TKey"/> türüne çevirip dizi olarak döner. Diğer durumlarda bir istisna fırlatır.
@@ -209,7 +209,7 @@
         /// <returns>Başarılıysa sorgu parametresi uygun türe dönüştürülür, aksi halde varsayılan değer döner.</returns>
         public static TKey ParseOrDefault<TKey>(this QueryString queryString, string key)
         {
-            var querydic = (queryString.HasValue ? HttpUtility.ParseQueryString(queryString.Value) : new());
+            var querydic = (queryString.HasValue ? HttpUtility.ParseQueryString(queryString.Value) : []);
             key = key.ToStringOrEmpty();
             if (querydic.AllKeys.Contains(key)) { return querydic[key].ParseOrDefault<TKey>(); }
             return default;

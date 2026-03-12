@@ -9,7 +9,7 @@
         /// <returns>Null veya verilen değeri döner.</returns>
         public static TKey? NullOrDefault<TKey>(this TKey value) where TKey : struct
         {
-            if (EqualityComparer<TKey>.Default.Equals(value, default(TKey))) { return null; }
+            if (EqualityComparer<TKey>.Default.Equals(value, default)) { return null; }
             return value;
         }
         /// <summary>Nullable türde verilen değeri varsayılan (default) değere eşit ise null döner; aksi halde değeri döner.</summary>

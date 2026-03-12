@@ -5,30 +5,16 @@
     using System.Globalization;
     public sealed class GlobalConstants
     {
-        public static readonly string[] FileSizeUnits = new string[] { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-        public static readonly char[] TurkishSpecialCharacters = new char[] { 'Ç', 'ç', 'Ğ', 'ğ', 'İ', 'ı', 'Ö', 'ö', 'Ş', 'ş', 'Ü', 'ü' };
-        /// <summary>
-        /// <code>
-        /// new JsonSerializerSettings{MetadataPropertyHandling=MetadataPropertyHandling.Ignore,DateParseHandling=DateParseHandling.None,NullValueHandling=NullValueHandling.Include,Converters={new IsoDateTimeConverter{DateTimeStyles=DateTimeStyles.AssumeUniversal},new StringEnumConverter()}};
-        /// </code>
-        /// </summary>
-        public static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        public sealed class ArrayConstants
         {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            NullValueHandling = NullValueHandling.Include,
-            Converters =
-            {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal },
-                new StringEnumConverter()
-            }
-        };
+            public static readonly string[] FileSizeUnits = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+            public static readonly char[] TurkishSpecialCharacters = ['Ç', 'ç', 'Ğ', 'ğ', 'İ', 'ı', 'Ö', 'ö', 'Ş', 'ş', 'Ü', 'ü'];
+        }
         public sealed class DateConstants
         {
             public const string ddMMyyyy_HHmmss = "dd.MM.yyyy HH:mm:ss";
             public const string ddMMyyyy_HHmm = "dd.MM.yyyy HH:mm";
             public const string ddMMyyyy = "dd.MM.yyyy";
-            public const string full_datetime = "dddd, dd MMMM yyyy HH:mm:ss";
             public const string yyyyMMdd_HHmmss = "yyyy-MM-dd HH:mm:ss";
             public const string yyyyMMdd_HHmm = "yyyy-MM-dd HH:mm";
             public const string yyyyMMdd = "yyyy-MM-dd";
@@ -39,10 +25,6 @@
             /// </summary>
             public static readonly DateOnly BeginOfOLEAutomation = new(1899, 12, 30);
         }
-        public sealed class DomainConstants
-        {
-            public const string Example = "https://example.com";
-        }
         public sealed class MaximumLengthConstants
         {
             public const int CuzdanSeriNo = 9;
@@ -51,9 +33,28 @@
             public const int IPAddress = 15;
             public const int Mac = 17;
             public const int Tckn = 11;
-            public const int Uri = 255;
-            public const int Vkn = 10;
             public const int UserName = 20;
+            public const int Vkn = 10;
+        }
+        public sealed class OtherConstants
+        {
+            public const string Example = "https://example.com";
+            /// <summary>
+            /// <code>
+            /// new(){MetadataPropertyHandling=MetadataPropertyHandling.Ignore,DateParseHandling=DateParseHandling.None,NullValueHandling=NullValueHandling.Include,Converters={new IsoDateTimeConverter{DateTimeStyles=DateTimeStyles.AssumeUniversal},new StringEnumConverter()}};
+            /// </code>
+            /// </summary>
+            public static readonly JsonSerializerSettings JsonSerializerSettings = new()
+            {
+                MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+                DateParseHandling = DateParseHandling.None,
+                NullValueHandling = NullValueHandling.Include,
+                Converters =
+                {
+                    new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal },
+                    new StringEnumConverter()
+                }
+            };
         }
         public sealed class TitleConstants
         {

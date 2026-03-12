@@ -29,17 +29,17 @@
             Guard.UnSupportLanguage(dil, nameof(dil));
             if (dil == "en")
             {
-                switch (value)
+                return value switch
                 {
-                    case DayOfWeekTR.pzr: return "Sunday";
-                    case DayOfWeekTR.pzts: return "Monday";
-                    case DayOfWeekTR.sali: return "Tuesday";
-                    case DayOfWeekTR.car: return "Wednesday";
-                    case DayOfWeekTR.per: return "Thursday";
-                    case DayOfWeekTR.cuma: return "Friday";
-                    case DayOfWeekTR.cmrts: return "Saturday";
-                    default: throw Utilities.ThrowNotSupportedForEnum<DayOfWeekTR>();
-                }
+                    DayOfWeekTR.pzr => "Sunday",
+                    DayOfWeekTR.pzts => "Monday",
+                    DayOfWeekTR.sali => "Tuesday",
+                    DayOfWeekTR.car => "Wednesday",
+                    DayOfWeekTR.per => "Thursday",
+                    DayOfWeekTR.cuma => "Friday",
+                    DayOfWeekTR.cmrts => "Saturday",
+                    _ => throw Utilities.ThrowNotSupportedForEnum<DayOfWeekTR>(),
+                };
             }
             return value.GetDescriptionFromEnum();
         }

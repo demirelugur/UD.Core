@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Helper.Validation
 {
     using UD.Core.Extensions;
-    using UD.Core.Helper;
+    using static UD.Core.Helper.GlobalConstants;
     public sealed class StrongPasswordValid
     {
         public static readonly StrongPasswordValid Default = new(8, 16, true, true, true);
@@ -27,13 +27,13 @@
             var isEn = dil == "en";
             if (!PasswordGenerator.IsStrongPassword(value, this.minimumLength))
             {
-                if (isEn) { r.Add($"The password must have a minimum of {this.minimumLength.ToString()} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
-                else { r.Add($"Şifre minimum {this.minimumLength.ToString()} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }
+                if (isEn) { r.Add($"The password must have a minimum of {this.minimumLength} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
+                else { r.Add($"Şifre minimum {this.minimumLength} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }
             }
             if (this.maximumLength.HasValue && value.Length > this.maximumLength.Value)
             {
-                if (isEn) { r.Add($"Password can be maximum {this.maximumLength.Value.ToString()} characters!"); }
-                else { r.Add($"Şifre maksimum {this.maximumLength.Value.ToString()} karakter olabilir!"); }
+                if (isEn) { r.Add($"Password can be maximum {this.maximumLength.Value} characters!"); }
+                else { r.Add($"Şifre maksimum {this.maximumLength.Value} karakter olabilir!"); }
             }
             if (this.isConsecutive && this.checkConsecutive(value))
             {
@@ -45,9 +45,9 @@
                 if (isEn) { r.Add("There should be no empty characters in the password!"); }
                 else { r.Add("Şifre içerisinde boş karakter bulunmamalıdır!"); }
             }
-            if (this.isTurkishSpecialCharacter && value.Any(GlobalConstants.TurkishSpecialCharacters.Contains))
+            if (this.isTurkishSpecialCharacter && value.Any(ArrayConstants.TurkishSpecialCharacters.Contains))
             {
-                var t = String.Join(", ", GlobalConstants.TurkishSpecialCharacters);
+                var t = String.Join(", ", ArrayConstants.TurkishSpecialCharacters);
                 if (isEn) { r.Add($"The password must not contain any letters specific to the Turkish language! ({t})"); }
                 else { r.Add($"Şifre içerisinde Türk diline özgü harf ({t}) bulunmamalıdır!"); }
             }

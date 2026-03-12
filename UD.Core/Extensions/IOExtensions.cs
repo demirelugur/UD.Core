@@ -35,8 +35,8 @@
         /// <returns>Diziler aynıysa <see langword="true"/>, farklıysa <see langword="false"/> döner.</returns>
         public static bool IsFileBytesEqual(this byte[] file1, byte[] file2)
         {
-            file1 = file1 ?? [];
-            file2 = file2 ?? [];
+            file1 ??= [];
+            file2 ??= [];
             if (file1.Length == 0 && file2.Length == 0) { return true; }
             if (file1.Length != file2.Length) { return false; }
             int i, _l = file1.Length;

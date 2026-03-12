@@ -80,7 +80,7 @@
             {
                 names = (names ?? []).Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
                 if (names.Length == 0) { return ""; }
-                return String.Join(".", names.Select(x => String.Join("", x.ToUpper().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x[0]).ToArray())));
+                return String.Join(".", names.Select(x => String.Join("", x.ToUpper().Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(x => x[0]).ToArray())));
             }
             /// <summary>
             /// Belirtilen dil koduna göre CultureInfo nesnesini döner. Dil kodu &quot;tr&quot; veya &quot;en&quot; olabilir. Diğer diller desteklenmemektedir.
@@ -205,13 +205,12 @@
                 if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
                 if (!kimlikTipi.HasValue) { return cs; }
                 Guard.UnSupportLanguage(dil, nameof(dil));
-                string t;
-                switch (kimlikTipi.Value)
+                string t = kimlikTipi.Value switch
                 {
-                    case NVIKimlikTypes.yeni: t = (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"); break;
-                    case NVIKimlikTypes.eski: t = (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"); break;
-                    default: throw Utilities.ThrowNotSupportedForEnum<NVIKimlikTypes>();
-                }
+                    NVIKimlikTypes.yeni => (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"),
+                    NVIKimlikTypes.eski => (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
+                    _ => throw Utilities.ThrowNotSupportedForEnum<NVIKimlikTypes>(),
+                };
                 return $"{cs} ({t})";
             }
             /// <summary>
@@ -266,7 +265,7 @@
             /// </summary>
             /// <param name="value">JSON&#39;a dönüştürülecek nesne.</param>
             /// <returns>Nesnenin JSON string formatındaki temsili.</returns>
-            public static string ToJSON(object value) => JsonConvert.SerializeObject(value, Formatting.None, GlobalConstants.JsonSerializerSettings);
+            public static string ToJSON(object value) => JsonConvert.SerializeObject(value, Formatting.None, OtherConstants.JsonSerializerSettings);
             /// <summary>
             /// Verilen string ifadeyi tersine çevirir. Bu metot, Türkçe karakterler (ğ, ü, ş, ç, ö, ı, İ vb.) dahil olmak üzere tüm Unicode metin öğelerini dikkate alarak çalışır. Standart char tabanlı ters çevirme yöntemlerinden farklı olarak <see cref="StringInfo"/> sınıfını kullanır ve her bir metin öğesini (text element) ayrı değerlendirir.
             /// </summary>
@@ -303,7 +302,7 @@
             /// <returns>Nesnenin özellik isimlerini ve değerlerini içeren sözlük.</returns>
             public static Dictionary<string, object> ToDictionaryFromObject(object obj)
             {
-                if (obj == null) { return new(); }
+                if (obj == null) { return []; }
                 if (obj is Dictionary<string, object> _d) { return _d; }
                 var t = obj.GetType();
                 if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
@@ -318,7 +317,7 @@
             public static SqlParameter[] ToSqlParameterFromObject(object obj)
             {
                 if (obj == null) { return []; }
-                if (obj is SqlParameter _sp) { return new[] { _sp }; }
+                if (obj is SqlParameter _sp) { return [_sp]; }
                 if (obj is IEnumerable<SqlParameter> _sps) { return _sps.ToArray(); }
                 return (obj is IDictionary<string, object> _dic ? _dic : ToDictionaryFromObject(obj)).Select(x => new SqlParameter
                 {
@@ -359,13 +358,13 @@
             /// Belirtilen dosya yolundan asenkron olarak bir <see cref="IFormFile"/> nesnesi oluşturur. Bu metod, dosya sistemindeki bir dosyayı bellek akışına okuyarak web formları veya API istekleri için uygun hale getirir.
             /// </summary>
             /// <param name="filePath">Dönüştürülecek dosyanın sistemdeki tam yolu.</param>
-            /// <param name="cancellationToken">Asenkron işlemin iptali için kullanılan sinyal.</param>
             /// <param name="name">IFormFile nesnesine verilecek ad. Varsayılan olarak &quot;file&quot; kullanılır.</param>
             /// <param name="headerDictionary">Oluşturulacak IFormFile için özel başlıkları içeren sözlük. (Opsiyonel)</param>
+            /// <param name="cancellationToken">Asenkron işlemin iptali için kullanılan sinyal.</param>
             /// <returns>Oluşturulan IFormFile nesnesini temsil eden bir <see cref="Task{TResult}"/>.</returns>
             /// <exception cref="ArgumentException">FilePath veya Name parametreleri boş veya null ise fırlatılır.</exception>
             /// <exception cref="FileNotFoundException">Belirtilen dosya yolu mevcut değilse fırlatılır.</exception>
-            public static async Task<FormFile> ToIFormFileFromPath(string filePath, CancellationToken cancellationToken = default, string name = "file", HeaderDictionary? headerDictionary = null)
+            public static async Task<FormFile> ToIFormFileFromPath(string filePath, string name = "file", HeaderDictionary? headerDictionary = null, CancellationToken cancellationToken = default)
             {
                 Guard.CheckEmpty(filePath, nameof(filePath));
                 Guard.CheckEmpty(name, nameof(name));
@@ -379,7 +378,7 @@
                 var provider = new FileExtensionContentTypeProvider();
                 return new(ms, 0, ms.Length, name, Path.GetFileName(filePath))
                 {
-                    Headers = headerDictionary ?? new HeaderDictionary(),
+                    Headers = headerDictionary ?? [],
                     ContentType = (provider.TryGetContentType(filePath, out string _contenttype) ? _contenttype : "application/octet-stream")
                 };
             }
@@ -391,38 +390,38 @@
             /// <exception cref="NotSupportedException">Geçersiz veya desteklenmeyen bir sistem tür kimliği verildiğinde fırlatılır.</exception>
             public static SqlDbType ToSqlDbTypeFromSystemTypeID(int systemTypeId)
             {
-                switch (systemTypeId)
+                return systemTypeId switch
                 {
-                    case 34: return SqlDbType.Image;
-                    case 35: return SqlDbType.Text;
-                    case 36: return SqlDbType.UniqueIdentifier;
-                    case 40: return SqlDbType.Date;
-                    case 41: return SqlDbType.Time;
-                    case 42: return SqlDbType.DateTime2;
-                    case 43: return SqlDbType.DateTimeOffset;
-                    case 48: return SqlDbType.TinyInt;
-                    case 52: return SqlDbType.SmallInt;
-                    case 56: return SqlDbType.Int;
-                    case 58: return SqlDbType.SmallDateTime;
-                    case 59: return SqlDbType.Real;
-                    case 60: return SqlDbType.Money;
-                    case 61: return SqlDbType.DateTime;
-                    case 62: return SqlDbType.Float;
-                    case 99: return SqlDbType.NText;
-                    case 104: return SqlDbType.Bit;
-                    case 106: return SqlDbType.Decimal;
-                    case 122: return SqlDbType.SmallMoney;
-                    case 127: return SqlDbType.BigInt;
-                    case 165: return SqlDbType.VarBinary;
-                    case 167: return SqlDbType.VarChar;
-                    case 173: return SqlDbType.Binary;
-                    case 175: return SqlDbType.Char;
-                    case 189: return SqlDbType.Timestamp;
-                    case 231: return SqlDbType.NVarChar;
-                    case 239: return SqlDbType.NChar;
-                    case 241: return SqlDbType.Xml;
-                    default: throw new NotSupportedException($"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}");
-                }
+                    34 => SqlDbType.Image,
+                    35 => SqlDbType.Text,
+                    36 => SqlDbType.UniqueIdentifier,
+                    40 => SqlDbType.Date,
+                    41 => SqlDbType.Time,
+                    42 => SqlDbType.DateTime2,
+                    43 => SqlDbType.DateTimeOffset,
+                    48 => SqlDbType.TinyInt,
+                    52 => SqlDbType.SmallInt,
+                    56 => SqlDbType.Int,
+                    58 => SqlDbType.SmallDateTime,
+                    59 => SqlDbType.Real,
+                    60 => SqlDbType.Money,
+                    61 => SqlDbType.DateTime,
+                    62 => SqlDbType.Float,
+                    99 => SqlDbType.NText,
+                    104 => SqlDbType.Bit,
+                    106 => SqlDbType.Decimal,
+                    122 => SqlDbType.SmallMoney,
+                    127 => SqlDbType.BigInt,
+                    165 => SqlDbType.VarBinary,
+                    167 => SqlDbType.VarChar,
+                    173 => SqlDbType.Binary,
+                    175 => SqlDbType.Char,
+                    189 => SqlDbType.Timestamp,
+                    231 => SqlDbType.NVarChar,
+                    239 => SqlDbType.NChar,
+                    241 => SqlDbType.Xml,
+                    _ => throw new NotSupportedException($"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
+                };
             }
             /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="IOExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>
             /// <param name="dataUri">Dönüştürülecek data URI string&#39;i. Biçim: &quot;data:[MIME-type];base64,[base64-encoded-data]&quot;</param>
@@ -435,7 +434,7 @@
                 Guard.UnSupportLanguage(dil, nameof(dil));
                 dataUri = dataUri.ToStringOrEmpty();
                 if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(dil == "en" ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
-                var parts = dataUri.Substring(5).Split(new string[] { ";base64," }, StringSplitOptions.None);
+                var parts = dataUri.Substring(5).Split([";base64,"], StringSplitOptions.None);
                 if (parts.Length != 2) { throw new ArgumentException(dil == "en" ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
                 return (Convert.FromBase64String(parts[1]), parts[0]);
             }
@@ -850,7 +849,7 @@
             /// Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;value&quot; parametresindeki metni &quot;from&quot; dilinden &quot;to&quot; diline çevirir. Varsayılan olarak &quot;from&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve false durumu döner.
             /// </para>
             /// </summary>
-            public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslate(string value, TimeSpan timeout, CancellationToken cancellationToken = default, string to = "en", string from = "tr")
+            public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslate(string value, TimeSpan timeout, string to = "en", string from = "tr", CancellationToken cancellationToken = default)
             {
                 value = value.ToStringOrEmpty();
                 if (value == "") { return (false, "", null); }

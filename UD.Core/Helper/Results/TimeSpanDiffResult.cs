@@ -17,13 +17,13 @@
             if (this.timeSpan == TimeSpan.Zero) { return $"0 {p0}"; }
             Guard.CheckEmpty(p1, nameof(p1));
             Guard.CheckEmpty(p2, nameof(p2));
-            var dts = this.DecomposeTimeSpan;
+            var (totalHours, minutes, seconds, milliseconds) = this.DecomposeTimeSpan;
             var r = new List<string>();
-            if (dts.totalHours != 0) { r.Add(String.Join(" ", Math.Abs(dts.totalHours).ToString(), p2)); }
-            if (dts.minutes != 0) { r.Add(String.Join(" ", Math.Abs(dts.minutes).ToString(), p1)); }
-            if ((dts.seconds > 0 && dts.milliseconds > 0) || (dts.seconds < 0 && dts.milliseconds < 0)) { r.Add($"{Math.Abs(dts.seconds).ToString()},{Math.Abs(dts.milliseconds).ToString().Replicate(3)} {p0}"); }
-            else if (dts.seconds != 0 && dts.milliseconds == 0) { r.Add(String.Join(" ", Math.Abs(dts.seconds).ToString(), p0)); }
-            else if (dts.milliseconds != 0) { r.Add($"0,{Math.Abs(dts.milliseconds).ToString().Replicate(3)} {p0}"); }
+            if (totalHours != 0) { r.Add(String.Join(" ", Math.Abs(totalHours).ToString(), p2)); }
+            if (minutes != 0) { r.Add(String.Join(" ", Math.Abs(minutes).ToString(), p1)); }
+            if ((seconds > 0 && milliseconds > 0) || (seconds < 0 && milliseconds < 0)) { r.Add($"{Math.Abs(seconds)},{Math.Abs(milliseconds).ToString().Replicate(3)} {p0}"); }
+            else if (seconds != 0 && milliseconds == 0) { r.Add(String.Join(" ", Math.Abs(seconds).ToString(), p0)); }
+            else if (milliseconds != 0) { r.Add($"0,{Math.Abs(milliseconds).ToString().Replicate(3)} {p0}"); }
             return String.Join(" ", r);
         }
     }

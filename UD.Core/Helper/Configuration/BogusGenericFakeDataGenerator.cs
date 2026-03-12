@@ -100,16 +100,16 @@
             return [];
         }
         private string createUri() => this.fakerEN.Internet.Url().TrimEnd('/');
-        private string createFullName(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper());
-        private MailAddress createEMail(Faker faker) => new(this.fakerEN.Internet.ExampleEmail().ToLower(), this.createFullName(faker));
+        private static string createFullName(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper());
+        private MailAddress createEMail(Faker faker) => new(this.fakerEN.Internet.ExampleEmail().ToLower(), createFullName(faker));
         private IPAddress createIPAdress() => this.fakerEN.Internet.IpAddress().MapToIPv4();
         private object createFakeInstance(string parametername, Type type, Faker faker)
         {
             if (Validators.TryTypeIsNullable(type, out Type _genericbasetype)) { return faker.Random.Bool(this.nullChange) ? null : this.createFakeInstance(parametername, _genericbasetype, faker); }
             if (type == typeof(string))
             {
-                if (parametername == "seo") { return this.createFullName(faker).ToSeoFriendly(); }
-                if (parametername == "nms") { return this.createFullName(faker); }
+                if (parametername == "seo") { return createFullName(faker).ToSeoFriendly(); }
+                if (parametername == "nms") { return createFullName(faker); }
                 if (parametername == "src") { return this.createUri(); }
                 if (parametername == "ipaddress") { return this.createIPAdress().ToString(); }
                 if (parametername == "color") { return faker.Internet.Color().ToUpper(); }
@@ -131,8 +131,8 @@
             if (type == typeof(int)) { return faker.Random.Int(this.intMin, this.intMax); }
             if (type == typeof(long))
             {
-                if (parametername == "tckn") { return faker.Random.ArrayElement(new long[] { 10000000146, 19293160506, 35270291346, 35505252760, 37417041838, 48056596160, 57856397112, 66122384800, 69016478326, 75255184164, 78094801254, 78268733060, 79937798144, 81299907768, 86061923892, 88599002742, 89021372822, 93095299084, 93513339668, 94781067710 }); }
-                if (parametername == "vkn") { return faker.Random.ArrayElement(new long[] { 33583636, 602883151, 1266516393, 1775916611, 3085865484, 3641323334, 3749934537, 5056541626, 5252719378, 5498069343, 5613060112, 6000479747, 6501266542, 7267046912, 7915288675, 9142970393, 9152251176, 9205280623, 9217990731, 9292694379, 9734899775 }); }
+                if (parametername == "tckn") { return faker.Random.ArrayElement([10000000146, 19293160506, 35270291346, 35505252760, 37417041838, 48056596160, 57856397112, 66122384800, 69016478326, 75255184164, 78094801254, 78268733060, 79937798144, 81299907768, 86061923892, 88599002742, 89021372822, 93095299084, 93513339668, 94781067710]); }
+                if (parametername == "vkn") { return faker.Random.ArrayElement([33583636, 602883151, 1266516393, 1775916611, 3085865484, 3641323334, 3749934537, 5056541626, 5252719378, 5498069343, 5613060112, 6000479747, 6501266542, 7267046912, 7915288675, 9142970393, 9152251176, 9205280623, 9217990731, 9292694379, 9734899775]); }
                 return faker.Random.Long(this.longMin, this.longMax);
             }
             if (type == typeof(bool)) { return faker.Random.Bool(); }

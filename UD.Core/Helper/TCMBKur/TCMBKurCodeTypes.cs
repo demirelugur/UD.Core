@@ -68,7 +68,6 @@
         /// </summary>
         [Description("RUMEN LEYİ")]
         RON,
-
         /// <summary>
         /// RUS RUBLESİ
         /// </summary>

@@ -34,7 +34,7 @@
             { 'ğ', 'g' }, { 'Ğ', 'g' },
             { 'ı', 'i' }, { 'I', 'i' }, { 'İ', 'i' }
         };
-        private static readonly char[] charsToRemove = new[] { '?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+' };
+        private static readonly char[] charsToRemove = ['?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+'];
         /// <summary>
         /// Verilen dizeyi SEO dostu bir hale getirir.
         /// </summary>
@@ -132,7 +132,7 @@
             string p;
             foreach (var pi in typeof(TArgument).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).ToArray())
             {
-                arm = new HashSet<string>();
+                arm = [];
                 foreach (Match item in Regex.Matches(value, String.Concat(@"\{", pi.Name, @"(\:.*?)?\}")))
                 {
                     if (arm.Contains(item.Value)) { continue; }

@@ -23,7 +23,7 @@
             if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             var valueDecimal = value.ToDecimal();
             if (valueDecimal >= Convert.ToDecimal(this.Minimum) && valueDecimal <= Convert.ToDecimal(this.Maximum)) { return ValidationResult.Success; }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{String.Format(ValidationErrorMessageConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum)} ({nameof(this.Precision)}={this.Precision}, {nameof(this.Scale)}={this.Scale})."), new[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{String.Format(ValidationErrorMessageConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum)} ({nameof(this.Precision)}={this.Precision}, {nameof(this.Scale)}={this.Scale})."), [validationContext.MemberName]);
         }
         private static string GetMaxString(int precision, int scale)
         {

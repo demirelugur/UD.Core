@@ -65,7 +65,7 @@
         /// <returns>Enum isimlerini ve long karşılıklarını içeren sözlük.</returns>
         public static Dictionary<string, long> ToDictionaryFromEnum(this Type type)
         {
-            if (type == null || !type.IsEnum) { return new(); }
+            if (type == null || !type.IsEnum) { return []; }
             var values = Enum.GetValues(type);
             var names = Enum.GetNames(type);
             int i, vl = values.Length;

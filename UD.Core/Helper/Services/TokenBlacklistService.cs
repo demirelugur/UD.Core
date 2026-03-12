@@ -11,7 +11,7 @@
     }
     public class TokenBlacklistService : ITokenBlacklistService
     {
-        private static readonly ConcurrentDictionary<string, DateTime> blackListedTokens = new();
+        private static readonly ConcurrentDictionary<string, DateTime> blackListedTokens = [];
         public Task<bool> Any(string token)
         {
             blackListedTokens.RemoveWhere(x => x.Value < DateTime.UtcNow);

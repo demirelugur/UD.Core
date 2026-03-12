@@ -53,7 +53,7 @@
                 if (this.isequal) { r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerlerinden biri olmalıdır!"; }
                 else { r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerleri dışında farklı bir değer olmalıdır!"; }
             }
-            return new(r, new[] { validationContext.MemberName });
+            return new(r, [validationContext.MemberName]);
         }
     }
 }

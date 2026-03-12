@@ -21,7 +21,7 @@
         }
         public static void CheckEmpty(Guid guid, string argName)
         {
-            if (guid == Guid.Empty) { throw new ArgumentNullException(argName, $"\"{argName}\" argümanı \"{Guid.Empty.ToString()}\" değerini alamaz!"); }
+            if (guid == Guid.Empty) { throw new ArgumentNullException(argName, $"\"{argName}\" argümanı \"{Guid.Empty}\" değerini alamaz!"); }
         }
         public static void CheckEmptyOrCountZero<T>(ICollection<T> collection, string argName)
         {
@@ -99,7 +99,7 @@
         }
         public static void CheckZero<TKey>(TKey value, string argName) where TKey : struct, IComparable<TKey>
         {
-            if (value.CompareTo(default(TKey)) == 0) { throw new ArgumentException($"\"{argName}\" argümanı, \"0 (sıfır)\" olamaz!", argName); }
+            if (value.CompareTo(default) == 0) { throw new ArgumentException($"\"{argName}\" argümanı, \"0 (sıfır)\" olamaz!", argName); }
         }
         public static void CheckZeroOrNegative<TKey>(TKey value, string argName) where TKey : struct, IComparable<TKey>
         {
@@ -108,7 +108,7 @@
         }
         public static void CheckNegative<TKey>(TKey value, string argName) where TKey : struct, IComparable<TKey>
         {
-            if (value.CompareTo(default(TKey)) < 0) { throw new ArgumentOutOfRangeException($"\"{argName}\" argümanı, negatif olamaz!", new Exception($"Gelen değer: \"{value}\"")); }
+            if (value.CompareTo(default) < 0) { throw new ArgumentOutOfRangeException($"\"{argName}\" argümanı, negatif olamaz!", new Exception($"Gelen değer: \"{value}\"")); }
         }
         public static void CheckEnumDefined(Type type, object value, string argName)
         {

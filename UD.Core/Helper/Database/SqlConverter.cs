@@ -8,6 +8,6 @@
         /// <summary> DateOnly değerini SQL Server DATE tipine dönüştüren CONVERT ifadesini oluşturur. </summary>
         public static string ToDate(DateOnly date) => $"CONVERT(DATE, '{date.ToString(DateConstants.yyyyMMdd)}')";
         /// <summary> DateTime değerini SQL Server DATETIME tipine dönüştüren CONVERT ifadesini oluşturur. </summary>
-        public static string ToDateTime(DateTime dateTime) => $"CONVERT(DATETIME, '{dateTime.ToString("yyyy-MM-dd HH:mm:ss:fff")}')";
+        public static string ToDateTime(DateTime dateTime) => $"CONVERT(DATETIME, '{dateTime:yyyy-MM-dd HH:mm:ss:fff}')";
     }
 }

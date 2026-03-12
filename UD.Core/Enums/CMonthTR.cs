@@ -39,22 +39,22 @@
             Guard.UnSupportLanguage(dil, nameof(dil));
             if (dil == "en")
             {
-                switch (value)
+                return value switch
                 {
-                    case MonthTR.oca: return "January";
-                    case MonthTR.sub: return "February";
-                    case MonthTR.mrt: return "March";
-                    case MonthTR.nis: return "April";
-                    case MonthTR.may: return "May";
-                    case MonthTR.haz: return "June";
-                    case MonthTR.tem: return "July";
-                    case MonthTR.agu: return "August";
-                    case MonthTR.eyu: return "September";
-                    case MonthTR.eki: return "October";
-                    case MonthTR.kas: return "November";
-                    case MonthTR.ara: return "December";
-                    default: throw Utilities.ThrowNotSupportedForEnum<MonthTR>();
-                }
+                    MonthTR.oca => "January",
+                    MonthTR.sub => "February",
+                    MonthTR.mrt => "March",
+                    MonthTR.nis => "April",
+                    MonthTR.may => "May",
+                    MonthTR.haz => "June",
+                    MonthTR.tem => "July",
+                    MonthTR.agu => "August",
+                    MonthTR.eyu => "September",
+                    MonthTR.eki => "October",
+                    MonthTR.kas => "November",
+                    MonthTR.ara => "December",
+                    _ => throw Utilities.ThrowNotSupportedForEnum<MonthTR>(),
+                };
             }
             return value.GetDescriptionFromEnum();
         }

@@ -10,7 +10,7 @@
         #region Private
         private const int keyRequiredLength = 32;
         private const int ivRequiredLength = 16;
-        private static readonly byte[] randomNumbers = new byte[] { 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // ObfuscatorEncrypt işleminde oluşan şifreden bağımsız olarak belirli bir rastgele karakter kümesi oluşturur.
+        private static readonly byte[] randomNumbers = [4, 5, 6, 7, 8, 9, 10, 11, 12]; // ObfuscatorEncrypt işleminde oluşan şifreden bağımsız olarak belirli bir rastgele karakter kümesi oluşturur.
         private static byte[] encryptProcess(string value, Aes aes)
         {
             using (var ms = new MemoryStream())
@@ -91,7 +91,7 @@
                         aes.Key,
                         aes.IV,
                         encryptProcess(value, aes), // Veri
-                        new byte[] { randomKeyLength } // Baştan kaç karakterin rastgele olduğunu belirten değer
+                        [randomKeyLength] // Baştan kaç karakterin rastgele olduğunu belirten değer
                     }) { ms.Write(item.AsSpan()); }
                     var r = Convert.ToBase64String(ms.ToArray());
                     var firstChar = r[0]; // İlk değerin char değerine göre CaesarCipherOperation ile karıştırma

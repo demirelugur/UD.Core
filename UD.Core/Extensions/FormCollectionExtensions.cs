@@ -21,7 +21,7 @@
         /// <returns>Değer başarıyla alındıysa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool TryGetStringValue(this IFormCollection form, string key, out string outvalue)
         {
-            if (form == null) { form = FormCollection.Empty; }
+            form ??= FormCollection.Empty;
             var r = form.TryGetValue(key, out StringValues _sv);
             if (r)
             {
@@ -48,7 +48,7 @@
             if (key != "")
             {
                 if (!key.EndsWith("[]")) { key = String.Concat(key, "[]"); }
-                if (form == null) { form = FormCollection.Empty; }
+                form ??= FormCollection.Empty;
                 if (form.TryGetValue(key, out StringValues _sv))
                 {
                     outvalues = _sv.Select(x => x.ParseOrDefault<TKey>()).ToArray();

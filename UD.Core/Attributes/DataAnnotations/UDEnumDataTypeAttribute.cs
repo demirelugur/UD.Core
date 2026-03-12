@@ -21,7 +21,7 @@
                 validationContext.SetValidatePropertyValue(_enum);
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {typeofEnum.Name} türünden bir değer olmalıdır!"), new[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {typeofEnum.Name} türünden bir değer olmalıdır!"), [validationContext.MemberName]);
         }
     }
 }

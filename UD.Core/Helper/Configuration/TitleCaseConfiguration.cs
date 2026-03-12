@@ -26,11 +26,11 @@
         /// Dönüştürme işlemi için kullanılacak dillerin listesidir.
         /// Varsayılan olarak yalnızca Türkçe (tr) içerir.
         /// </summary>
-        private ConjunctionDilTypes[] dils = new[] { ConjunctionDilTypes.tr };
+        private ConjunctionDilTypes[] dils = [ConjunctionDilTypes.tr];
         /// <summary>
         /// Başlık formatında kelime ayırıcı olarak kullanılacak noktalama işaretlerinin listesidir. Varsayılan olarak &#39;(&#39;, &#39;-&#39;, &#39;/&#39;, &#39;:&#39;, &#39;.&#39; içerir.
         /// </summary>
-        private char[] punctuations = new[] { '(', '-', '/', ':', '.' };
+        private char[] punctuations = ['(', '-', '/', ':', '.'];
         /// <summary>
         /// Her zaman büyük harfle yazılması gereken kelimelerin listesidir.
         /// Varsayılan olarak boştur.

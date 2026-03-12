@@ -21,7 +21,7 @@
                 validationContext.SetValidatePropertyValue(isbn);
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {TitleConstants.Isbn} biçimine uygun olmalıdır!"), new[] { validationContext.MemberName });
+            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, {TitleConstants.Isbn} biçimine uygun olmalıdır!"), [validationContext.MemberName]);
         }
     }
 }

@@ -25,11 +25,7 @@
         public static Uri GetFullRequestUri(this HttpContext context)
         {
             var request = context.Request;
-            return new(String.Concat(
-                context.GetBaseUri().ToString().TrimEnd('/'),
-                request.Path.HasValue ? request.Path.Value : "",
-                request.QueryString.HasValue ? request.QueryString.Value : ""
-            ));
+            return new(String.Concat(context.GetBaseUri().ToString().TrimEnd('/'), request.Path.HasValue ? request.Path.Value : "", request.QueryString.HasValue ? request.QueryString.Value : ""));
         }
         /// <summary>
         /// Bearer token&#39;ı HttpContext&#39;den alır.

@@ -95,21 +95,21 @@
             if (isDebug) { return Task.FromResult(0); }
             var sb = new StringBuilder();
             var index = 0;
-            mappedTables = mappedTables ?? [];
+            mappedTables ??= [];
             foreach (var type in mappedTables.Where(x => x.IsMappedTable()).ToArray())
             {
-                var pkInfo = getprimarykeyinfo(type);
-                if (pkInfo.columnName == "" || pkInfo.sqlDbTypeName == "") { continue; }
+                var (columnName, sqlDbTypeName) = getprimarykeyinfo(type);
+                if (columnName == "" || sqlDbTypeName == "") { continue; }
                 var tableName = type.GetTableName(true);
                 var variableName = $"@MAXID_{index}";
-                sb.AppendLine($"DECLARE {variableName} {pkInfo.sqlDbTypeName}");
-                sb.AppendLine($"SELECT {variableName} = MAX([{pkInfo.columnName}]) FROM {tableName}");
+                sb.AppendLine($"DECLARE {variableName} {sqlDbTypeName}");
+                sb.AppendLine($"SELECT {variableName} = MAX([{columnName}]) FROM {tableName}");
                 sb.AppendLine($"SET {variableName} = ISNULL({variableName}, 0)");
                 sb.AppendLine($"DBCC CHECKIDENT ('{tableName}', RESEED, {variableName})");
                 index++;
             }
             if (sb.Length == 0) { return Task.FromResult(0); }
-            return context.Database.ExecuteSqlRawAsync(sb.ToString(), Array.Empty<SqlParameter>(), cancellationToken);
+            return context.Database.ExecuteSqlRawAsync(sb.ToString(), [], cancellationToken);
         }
         private static (string columnName, string sqlDbTypeName) getprimarykeyinfo(Type mappedtabletype)
         {

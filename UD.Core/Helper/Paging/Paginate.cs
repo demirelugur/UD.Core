@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Helper.Paging
 {
-    using System;
     public interface IPaginate<T>
     {
         int pagenumber { get; set; }

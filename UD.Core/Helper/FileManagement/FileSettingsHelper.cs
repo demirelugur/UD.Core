@@ -47,16 +47,16 @@
         {
             if (value < 0 || Double.IsNaN(value)) { value = 0; }
             var j = 0;
-            var sz = FileSizeUnits.Length - 1;
+            var sz = ArrayConstants.FileSizeUnits.Length - 1;
             while (value > 1024 && j < sz) { value /= 1024; j++; }
-            return String.Join(" ", (Math.Ceiling(value * 100) / 100).ToString(), FileSizeUnits[j]);
+            return String.Join(" ", (Math.Ceiling(value * 100) / 100).ToString(), ArrayConstants.FileSizeUnits[j]);
         }
         public static string FormatSizeDetail(double value)
         {
             if (value < 0 || Double.IsNaN(value)) { return ""; }
             var fs = FormatSize(value);
             if (value < 1024 || value % 1024 == 0) { return fs; }
-            return $"{value.ToString()} {FileSizeUnits[0]} (~ {fs})";
+            return $"{value} {ArrayConstants.FileSizeUnits[0]} (~ {fs})";
         }
         public static bool TryFileisException(ICollection<IFormFile> files, FileSettingsHelper fileSettingsHelper, string dil, out string[] errors)
         {
@@ -86,17 +86,17 @@
                 {
                     if (dil == "en")
                     {
-                        errors = new[] {
+                        errors = [
                            "You have exceeded the maximum number of files allowed to upload!",
                            $"Maximum file count: {fileSettingsHelper.fileCount}"
-                        };
+                        ];
                     }
                     else
                     {
-                        errors = new[] {
+                        errors = [
                            "Yüklenecek maksimum dosya sayısını aştınız!",
                            $"Maksimum dosya sayısı: {fileSettingsHelper.fileCount}"
-                        };
+                        ];
                     }
                     return true;
                 }
@@ -104,19 +104,19 @@
                 {
                     if (dil == "en")
                     {
-                        errors = new[] {
+                        errors = [
                             "The file extensions are not compatible!",
                             $"Incompatible files: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
                             $"Allowed extension types: {String.Join(", ", fileSettingsHelper.accept)}"
-                        };
+                        ];
                     }
                     else
                     {
-                        errors = new[] {
+                        errors = [
                            "Yüklenecek dosya uzantıları uyumsuzdur!",
                            $"Uyumsuz olan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
                            $"İzin verilen uzantı türleri: {String.Join(", ", fileSettingsHelper.accept)}"
-                        };
+                        ];
                     }
                     return true;
                 }
@@ -124,19 +124,19 @@
                 {
                     if (dil == "en")
                     {
-                        errors = new[] {
+                        errors = [
                             "You have exceeded the allowed upload size for a single file!",
                             $"Files exceeding the size limit: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(", ", x.fileName, FormatSize(x.size))).ToArray())}",
                             $"Maximum allowed size for a single file: {fileSettingsHelper.getformatsize}"
-                        };
+                        ];
                     }
                     else
                     {
-                        errors = new[] {
+                        errors = [
                             "Tek bir dosya için izin verilen yükleme miktarını aştınız!",
                             $"Kapasite miktarı aşan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(", ", x.fileName, FormatSize(x.size))).ToArray())}",
                             $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileSettingsHelper.getformatsize}"
-                        };
+                        ];
                     }
                     return true;
                 }

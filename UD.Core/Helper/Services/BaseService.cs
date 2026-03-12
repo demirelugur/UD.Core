@@ -79,6 +79,10 @@
                 if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
             }
         }
-        public void Dispose() => this.Context.Dispose();
+        public void Dispose()
+        {
+            this.Context.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }
