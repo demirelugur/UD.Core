@@ -6,9 +6,7 @@
     using UD.Core.Helper.Validation;
     public static class UriExtensions
     {
-        /// <summary>
-        /// Verilen dizeye &quot;v&quot; parametresiyle bir sürüm numarası ekleyerek yeni bir URL oluşturur.
-        /// </summary>
+        /// <summary>Verilen dizeye &quot;v&quot; parametresiyle bir sürüm numarası ekleyerek yeni bir URL oluşturur.</summary>
         /// <param name="uri">Temel URL.</param>
         /// <returns>Sürüm numarası eklenmiş URL.</returns>
         public static string GenerateVersionedUrl(this Uri uri)
@@ -17,9 +15,7 @@
             var separator = (uri.Query.Length > 0 ? "&" : "?");
             return $"{uri.ToString().TrimEnd('/')}{separator}v={DateTime.Now.Ticks}";
         }
-        /// <summary>
-        /// Verilen URI&#39;nin bir YouTube gömme(embed) bağlantısı olup olmadığını kontrol eder.
-        /// </summary>
+        /// <summary>Verilen URI&#39;nin bir YouTube gömme(embed) bağlantısı olup olmadığını kontrol eder.</summary>
         /// <param name="uri">Kontrol edilecek URI.</param>
         /// <returns>URI bir YouTube gömme bağlantısı ise <see langword="true"/>, aksi halde <see langword="false"/> döner.</returns>
         public static bool IsYouTubeEmbedLink(this Uri uri)
@@ -27,9 +23,7 @@
             Guard.CheckNull(uri, nameof(uri));
             return (uri.Host.Contains("youtube.com") && uri.AbsolutePath.StartsWith("/embed/"));
         }
-        /// <summary>
-        /// Verilen URI&#39;nin bağlantı durumunu kontrol eder.
-        /// </summary>
+        /// <summary>Verilen URI&#39;nin bağlantı durumunu kontrol eder.</summary>
         public static async Task<(bool hasError, Uri requestUri)> IsConnectionStatus(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
             Guard.CheckNull(uri, nameof(uri));
@@ -47,9 +41,7 @@
                 catch { return (true, default); }
             }
         }
-        /// <summary>
-        /// Belirtilen <see cref="Uri"/> adresinden byte[] veri almaya çalışır.
-        /// </summary>
+        /// <summary>Belirtilen <see cref="Uri"/> adresinden byte[] veri almaya çalışır.</summary>
         public static async Task<(bool hasError, byte[] dataBinary, string mimeType, Exception ex)> GetBinaryData(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
             Guard.CheckNull(uri, nameof(uri));

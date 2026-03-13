@@ -261,6 +261,22 @@
         }
         public sealed class Converters
         {
+            /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
+            /// <param name="value">Dönüştürülecek değer</param>
+            /// <param name="type">Dönüştürülecek hedef tür</param>
+            /// <returns>Dönüştürülmüş değer</returns>
+            public static object ChangeType(object value, Type type)
+            {
+                var t = Validators.TryTypeIsNullable(type, out Type _genericBaseType);
+                if (t && value == null) { return null; }
+                if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
+                return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericBaseType);
+            }
+            /// <summary><paramref name="value"/> değerini <typeparamref name="T"/> türüne dönüştürür.</summary>
+            /// <typeparam name="T">Dönüştürülecek hedef tür</typeparam>
+            /// <param name="value">Dönüştürülecek değer</param>
+            /// <returns><typeparamref name="T"/> türüne dönüştürülmüş değer</returns>
+            public static T ChangeType<T>(object value) => (T)ChangeType(value, typeof(T));
             /// <summary>
             /// Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.
             /// </summary>
@@ -296,9 +312,7 @@
                 foreach (var item in SHA256.HashData(Encoding.UTF8.GetBytes(value is String _s ? _s.Trim() : ToJSON(value)))) { r.Add(item.ToString("x2")); }
                 return String.Join("", r);
             }
-            /// <summary>
-            /// Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.
-            /// </summary>
+            /// <summary>Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.</summary>
             /// <param name="obj">Dönüştürülecek nesne.</param>
             /// <returns>Nesnenin özellik isimlerini ve değerlerini içeren sözlük.</returns>
             public static Dictionary<string, object> ToDictionaryFromObject(object obj)
@@ -498,22 +512,6 @@
             /// <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code>
             /// </summary>
             public static TransactionScope TransactionScopeAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
-            /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
-            /// <param name="value">Dönüştürülecek değer</param>
-            /// <param name="type">Dönüştürülecek hedef tür</param>
-            /// <returns>Dönüştürülmüş değer</returns>
-            public static object ChangeType(object value, Type type)
-            {
-                var t = Validators.TryTypeIsNullable(type, out Type _genericBaseType);
-                if (t && value == null) { return null; }
-                if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
-                return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericBaseType);
-            }
-            /// <summary><paramref name="value"/> değerini <typeparamref name="T"/> türüne dönüştürür.</summary>
-            /// <typeparam name="T">Dönüştürülecek hedef tür</typeparam>
-            /// <param name="value">Dönüştürülecek değer</param>
-            /// <returns><typeparamref name="T"/> türüne dönüştürülmüş değer</returns>
-            public static T ChangeType<T>(object value) => (T)ChangeType(value, typeof(T));
             /// <summary>
             /// Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.
             /// </summary>
@@ -552,7 +550,7 @@
                 var pi = type.GetProperty(propertyName);
                 Guard.CheckNull(pi, nameof(pi));
                 if (!pi.CanWrite) { throw new InvalidOperationException(dil == "en" ? $"The \"{nameof(propertyName)}\" property is not writable!" : $"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
-                pi.SetValue(value, data == null ? null : ChangeType(data, pi.PropertyType));
+                pi.SetValue(value, data == null ? null : Converters.ChangeType(data, pi.PropertyType));
             }
             /// <summary>
             /// Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.

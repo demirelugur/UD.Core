@@ -13,15 +13,11 @@
     using static UD.Core.Helper.OrtakTools;
     public static class StringExtensions
     {
-        /// <summary>
-        /// Bir string&#39;i Guid&#39;e dönüştürür. String null veya geçersizse varsayılan Guid döner.
-        /// </summary>
+        /// <summary>Bir string&#39;i Guid&#39;e dönüştürür. String null veya geçersizse varsayılan Guid döner.</summary>
         /// <param name="value">Dönüştürülecek string.</param>
         /// <returns>Dönüştürülmüş Guid.</returns>
         public static Guid ToGuid(this string value) => value.ParseOrDefault<Guid>();
-        /// <summary>
-        /// Bir dizeyi <see cref="DateTime"/> türüne dönüştürür. Dize geçerli bir tarih formatında değilse, varsayılan <see cref="DateTime"/> değeri döndürülür.
-        /// </summary>
+        /// <summary>Bir dizeyi <see cref="DateTime"/> türüne dönüştürür. Dize geçerli bir tarih formatında değilse, varsayılan <see cref="DateTime"/> değeri döndürülür.</summary>
         /// <param name="value">Dönüştürülecek tarih içeren dize.</param>
         /// <returns>Geçerli bir <see cref="DateTime"/> nesnesi veya varsayılan <see cref="DateTime"/> değeri.</returns>
         public static DateTime ToDate(this string value) => value.ParseOrDefault<DateTime>();
@@ -35,9 +31,7 @@
             { 'ı', 'i' }, { 'I', 'i' }, { 'İ', 'i' }
         };
         private static readonly char[] charsToRemove = ['?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+'];
-        /// <summary>
-        /// Verilen dizeyi SEO dostu bir hale getirir.
-        /// </summary>
+        /// <summary>Verilen dizeyi SEO dostu bir hale getirir.</summary>
         /// <param name="value">Dönüştürülecek dize.</param>
         /// <returns>SEO dostu hale getirilmiş dize.</returns>
         public static string ToSeoFriendly(this string value)
@@ -64,48 +58,34 @@
         /// <param name="phoneNumberTR">Dönüştürülmek istenen telefon numarası.</param>
         /// <returns>Biçimlenmiş Türk telefon numarası ya da geçerli değilse boş bir string.</returns>
         public static string BeautifyPhoneNumberTR(this string phoneNumberTR) => (Validators.TryPhoneNumberTR(phoneNumberTR, out string _s) ? $"({_s.Substring(0, 3)}) {_s.Substring(3, 3)}-{_s.Substring(6, 4)}" : "");
-        /// <summary>
-        /// Verilen string değer null veya boş (&quot;&quot;) ise, parametre olarak girilen alternatif string değerler arasında ilk dolu olanı döndürür. Eğer hiçbir alternatif değer dolu değilse boş string (&quot;&quot;) döner.
-        /// </summary>
+        /// <summary>Verilen string değer null veya boş (&quot;&quot;) ise, parametre olarak girilen alternatif string değerler arasında ilk dolu olanı döndürür. Eğer hiçbir alternatif değer dolu değilse boş string (&quot;&quot;) döner.</summary>
         /// <param name="value">Kontrol edilecek ana string değer.</param>
         /// <param name="defaultValues">Alternatif string değerler listesi.</param>
-        /// <returns>
-        /// İlk olarak value değeri boş değilse value değerini döner. Aksi halde alternatif değerler arasında bulunan ilk dolu string değeri döner. Eğer hiçbiri dolu değilse boş string (&quot;&quot;) döner.
-        /// </returns>
+        /// <returns>İlk olarak value değeri boş değilse value değerini döner. Aksi halde alternatif değerler arasında bulunan ilk dolu string değeri döner. Eğer hiçbiri dolu değilse boş string (&quot;&quot;) döner.</returns>
         public static string CoalesceOrDefault(this string value, params string[] defaultValues)
         {
             value = value.ToStringOrEmpty();
             if (value != "") { return value; }
             return (defaultValues ?? []).Select(x => x.ToStringOrEmpty()).FirstOrDefault(x => x != "") ?? "";
         }
-        /// <summary>
-        /// Verilen dize değerinin null veya boş olup olmadığını kontrol eder.
-        /// </summary>
+        /// <summary>Verilen dize değerinin null veya boş olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize.</param>
         /// <returns><see langword="true"/>, eğer dize null veya boşsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsNullOrEmpty(this string value) => String.IsNullOrEmpty(value.ToStringOrEmpty());
-        /// <summary>
-        /// Verilen dize değerinin null, boş veya yalnızca beyaz boşluk karakterlerinden (space, tab, newline vb.) oluşup oluşmadığını kontrol eder.
-        /// </summary>
+        /// <summary>Verilen dize değerinin null, boş veya yalnızca beyaz boşluk karakterlerinden (space, tab, newline vb.) oluşup oluşmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize.</param>
         /// <returns><see langword="true"/>, eğer dize null, boş veya yalnızca beyaz boşluk karakterlerinden oluşuyorsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsNullOrWhiteSpace(this string value) => String.IsNullOrWhiteSpace(value.ToStringOrEmpty());
-        /// <summary>
-        /// Verilen dize değerinin sayısal bir değere dönüştürülüp dönüştürülemeyeceğini kontrol eder.
-        /// </summary>
+        /// <summary>Verilen dize değerinin sayısal bir değere dönüştürülüp dönüştürülemeyeceğini kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize.</param>
         /// <param name="numberStyles">Sayının biçimlendirilmesi için kullanılacak sayı stilleri.</param>
         /// <returns><see langword="true"/>, eğer dize bir sayıya dönüştürülebiliyorsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsNumeric(this string value, NumberStyles numberStyles = NumberStyles.Integer) => BigInteger.TryParse(value.ToStringOrEmpty(), numberStyles, NumberFormatInfo.InvariantInfo, out _);
-        /// <summary>
-        /// Belirtilen string değerinin geçerli bir e-Posta adresi olup olmadığını kontrol eder.
-        /// </summary>
+        /// <summary>Belirtilen string değerinin geçerli bir e-Posta adresi olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek e-Posta adresi.</param>
         /// <returns>Geçerli bir e-Posta adresi ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsMail(this string value) => Validators.TryMailAddress(value, out _);
-        /// <summary>
-        /// Verilen string&#39;in geçerli bir e-Posta adresi olup olmadığını ve bu adresin host kısmının belirtilen host ile eşleşip eşleşmediğini kontrol eder. Host karşılaştırması büyük/küçük harfe duyarlı değildir ve host parametresi &#39;@&#39; ile başlıyorsa bu karakter yok sayılır.
-        /// </summary>
+        /// <summary>Verilen string&#39;in geçerli bir e-Posta adresi olup olmadığını ve bu adresin host kısmının belirtilen host ile eşleşip eşleşmediğini kontrol eder. Host karşılaştırması büyük/küçük harfe duyarlı değildir ve host parametresi &#39;@&#39; ile başlıyorsa bu karakter yok sayılır.</summary>
         public static bool IsMailFromHost(this string value, string host)
         {
             host = host.ToStringOrEmpty().ToLower();
@@ -113,15 +93,11 @@
             if (host[0] == '@') { host = host.Substring(1); }
             return Validators.TryMailAddress(value, out MailAddress _ma) && _ma.Host == host;
         }
-        /// <summary>
-        /// Verilen dize değerinin geçerli bir URI olup olmadığını kontrol eder.
-        /// </summary>
+        /// <summary>Verilen dize değerinin geçerli bir URI olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize (URI).</param>
         /// <returns><see langword="true"/>, eğer dize geçerli bir URI ise; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsUri(this string value) => Validators.TryUri(value, out _);
-        /// <summary>
-        /// Verilen dizeyi bir nesnenin üyeleri ile biçimlendirir.
-        /// </summary>
+        /// <summary>Verilen dizeyi bir nesnenin üyeleri ile biçimlendirir.</summary>
         /// <typeparam name="TArgument">Biçimlendirilecek nesnenin türü.</typeparam>
         /// <param name="value">Dize.</param>
         /// <param name="argument">Biçimlendirme için kullanılan nesne.</param>
@@ -143,9 +119,7 @@
             }
             return value;
         }
-        /// <summary>
-        /// Verilen metot ismi ve tip bilgisi kullanılarak bir route ismi oluşturur.
-        /// </summary>
+        /// <summary>Verilen metot ismi ve tip bilgisi kullanılarak bir route ismi oluşturur.</summary>
         /// <typeparam name="T">Route&#39;un ilişkilendirileceği sınıf tipi (class olmalıdır)</typeparam>
         /// <param name="methodName">Route ile ilişkilendirilecek metot ismi</param>
         /// <param name="useFullTypeName">Tam tip ismi (<see cref="Type.FullName"/>) kullanılacak mı? <see langword="false"/> ise kısa tip ismi (<see cref="MemberInfo.Name"/>) kullanılır</param>
@@ -189,9 +163,7 @@
             value = value.ToStringOrEmpty();
             return (value.Length > length ? value.Substring(0, length).Trim() : value);
         }
-        /// <summary>
-        /// Bir string&#39;i belirtilen noktalama işaretleri kurallarına göre Başlık Durumuna dönüştürür.
-        /// </summary>
+        /// <summary>Bir string&#39;i belirtilen noktalama işaretleri kurallarına göre Başlık Durumuna dönüştürür.</summary>
         /// <param name="value">Dönüştürülecek string.</param>
         /// <param name="isWhiteSpace">Boşluk karakterlerinin yeni kelimeleri ayırmak için dikkate alınıp alınmayacağını belirtir.</param>
         /// <param name="punctuations">Kelime ayıran noktalama karakterleri.</param>
@@ -220,9 +192,7 @@
             }
             return sb.ToString();
         }
-        /// <summary>
-        /// Verilen bir dizeyi, belirtilen türde bir değere dönüştürür. Dönüşüm başarısız olursa, varsayılan değeri döner.
-        /// </summary>
+        /// <summary>Verilen bir dizeyi, belirtilen türde bir değere dönüştürür. Dönüşüm başarısız olursa, varsayılan değeri döner.</summary>
         /// <typeparam name="TKey">Dönüşüm yapılacak hedef tür.</typeparam>
         /// <param name="value">Dönüştürülecek dize değeri.</param>
         /// <returns>Dönüştürülen değeri veya dönüşüm başarısızsa varsayılan değeri döner.</returns>
