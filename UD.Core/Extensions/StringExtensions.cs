@@ -172,7 +172,7 @@
             value = value.ToStringOrEmpty();
             if (value != "")
             {
-                Guard.CheckZeroOrNegative(totalValueLength, nameof(totalValueLength));
+                totalValueLength = Math.Max(1, totalValueLength);
                 if (totalValueLength <= value.Length) { return value; }
                 if (direction == 'l') { return value.PadLeft(totalValueLength, c); }
                 if (direction == 'r') { return value.PadRight(totalValueLength, c); }

@@ -82,6 +82,8 @@
         /// <returns>Görüntünün bayt dizisi temsilini döndürür.</returns>
         public static byte[] ToByteArray(this Image image, ImageFormat imageFormat)
         {
+            Guard.CheckNull(image, nameof(image));
+            Guard.CheckNull(imageFormat, nameof(imageFormat));
             using (var ms = new MemoryStream())
             {
                 image.Save(ms, imageFormat);
@@ -96,6 +98,7 @@
         /// <remarks>Kullandığı yerde Dispose edilmelidir!</remarks>
         public static Bitmap Resize(this Image image, Size size)
         {
+            Guard.CheckNull(image, nameof(image));
             if (size.IsEmpty) { throw new ArgumentException($"{nameof(size)} parametresi geçerli olmalıdır!", nameof(size)); }
             var bm = new Bitmap(size.Width, size.Height); // Not: using kullanılırsa bitmap değerleri iletilmemekte
             using (var g = Graphics.FromImage(bm))
@@ -111,12 +114,20 @@
         /// <param name="image">Orijinal resim nesnesi.</param>
         /// <param name="width">Yeni genişlik değeri (piksel cinsinden).</param>
         /// <returns>En boy oranı korunarak hesaplanan yeni yükseklik değeri (piksel cinsinden).</returns>
-        public static int CalculateHeight(this Image image, int width) => Convert.ToInt32(image.Height * (Convert.ToSingle(width) / image.Width));
+        public static int CalculateHeight(this Image image, int width)
+        {
+            Guard.CheckNull(image, nameof(image));
+            return Convert.ToInt32(image.Height * (Convert.ToSingle(width) / image.Width));
+        }
         /// <summary>Verilen yeni yükseklik(height) değerine göre resmin genişliğini(width), en boy oranını koruyarak hesaplar.</summary>
         /// <param name="image">Orijinal resim nesnesi.</param>
         /// <param name="height">Yeni yükseklik değeri (piksel cinsinden).</param>
         /// <returns>En boy oranı korunarak hesaplanan yeni genişlik değeri (piksel cinsinden).</returns>
-        public static int CalculateWidth(this Image image, int height) => Convert.ToInt32(image.Width * (Convert.ToSingle(height) / image.Height));
+        public static int CalculateWidth(this Image image, int height)
+        {
+            Guard.CheckNull(image, nameof(image));
+            return Convert.ToInt32(image.Width * (Convert.ToSingle(height) / image.Height));
+        }
         #endregion
         #region DirectoryInfo
         /// <summary>Belirtilen kaynak dizinini hedef dizine kopyalar.</summary>
@@ -124,6 +135,8 @@
         /// <param name="target">Hedef dizini temsil eden DirectoryInfo nesnesi.</param>
         public static void CopyAll(this DirectoryInfo source, DirectoryInfo target)
         {
+            Guard.CheckNull(source, nameof(source));
+            Guard.CheckNull(target, nameof(target));
             Files.DirectoryCreate(target.FullName);
             foreach (var item in source.GetFiles()) { item.CopyTo(Path.Combine(target.FullName, item.Name), true); }
             foreach (var item in source.GetDirectories()) { item.CopyAll(target.CreateSubdirectory(item.Name)); }

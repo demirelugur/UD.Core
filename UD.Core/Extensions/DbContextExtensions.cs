@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Extensions
 {
-    using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
@@ -24,6 +23,7 @@
         /// <returns>Değiştirilmişse <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsModified<T>(this DbContext context, T entity, params Expression<Func<T, object>>[] expressions) where T : class
         {
+            Guard.CheckNull(context, nameof(context));
             var entry = context.Entry(entity);
             var properties = typeof(T).GetProperties().Where(x => x.IsMapped() && entry.Property(x.Name).IsModified).ToArray();
             var columns = (expressions ?? []).Select(x => x.GetExpressionName()).ToArray();
@@ -44,6 +44,8 @@
                 isSetCompositeKeyName = x.Name == compositeKeyName,
                 isCompositeKey = x.IsPK() && x.GetDatabaseGeneratedOption() == DatabaseGeneratedOption.None
             }).ToArray();
+            Guard.CheckNull(context, nameof(context));
+            Guard.CheckNull(oldEntity, nameof(oldEntity));
             Guard.UnSupportLanguage(dil, nameof(dil));
             if (properties.Count(x => x.isCompositeKey) < 2)
             {
@@ -93,9 +95,10 @@
         public static Task<int> TableReseed(this DbContext context, bool isDebug, Type[] mappedTables, CancellationToken cancellationToken = default)
         {
             if (isDebug) { return Task.FromResult(0); }
+            Guard.CheckNull(context, nameof(context));
+            Guard.CheckEmptyOrCountZero(mappedTables, nameof(mappedTables));
             var sb = new StringBuilder();
             var index = 0;
-            mappedTables ??= [];
             foreach (var type in mappedTables.Where(x => x.IsMappedTable()).ToArray())
             {
                 var (columnName, sqlDbTypeName) = getprimarykeyinfo(type);

@@ -2,7 +2,6 @@
 {
     using System.Text.RegularExpressions;
     using UD.Core.Extensions;
-
     /// <summary>
     /// Metinleri başlık formatına (title case) dönüştürmek için yapılandırma sağlayan bir sınıftır. Türkçe ve İngilizce gibi diller için özel kurallar ve özelleştirilebilir ayarlar sunar.
     /// </summary>
@@ -11,7 +10,7 @@
         /// <summary>
         /// Desteklenen dil türlerini temsil eden bir enum yapısıdır.
         /// </summary>
-        public enum ConjunctionDilTypes
+        public enum ConjunctionDilTypes : byte
         {
             /// <summary>
             /// Küçük harfe çevirilecek bağlaçlar: <c>Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya</c>

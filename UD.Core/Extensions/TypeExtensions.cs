@@ -11,15 +11,27 @@
         /// <summary>Verilen türün (Type) bir tabloya eşlendiğini kontrol eder. Türün, <see cref="TableAttribute"/> ile işaretlenmiş olup olmadığını kontrol ederek tabloya eşlenip eşlenmediğini döndürür.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
         /// <returns>Tür bir tabloya eşlenmişse <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsMappedTable(this Type type) => type != null && Validators.TryCustomAttribute(type, out TableAttribute _);
+        public static bool IsMappedTable(this Type type)
+        {
+            Guard.CheckNull(type, nameof(type));
+            return Validators.TryCustomAttribute(type, out TableAttribute _);
+        }
         /// <summary>Belirtilen türün nullable olup olmadığını kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
         /// <returns>Nullable ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsNullable(this Type type) => Validators.TryTypeIsNullable(type, out _);
+        public static bool IsNullable(this Type type)
+        {
+            Guard.CheckNull(type, nameof(type));
+            return Validators.TryTypeIsNullable(type, out _);
+        }
         /// <summary>Belirtilen türün özel bir sınıf olup olmadığını kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
         /// <returns>Özel sınıf ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsCustomClass(this Type type) => (type != null && type.IsClass && type != typeof(string) && !type.IsArray && !typeof(Delegate).IsAssignableFrom(type) && !type.IsInterface);
+        public static bool IsCustomClass(this Type type)
+        {
+            Guard.CheckNull(type, nameof(type));
+            return (type.IsClass && type != typeof(string) && !type.IsArray && !typeof(Delegate).IsAssignableFrom(type) && !type.IsInterface);
+        }
         /// <summary>Belirtilen <see cref="Type"/> için tanımlı <see cref="TableAttribute"/> özniteliğini kullanarak tablo adını döndürür. Varsayılan olarak şema adı &quot;dbo&quot; kabul edilir. <paramref name="isSquareBrackets"/> true ise tablo ve şema adları köşeli parantez içerisine alınır.</summary>
         /// <param name="type">Tabloya karşılık gelen sınıf tipi.</param>
         /// <param name="isSquareBrackets">Tablo ve şema adlarının köşeli parantez içerisine alınıp alınmayacağını belirtir.</param>
@@ -40,17 +52,28 @@
         /// <summary>Belirtilen türü enum dizisine dönüştürür.</summary>
         /// <param name="type">Enum türü.</param>
         /// <returns>Enum sonuçları dizisi.</returns>
-        public static EnumResult[] ToEnumArray(this Type type) => Enum.GetNames(type).Select((enumName, i) => new EnumResult(Convert.ToInt64(Enum.GetValues(type).GetValue(i)), enumName, type.GetField(enumName).GetDescription())).ToArray();
+        public static EnumResult[] ToEnumArray(this Type type)
+        {
+            Guard.CheckNull(type, nameof(type));
+            return Enum.GetNames(type).Select((enumName, i) => new EnumResult(Convert.ToInt64(Enum.GetValues(type).GetValue(i)), enumName, type.GetField(enumName).GetDescription())).ToArray();
+        }
         /// <summary> Belirtilen tipin, verilen açık generic interface'i (open generic interface) implement edip etmediğini kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tip (class, struct, record vs.)</param>
         /// <param name="openGenericInterface">Açık generic interface tanımı</param>
-        public static bool IsImplementsOpenGenericInterface(this Type type, Type openGenericInterface) => (type != null && type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == openGenericInterface));
+        public static bool IsImplementsOpenGenericInterface(this Type type, Type openGenericInterface)
+        {
+            Guard.CheckNull(type, nameof(type));
+            Guard.CheckNull(openGenericInterface, nameof(openGenericInterface));
+            return (type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == openGenericInterface));
+        }
         /// <summary>Belirtilen <paramref name="type"/> türünün, verilen açık generic (<paramref name="openGeneric"/>) türünden türeyip türemediğini kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
         /// <param name="openGeneric">Açık generic taban türü.</param>
         public static bool IsSubclassOfOpenGeneric(this Type type, Type openGeneric)
         {
-            while (type != null && type != typeof(object))
+            Guard.CheckNull(type, nameof(type));
+            Guard.CheckNull(openGeneric, nameof(openGeneric));
+            while (type != typeof(object))
             {
                 var cur = (type.IsGenericType ? type.GetGenericTypeDefinition() : type);
                 if (cur == openGeneric) { return true; }
@@ -65,7 +88,8 @@
         /// <returns>Enum isimlerini ve long karşılıklarını içeren sözlük.</returns>
         public static Dictionary<string, long> ToDictionaryFromEnum(this Type type)
         {
-            if (type == null || !type.IsEnum) { return []; }
+            Guard.CheckNull(type, nameof(type));
+            if (!type.IsEnum) { return []; }
             var values = Enum.GetValues(type);
             var names = Enum.GetNames(type);
             int i, vl = values.Length;

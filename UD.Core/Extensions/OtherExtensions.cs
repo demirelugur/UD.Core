@@ -18,9 +18,7 @@
     using static UD.Core.Helper.OrtakTools;
     public static class OtherExtensions
     {
-        /// <summary>
-        /// Verilen e-Posta adresindeki &quot;@&quot; karakterini &quot;[at]&quot; ile değiştirir.
-        /// </summary>
+        /// <summary>Verilen e-Posta adresindeki &quot;@&quot; karakterini &quot;[at]&quot; ile değiştirir.</summary>
         /// <param name="mailAddress">MailAddress nesnesi.</param>
         /// <returns>Dönüştürülmüş e-Posta adresi.</returns>
         /// <exception cref="ArgumentNullException">Verilen e-Posta adresi null ise fırlatılır.</exception>
@@ -29,38 +27,33 @@
             Guard.CheckNull(mailAddress, nameof(mailAddress));
             return mailAddress.Address.Replace("@", "[at]");
         }
-        /// <summary>
-        /// Verilen validation bağlamında bir özelliğin gerekli olup olmadığını kontrol eder.
-        /// </summary>
+        /// <summary>Verilen validation bağlamında bir özelliğin gerekli olup olmadığını kontrol eder.</summary>
         /// <param name="validationContext">ValidationContext nesnesi.</param>
         /// <returns>Gerekli ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsRequiredAttribute(this ValidationContext validationContext)
         {
-            if (validationContext == null) { return false; }
+            Guard.CheckNull(validationContext, nameof(validationContext));
             var property = validationContext.ObjectInstance.GetType().GetProperty(validationContext.MemberName);
             if (property == null) { return false; }
             return Validators.TryCustomAttribute(property, out RequiredAttribute _);
         }
-        /// <summary>
-        /// Verilen doğrulama bağlamına göre, belirtilen özelliğin değerini günceller. Eğer özellik yazılabilir durumdaysa, yeni değer atanır.
-        /// </summary>
+        /// <summary>Verilen doğrulama bağlamına göre, belirtilen özelliğin değerini günceller. Eğer özellik yazılabilir durumdaysa, yeni değer atanır.</summary>
         /// <param name="validationContext">Doğrulama işlemi sırasında bağlam bilgilerini içeren nesne.</param>
         /// <param name="value">Güncellenmek istenen yeni değer.</param>
         /// <exception cref="ArgumentNullException">Eğer <paramref name="validationContext"/> null ise tetiklenir.</exception>
         public static void SetValidatePropertyValue(this ValidationContext validationContext, object value)
         {
-            if (validationContext == null) { return; }
+            Guard.CheckNull(validationContext, nameof(validationContext));
             var property = validationContext.ObjectType.GetProperty(validationContext.MemberName);
             if (property != null && property.CanWrite) { property.SetValue(validationContext.ObjectInstance, value); }
         }
-        /// <summary>
-        /// Verilen ifadenin adını alır.
-        /// </summary>
+        /// <summary>Verilen ifadenin adını alır.</summary>
         /// <param name="expression">İfade.</param>
         /// <returns>İfadenin adı.</returns>
         /// <exception cref="ArgumentException">İfade geçersiz ise fırlatılır.</exception>
         public static string GetExpressionName(this Expression expression)
         {
+            Guard.CheckNull(expression, nameof(expression));
             if (expression is LambdaExpression _lambda) { expression = _lambda.Body; }
             var result = "";
             if (expression is MemberExpression _me) { result = _me.Member.Name; }
@@ -76,9 +69,7 @@
             if (result.IsNullOrEmpty()) { throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression)); }
             return result;
         }
-        /// <summary>
-        /// Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.
-        /// </summary>
+        /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.</summary>
         /// <param name="type">Dönüştürülecek <see cref="SqlDbType"/> enum değeri.</param>
         /// <returns>SQL Server sistem tür kimliği (<c>[system_type_id]</c>) değeri</returns>
         /// <exception cref="NotSupportedException">Desteklenmeyen bir <see cref="SqlDbType"/> değeri verildiğinde fırlatılır.</exception>
@@ -118,9 +109,7 @@
                 _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>(),
             };
         }
-        /// <summary>
-        /// Verilen <see cref="SqlDbType"/> enum değerini, ADO.NET&#39;in genel veri türü olan <see cref="DbType"/>&#39;a dönüştürür. SQL Server&#39;a özgü veri türlerini platform bağımsız <see cref="DbType"/> türlerine çevirir.
-        /// </summary>
+        /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, ADO.NET&#39;in genel veri türü olan <see cref="DbType"/>&#39;a dönüştürür. SQL Server&#39;a özgü veri türlerini platform bağımsız <see cref="DbType"/> türlerine çevirir.</summary>
         /// <param name="type">Dönüştürülecek <see cref="SqlDbType"/> enum değeri.</param>
         /// <returns>Eşdeğer <see cref="DbType"/> enum değeri.</returns>
         /// <exception cref="NotSupportedException">Desteklenmeyen bir <see cref="SqlDbType"/> değeri verildiğinde fırlatılır.</exception>
@@ -153,9 +142,7 @@
                 _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>(),
             };
         }
-        /// <summary>
-        /// Verilen <see cref="DbType"/> enum değerini, SQL Server&#39;a özgü <see cref="SqlDbType"/> enum değerine dönüştürür. ADO.NET&#39;in genel veri türleri (<see cref="DbType"/>) ile SQL Server&#39;ın özel veri türleri (<see cref="SqlDbType"/>) arasında eşleme yapar.
-        /// </summary>
+        /// <summary>Verilen <see cref="DbType"/> enum değerini, SQL Server&#39;a özgü <see cref="SqlDbType"/> enum değerine dönüştürür. ADO.NET&#39;in genel veri türleri (<see cref="DbType"/>) ile SQL Server&#39;ın özel veri türleri (<see cref="SqlDbType"/>) arasında eşleme yapar.</summary>
         /// <param name="type">Dönüştürülecek <see cref="DbType"/> enum değeri.</param>
         /// <returns>Eşdeğer <see cref="SqlDbType"/> enum değeri.</returns>
         /// <exception cref="NotSupportedException">Desteklenmeyen bir <see cref="DbType"/> değeri verildiğinde fırlatılır.</exception>
@@ -187,9 +174,7 @@
                 _ => throw Utilities.ThrowNotSupportedForEnum<DbType>(),
             };
         }
-        /// <summary>
-        /// Bir <see cref="JToken"/> nesnesini belirtilen <typeparamref name="TKey"/> türündeki bir diziye dönüştürür. Eğer <see cref="JToken"/> null ise boş bir dizi döner, array türünde ise içindeki değerleri <typeparamref name="TKey"/> türüne çevirip dizi olarak döner. Diğer durumlarda bir istisna fırlatır.
-        /// </summary>
+        /// <summary>Bir <see cref="JToken"/> nesnesini belirtilen <typeparamref name="TKey"/> türündeki bir diziye dönüştürür. Eğer <see cref="JToken"/> null ise boş bir dizi döner, array türünde ise içindeki değerleri <typeparamref name="TKey"/> türüne çevirip dizi olarak döner. Diğer durumlarda bir istisna fırlatır.</summary>
         /// <typeparam name="TKey">Dönüştürülecek hedef veri türü.</typeparam>
         /// <param name="jToken">Dönüştürülecek <see cref="JToken"/> nesnesi.</param>
         /// <returns><typeparamref name="TKey"/> türünden bir dizi.</returns>
@@ -200,9 +185,7 @@
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
             throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
-        /// <summary>
-        /// <see cref="QueryString"/> içindeki belirtilen anahtarı alır ve uygun türde bir değere dönüştürür. Eğer anahtar bulunamazsa veya dönüştürme başarısız olursa, varsayılan değeri döner.
-        /// </summary>
+        /// <summary><see cref="QueryString"/> içindeki belirtilen anahtarı alır ve uygun türde bir değere dönüştürür. Eğer anahtar bulunamazsa veya dönüştürme başarısız olursa, varsayılan değeri döner.</summary>
         /// <typeparam name="TKey">Dönüştürülecek hedef tür.</typeparam>
         /// <param name="queryString">İçinde sorgu parametrelerini barındıran <see cref="QueryString"/> nesnesi.</param>
         /// <param name="key">Alınacak sorgu parametresinin adı (anahtar).</param>
@@ -214,16 +197,15 @@
             if (querydic.AllKeys.Contains(key)) { return querydic[key].ParseOrDefault<TKey>(); }
             return default;
         }
-        /// <summary>
-        /// Belirtilen sütun adını kullanarak <see cref="IDataReader"/> içinden değeri okur ve verilen türde (<typeparamref name="TKey"/>) döndürür. Eğer sütun değeri <c>null</c>, <see cref="DBNull"/> ya da dönüştürülemeyen bir değer içeriyorsa, türün varsayılan değerini (<c>default</c>) geri döner.
-        /// </summary>
+        /// <summary>Belirtilen sütun adını kullanarak <see cref="IDataReader"/> içinden değeri okur ve verilen türde (<typeparamref name="TKey"/>) döndürür. Eğer sütun değeri <c>null</c>, <see cref="DBNull"/> ya da dönüştürülemeyen bir değer içeriyorsa, türün varsayılan değerini (<c>default</c>) geri döner.</summary>
         /// <typeparam name="TKey">Dönüştürülmek istenen hedef tür.</typeparam>
         /// <param name="reader">Veri kaynağından okuma yapan <see cref="IDataReader"/> nesnesi.</param>
         /// <param name="key">Okunacak sütunun adı.</param>
         /// <returns>Sütun değeri başarıyla dönüştürülebilirse <typeparamref name="TKey"/> tipinde değer, aksi durumda varsayılan değer döner.</returns>
         public static TKey ParseOrDefault<TKey>(this IDataReader reader, string key)
         {
-            if (reader == null || key.IsNullOrEmpty()) { return default; }
+            Guard.CheckNull(reader, nameof(reader));
+            Guard.CheckEmpty(key, nameof(key));
             try
             {
                 var value = reader[key];
@@ -237,17 +219,16 @@
         /// <returns>Durdurulduktan sonra geçen süre.</returns>
         public static TimeSpan StopThenGetElapsed(this Stopwatch stopWatch)
         {
+            Guard.CheckNull(stopWatch, nameof(stopWatch));
             stopWatch.Stop();
             return stopWatch.Elapsed;
         }
-        /// <summary>
-        /// Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DescriptionAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.
-        /// </summary>
+        /// <summary>Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DescriptionAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.</summary>
         /// <param name="memberInfo">Üzerinde <see cref="DescriptionAttribute"/> aranacak üye bilgisi (sınıf, property, metod vb.).</param>
         /// <returns><see cref="DescriptionAttribute"/> içindeki açıklama metni, yoksa boş string (&quot;&quot;).</returns>
         public static string GetDescription(this MemberInfo memberInfo)
         {
-            if (memberInfo == null) { return ""; }
+            Guard.CheckNull(memberInfo, nameof(memberInfo));
             try
             {
                 var attr = memberInfo.GetCustomAttribute<DescriptionAttribute>();
@@ -255,13 +236,14 @@
             }
             catch { return ""; }
         }
-        /// <summary> Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
+        /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
         /// <param name="services">Bağımlılık enjeksiyon konteyneri</param>
         /// <param name="assembly">Repository sınıflarının bulunduğu assembly</param>
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
-            var types = (assembly == null ? [] : assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,,>))).ToArray());
+            Guard.CheckNull(assembly, nameof(assembly));
+            var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,,>))).ToArray();
             foreach (var implementation in types)
             {
                 var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeof(IBaseService<,,,,>))).ToArray();

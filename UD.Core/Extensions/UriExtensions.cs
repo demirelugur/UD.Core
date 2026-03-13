@@ -22,13 +22,17 @@
         /// </summary>
         /// <param name="uri">Kontrol edilecek URI.</param>
         /// <returns>URI bir YouTube gömme bağlantısı ise <see langword="true"/>, aksi halde <see langword="false"/> döner.</returns>
-        public static bool IsYouTubeEmbedLink(this Uri uri) => (uri != null && uri.Host.Contains("youtube.com") && uri.AbsolutePath.StartsWith("/embed/"));
+        public static bool IsYouTubeEmbedLink(this Uri uri)
+        {
+            Guard.CheckNull(uri, nameof(uri));
+            return (uri.Host.Contains("youtube.com") && uri.AbsolutePath.StartsWith("/embed/"));
+        }
         /// <summary>
         /// Verilen URI&#39;nin bağlantı durumunu kontrol eder.
         /// </summary>
         public static async Task<(bool hasError, Uri requestUri)> IsConnectionStatus(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
-            if (uri == null) { return (true, default); }
+            Guard.CheckNull(uri, nameof(uri));
             using (var client = new HttpClient
             {
                 Timeout = timeSpan

@@ -5,6 +5,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using UD.Core.Helper.Results;
+    using UD.Core.Helper.Validation;
+
     public static class CollectionExtensions
     {
         #region IDictionary
@@ -42,11 +44,9 @@
         /// </returns>
         public static TKey ParseOrDefault<TKey>(this IDictionary<string, string> dictionary, string key)
         {
-            if (!key.IsNullOrEmpty())
-            {
-                dictionary ??= new Dictionary<string, string>();
-                if (dictionary.TryGetValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
-            }
+            Guard.CheckEmpty(key, nameof(key));
+            dictionary ??= new Dictionary<string, string>();
+            if (dictionary.TryGetValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
             return default;
         }
         /// <summary>
@@ -61,7 +61,11 @@
         /// </remarks>
         public static void AddModelErrorRange(this ModelStateDictionary modelstate, IEnumerable<string> errors)
         {
-            if (errors != null) { foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("", item); } }
+            if (errors != null)
+            {
+                Guard.CheckNull(modelstate, nameof(modelstate));
+                foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("", item); }
+            }
         }
         #endregion
         #region IEnumerable
@@ -106,7 +110,7 @@
         public static ICollection<T> Shuffle<T>(this IEnumerable<T> source)
         {
             T temp;
-            var r = source.ToList();
+            var r = (source == null ? [] : source.ToList());
             int i, j, _count = (r.Count - 1);
             for (i = _count; i > 0; i--)
             {
@@ -149,7 +153,7 @@
         /// <param name="other">Eklenecek öğeleri içeren diğer koleksiyon.</param>
         public static void AddRangeOptimized<T>(this ICollection<T> initial, IEnumerable<T> other)
         {
-            if (other != null && other.Any())
+            if (initial != null && other != null && other.Any())
             {
                 if (initial is List<T> _l) { _l.AddRange(other); }
                 else { foreach (var l in other) { initial.Add(l); } }
@@ -165,7 +169,7 @@
         public static Exception ToNestedException(this string[] errors)
         {
             errors = (errors ?? []).Reverse().ToArray();
-            if (errors.Length == 0) { return new(); }
+            Guard.CheckEmptyOrCountZero(errors, nameof(errors));
             Exception ex = null;
             var i = errors.Length - 1;
             while (i >= 0)

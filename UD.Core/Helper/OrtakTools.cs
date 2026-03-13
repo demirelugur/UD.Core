@@ -72,7 +72,7 @@
             public static int GetStringOrMaxLength<T>(Expression<Func<T, string>> expression) where T : class => GetStringOrMaxLength<T>(expression.GetExpressionName());
             /// <summary>
             /// Verilen string dizisinden kısaltma oluşturur. Her bir kelimenin baş harfini alarak noktalarla ayrılmış bir kısaltma döner. Boş veya null değerler atlanır.
-            /// <example>Örnek: <br />Uğur DEMİREL -> U.D <br />Mustafa Kemal ATATÜRK -> MK.A</example>
+            /// <example><br />Örnek: <br />Uğur DEMİREL -> U.D <br />Mustafa Kemal ATATÜRK -> MK.A</example>
             /// </summary>
             /// <param name="names">Kısaltma için kullanılacak isim dizisi.</param>
             /// <returns>Verilen isimlerin baş harflerinden oluşan kısaltma. Eğer parametreler boş veya geçersizse boş string döner.</returns>
@@ -172,6 +172,7 @@
             /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
             public static byte[] GenerateRandomKey(int length)
             {
+                Guard.CheckZeroOrNegative(length, nameof(length));
                 using (var rng = RandomNumberGenerator.Create())
                 {
                     var byteArray = new byte[length];
@@ -497,9 +498,7 @@
             /// <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code>
             /// </summary>
             public static TransactionScope TransactionScopeAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
-            /// <summary>
-            /// Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.
-            /// </summary>
+            /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
             /// <param name="value">Dönüştürülecek değer</param>
             /// <param name="type">Dönüştürülecek hedef tür</param>
             /// <returns>Dönüştürülmüş değer</returns>
@@ -510,6 +509,11 @@
                 if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
                 return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericBaseType);
             }
+            /// <summary><paramref name="value"/> değerini <typeparamref name="T"/> türüne dönüştürür.</summary>
+            /// <typeparam name="T">Dönüştürülecek hedef tür</typeparam>
+            /// <param name="value">Dönüştürülecek değer</param>
+            /// <returns><typeparamref name="T"/> türüne dönüştürülmüş değer</returns>
+            public static T ChangeType<T>(object value) => (T)ChangeType(value, typeof(T));
             /// <summary>
             /// Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.
             /// </summary>
@@ -723,7 +727,7 @@
             {
                 try
                 {
-                    outvalue = (type == null ? [] : type.GetProperties()).Where(x => x.IsPK()).ToArray();
+                    outvalue = (type == null ? [] : type.GetProperties().Where(x => x.IsPK()).ToArray());
                     return outvalue.Length > 0;
                 }
                 catch
