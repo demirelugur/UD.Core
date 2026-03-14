@@ -2,6 +2,8 @@
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Primitives;
+    using UD.Core.Helper.Validation;
+
     public static class FormCollectionExtensions
     {
         /// <summary>Belirtilen anahtar ile form verilerinden bir değeri alır ve belirtilen türde bir nesneye dönüştürür.</summary>
@@ -22,6 +24,7 @@
         public static bool TryGetStringValue(this IFormCollection form, string key, out string outvalue)
         {
             form ??= FormCollection.Empty;
+            Guard.ThrowIfEmpty(key, nameof(key));
             var r = form.TryGetValue(key, out StringValues _sv);
             if (r)
             {
@@ -36,24 +39,17 @@
         /// <param name="form">Değerin aranacağı IFormCollection nesnesi.</param>
         /// <param name="key">Hedef değerin anahtarı. Anahtarın &quot;[]&quot; ile bitmesi beklenir, aksi takdirde otomatik olarak eklenir.</param>
         /// <param name="outvalues">Belirtilen türdeki değerleri içeren çıktı dizisi. Anahtar bulunamazsa boş bir dizi döner.</param>
-        /// <returns>
-        /// Anahtar bulunduğunda ve değerler belirtilen türe dönüştürüldüğünde <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.
-        /// </returns>
-        /// <remarks>
-        /// Bu metot, bir form verisindeki (IFormCollection) belirli bir anahtara karşılık gelen değerleri belirtilen türe dönüştürerek bir dizi olarak döndürmek için kullanılır. Eğer anahtar &quot;[]&quot; ile bitmiyorsa, otomatik olarak eklenir. Dönüştürme sırasında hata oluşursa, varsayılan değerler kullanılır.
-        /// </remarks>
+        /// <returns>Anahtar bulunduğunda ve değerler belirtilen türe dönüştürüldüğünde <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</returns>
+        /// <remarks>Bu metot, bir form verisindeki (IFormCollection) belirli bir anahtara karşılık gelen değerleri belirtilen türe dönüştürerek bir dizi olarak döndürmek için kullanılır. Eğer anahtar &quot;[]&quot; ile bitmiyorsa, otomatik olarak eklenir. Dönüştürme sırasında hata oluşursa, varsayılan değerler kullanılır.</remarks>
         public static bool TryGetArrayValue<TKey>(this IFormCollection form, string key, out TKey[] outvalues)
         {
-            key = key.ToStringOrEmpty();
-            if (key != "")
+            Guard.ThrowIfEmpty(key, nameof(key));
+            if (!key.EndsWith("[]")) { key = String.Concat(key, "[]"); }
+            form ??= FormCollection.Empty;
+            if (form.TryGetValue(key, out StringValues _sv))
             {
-                if (!key.EndsWith("[]")) { key = String.Concat(key, "[]"); }
-                form ??= FormCollection.Empty;
-                if (form.TryGetValue(key, out StringValues _sv))
-                {
-                    outvalues = _sv.Select(x => x.ParseOrDefault<TKey>()).ToArray();
-                    return true;
-                }
+                outvalues = _sv.Select(x => x.ParseOrDefault<TKey>()).ToArray();
+                return true;
             }
             outvalues = [];
             return false;

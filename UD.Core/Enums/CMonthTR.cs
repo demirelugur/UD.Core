@@ -36,7 +36,7 @@
         }
         public static string GetDescriptionLocalizationValue(MonthTR value, string dil)
         {
-            Guard.UnSupportLanguage(dil, nameof(dil));
+            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
             if (dil == "en")
             {
                 return value switch

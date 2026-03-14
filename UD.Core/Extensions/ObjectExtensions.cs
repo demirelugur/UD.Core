@@ -8,7 +8,7 @@
     using UD.Core.Helper.Validation;
     public static class ObjectExtensions
     {
-        /// <summary> Nesneyi string değere dönüştürür. Nesne null ise boş string döndürür.</summary>
+        /// <summary>Nesneyi string değere dönüştürür. Nesne null ise boş string döndürür.</summary>
         /// <param name="value">String&#39;e dönüştürülecek nesne</param>
         /// <param name="provider">Kültüre özgü biçimlendirme bilgisi sağlayan nesne (opsiyonel)</param>
         /// <returns>Nesnenin string değeri (baş ve sondaki boşluklar kırpılmış) veya nesne null ise boş string</returns>
@@ -74,14 +74,14 @@
         public static decimal ToDecimal(this object value, decimal defaultValue = Decimal.Zero)
         {
             if (value == null) { return defaultValue; }
-            return Convert.ToString(value, CultureInfo.InvariantCulture).ParseOrDefault<decimal?>() ?? defaultValue;
+            return value.ToStringOrEmpty(CultureInfo.InvariantCulture).ParseOrDefault<decimal?>() ?? defaultValue;
         }
         /// <summary>Bir nesneyi dinamik bir nesneye (<see cref="ExpandoObject"/>) dönüştürür. Dönüştürülen nesne, içindeki tüm özellik adları ve değerleriyle birlikte dinamik bir yapı sunar.</summary>
         /// <param name="value">Dönüştürülecek nesne.</param>
         /// <returns>Dinamik bir nesne olarak temsil edilen <see cref="ExpandoObject"/>.</returns>
         public static dynamic ToDynamic(this object value)
         {
-            Guard.CheckNull(value, nameof(value));
+            Guard.ThrowIfNull(value, nameof(value));
             IDictionary<string, object> e = new ExpandoObject();
             foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType())) { e.Add(property.Name, property.GetValue(value)); }
             return e as ExpandoObject;

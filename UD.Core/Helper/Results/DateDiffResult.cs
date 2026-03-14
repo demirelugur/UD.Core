@@ -36,9 +36,9 @@
         }
         public string FormatDateDifference(string p0 = "yıl", string p1 = "ay", string p2 = "gün")
         {
-            Guard.CheckEmpty(p0, nameof(p0));
-            Guard.CheckEmpty(p1, nameof(p1));
-            Guard.CheckEmpty(p2, nameof(p2));
+            Guard.ThrowIfEmpty(p0, nameof(p0));
+            Guard.ThrowIfEmpty(p1, nameof(p1));
+            Guard.ThrowIfEmpty(p2, nameof(p2));
             var r = new List<string>();
             var (yil, ay, gun, _) = this.CalculateDateDifference();
             if (yil > 0) { r.Add(String.Join(" ", yil.ToString(), p0)); }

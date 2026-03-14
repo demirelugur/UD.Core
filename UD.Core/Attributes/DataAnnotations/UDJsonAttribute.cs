@@ -32,7 +32,8 @@
                     return ValidationResult.Success;
                 }
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, JSON biçimine ({this.jTokenType:g}) uygun olmalıdır!"), [validationContext.MemberName]);
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, JSON biçimine ({this.jTokenType:g}) uygun olmalıdır!"; }
+            return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }
 }

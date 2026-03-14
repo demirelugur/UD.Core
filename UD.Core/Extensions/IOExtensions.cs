@@ -19,8 +19,8 @@
         /// <summary>Verilen byte dizisini belirtilen fiziksel yola asenkron olarak yükler.</summary>
         public static async Task FileUpload(this byte[] bytes, string physicallyPath, CancellationToken cancellationToken = default)
         {
-            Guard.CheckEmptyOrCountZero(bytes, nameof(bytes));
-            Guard.CheckEmpty(physicallyPath, nameof(physicallyPath));
+            Guard.ThrowIfEmpty(bytes, nameof(bytes));
+            Guard.ThrowIfEmpty(physicallyPath, nameof(physicallyPath));
             Files.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
             using (var fs = new FileStream(physicallyPath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true))
             {
@@ -56,8 +56,8 @@
         /// <summary>Verilen IFormFile nesnesini belirtilen fiziksel yola asenkron olarak yükler.</summary>
         public static async Task FileUpload(this IFormFile file, string physicallyPath, CancellationToken cancellationToken = default)
         {
-            Guard.CheckNull(file, nameof(file));
-            Guard.CheckEmpty(physicallyPath, nameof(physicallyPath));
+            Guard.ThrowIfNull(file, nameof(file));
+            Guard.ThrowIfEmpty(physicallyPath, nameof(physicallyPath));
             Files.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
             using (var fs = new FileStream(physicallyPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
             {
@@ -67,7 +67,7 @@
         /// <summary>Bir IFormFile nesnesini byte dizisine dönüştürür.</summary>
         public static async Task<byte[]> ToByteArray(this IFormFile file, CancellationToken cancellationToken = default)
         {
-            Guard.CheckNull(file, nameof(file));
+            Guard.ThrowIfNull(file, nameof(file));
             using (var ms = new MemoryStream())
             {
                 await file.CopyToAsync(ms, cancellationToken);
@@ -82,8 +82,8 @@
         /// <returns>Görüntünün bayt dizisi temsilini döndürür.</returns>
         public static byte[] ToByteArray(this Image image, ImageFormat imageFormat)
         {
-            Guard.CheckNull(image, nameof(image));
-            Guard.CheckNull(imageFormat, nameof(imageFormat));
+            Guard.ThrowIfNull(image, nameof(image));
+            Guard.ThrowIfNull(imageFormat, nameof(imageFormat));
             using (var ms = new MemoryStream())
             {
                 image.Save(ms, imageFormat);
@@ -98,7 +98,7 @@
         /// <remarks>Kullandığı yerde Dispose edilmelidir!</remarks>
         public static Bitmap Resize(this Image image, Size size)
         {
-            Guard.CheckNull(image, nameof(image));
+            Guard.ThrowIfNull(image, nameof(image));
             if (size.IsEmpty) { throw new ArgumentException($"{nameof(size)} parametresi geçerli olmalıdır!", nameof(size)); }
             var bm = new Bitmap(size.Width, size.Height); // Not: using kullanılırsa bitmap değerleri iletilmemekte
             using (var g = Graphics.FromImage(bm))
@@ -116,7 +116,7 @@
         /// <returns>En boy oranı korunarak hesaplanan yeni yükseklik değeri (piksel cinsinden).</returns>
         public static int CalculateHeight(this Image image, int width)
         {
-            Guard.CheckNull(image, nameof(image));
+            Guard.ThrowIfNull(image, nameof(image));
             return Convert.ToInt32(image.Height * (Convert.ToSingle(width) / image.Width));
         }
         /// <summary>Verilen yeni yükseklik(height) değerine göre resmin genişliğini(width), en boy oranını koruyarak hesaplar.</summary>
@@ -125,7 +125,7 @@
         /// <returns>En boy oranı korunarak hesaplanan yeni genişlik değeri (piksel cinsinden).</returns>
         public static int CalculateWidth(this Image image, int height)
         {
-            Guard.CheckNull(image, nameof(image));
+            Guard.ThrowIfNull(image, nameof(image));
             return Convert.ToInt32(image.Width * (Convert.ToSingle(height) / image.Height));
         }
         #endregion
@@ -135,8 +135,8 @@
         /// <param name="target">Hedef dizini temsil eden DirectoryInfo nesnesi.</param>
         public static void CopyAll(this DirectoryInfo source, DirectoryInfo target)
         {
-            Guard.CheckNull(source, nameof(source));
-            Guard.CheckNull(target, nameof(target));
+            Guard.ThrowIfNull(source, nameof(source));
+            Guard.ThrowIfNull(target, nameof(target));
             Files.DirectoryCreate(target.FullName);
             foreach (var item in source.GetFiles()) { item.CopyTo(Path.Combine(target.FullName, item.Name), true); }
             foreach (var item in source.GetDirectories()) { item.CopyAll(target.CreateSubdirectory(item.Name)); }

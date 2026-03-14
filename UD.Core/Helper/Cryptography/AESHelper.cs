@@ -60,9 +60,9 @@
         #endregion
         public static string Encrypt(string value, string key, string iv)
         {
-            Guard.CheckEmpty(value, nameof(value));
-            Guard.CheckEmpty(key, nameof(key));
-            Guard.CheckEmpty(iv, nameof(iv));
+            Guard.ThrowIfEmpty(value, nameof(value));
+            Guard.ThrowIfEmpty(key, nameof(key));
+            Guard.ThrowIfEmpty(iv, nameof(iv));
             using (var aes = Aes.Create())
             {
                 aes.Key = generateKey(key, keyRequiredLength);
@@ -72,9 +72,9 @@
         }
         public static string Decrypt(string encryptedValue, string key, string iv)
         {
-            Guard.CheckEmpty(encryptedValue, nameof(encryptedValue));
-            Guard.CheckEmpty(key, nameof(key));
-            Guard.CheckEmpty(iv, nameof(iv));
+            Guard.ThrowIfEmpty(encryptedValue, nameof(encryptedValue));
+            Guard.ThrowIfEmpty(key, nameof(key));
+            Guard.ThrowIfEmpty(iv, nameof(iv));
             return decryptProcess(Convert.FromBase64String(encryptedValue), generateKey(key, keyRequiredLength), generateKey(iv, ivRequiredLength));
         }
         public static string ObfuscatorEncrypt(string value)
@@ -101,7 +101,7 @@
         }
         public static string ObfuscatorDecrypt(string encryptedValue)
         {
-            Guard.CheckEmpty(encryptedValue, nameof(encryptedValue));
+            Guard.ThrowIfEmpty(encryptedValue, nameof(encryptedValue));
             encryptedValue = Converters.ToReverse(encryptedValue);
             var firstChar = encryptedValue[0];
             var combinedBytes = Convert.FromBase64String(String.Concat(firstChar.ToString(), Utilities.CaesarCipherOperation(encryptedValue.Substring(1), -1 * Convert.ToInt32(firstChar))));

@@ -4,6 +4,8 @@
     using static UD.Core.Helper.GlobalConstants;
     public static class DateExtensions
     {
+        /// <summary>Hafta içi günlerini (Pazartesi, Salı, Çarşamba, Perşembe, Cuma) kontrol eder. Eğer belirtilen <see cref="DayOfWeek"/> değeri bu günlerden biri ise <c>true</c>, aksi halde <c>false</c> döner.</summary>
+        public static bool IsWeekDays(this DayOfWeek dayOfWeek) => dayOfWeek.Includes(DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday);
         /// <summary>Belirtilen <see cref="DateTime"/> nesnesini yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesine dönüştürür.</summary>
         /// <param name="dateTime">Dönüştürülecek <see cref="DateTime"/> nesnesi.</param>
         /// <returns>Yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesi.</returns>

@@ -90,7 +90,7 @@
             /// <exception cref="NotSupportedException">Eğer dil desteklenmiyorsa hata fırlatılır</exception>
             public static CultureInfo GetCultureInfo(string dil)
             {
-                Guard.UnSupportLanguage(dil, nameof(dil));
+                Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
                 if (dil == "en") { return new("en-US"); }
                 return new("tr-TR");
             }
@@ -172,7 +172,7 @@
             /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
             public static byte[] GenerateRandomKey(int length)
             {
-                Guard.CheckZeroOrNegative(length, nameof(length));
+                Guard.ThrowIfZeroOrNegative(length, nameof(length));
                 using (var rng = RandomNumberGenerator.Create())
                 {
                     var byteArray = new byte[length];
@@ -205,7 +205,7 @@
                 if (cs == "") { return ""; }
                 if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
                 if (!kimlikTipi.HasValue) { return cs; }
-                Guard.UnSupportLanguage(dil, nameof(dil));
+                Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
                 string t = kimlikTipi.Value switch
                 {
                     NVIKimlikTypes.yeni => (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"),
@@ -381,8 +381,8 @@
             /// <exception cref="FileNotFoundException">Belirtilen dosya yolu mevcut değilse fırlatılır.</exception>
             public static async Task<FormFile> ToIFormFileFromPath(string filePath, string name = "file", HeaderDictionary? headerDictionary = null, CancellationToken cancellationToken = default)
             {
-                Guard.CheckEmpty(filePath, nameof(filePath));
-                Guard.CheckEmpty(name, nameof(name));
+                Guard.ThrowIfEmpty(filePath, nameof(filePath));
+                Guard.ThrowIfEmpty(name, nameof(name));
                 if (!File.Exists(filePath)) { throw new FileNotFoundException("Belirtilen dosya bulunamadı!", filePath); }
                 var ms = new MemoryStream();
                 using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
@@ -446,7 +446,7 @@
             /// <exception cref="ArgumentException">Desteklenmeyen dil belirtildiğinde fırlatılır.</exception>
             public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string dataUri, string dil)
             {
-                Guard.UnSupportLanguage(dil, nameof(dil));
+                Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
                 dataUri = dataUri.ToStringOrEmpty();
                 if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(dil == "en" ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
                 var parts = dataUri.Substring(5).Split([";base64,"], StringSplitOptions.None);
@@ -542,13 +542,13 @@
             /// <exception cref="ArgumentNullException"><paramref name="value"/> veya <paramref name="propertyName"/> null ise fırlatılır.</exception>
             public static void SetPropertyValue(object value, string propertyName, object data, string dil)
             {
-                Guard.CheckNull(value, nameof(value));
-                Guard.CheckEmpty(propertyName, nameof(propertyName));
-                Guard.UnSupportLanguage(dil, nameof(dil));
+                Guard.ThrowIfNull(value, nameof(value));
+                Guard.ThrowIfEmpty(propertyName, nameof(propertyName));
+                Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
                 var type = value.GetType();
                 if (!type.IsCustomClass()) { throw new ArgumentException(dil == "en" ? $"The \"{nameof(value)}\" argument type must be class!" : $"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value)); }
                 var pi = type.GetProperty(propertyName);
-                Guard.CheckNull(pi, nameof(pi));
+                Guard.ThrowIfNull(pi, nameof(pi));
                 if (!pi.CanWrite) { throw new InvalidOperationException(dil == "en" ? $"The \"{nameof(propertyName)}\" property is not writable!" : $"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
                 pi.SetValue(value, data == null ? null : Converters.ChangeType(data, pi.PropertyType));
             }
@@ -855,8 +855,8 @@
             {
                 value = value.ToStringOrEmpty();
                 if (value == "") { return (false, "", null); }
-                Guard.CheckEmpty(to, nameof(to));
-                Guard.CheckEmpty(from, nameof(from));
+                Guard.ThrowIfEmpty(to, nameof(to));
+                Guard.ThrowIfEmpty(from, nameof(from));
                 try
                 {
                     using (var client = new HttpClient

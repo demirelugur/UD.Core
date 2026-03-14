@@ -13,10 +13,10 @@
         public (double totalHours, int minutes, int seconds, int milliseconds) DecomposeTimeSpan => (Math.Truncate(timeSpan.TotalHours), timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
         public string FormatTimeSpan(string p0 = "sn.", string p1 = "dk.", string p2 = "saat")
         {
-            Guard.CheckEmpty(p0, nameof(p0));
+            Guard.ThrowIfEmpty(p0, nameof(p0));
             if (this.timeSpan == TimeSpan.Zero) { return $"0 {p0}"; }
-            Guard.CheckEmpty(p1, nameof(p1));
-            Guard.CheckEmpty(p2, nameof(p2));
+            Guard.ThrowIfEmpty(p1, nameof(p1));
+            Guard.ThrowIfEmpty(p2, nameof(p2));
             var (totalHours, minutes, seconds, milliseconds) = this.DecomposeTimeSpan;
             var r = new List<string>();
             if (totalHours != 0) { r.Add(String.Join(" ", Math.Abs(totalHours).ToString(), p2)); }

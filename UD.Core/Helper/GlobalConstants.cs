@@ -39,11 +39,7 @@
         public sealed class OtherConstants
         {
             public const string Example = "https://example.com";
-            /// <summary>
-            /// <code>
-            /// new(){MetadataPropertyHandling=MetadataPropertyHandling.Ignore,DateParseHandling=DateParseHandling.None,NullValueHandling=NullValueHandling.Include,Converters={new IsoDateTimeConverter{DateTimeStyles=DateTimeStyles.AssumeUniversal},new StringEnumConverter()}};
-            /// </code>
-            /// </summary>
+            /// <summary><code>new(){MetadataPropertyHandling=MetadataPropertyHandling.Ignore,DateParseHandling=DateParseHandling.None,NullValueHandling=NullValueHandling.Include,Converters={new IsoDateTimeConverter{DateTimeStyles=DateTimeStyles.AssumeUniversal},new StringEnumConverter()}};</code></summary>
             public static readonly JsonSerializerSettings JsonSerializerSettings = new()
             {
                 MetadataPropertyHandling = MetadataPropertyHandling.Ignore,

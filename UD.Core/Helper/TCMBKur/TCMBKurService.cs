@@ -6,7 +6,6 @@ namespace UD.Core.Helper.TCMBKur
     using System.Text;
     using System.Xml.Linq;
     using UD.Core.Extensions;
-    using static UD.Core.Enums.CDayOfWeekTR;
     public interface ITCMBKurService // AddSingleton
     {
         Task<TCMBKurResponse> Get(TCMBKurCodeTypes type, DateOnly? date = null, CancellationToken cancellationToken = default);
@@ -41,7 +40,7 @@ namespace UD.Core.Helper.TCMBKur
         public async Task<TCMBKurResponse> Get(TCMBKurCodeTypes type, DateOnly? date = null, CancellationToken cancellationToken = default)
         {
             var dateTime = (date.HasValue ? date.Value.ToDateTime(default) : DateTime.Today);
-            if (IsWeekDays((DayOfWeekTR)dateTime.DayOfWeek)) { return this.GetRate(await this.GetXml(dateTime, cancellationToken), type.ToString("g")); }
+            if (dateTime.DayOfWeek.IsWeekDays()) { return this.GetRate(await this.GetXml(dateTime, cancellationToken), type.ToString("g")); }
             return new();
         }
         public Task<TCMBKurResponse> GetUSD(DateOnly? date = null, CancellationToken cancellationToken = default) => this.Get(TCMBKurCodeTypes.USD, date, cancellationToken);

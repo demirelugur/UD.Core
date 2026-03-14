@@ -67,7 +67,7 @@
             }
             fileSettingsHelper ??= new();
             if (Validators.TryValidateObject(fileSettingsHelper, out errors)) { return false; }
-            Guard.UnSupportLanguage(dil, nameof(dil));
+            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
             try
             {
                 var filesArray = files.Select(file => new

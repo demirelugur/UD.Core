@@ -18,7 +18,7 @@
         Task<TEntityDto?> GetById(TKey id, CancellationToken cancellationToken = default);
         Task<TKey> Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task Update(TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task DeleteById(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteByIds(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default);
     }
     public abstract class BaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
@@ -58,7 +58,7 @@
                 if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
             }
         }
-        public virtual async Task DeleteById(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteByIds(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (ids != null)
             {

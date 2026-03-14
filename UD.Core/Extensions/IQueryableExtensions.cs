@@ -57,7 +57,7 @@
         {
             var i = 0;
             string r, textSeo = text.ToSeoFriendly();
-            Guard.CheckEmpty(textSeo, nameof(textSeo));
+            Guard.ThrowIfEmpty(textSeo, nameof(textSeo));
             while (true)
             {
                 r = (i == 0 ? textSeo : String.Join("-", textSeo, i.ToString()));
@@ -65,11 +65,11 @@
                 i++;
             }
             if (r.Length <= maxLength) { return r; }
-            Guard.UnSupportLanguage(dil, nameof(dil));
+            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
             if (dil == "en") { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
             throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxLength} karakterlik maksimum uzunluğu aşıyor!");
         }
-        /// <summary> IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>
+        /// <summary>IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>
         /// <typeparam name="T">Sorgu sonucundaki öğelerin tipi.</typeparam>
         /// <param name="source">Sayfalanacak IQueryable veri kaynağı.</param>
         /// <param name="pageNumber">İstenen sayfa numarası. (1 tabanlı)</param>

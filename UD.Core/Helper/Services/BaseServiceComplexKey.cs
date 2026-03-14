@@ -5,6 +5,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
+    using UD.Core.Helper.Validation;
     public interface IBaseServiceComplexKey<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class, IBaseEntity
@@ -37,7 +38,7 @@
         }
         public virtual async Task Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(insertDto);
+            Guard.ThrowIfNull(insertDto, nameof(insertDto));
             var entity = this.Mapper.Map<TEntity>(insertDto);
             await this.DbSet.AddAsync(entity, cancellationToken);
             if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
@@ -46,7 +47,7 @@
         {
             if (!keyValues.IsNullOrCountZero())
             {
-                ArgumentNullException.ThrowIfNull(updateDto);
+                Guard.ThrowIfNull(updateDto, nameof(updateDto));
                 var entity = await this.DbSet.FindAsync(keyValues, cancellationToken);
                 if (entity != null)
                 {

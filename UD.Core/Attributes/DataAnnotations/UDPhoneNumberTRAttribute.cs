@@ -20,7 +20,8 @@
                 validationContext.SetValidatePropertyValue(_phonetr);
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, (xxx) xxx-xxxx biçimine uygun telefon numarası olmalıdır!"), [validationContext.MemberName]);
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, (xxx) xxx-xxxx biçimine uygun telefon numarası olmalıdır!"; }
+            return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }
 }

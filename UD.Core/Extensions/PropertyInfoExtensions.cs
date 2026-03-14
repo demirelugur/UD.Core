@@ -13,7 +13,7 @@
         /// <returns>Haritalanmış bir özellik ise <see langword="true"/>, değilse false <see langword="false"/>.</returns>
         public static bool IsMapped(this PropertyInfo propertyInfo)
         {
-            Guard.CheckNull(propertyInfo, nameof(propertyInfo));
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
             if (!propertyInfo.CanRead || !propertyInfo.CanWrite || propertyInfo.IsNotMapped()) { return false; }
             if ((propertyInfo.GetMethod.IsVirtual || propertyInfo.SetMethod.IsVirtual) && (propertyInfo.PropertyType.IsMappedTable() || (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) && propertyInfo.PropertyType.GenericTypeArguments[0].IsMappedTable()))) { return false; }
             return true;
@@ -23,7 +23,7 @@
         /// <returns>Özellik birincil anahtarsa <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsPK(this PropertyInfo propertyInfo)
         {
-            Guard.CheckNull(propertyInfo, nameof(propertyInfo));
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
             return Validators.TryCustomAttribute(propertyInfo, out KeyAttribute _);
         }
         /// <summary>Verilen <see cref="PropertyInfo"/> nesnesinin <see cref="NotMappedAttribute"/> ile işaretlenip işaretlenmediğini kontrol eder.</summary>
@@ -32,7 +32,7 @@
         /// <remarks>Bu metot, Entity Framework veya benzeri ORM yapılarında, bir özelliğin veritabanına eşlenip eşlenmediğini hızlıca kontrol etmek için kullanılabilir.</remarks>
         public static bool IsNotMapped(this PropertyInfo propertyInfo)
         {
-            Guard.CheckNull(propertyInfo, nameof(propertyInfo));
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
             return Validators.TryCustomAttribute(propertyInfo, out NotMappedAttribute _);
         }
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) veritabanındaki sütun adını döndürür. Özellik <see cref="ColumnAttribute"/> ile işaretlenmişse, bu özniteliğin belirttiği sütun adını; aksi takdirde özelliğin adını döndürür.</summary>
@@ -40,7 +40,7 @@
         /// <returns>Özelliğin veritabanındaki sütun adı veya özellik adı.</returns>
         public static string GetColumnName(this PropertyInfo propertyInfo)
         {
-            Guard.CheckNull(propertyInfo, nameof(propertyInfo));
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
             return Validators.TryCustomAttribute(propertyInfo, out ColumnAttribute _ca) ? _ca.Name : propertyInfo.Name;
         }
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) veritabanında nasıl oluşturulduğunu belirten <see cref="DatabaseGeneratedOption"/> değerini döndürür. Özellik <see cref="DatabaseGeneratedAttribute"/> ile işaretlenmişse, bu özniteliğin belirttiği seçeneği; aksi takdirde null döner.</summary>
@@ -48,7 +48,7 @@
         /// <returns>DatabaseGeneratedOption değeri veya null.</returns>
         public static DatabaseGeneratedOption? GetDatabaseGeneratedOption(this PropertyInfo propertyInfo)
         {
-            Guard.CheckNull(propertyInfo, nameof(propertyInfo));
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
             return (Validators.TryCustomAttribute(propertyInfo, out DatabaseGeneratedAttribute _dga) ? _dga.DatabaseGeneratedOption : null);
         }
         /// <summary>Verilen <see cref="PropertyInfo"/> nesnesinin string uzunluğunu belirleyen attribute&#39;lerden <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> var ise maksimum uzunluğunu döndürür. Attribute yoksa veya property null ise 0 döner.</summary>
@@ -56,7 +56,7 @@
         /// <returns>String property&#39;sinin maksimum uzunluğu, yoksa 0.</returns>
         public static int GetStringOrMaxLength(this PropertyInfo propertyInfo)
         {
-            Guard.CheckNull(propertyInfo, nameof(propertyInfo));
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
             if (Validators.TryCustomAttribute(propertyInfo, out StringLengthAttribute _sl)) { return _sl.MaximumLength; }
             if (Validators.TryCustomAttribute(propertyInfo, out MaxLengthAttribute _ml)) { return _ml.Length; }
             return 0;

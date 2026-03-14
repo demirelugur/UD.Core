@@ -20,10 +20,10 @@
         }
         public string Generate()
         {
-            Guard.CheckEmpty(this.upperCases, nameof(this.upperCases));
-            Guard.CheckEmpty(this.lowerCases, nameof(this.lowerCases));
-            Guard.CheckEmpty(this.digits, nameof(this.digits));
-            Guard.CheckEmpty(this.punctuations, nameof(this.punctuations));
+            Guard.ThrowIfEmpty(this.upperCases, nameof(this.upperCases));
+            Guard.ThrowIfEmpty(this.lowerCases, nameof(this.lowerCases));
+            Guard.ThrowIfEmpty(this.digits, nameof(this.digits));
+            Guard.ThrowIfEmpty(this.punctuations, nameof(this.punctuations));
             int i, minLength = 4, maxLength = Random.Shared.Next(minLength * 2, (minLength * 4) + 1);
             var sb = new StringBuilder();
             if (maxLength % minLength == 0) { this.set(sb, maxLength / minLength); }
@@ -41,8 +41,8 @@
         }
         public static string GenerateRandomChars(int length, string elements = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
         {
-            Guard.CheckZeroOrNegative(length, nameof(length));
-            Guard.CheckEmpty(elements, nameof(elements));
+            Guard.ThrowIfZeroOrNegative(length, nameof(length));
+            Guard.ThrowIfEmpty(elements, nameof(elements));
             return new(Enumerable.Repeat(elements, length).Select(x => x[Random.Shared.Next(x.Length)]).ToArray());
         }
         public static bool IsStrongPassword(string value, int minimumLength = 8)

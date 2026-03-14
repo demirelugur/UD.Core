@@ -33,6 +33,16 @@
             try { return t.GetField(Enum.GetName(t, value)).GetDescription(); }
             catch { return ""; }
         }
+        /// <summary>Verilen enum değerinin görüntülenebilir adını döner. Genellikle kullanıcı arayüzünde gösterilmek üzere kullanılır.</summary>
+        /// <typeparam name="TEnum">Enum türü.</typeparam>
+        /// <param name="value">Enum değeri.</param>
+        /// <returns>Enum açıklaması; açıklama yoksa boş dize döner.</returns>
+        public static string GetDisplayNameFromEnum<TEnum>(this TEnum value) where TEnum : Enum
+        {
+            var t = typeof(TEnum);
+            try { return t.GetField(Enum.GetName(t, value)).GetDisplayName(); }
+            catch { return ""; }
+        }
         /// <summary>Tekil bir değeri enumerable (koleksiyon) olarak döner.</summary>
         /// <typeparam name="T">Değer türü.</typeparam>
         /// <param name="value">Kaynak değer.</param>

@@ -42,18 +42,16 @@
                 contains = this.values.Any(v => Convert.ToInt64(v) == valueLong);
             }
             else { contains = this.values.Any(v => v.ToString() == value.ToString()); }
-            if (contains == this.isequal) { return ValidationResult.Success; }
-            return this.tovalidationresult(validationContext);
+            return (contains == this.isequal ? ValidationResult.Success : this.tovalidationresult(validationContext));
         }
         private ValidationResult tovalidationresult(ValidationContext validationContext)
         {
-            var r = this.ErrorMessage.ToStringOrEmpty();
-            if (r == "")
+            if (this.ErrorMessage.IsNullOrEmpty())
             {
-                if (this.isequal) { r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerlerinden biri olmalıdır!"; }
-                else { r = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerleri dışında farklı bir değer olmalıdır!"; }
+                if (this.isequal) { this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerlerinden biri olmalıdır!"; }
+                else { this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerleri dışında farklı bir değer olmalıdır!"; }
             }
-            return new(r, [validationContext.MemberName]);
+            return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }
 }

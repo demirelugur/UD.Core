@@ -20,7 +20,8 @@
                 validationContext.SetValidatePropertyValue(_uri.ToString().TrimEnd('/'));
                 return ValidationResult.Success;
             }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{validationContext.DisplayName}, geçerli bir \"http, https\" protokollerine uygun {nameof(Uri)} adresi olmalıdır!"), [validationContext.MemberName]);
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, geçerli bir \"http, https\" protokollerine uygun {nameof(Uri)} adresi olmalıdır!"; }
+            return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }
 }

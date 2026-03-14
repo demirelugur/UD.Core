@@ -20,9 +20,9 @@
         }
         public bool TryIsWarning(string value, string name, string surname, string dil, out string[] errors)
         {
-            Guard.CheckEmpty(value, nameof(value));
-            Guard.UnSupportLanguage(dil, nameof(dil));
-            if (this.maximumLength.HasValue) { Guard.CheckZeroOrNegative(this.maximumLength.Value, nameof(this.maximumLength)); }
+            Guard.ThrowIfEmpty(value, nameof(value));
+            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
+            if (this.maximumLength.HasValue) { Guard.ThrowIfZeroOrNegative(this.maximumLength.Value, nameof(this.maximumLength)); }
             var r = new List<string>();
             var isEn = dil == "en";
             if (!PasswordGenerator.IsStrongPassword(value, this.minimumLength))

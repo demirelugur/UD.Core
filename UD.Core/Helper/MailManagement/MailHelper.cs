@@ -29,10 +29,10 @@
         }
         public async Task<(bool hasError, Exception ex)> Send(SmtpClientBasic smtpClientBasic, CancellationToken cancellationToken = default)
         {
-            Guard.CheckEmpty(this.Subject, nameof(this.Subject));
-            Guard.CheckEmpty(this.Body, nameof(this.Body));
-            Guard.CheckEmptyOrCountZero(this.Tos, nameof(this.Tos));
-            Guard.CheckEnumDefined<MailPriority>(this.Priority, nameof(this.Priority));
+            Guard.ThrowIfEmpty(this.Subject, nameof(this.Subject));
+            Guard.ThrowIfEmpty(this.Body, nameof(this.Body));
+            Guard.ThrowIfEmpty(this.Tos, nameof(this.Tos));
+            Guard.ThrowIfNotValidCheckEnumDefined<MailPriority>(this.Priority, nameof(this.Priority));
             try
             {
                 smtpClientBasic ??= new();

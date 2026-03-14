@@ -24,7 +24,7 @@
         /// <exception cref="ArgumentNullException">Verilen e-Posta adresi null ise fırlatılır.</exception>
         public static string ReplaceAT(this MailAddress mailAddress)
         {
-            Guard.CheckNull(mailAddress, nameof(mailAddress));
+            Guard.ThrowIfNull(mailAddress, nameof(mailAddress));
             return mailAddress.Address.Replace("@", "[at]");
         }
         /// <summary>Verilen validation bağlamında bir özelliğin gerekli olup olmadığını kontrol eder.</summary>
@@ -32,7 +32,7 @@
         /// <returns>Gerekli ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsRequiredAttribute(this ValidationContext validationContext)
         {
-            Guard.CheckNull(validationContext, nameof(validationContext));
+            Guard.ThrowIfNull(validationContext, nameof(validationContext));
             var property = validationContext.ObjectInstance.GetType().GetProperty(validationContext.MemberName);
             if (property == null) { return false; }
             return Validators.TryCustomAttribute(property, out RequiredAttribute _);
@@ -43,7 +43,7 @@
         /// <exception cref="ArgumentNullException">Eğer <paramref name="validationContext"/> null ise tetiklenir.</exception>
         public static void SetValidatePropertyValue(this ValidationContext validationContext, object value)
         {
-            Guard.CheckNull(validationContext, nameof(validationContext));
+            Guard.ThrowIfNull(validationContext, nameof(validationContext));
             var property = validationContext.ObjectType.GetProperty(validationContext.MemberName);
             if (property != null && property.CanWrite) { property.SetValue(validationContext.ObjectInstance, value); }
         }
@@ -53,7 +53,7 @@
         /// <exception cref="ArgumentException">İfade geçersiz ise fırlatılır.</exception>
         public static string GetExpressionName(this Expression expression)
         {
-            Guard.CheckNull(expression, nameof(expression));
+            Guard.ThrowIfNull(expression, nameof(expression));
             if (expression is LambdaExpression _lambda) { expression = _lambda.Body; }
             var result = "";
             if (expression is MemberExpression _me) { result = _me.Member.Name; }
@@ -204,8 +204,8 @@
         /// <returns>Sütun değeri başarıyla dönüştürülebilirse <typeparamref name="TKey"/> tipinde değer, aksi durumda varsayılan değer döner.</returns>
         public static TKey ParseOrDefault<TKey>(this IDataReader reader, string key)
         {
-            Guard.CheckNull(reader, nameof(reader));
-            Guard.CheckEmpty(key, nameof(key));
+            Guard.ThrowIfNull(reader, nameof(reader));
+            Guard.ThrowIfEmpty(key, nameof(key));
             try
             {
                 var value = reader[key];
@@ -219,20 +219,29 @@
         /// <returns>Durdurulduktan sonra geçen süre.</returns>
         public static TimeSpan StopThenGetElapsed(this Stopwatch stopWatch)
         {
-            Guard.CheckNull(stopWatch, nameof(stopWatch));
+            Guard.ThrowIfNull(stopWatch, nameof(stopWatch));
             stopWatch.Stop();
             return stopWatch.Elapsed;
         }
         /// <summary>Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DescriptionAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.</summary>
-        /// <param name="memberInfo">Üzerinde <see cref="DescriptionAttribute"/> aranacak üye bilgisi (sınıf, property, metod vb.).</param>
-        /// <returns><see cref="DescriptionAttribute"/> içindeki açıklama metni, yoksa boş string (&quot;&quot;).</returns>
         public static string GetDescription(this MemberInfo memberInfo)
         {
-            Guard.CheckNull(memberInfo, nameof(memberInfo));
+            Guard.ThrowIfNull(memberInfo, nameof(memberInfo));
             try
             {
                 var attr = memberInfo.GetCustomAttribute<DescriptionAttribute>();
                 return attr == null ? "" : attr.Description.ToStringOrEmpty();
+            }
+            catch { return ""; }
+        }
+        /// <summary>Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DisplayAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.</summary>
+        public static string GetDisplayName(this MemberInfo memberInfo)
+        {
+            Guard.ThrowIfNull(memberInfo, nameof(memberInfo));
+            try
+            {
+                var attr = memberInfo.GetCustomAttribute<DisplayAttribute>();
+                return attr == null ? "" : attr.GetName().ToStringOrEmpty();
             }
             catch { return ""; }
         }
@@ -242,7 +251,7 @@
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
-            Guard.CheckNull(assembly, nameof(assembly));
+            Guard.ThrowIfNull(assembly, nameof(assembly));
             var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,,>))).ToArray();
             foreach (var implementation in types)
             {

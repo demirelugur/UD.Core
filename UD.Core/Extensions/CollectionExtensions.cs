@@ -36,7 +36,7 @@
         /// <returns>Sözlükte belirtilen anahtara karşılık gelen değeri <typeparamref name="TKey"/> türüne dönüştürülmüş şekilde döndürür. Anahtar yoksa veya geçersizse, <typeparamref name="TKey"/> türünün varsayılan değerini döndürür.</returns>
         public static TKey ParseOrDefault<TKey>(this IDictionary<string, string> dictionary, string key)
         {
-            Guard.CheckEmpty(key, nameof(key));
+            Guard.ThrowIfEmpty(key, nameof(key));
             dictionary ??= new Dictionary<string, string>();
             if (dictionary.TryGetValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
             return default;
@@ -55,7 +55,7 @@
         {
             if (errors != null)
             {
-                Guard.CheckNull(modelstate, nameof(modelstate));
+                Guard.ThrowIfNull(modelstate, nameof(modelstate));
                 foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("", item); }
             }
         }
@@ -135,7 +135,7 @@
         /// <param name="other">Eklenecek öğeleri içeren diğer koleksiyon.</param>
         public static void AddRangeOptimized<T>(this ICollection<T> initial, IEnumerable<T> other)
         {
-            Guard.CheckNull(initial, nameof(initial));
+            Guard.ThrowIfNull(initial, nameof(initial));
             if (other != null && other.Any())
             {
                 if (initial is List<T> _l) { _l.AddRange(other); }
@@ -150,7 +150,7 @@
         public static Exception ToNestedException(this string[] errors)
         {
             errors = (errors ?? []).Reverse().ToArray();
-            Guard.CheckEmptyOrCountZero(errors, nameof(errors));
+            Guard.ThrowIfEmpty(errors, nameof(errors));
             Exception ex = null;
             var i = errors.Length - 1;
             while (i >= 0)

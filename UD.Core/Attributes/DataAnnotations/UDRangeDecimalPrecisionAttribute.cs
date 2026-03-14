@@ -10,7 +10,7 @@
     {
         public int Precision { get; }
         public int Scale { get; }
-        public UDRangeDecimalPrecisionAttribute(object min, int precision, int scale) : base(typeof(decimal), Convert.ToString(min, CultureInfo.InvariantCulture), GetMaxString(precision, scale))
+        public UDRangeDecimalPrecisionAttribute(object min, int precision, int scale) : base(typeof(decimal), min.ToStringOrEmpty(CultureInfo.InvariantCulture), GetMaxString(precision, scale))
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(precision);
             ArgumentOutOfRangeException.ThrowIfNegative(scale);
@@ -23,7 +23,8 @@
             if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             var valueDecimal = value.ToDecimal();
             if (valueDecimal >= Convert.ToDecimal(this.Minimum) && valueDecimal <= Convert.ToDecimal(this.Maximum)) { return ValidationResult.Success; }
-            return new(this.ErrorMessage.CoalesceOrDefault($"{String.Format(ValidationErrorMessageConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum)} ({nameof(this.Precision)}={this.Precision}, {nameof(this.Scale)}={this.Scale})."), [validationContext.MemberName]);
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = String.Format(ValidationErrorMessageConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum); }
+            return new(this.ErrorMessage, [validationContext.MemberName]);
         }
         private static string GetMaxString(int precision, int scale)
         {

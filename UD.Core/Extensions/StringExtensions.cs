@@ -127,7 +127,7 @@
         /// <exception cref="ArgumentException">method parametresi boş veya null olduğunda fırlatılır</exception>
         public static string GetRouteName<T>(this string methodName, bool useFullTypeName) where T : class
         {
-            Guard.CheckEmpty(methodName, nameof(methodName));
+            Guard.ThrowIfEmpty(methodName, nameof(methodName));
             return $"/{(useFullTypeName ? typeof(T).FullName : typeof(T).Name)}/{methodName}";
         }
         /// <summary> Metin içerisindeki tab (\t), satır başı (\r) ve yeni satır (\n) karakterlerini boşluk ile değiştirir ve baştaki ile sondaki gereksiz boşlukları temizler. Null değerlerde güvenli şekilde çalışır.</summary>
@@ -159,7 +159,7 @@
         /// <returns>Kesilmiş dize.</returns>
         public static string SubstringUpToLength(this string value, int length)
         {
-            Guard.CheckZeroOrNegative(length, nameof(length));
+            Guard.ThrowIfZeroOrNegative(length, nameof(length));
             value = value.ToStringOrEmpty();
             return (value.Length > length ? value.Substring(0, length).Trim() : value);
         }

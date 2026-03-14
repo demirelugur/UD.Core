@@ -35,7 +35,7 @@
         }
         public static string GetDescriptionLocalizationValue(RetMesaj value, string dil)
         {
-            Guard.UnSupportLanguage(dil, nameof(dil));
+            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
             if (dil == "en")
             {
                 return value switch
