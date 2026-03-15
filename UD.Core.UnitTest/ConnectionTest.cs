@@ -5,6 +5,7 @@ namespace UD.Core.UnitTest
     using Newtonsoft.Json.Linq;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Globalization;
     using System.IO;
     using UD.Core.Extensions;
     [TestFixture]
@@ -15,6 +16,7 @@ namespace UD.Core.UnitTest
         [SetUp]
         public void Setup()
         {
+            CultureInfo.CurrentUICulture = new CultureInfo("tr-TR");
             this.connection = new("Data Source=:memory:");
             this.connection.Open();
             this.context = new(new DbContextOptionsBuilder<TestDbContext>().UseSqlite(this.connection).Options);

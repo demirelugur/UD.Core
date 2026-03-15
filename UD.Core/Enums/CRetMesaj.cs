@@ -2,7 +2,6 @@
 {
     using System.ComponentModel;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public sealed class CRetMesaj
     {
@@ -33,10 +32,9 @@
             [Description("Girilebilecek maksimum karakter sınırı aşıldı! Yönetici ile iletişime geçiniz.")]
             maxlength
         }
-        public static string GetDescriptionLocalizationValue(RetMesaj value, string dil)
+        public static string GetDescriptionLocalizationValue(RetMesaj value)
         {
-            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
-            if (dil == "en")
+            if (Guards.IsUICultureEnglish)
             {
                 return value switch
                 {
@@ -48,7 +46,7 @@
                     RetMesaj.unauthority => "You are not authorized for the transaction! Contact the administrator.",
                     RetMesaj.unconnection => "Cannot communicate with the server computer! Contact the administrator.",
                     RetMesaj.maxlength => "The maximum character limit that can be entered has been exceeded! Contact the administrator.",
-                    _ => throw Utilities.ThrowNotSupportedForEnum<RetMesaj>(),
+                    _ => throw Utilities.ThrowNotSupportedForEnum<RetMesaj>()
                 };
             }
             return value.GetDescriptionFromEnum();

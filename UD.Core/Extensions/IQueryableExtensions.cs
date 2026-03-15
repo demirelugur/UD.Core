@@ -10,6 +10,8 @@
     using UD.Core.Helper.Paging;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
+    using static UD.Core.Helper.OrtakTools;
+
     public static class IQueryableExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>
@@ -53,7 +55,7 @@
         /// <summary>Verilen ifade ile minimum değeri asenkron olarak getirir, yoksa varsayılan değeri döner.</summary>
         public static async Task<TKey> MinOrDefault<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => (await source.AnyAsync(cancellationToken) ? await source.MinAsync(selector, cancellationToken) : default);
         /// <summary>Verilen metin için benzersiz bir SEO dostu string oluşturur.</summary>
-        public static async Task<string> GenerateUniqueSEOString(this IQueryable<string> source, string text, int maxLength, string dil, CancellationToken cancellationToken = default)
+        public static async Task<string> GenerateUniqueSEOString(this IQueryable<string> source, string text, int maxLength, CancellationToken cancellationToken = default)
         {
             var i = 0;
             string r, textSeo = text.ToSeoFriendly();
@@ -65,8 +67,7 @@
                 i++;
             }
             if (r.Length <= maxLength) { return r; }
-            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
-            if (dil == "en") { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
+            if (Guards.IsUICultureEnglish) { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
             throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxLength} karakterlik maksimum uzunluğu aşıyor!");
         }
         /// <summary>IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>

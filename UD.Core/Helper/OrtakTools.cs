@@ -89,14 +89,6 @@
                 if (names.Length == 0) { return ""; }
                 return String.Join(".", names.Select(x => String.Join("", x.ToUpper().Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(x => x[0]).ToArray())));
             }
-            /// <summary>Belirtilen dil/kültür koduna ait <see cref="DateTimeFormatInfo"/> bilgisini döndürür.</summary>
-            /// <param name="dil">Dil kodu (örnek: &quot;tr&quot;, &quot;en&quot;)</param>
-            /// <returns>İlgili kültüre ait tarih ve saat biçimlendirme bilgisi.</returns>
-            public static DateTimeFormatInfo GetDateTimeFormat(string dil)
-            {
-                Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
-                return CultureInfo.GetCultureInfo(dil).DateTimeFormat;
-            }
             /// <summary>Verilen nesneden &quot;isldate&quot; ve &quot;isluser&quot; bilgilerini çıkarır ve bu bilgileri belirtilen tarih formatında birleştirerek string olarak döndürür. Nesne tipi IFormCollection, JToken, Tuple, ValueTuple veya bir enumerable koleksiyon olabilir. Eğer nesne null ise, &quot;isldate&quot; geçerli bir tarih değilse veya &quot;isluser&quot; boşsa, boş string döndürür.</summary>
             /// <param name="model">Bilgilerin alınacağı nesne.</param>
             /// <param name="dateFormat">Tarih biçimi.</param>
@@ -192,21 +184,18 @@
             /// <summary>Kimlik kartı veya nüfus cüzdanı seri numarasını maskeleme işlemi yapar. İsteğe bağlı olarak kimlik türü ve dil bilgisi ile birlikte açıklama ekler.</summary>
             /// <param name="cuzdanSeriNo">Maske uygulanacak cüzdan seri numarası.</param>
             /// <param name="kimlikTipi">Kimlik türü (yeni kimlik kartı veya eski nüfus cüzdanı).</param>
-            /// <param name="showFull"><see langword="true"/> ise seri numarasının tamamı döner; <see langword="false"/> ise ilk 3 hane açık, kalan kısım * ile gizlenmiş döner.
-            /// </param>
-            /// <param name="dil">Kimlik türü açıklamasının dili (&quot;tr&quot; veya &quot;en&quot;).</param>
+            /// <param name="showFull"><see langword="true"/> ise seri numarasının tamamı döner; <see langword="false"/> ise ilk 3 hane açık, kalan kısım * ile gizlenmiş döner.</param>
             /// <returns>Maske uygulanmış cüzdan seri numarası, opsiyonel olarak kimlik türü bilgisiyle birlikte. Geçersizse boş string döner.</returns>
-            public static string MaskedCuzdanSeriNo(string cuzdanSeriNo, NVIKimlikTypes? kimlikTipi, bool showFull, string dil)
+            public static string MaskedCuzdanSeriNo(string cuzdanSeriNo, NVIKimlikTypes? kimlikTipi, bool showFull)
             {
                 var cs = cuzdanSeriNo.ToStringOrEmpty();
                 if (cs == "") { return ""; }
                 if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
                 if (!kimlikTipi.HasValue) { return cs; }
-                Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
                 var t = kimlikTipi.Value switch
                 {
-                    NVIKimlikTypes.yeni => (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"),
-                    NVIKimlikTypes.eski => (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
+                    NVIKimlikTypes.yeni => (Guards.IsUICultureEnglish ? "New ID Card" : "Yeni Kimlik Kartı"),
+                    NVIKimlikTypes.eski => (Guards.IsUICultureEnglish ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
                     _ => throw Utilities.ThrowNotSupportedForEnum<NVIKimlikTypes>(),
                 };
                 return $"{cs} ({t})";
@@ -412,17 +401,15 @@
             }
             /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="IOExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>
             /// <param name="dataUri">Dönüştürülecek data URI string&#39;i. Biçim: &quot;data:[MIME-type];base64,[base64-encoded-data]&quot;</param>
-            /// <param name="dil">Hata mesajlarının dilini belirtir.</param>
             /// <returns>Binary veri (byte[]) ve MIME tipini içeren bir tuple döner.</returns>
             /// <exception cref="ArgumentException">Geçersiz data URI biçimi veya eksik MIME tipi/base64 verisi durumunda fırlatılır.</exception>
             /// <exception cref="ArgumentException">Desteklenmeyen dil belirtildiğinde fırlatılır.</exception>
-            public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string dataUri, string dil)
+            public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string dataUri)
             {
-                Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
                 dataUri = dataUri.ToStringOrEmpty();
-                if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(dil == "en" ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
+                if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(Guards.IsUICultureEnglish ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
                 var parts = dataUri.Substring(5).Split([";base64,"], StringSplitOptions.None);
-                if (parts.Length != 2) { throw new ArgumentException(dil == "en" ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
+                if (parts.Length != 2) { throw new ArgumentException(Guards.IsUICultureEnglish ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
                 return (Convert.FromBase64String(parts[1]), parts[0]);
             }
         }
@@ -446,6 +433,8 @@
         }
         public sealed class Guards
         {
+            /// <summary>CultureInfo.CurrentUICulture&#39;un iki harfli ISO dil kodunun &quot;en&quot; içerip içermediğini kontrol eder. Bu özellik, uygulamanın geçerli kullanıcı arayüzü kültürünün İngilizce olup olmadığını belirlemek için kullanılabilir. Eğer geçerli UI kültürü İngilizce ise <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</summary>
+            public static bool IsUICultureEnglish => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.OrdinalIgnoreCase);
             /// <summary>
             /// Verilen string&#39;in HTML tag&#39;leri içerip içermediğini kontrol eder. String null, boş veya yalnızca boşluklardan oluşuyorsa <see langword="false"/> döner. HTML tag&#39;leri, düzenli ifade (regex) kullanılarak tespit edilir.
             /// <code>(!value.IsNullOrEmpty_string() &amp;&amp; Regex.IsMatch(value, @&quot;&lt;/?\w+\s*[^&gt;]*&gt;&quot;, RegexOptions.Compiled))</code>
@@ -489,20 +478,18 @@
             /// <param name="value">Değeri atanac nesne.</param>
             /// <param name="propertyName">Değeri atanacak property&#39;sinin adı.</param>
             /// <param name="data">Property&#39;ye atanacak değer.</param>
-            /// <param name="dil">Hata mesajlarının döndürüleceği dil.</param>
             /// <exception cref="ArgumentException"><paramref name="value"/> nesnesi sınıf türünde değilse fırlatılır.</exception>
             /// <exception cref="InvalidOperationException">Property yazılabilir değilse fırlatılır.</exception>
             /// <exception cref="ArgumentNullException"><paramref name="value"/> veya <paramref name="propertyName"/> null ise fırlatılır.</exception>
-            public static void SetPropertyValue(object value, string propertyName, object data, string dil)
+            public static void SetPropertyValue(object value, string propertyName, object data)
             {
                 Guard.ThrowIfNull(value, nameof(value));
                 Guard.ThrowIfEmpty(propertyName, nameof(propertyName));
-                Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
                 var type = value.GetType();
-                if (!type.IsCustomClass()) { throw new ArgumentException(dil == "en" ? $"The \"{nameof(value)}\" argument type must be class!" : $"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value)); }
+                if (!type.IsCustomClass()) { throw new ArgumentException(Guards.IsUICultureEnglish ? $"The \"{nameof(value)}\" argument type must be class!" : $"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value)); }
                 var pi = type.GetProperty(propertyName);
                 Guard.ThrowIfNull(pi, nameof(pi));
-                if (!pi.CanWrite) { throw new InvalidOperationException(dil == "en" ? $"The \"{nameof(propertyName)}\" property is not writable!" : $"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
+                if (!pi.CanWrite) { throw new InvalidOperationException(Guards.IsUICultureEnglish ? $"The \"{nameof(propertyName)}\" property is not writable!" : $"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
                 pi.SetValue(value, data == null ? null : Converters.ChangeType(data, pi.PropertyType));
             }
             /// <summary>Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.</summary>

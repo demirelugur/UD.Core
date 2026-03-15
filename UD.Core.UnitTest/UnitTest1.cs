@@ -1,10 +1,14 @@
 ﻿namespace UD.Core.UnitTest
 {
+    using System.Globalization;
     [TestFixture]
     public class UnitTest1
     {
         [SetUp]
-        public void Setup() { }
+        public void Setup()
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo("tr-TR");
+        }
         [Test]
         public void Test1()
         {

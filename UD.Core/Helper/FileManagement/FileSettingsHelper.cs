@@ -35,7 +35,7 @@
         [JsonIgnore]
         [IgnoreDataMember]
         public string getformatsize => FormatSize(Convert.ToDouble(this.size));
-        public bool gettryfileisexception(ICollection<IFormFile> files, string dil, out string[] errors) => TryFileisException(files, this, dil, out errors);
+        public bool gettryfileisexception(ICollection<IFormFile> files, out string[] errors) => TryFileisException(files, this, out errors);
         public FileSettingsHelper() : this(default, default, default) { }
         public FileSettingsHelper(string[] accept, long size, byte fileCount)
         {
@@ -58,7 +58,7 @@
             if (value < 1024 || value % 1024 == 0) { return fs; }
             return $"{value} {ArrayConstants.FileSizeUnits[0]} (~ {fs})";
         }
-        public static bool TryFileisException(ICollection<IFormFile> files, FileSettingsHelper fileSettingsHelper, string dil, out string[] errors)
+        public static bool TryFileisException(ICollection<IFormFile> files, FileSettingsHelper fileSettingsHelper, out string[] errors)
         {
             if (files.Count == 0)
             {
@@ -67,7 +67,6 @@
             }
             fileSettingsHelper ??= new();
             if (Validators.TryValidateObject(fileSettingsHelper, out errors)) { return false; }
-            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
             try
             {
                 var filesArray = files.Select(file => new
@@ -84,7 +83,7 @@
                 }).ToArray();
                 if (filesArray.Length > fileSettingsHelper.fileCount)
                 {
-                    if (dil == "en")
+                    if (Guards.IsUICultureEnglish)
                     {
                         errors = [
                            "You have exceeded the maximum number of files allowed to upload!",
@@ -102,7 +101,7 @@
                 }
                 if (filesArray.Any(x => !x.checkExt))
                 {
-                    if (dil == "en")
+                    if (Guards.IsUICultureEnglish)
                     {
                         errors = [
                             "The file extensions are not compatible!",
@@ -122,7 +121,7 @@
                 }
                 if (filesArray.Any(x => !x.checkSize))
                 {
-                    if (dil == "en")
+                    if (Guards.IsUICultureEnglish)
                     {
                         errors = [
                             "You have exceeded the allowed upload size for a single file!",

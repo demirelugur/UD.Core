@@ -6,6 +6,8 @@ namespace UD.Core.Helper.TCMBKur
     using System.Text;
     using System.Xml.Linq;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Validation;
+
     public interface ITCMBKurService // AddSingleton
     {
         Task<TCMBKurResponse> Get(TCMBKurCodeTypes type, DateOnly? date = null, CancellationToken cancellationToken = default);
@@ -27,7 +29,7 @@ namespace UD.Core.Helper.TCMBKur
         private TCMBKurResponse GetRate(XDocument xml, string code)
         {
             var node = xml.Descendants("Currency").FirstOrDefault(x => x.Attribute("CurrencyCode")?.Value == code);
-            if (node == null) { throw new Exception($"Kur bilgisi alınamadı: \"{code}\""); }
+            Guard.ThrowIfNull(node, $"Kur bilgisi alınamadı: \"{code}\"");
             var data = new TCMBKurResponse();
             if (Int32.TryParse(node.Element(nameof(data.Unit))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out int _valueInt)) { data.Unit = _valueInt; }
             if (Decimal.TryParse(node.Element(nameof(data.ForexBuying))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal _valueDecimal)) { data.ForexBuying = _valueDecimal; }

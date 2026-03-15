@@ -11,7 +11,7 @@
     public static class IOExtensions
     {
         #region byte[]
-        /// <summary>İkili verileri base64 biçiminde bir dizeye dönüştürür. <see cref="Converters.ToBinaryFromBase64String(string, string)"/> işleminin tersidir</summary>
+        /// <summary>İkili verileri base64 biçiminde bir dizeye dönüştürür. <see cref="Converters.ToBinaryFromBase64String(string)"/> işleminin tersidir</summary>
         /// <param name="bytes">Dönüştürülecek byte dizisi.</param>
         /// <param name="mimeType">Mime türü.</param>
         /// <returns>Base64 biçimindeki dize.</returns>

@@ -110,11 +110,5 @@
             ThrowIfEmpty(collection2, nameof(collection2));
             if (collection1.Count != collection2.Count) { throw new ArgumentException($"\"{nameof(collection1)} ({collection1.Count})\" ve \"{nameof(collection2)} ({collection2.Count})\" nesne sayıları eşit olmalıdır!"); }
         }
-        public static void ThrowIfUnSupportLanguage(string value, string argName)
-        {
-            ThrowIfEmpty(value, argName);
-            var defaultlanguages = new string[] { "tr", "en" };
-            if (!defaultlanguages.Contains(value)) { throw new NotSupportedException($"{argName}; {String.Join(", ", defaultlanguages)} değerlerinden biri olabilir!", new Exception("Yönetici ile iletişime geçiniz!")); }
-        }
     }
 }

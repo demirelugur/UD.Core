@@ -1,8 +1,8 @@
 ﻿namespace UD.Core.Extensions
 {
     using System;
+    using System.Globalization;
     using static UD.Core.Helper.GlobalConstants;
-    using static UD.Core.Helper.OrtakTools;
     public static class DateExtensions
     {
         /// <summary>Hafta içi günlerini (Pazartesi, Salı, Çarşamba, Perşembe, Cuma) kontrol eder. Eğer belirtilen <see cref="DayOfWeek"/> değeri bu günlerden biri ise <c>true</c>, aksi halde <c>false</c> döner.</summary>
@@ -10,21 +10,19 @@
         /// <summary>Verilen <see cref="DayOfWeek"/> değerinin, belirtilen dile göre gün adını döndürür.</summary>
         /// <param name="dayOfWeek">Gün bilgisi.</param>
         /// <param name="isElongated">><see langword="true"/> ise tam gün adı, ><see langword="false"/> ise kısaltılmış gün adı döndürülür.</param>
-        /// <param name="dil">Dil kodu (örnek: &quot;tr&quot;, &quot;en&quot;)</param>
         /// <returns>Belirtilen dile göre gün adı.</returns>
-        public static string GetDayName(this DayOfWeek dayOfWeek, bool isElongated = true, string dil = "tr")
+        public static string GetDayName(this DayOfWeek dayOfWeek, bool isElongated = true)
         {
-            var dtf = Accessors.GetDateTimeFormat(dil);
+            var dtf = CultureInfo.CurrentUICulture.DateTimeFormat;
             return isElongated ? dtf.GetDayName(dayOfWeek) : dtf.GetAbbreviatedDayName(dayOfWeek);
         }
         /// <summary>Verilen <see cref="DateTime"/> değerinin ay adını, belirtilen dile göre döndürür.</summary>
         /// <param name="dateTime">Tarih bilgisi.</param>
         /// <param name="isElongated">><see langword="true"/> ise tam ay adı, ><see langword="false"/> ise kısaltılmış ay adı döndürülür.</param>
-        /// <param name="dil">Dil kodu (örnek: &quot;tr&quot;, &quot;en&quot;)</param>
         /// <returns>Belirtilen dile göre ay adı.</returns>
-        public static string GetMonthName(this DateTime dateTime, bool isElongated = true, string dil = "tr")
-        { 
-            var dtf = Accessors.GetDateTimeFormat(dil);
+        public static string GetMonthName(this DateTime dateTime, bool isElongated = true)
+        {
+            var dtf = CultureInfo.CurrentUICulture.DateTimeFormat;
             return isElongated ? dtf.GetMonthName(dateTime.Month) : dtf.GetAbbreviatedMonthName(dateTime.Month);
         }
         /// <summary>Belirtilen <see cref="DateTime"/> nesnesini yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesine dönüştürür.</summary>

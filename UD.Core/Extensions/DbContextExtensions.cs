@@ -13,9 +13,7 @@
     using static UD.Core.Helper.OrtakTools;
     public static class DbContextExtensions
     {
-        /// <summary>
-        /// Belirtilen varlığın (entity) bir veya daha fazla özelliğinin değiştirilip değiştirilmediğini kontrol eder.
-        /// </summary>
+        /// <summary>Belirtilen varlığın (entity) bir veya daha fazla özelliğinin değiştirilip değiştirilmediğini kontrol eder.</summary>
         /// <typeparam name="T">Kontrol edilecek varlık türü.</typeparam>
         /// <param name="context">DbContext örneği.</param>
         /// <param name="entity">Değişiklik durumu kontrol edilecek varlık.</param>
@@ -30,10 +28,8 @@
             if (columns.Length == 0) { return properties.Length > 0; }
             return properties.Any(x => columns.Contains(x.Name));
         }
-        /// <summary>
-        /// Belirli bir bileşik anahtar(composite key) özelliği ile eski varlığın güncellenmesini sağlar.
-        /// </summary>
-        public static async Task<T> SetCompositeKey<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyValue, string dil, CancellationToken cancellationToken = default) where T : class, new()
+        /// <summary>Belirli bir bileşik anahtar(composite key) özelliği ile eski varlığın güncellenmesini sağlar.</summary>
+        public static async Task<T> SetCompositeKey<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyValue, CancellationToken cancellationToken = default) where T : class, new()
         {
             var type = typeof(T);
             var tableName = type.GetTableName(false);
@@ -46,10 +42,9 @@
             }).ToArray();
             Guard.ThrowIfNull(context, nameof(context));
             Guard.ThrowIfNull(oldEntity, nameof(oldEntity));
-            Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
             if (properties.Count(x => x.isCompositeKey) < 2)
             {
-                if (dil == "en") { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
+                if (Guards.IsUICultureEnglish) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
                 throw new KeyNotFoundException($"İşleme devam edebilmek için \"{tableName}\" tablosunda en az 2 özelliğin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" içermesi gerekmektedir!");
             }
             if (properties.Any(x => x.isSetCompositeKeyName && x.isCompositeKey))
@@ -62,13 +57,13 @@
                 {
                     x.name,
                     x.isSetCompositeKeyName
-                }).ToArray()) { Utilities.SetPropertyValue(newEntity, item.name, (item.isSetCompositeKeyName ? compositeKeyValue : entry.Property(item.name).OriginalValue), dil); }
+                }).ToArray()) { Utilities.SetPropertyValue(newEntity, item.name, (item.isSetCompositeKeyName ? compositeKeyValue : entry.Property(item.name).OriginalValue)); }
                 await dbSet.AddAsync(newEntity, cancellationToken);
                 dbSet.Remove(oldEntity);
                 if (autoSave) { await context.SaveChangesAsync(cancellationToken); }
                 return newEntity;
             }
-            if (dil == "en") { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
+            if (Guards.IsUICultureEnglish) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
             throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" özelliğinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
         }
         /// <summary> Bağlı bulunulan <see cref="DbContext"/> üzerinden SQL Server sunucusuna ait sistem özelliklerini asenkron olarak sorgular ve <see cref="SqlServerProperties"/> nesnesi olarak döndürür. </summary>
