@@ -1,4 +1,4 @@
-ï»¿namespace UD.Core.Extensions
+namespace UD.Core.Extensions
 {
     using System;
     using System.ComponentModel;
@@ -13,27 +13,27 @@
     using static UD.Core.Helper.OrtakTools;
     public static class StringExtensions
     {
-        /// <summary>Bir string&#39;i Guid&#39;e dÃ¶nÃ¼ÅŸtÃ¼rÃ¼r. String null veya geÃ§ersizse varsayÄ±lan Guid dÃ¶ner.</summary>
-        /// <param name="value">DÃ¶nÃ¼ÅŸtÃ¼rÃ¼lecek string.</param>
-        /// <returns>DÃ¶nÃ¼ÅŸtÃ¼rÃ¼lmÃ¼ÅŸ Guid.</returns>
+        /// <summary>Bir string&#39;i Guid&#39;e dönüştürür. String null veya geçersizse varsayılan Guid döner.</summary>
+        /// <param name="value">Dönüştürülecek string.</param>
+        /// <returns>Dönüştürülmüş Guid.</returns>
         public static Guid ToGuid(this string value) => value.ParseOrDefault<Guid>();
-        /// <summary>Bir dizeyi <see cref="DateTime"/> tÃ¼rÃ¼ne dÃ¶nÃ¼ÅŸtÃ¼rÃ¼r. Dize geÃ§erli bir tarih formatÄ±nda deÄŸilse, varsayÄ±lan <see cref="DateTime"/> deÄŸeri dÃ¶ndÃ¼rÃ¼lÃ¼r.</summary>
-        /// <param name="value">DÃ¶nÃ¼ÅŸtÃ¼rÃ¼lecek tarih iÃ§eren dize.</param>
-        /// <returns>GeÃ§erli bir <see cref="DateTime"/> nesnesi veya varsayÄ±lan <see cref="DateTime"/> deÄŸeri.</returns>
+        /// <summary>Bir dizeyi <see cref="DateTime"/> türüne dönüştürür. Dize geçerli bir tarih formatında değilse, varsayılan <see cref="DateTime"/> değeri döndürülür.</summary>
+        /// <param name="value">Dönüştürülecek tarih içeren dize.</param>
+        /// <returns>Geçerli bir <see cref="DateTime"/> nesnesi veya varsayılan <see cref="DateTime"/> değeri.</returns>
         public static DateTime ToDate(this string value) => value.ParseOrDefault<DateTime>();
         private static readonly Dictionary<char, char> charReplacements = new()
         {
-            { 'ÅŸ', 's' }, { 'Å', 's' },
-            { 'Ã¶', 'o' }, { 'Ã–', 'o' },
-            { 'Ã¼', 'u' }, { 'Ãœ', 'u' },
-            { 'Ã§', 'c' }, { 'Ã‡', 'c' },
-            { 'ÄŸ', 'g' }, { 'Ä', 'g' },
-            { 'Ä±', 'i' }, { 'I', 'i' }, { 'Ä°', 'i' }
+            { 'ş', 's' }, { 'Ş', 's' },
+            { 'ö', 'o' }, { 'Ö', 'o' },
+            { 'ü', 'u' }, { 'Ü', 'u' },
+            { 'ç', 'c' }, { 'Ç', 'c' },
+            { 'ğ', 'g' }, { 'Ğ', 'g' },
+            { 'ı', 'i' }, { 'I', 'i' }, { 'İ', 'i' }
         };
         private static readonly char[] charsToRemove = ['?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+'];
         /// <summary>Verilen dizeyi SEO dostu bir hale getirir.</summary>
-        /// <param name="value">DÃ¶nÃ¼ÅŸtÃ¼rÃ¼lecek dize.</param>
-        /// <returns>SEO dostu hale getirilmiÅŸ dize.</returns>
+        /// <param name="value">Dönüştürülecek dize.</param>
+        /// <returns>SEO dostu hale getirilmiş dize.</returns>
         public static string ToSeoFriendly(this string value)
         {
             value = value.ToStringOrEmpty();
@@ -51,57 +51,56 @@
             return value.Trim('-');
         }
         /// <summary>
-        /// Verilen telefon numarasÄ±nÄ± TÃ¼rk telefon biÃ§ime dÃ¶nÃ¼ÅŸtÃ¼rÃ¼r. EÄŸer telefon numarasÄ± geÃ§erli bir TÃ¼rk telefon numarasÄ± deÄŸilse, boÅŸ bir string dÃ¶ner.
-        /// <para>BiÃ§im: (###) ###-####</para>
-        /// <para>Ã–rneÄŸin: &quot;5001112233&quot; giriÅŸi &quot;(500) 111-2233&quot; biÃ§iminde dÃ¶ner.</para>
+        /// Verilen telefon numarasını Türk telefon biçime dönüştürür. Eğer telefon numarası geçerli bir Türk telefon numarası değilse, boş bir string döner.
+        /// <para>Biçim: (###) ###-####</para>
+        /// <para>Örneğin: &quot;5001112233&quot; girişi &quot;(500) 111-2233&quot; biçiminde döner.</para>
         /// </summary>
-        /// <param name="phoneNumberTR">DÃ¶nÃ¼ÅŸtÃ¼rÃ¼lmek istenen telefon numarasÄ±.</param>
-        /// <returns>BiÃ§imlenmiÅŸ TÃ¼rk telefon numarasÄ± ya da geÃ§erli deÄŸilse boÅŸ bir string.</returns>
+        /// <param name="phoneNumberTR">Dönüştürülmek istenen telefon numarası.</param>
+        /// <returns>Biçimlenmiş Türk telefon numarası ya da geçerli değilse boş bir string.</returns>
         public static string BeautifyPhoneNumberTR(this string phoneNumberTR) => (Validators.TryPhoneNumberTR(phoneNumberTR, out string _s) ? $"({_s.Substring(0, 3)}) {_s.Substring(3, 3)}-{_s.Substring(6, 4)}" : "");
-        /// <summary>Verilen string deÄŸer null veya boÅŸ (&quot;&quot;) ise, parametre olarak girilen alternatif string deÄŸerler arasÄ±nda ilk dolu olanÄ± dÃ¶ndÃ¼rÃ¼r. EÄŸer hiÃ§bir alternatif deÄŸer dolu deÄŸilse boÅŸ string (&quot;&quot;) dÃ¶ner.</summary>
-        /// <param name="value">Kontrol edilecek ana string deÄŸer.</param>
-        /// <param name="defaultValues">Alternatif string deÄŸerler listesi.</param>
-        /// <returns>Ä°lk olarak value deÄŸeri boÅŸ deÄŸilse value deÄŸerini dÃ¶ner. Aksi halde alternatif deÄŸerler arasÄ±nda bulunan ilk dolu string deÄŸeri dÃ¶ner. EÄŸer hiÃ§biri dolu deÄŸilse boÅŸ string (&quot;&quot;) dÃ¶ner.</returns>
+        /// <summary>Verilen string değer null veya boş (&quot;&quot;) ise, parametre olarak girilen alternatif string değerler arasında ilk dolu olanı döndürür. Eğer hiçbir alternatif değer dolu değilse boş string (&quot;&quot;) döner.</summary>
+        /// <param name="value">Kontrol edilecek ana string değer.</param>
+        /// <param name="defaultValues">Alternatif string değerler listesi.</param>
+        /// <returns>İlk olarak value değeri boş değilse value değerini döner. Aksi halde alternatif değerler arasında bulunan ilk dolu string değeri döner. Eğer hiçbiri dolu değilse boş string (&quot;&quot;) döner.</returns>
         public static string CoalesceOrDefault(this string value, params string[] defaultValues)
         {
             value = value.ToStringOrEmpty();
             if (value != "") { return value; }
             return (defaultValues ?? []).Select(x => x.ToStringOrEmpty()).FirstOrDefault(x => x != "") ?? "";
         }
-        /// <summary>Verilen dize deÄŸerinin null veya boÅŸ olup olmadÄ±ÄŸÄ±nÄ± kontrol eder.</summary>
+        /// <summary>Verilen dize değerinin null veya boş olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize.</param>
-        /// <returns><see langword="true"/>, eÄŸer dize null veya boÅŸsa; aksi takdirde <see langword="false"/>.</returns>
+        /// <returns><see langword="true"/>, eğer dize null veya boşsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsNullOrEmpty(this string value) => String.IsNullOrEmpty(value.ToStringOrEmpty());
-        /// <summary>Verilen dize deÄŸerinin null, boÅŸ veya yalnÄ±zca beyaz boÅŸluk karakterlerinden (space, tab, newline vb.) oluÅŸup oluÅŸmadÄ±ÄŸÄ±nÄ± kontrol eder.</summary>
+        /// <summary>Verilen dize değerinin null, boş veya yalnızca beyaz boşluk karakterlerinden (space, tab, newline vb.) oluşup oluşmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize.</param>
-        /// <returns><see langword="true"/>, eÄŸer dize null, boÅŸ veya yalnÄ±zca beyaz boÅŸluk karakterlerinden oluÅŸuyorsa; aksi takdirde <see langword="false"/>.</returns>
+        /// <returns><see langword="true"/>, eğer dize null, boş veya yalnızca beyaz boşluk karakterlerinden oluşuyorsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsNullOrWhiteSpace(this string value) => String.IsNullOrWhiteSpace(value.ToStringOrEmpty());
-        /// <summary>Verilen dize deÄŸerinin sayÄ±sal bir deÄŸere dÃ¶nÃ¼ÅŸtÃ¼rÃ¼lÃ¼p dÃ¶nÃ¼ÅŸtÃ¼rÃ¼lemeyeceÄŸini kontrol eder.</summary>
+        /// <summary>Verilen dize değerinin sayısal bir değere dönüştürülüp dönüştürülemeyeceğini kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize.</param>
-        /// <param name="numberStyles">SayÄ±nÄ±n biÃ§imlendirilmesi iÃ§in kullanÄ±lacak sayÄ± stilleri.</param>
-        /// <returns><see langword="true"/>, eÄŸer dize bir sayÄ±ya dÃ¶nÃ¼ÅŸtÃ¼rÃ¼lebiliyorsa; aksi takdirde <see langword="false"/>.</returns>
+        /// <param name="numberStyles">Sayının biçimlendirilmesi için kullanılacak sayı stilleri.</param>
+        /// <returns><see langword="true"/>, eğer dize bir sayıya dönüştürülebiliyorsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsNumeric(this string value, NumberStyles numberStyles = NumberStyles.Integer) => BigInteger.TryParse(value.ToStringOrEmpty(), numberStyles, NumberFormatInfo.InvariantInfo, out _);
-        /// <summary>Belirtilen string deÄŸerinin geÃ§erli bir e-Posta adresi olup olmadÄ±ÄŸÄ±nÄ± kontrol eder.</summary>
+        /// <summary>Belirtilen string değerinin geçerli bir e-Posta adresi olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek e-Posta adresi.</param>
-        /// <returns>GeÃ§erli bir e-Posta adresi ise <see langword="true"/>, deÄŸilse <see langword="false"/> dÃ¶ner.</returns>
+        /// <returns>Geçerli bir e-Posta adresi ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsMail(this string value) => Validators.TryMailAddress(value, out _);
-        /// <summary>Verilen string&#39;in geÃ§erli bir e-Posta adresi olup olmadÄ±ÄŸÄ±nÄ± ve bu adresin host kÄ±smÄ±nÄ±n belirtilen host ile eÅŸleÅŸip eÅŸleÅŸmediÄŸini kontrol eder. Host karÅŸÄ±laÅŸtÄ±rmasÄ± bÃ¼yÃ¼k/kÃ¼Ã§Ã¼k harfe duyarlÄ± deÄŸildir ve host parametresi &#39;@&#39; ile baÅŸlÄ±yorsa bu karakter yok sayÄ±lÄ±r.</summary>
+        /// <summary>Verilen string&#39;in geçerli bir e-Posta adresi olup olmadığını ve bu adresin host kısmının belirtilen host ile eşleşip eşleşmediğini kontrol eder. Host karşılaştırması büyük/küçük harfe duyarlı değildir ve host parametresi &#39;@&#39; ile başlıyorsa bu karakter yok sayılır.</summary>
         public static bool IsMailFromHost(this string value, string host)
         {
-            host = host.ToStringOrEmpty().ToLower();
+            host = host.ToStringOrEmpty().TrimStart('@').ToLower();
             if (host == "") { return false; }
-            if (host[0] == '@') { host = host.Substring(1); }
             return Validators.TryMailAddress(value, out MailAddress _ma) && _ma.Host == host;
         }
-        /// <summary>Verilen dize deÄŸerinin geÃ§erli bir URI olup olmadÄ±ÄŸÄ±nÄ± kontrol eder.</summary>
+        /// <summary>Verilen dize değerinin geçerli bir URI olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize (URI).</param>
-        /// <returns><see langword="true"/>, eÄŸer dize geÃ§erli bir URI ise; aksi takdirde <see langword="false"/>.</returns>
+        /// <returns><see langword="true"/>, eğer dize geçerli bir URI ise; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsUri(this string value) => Validators.TryUri(value, out _);
-        /// <summary>Verilen dizeyi bir nesnenin Ã¼yeleri ile biÃ§imlendirir.</summary>
-        /// <typeparam name="TArgument">BiÃ§imlendirilecek nesnenin tÃ¼rÃ¼.</typeparam>
+        /// <summary>Verilen dizeyi bir nesnenin üyeleri ile biçimlendirir.</summary>
+        /// <typeparam name="TArgument">Biçimlendirilecek nesnenin türü.</typeparam>
         /// <param name="value">Dize.</param>
-        /// <param name="argument">BiÃ§imlendirme iÃ§in kullanÄ±lan nesne.</param>
-        /// <returns>BiÃ§imlendirilmiÅŸ dize.</returns>
+        /// <param name="argument">Biçimlendirme için kullanılan nesne.</param>
+        /// <returns>Biçimlendirilmiş dize.</returns>
         public static string FormatVar<TArgument>(this string value, TArgument argument) where TArgument : class
         {
             HashSet<string> arm;
@@ -119,28 +118,28 @@
             }
             return value;
         }
-        /// <summary>Verilen metot ismi ve tip bilgisi kullanÄ±larak bir route ismi oluÅŸturur.</summary>
-        /// <typeparam name="T">Route&#39;un iliÅŸkilendirileceÄŸi sÄ±nÄ±f tipi (class olmalÄ±dÄ±r)</typeparam>
-        /// <param name="methodName">Route ile iliÅŸkilendirilecek metot ismi</param>
-        /// <param name="useFullTypeName">Tam tip ismi (<see cref="Type.FullName"/>) kullanÄ±lacak mÄ±? <see langword="false"/> ise kÄ±sa tip ismi (<see cref="MemberInfo.Name"/>) kullanÄ±lÄ±r</param>
-        /// <returns>BiÃ§imli route string&#39;i (Ã¶rn: &quot;/ControllerName/Method&quot; veya &quot;/Namespace.ControllerName/Method&quot;)</returns>
-        /// <exception cref="ArgumentException">method parametresi boÅŸ veya null olduÄŸunda fÄ±rlatÄ±lÄ±r</exception>
+        /// <summary>Verilen metot ismi ve tip bilgisi kullanılarak bir route ismi oluşturur.</summary>
+        /// <typeparam name="T">Route&#39;un ilişkilendirileceği sınıf tipi (class olmalıdır)</typeparam>
+        /// <param name="methodName">Route ile ilişkilendirilecek metot ismi</param>
+        /// <param name="useFullTypeName">Tam tip ismi (<see cref="Type.FullName"/>) kullanılacak mı? <see langword="false"/> ise kısa tip ismi (<see cref="MemberInfo.Name"/>) kullanılır</param>
+        /// <returns>Biçimli route string&#39;i (örn: &quot;/ControllerName/Method&quot; veya &quot;/Namespace.ControllerName/Method&quot;)</returns>
+        /// <exception cref="ArgumentException">method parametresi boş veya null olduğunda fırlatılır</exception>
         public static string GetRouteName<T>(this string methodName, bool useFullTypeName) where T : class
         {
             Guard.ThrowIfEmpty(methodName, nameof(methodName));
             return $"/{(useFullTypeName ? typeof(T).FullName : typeof(T).Name)}/{methodName}";
         }
-        /// <summary> Metin iÃ§erisindeki tab (\t), satÄ±r baÅŸÄ± (\r) ve yeni satÄ±r (\n) karakterlerini boÅŸluk ile deÄŸiÅŸtirir ve baÅŸtaki ile sondaki gereksiz boÅŸluklarÄ± temizler. Null deÄŸerlerde gÃ¼venli ÅŸekilde Ã§alÄ±ÅŸÄ±r.</summary>
+        /// <summary> Metin içerisindeki tab (\t), satır başı (\r) ve yeni satır (\n) karakterlerini boşluk ile değiştirir ve baştaki ile sondaki gereksiz boşlukları temizler. Null değerlerde güvenli şekilde çalışır.</summary>
         public static string ReplaceTRNSpace(this string value) => value.ToStringOrEmpty().Replace("\t", " ").Replace("\r", " ").Replace("\n", " ").Trim();
-        /// <summary> Metin iÃ§erisindeki birden fazla ardÄ±ÅŸÄ±k boÅŸluÄŸu tek bir boÅŸluÄŸa indirger ve baÅŸtaki ile sondaki gereksiz boÅŸluklarÄ± temizler. Null veya boÅŸ metinlerde gÃ¼venli ÅŸekilde Ã§alÄ±ÅŸÄ±r.</summary>
+        /// <summary> Metin içerisindeki birden fazla ardışık boşluğu tek bir boşluğa indirger ve baştaki ile sondaki gereksiz boşlukları temizler. Null veya boş metinlerde güvenli şekilde çalışır.</summary>
         public static string RemoveMultipleSpace(this string value) => Regex.Replace(value.ToStringOrEmpty(), " +", " ").Trim();
-        /// <summary> Belirtilen karakter ile doldurarak bir string deÄŸerini belirli bir uzunluÄŸa getirir.</summary>
-        /// <param name="value">UzunluÄŸu ayarlanacak string deÄŸeri. </param>
-        /// <param name="totalValueLength">Hedef toplam uzunluk.  VarsayÄ±lan deÄŸer 2&#39;dir.</param>
-        /// <param name="c">Dolgu iÃ§in kullanÄ±lacak karakter.  VarsayÄ±lan deÄŸer 0&#39;dÄ±r.</param>
-        /// <param name="direction">Doldurma yÃ¶nÃ¼. &#39;l&#39; sol tarafa (PadLeft), &#39;r&#39; saÄŸ tarafa (PadRight) doldurur.  VarsayÄ±lan deÄŸer l&#39;dir.</param>
-        /// <returns> Belirtilen uzunluÄŸa getirilmiÅŸ string deÄŸeri. EÄŸer deÄŸer boÅŸ ise veya mevcut uzunluk hedef uzunluktan bÃ¼yÃ¼k/eÅŸitse orijinal deÄŸeri dÃ¶ndÃ¼rÃ¼r. </returns>
-        /// <exception cref="ArgumentException"><paramref name="totalValueLength"/> parametresi sÄ±fÄ±r veya negatif olduÄŸunda fÄ±rlatÄ±lÄ±r.</exception>
+        /// <summary> Belirtilen karakter ile doldurarak bir string değerini belirli bir uzunluğa getirir.</summary>
+        /// <param name="value">Uzunluğu ayarlanacak string değeri. </param>
+        /// <param name="totalValueLength">Hedef toplam uzunluk.  Varsayılan değer 2&#39;dir.</param>
+        /// <param name="c">Dolgu için kullanılacak karakter.  Varsayılan değer 0&#39;dır.</param>
+        /// <param name="direction">Doldurma yönü. &#39;l&#39; sol tarafa (PadLeft), &#39;r&#39; sağ tarafa (PadRight) doldurur.  Varsayılan değer l&#39;dir.</param>
+        /// <returns> Belirtilen uzunluğa getirilmiş string değeri. Eğer değer boş ise veya mevcut uzunluk hedef uzunluktan büyük/eşitse orijinal değeri döndürür. </returns>
+        /// <exception cref="ArgumentException"><paramref name="totalValueLength"/> parametresi sıfır veya negatif olduğunda fırlatılır.</exception>
         public static string Replicate(this string value, int totalValueLength = 2, char c = '0', char direction = 'l')
         {
             value = value.ToStringOrEmpty();
@@ -153,21 +152,21 @@
             }
             return "";
         }
-        /// <summary>Verilen dizeyi belirtilen uzunluÄŸa kadar keser. </summary>
+        /// <summary>Verilen dizeyi belirtilen uzunluğa kadar keser. </summary>
         /// <param name="value">Kesilecek dize.</param>
-        /// <param name="length">Kesim uzunluÄŸu.</param>
-        /// <returns>KesilmiÅŸ dize.</returns>
+        /// <param name="length">Kesim uzunluğu.</param>
+        /// <returns>Kesilmiş dize.</returns>
         public static string SubstringUpToLength(this string value, int length)
         {
             Guard.ThrowIfZeroOrNegative(length, nameof(length));
             value = value.ToStringOrEmpty();
             return (value.Length > length ? value.Substring(0, length).Trim() : value);
         }
-        /// <summary>Bir string&#39;i belirtilen noktalama iÅŸaretleri kurallarÄ±na gÃ¶re BaÅŸlÄ±k Durumuna dÃ¶nÃ¼ÅŸtÃ¼rÃ¼r.</summary>
-        /// <param name="value">DÃ¶nÃ¼ÅŸtÃ¼rÃ¼lecek string.</param>
-        /// <param name="isWhiteSpace">BoÅŸluk karakterlerinin yeni kelimeleri ayÄ±rmak iÃ§in dikkate alÄ±nÄ±p alÄ±nmayacaÄŸÄ±nÄ± belirtir.</param>
-        /// <param name="punctuations">Kelime ayÄ±ran noktalama karakterleri.</param>
-        /// <returns>BaÅŸlÄ±k durumuna dÃ¶nÃ¼ÅŸtÃ¼rÃ¼lmÃ¼ÅŸ string.</returns>
+        /// <summary>Bir string&#39;i belirtilen noktalama işaretleri kurallarına göre Başlık Durumuna dönüştürür.</summary>
+        /// <param name="value">Dönüştürülecek string.</param>
+        /// <param name="isWhiteSpace">Boşluk karakterlerinin yeni kelimeleri ayırmak için dikkate alınıp alınmayacağını belirtir.</param>
+        /// <param name="punctuations">Kelime ayıran noktalama karakterleri.</param>
+        /// <returns>Başlık durumuna dönüştürülmüş string.</returns>
         public static string ToTitleCase(this string value, bool isWhiteSpace, char[] punctuations)
         {
             value = value.ToStringOrEmpty();
@@ -192,10 +191,10 @@
             }
             return sb.ToString();
         }
-        /// <summary>Verilen bir dizeyi, belirtilen tÃ¼rde bir deÄŸere dÃ¶nÃ¼ÅŸtÃ¼rÃ¼r. DÃ¶nÃ¼ÅŸÃ¼m baÅŸarÄ±sÄ±z olursa, varsayÄ±lan deÄŸeri dÃ¶ner.</summary>
-        /// <typeparam name="TKey">DÃ¶nÃ¼ÅŸÃ¼m yapÄ±lacak hedef tÃ¼r.</typeparam>
-        /// <param name="value">DÃ¶nÃ¼ÅŸtÃ¼rÃ¼lecek dize deÄŸeri.</param>
-        /// <returns>DÃ¶nÃ¼ÅŸtÃ¼rÃ¼len deÄŸeri veya dÃ¶nÃ¼ÅŸÃ¼m baÅŸarÄ±sÄ±zsa varsayÄ±lan deÄŸeri dÃ¶ner.</returns>
+        /// <summary>Verilen bir dizeyi, belirtilen türde bir değere dönüştürür. Dönüşüm başarısız olursa, varsayılan değeri döner.</summary>
+        /// <typeparam name="TKey">Dönüşüm yapılacak hedef tür.</typeparam>
+        /// <param name="value">Dönüştürülecek dize değeri.</param>
+        /// <returns>Dönüştürülen değeri veya dönüşüm başarısızsa varsayılan değeri döner.</returns>
         public static TKey ParseOrDefault<TKey>(this string value)
         {
             var pd = parseOrDefault(value, typeof(TKey));
@@ -250,13 +249,13 @@
             catch { return (default, default); }
         }
         /// <summary>
-        /// Verilen metni SQL LIKE sorgusu iÃ§in &quot;%<paramref name="value"/>%&quot; biÃ§imine getirir
+        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir
         /// <br/>
-        /// isLowerCase seÃ§enekleri:
+        /// isLowerCase seçenekleri:
         /// <list type="bullet">
-        /// <item><c><see langword="true"/>: </c><paramref name="value"/> deÄŸerini kÃ¼Ã§Ã¼k harfe Ã§evirir (.ToLower()) â€“ varsayÄ±lan davranÄ±ÅŸ</item>
-        /// <item><c><see langword="false"/>: </c><paramref name="value"/> deÄŸerini bÃ¼yÃ¼k harfe Ã§evirir (.ToUpper())</item>
-        /// <item><c>null</c>: <paramref name="value"/> deÄŸerini orijinal haliyle (deÄŸiÅŸtirmeden) bÄ±rakÄ±r</item>
+        /// <item><c><see langword="true"/>: </c><paramref name="value"/> değerini küçük harfe çevirir (.ToLower()) – varsayılan davranış</item>
+        /// <item><c><see langword="false"/>: </c><paramref name="value"/> değerini büyük harfe çevirir (.ToUpper())</item>
+        /// <item><c>null</c>: <paramref name="value"/> değerini orijinal haliyle (değiştirmeden) bırakır</item>
         /// </list>
         /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code>
         /// </summary>
@@ -272,13 +271,13 @@
             return $"%{value}%";
         }
         /// <summary>
-        /// Verilen metni SQL LIKE sorgusu iÃ§in &quot;<paramref name="value"/>%&quot; biÃ§imine getirir
+        /// Verilen metni SQL LIKE sorgusu için &quot;<paramref name="value"/>%&quot; biçimine getirir
         /// <br/>
-        /// isLowerCase seÃ§enekleri:
+        /// isLowerCase seçenekleri:
         /// <list type="bullet">
-        /// <item><c><see langword="true"/>: </c><paramref name="value"/> deÄŸerini kÃ¼Ã§Ã¼k harfe Ã§evirir (.ToLower()) â€“ varsayÄ±lan davranÄ±ÅŸ</item>
-        /// <item><c><see langword="false"/>:</c><paramref name="value"/> deÄŸerini bÃ¼yÃ¼k harfe Ã§evirir (.ToUpper())</item>
-        /// <item><c>null</c>: <paramref name="value"/> deÄŸerini orijinal haliyle (deÄŸiÅŸtirmeden) bÄ±rakÄ±r</item>
+        /// <item><c><see langword="true"/>: </c><paramref name="value"/> değerini küçük harfe çevirir (.ToLower()) – varsayılan davranış</item>
+        /// <item><c><see langword="false"/>:</c><paramref name="value"/> değerini büyük harfe çevirir (.ToUpper())</item>
+        /// <item><c>null</c>: <paramref name="value"/> değerini orijinal haliyle (değiştirmeden) bırakır</item>
         /// </list>
         /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeStartWith()))</code>
         /// </summary>
@@ -294,13 +293,13 @@
             return String.Concat(value, "%");
         }
         /// <summary>
-        /// Verilen metni SQL LIKE sorgusu iÃ§in &quot;%<paramref name="value"/>&quot; biÃ§imine getirir.
+        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>&quot; biçimine getirir.
         /// <br/>
-        /// isLowerCase seÃ§enekleri:
+        /// isLowerCase seçenekleri:
         /// <list type="bullet">
-        /// <item><c><see langword="true"/>: </c><paramref name="value"/> deÄŸerini kÃ¼Ã§Ã¼k harfe Ã§evirir (.ToLower()) â€“ varsayÄ±lan davranÄ±ÅŸ</item>
-        /// <item><c><see langword="false"/>: </c><paramref name="value"/> deÄŸerini bÃ¼yÃ¼k harfe Ã§evirir (.ToUpper())</item>
-        /// <item><c>null</c>: <paramref name="value"/> deÄŸerini orijinal haliyle (deÄŸiÅŸtirmeden) bÄ±rakÄ±r</item>
+        /// <item><c><see langword="true"/>: </c><paramref name="value"/> değerini küçük harfe çevirir (.ToLower()) – varsayılan davranış</item>
+        /// <item><c><see langword="false"/>: </c><paramref name="value"/> değerini büyük harfe çevirir (.ToUpper())</item>
+        /// <item><c>null</c>: <paramref name="value"/> değerini orijinal haliyle (değiştirmeden) bırakır</item>
         /// </list>
         /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeEndsWith()))</code>
         /// </summary>

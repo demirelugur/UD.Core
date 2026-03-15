@@ -55,7 +55,9 @@
         public static EnumResult[] ToEnumArray(this Type type)
         {
             Guard.ThrowIfNull(type, nameof(type));
-            return Enum.GetNames(type).Select((enumName, i) => new EnumResult(Convert.ToInt64(Enum.GetValues(type).GetValue(i)), enumName, type.GetField(enumName).GetDescription())).ToArray();
+            if (!type.IsEnum) { throw new ArgumentException($"\"{type.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(type)); }
+            var values = Enum.GetValues(type);
+            return Enum.GetNames(type).Select((enumName, i) => new EnumResult(Convert.ToInt64(values.GetValue(i)), enumName, type.GetField(enumName).GetDescription())).ToArray();
         }
         /// <summary> Belirtilen tipin, verilen açık generic interface'i (open generic interface) implement edip etmediğini kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tip (class, struct, record vs.)</param>

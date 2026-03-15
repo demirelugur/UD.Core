@@ -27,7 +27,7 @@
         /// <typeparam name="TEnum">Enum türü.</typeparam>
         /// <param name="value">Enum değeri.</param>
         /// <returns>Enum açıklaması; açıklama yoksa boş dize döner.</returns>
-        public static string GetDescriptionFromEnum<TEnum>(this TEnum value) where TEnum : Enum
+        public static string GetDescriptionFromEnum<TEnum>(this TEnum value) where TEnum : struct, Enum
         {
             var t = typeof(TEnum);
             try { return t.GetField(Enum.GetName(t, value)).GetDescription(); }
@@ -37,7 +37,7 @@
         /// <typeparam name="TEnum">Enum türü.</typeparam>
         /// <param name="value">Enum değeri.</param>
         /// <returns>Enum açıklaması; açıklama yoksa boş dize döner.</returns>
-        public static string GetDisplayNameFromEnum<TEnum>(this TEnum value) where TEnum : Enum
+        public static string GetDisplayNameFromEnum<TEnum>(this TEnum value) where TEnum : struct, Enum
         {
             var t = typeof(TEnum);
             try { return t.GetField(Enum.GetName(t, value)).GetDisplayName(); }

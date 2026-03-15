@@ -5,7 +5,7 @@
     using System.Linq;
     using UD.Core.Extensions;
     using UD.Core.Helper.Results;
-    public class BaseEnumCache<TEnum> where TEnum : Enum
+    public class BaseEnumCache<TEnum> where TEnum : struct, Enum
     {
         private static readonly Type type = typeof(TEnum);
         public static readonly Type UnderlyingType = type.GetEnumUnderlyingType();

@@ -117,6 +117,7 @@
         public static int CalculateHeight(this Image image, int width)
         {
             Guard.ThrowIfNull(image, nameof(image));
+            Guard.ThrowIfZeroOrNegative(width, nameof(width));
             return Convert.ToInt32(image.Height * (Convert.ToSingle(width) / image.Width));
         }
         /// <summary>Verilen yeni yükseklik(height) değerine göre resmin genişliğini(width), en boy oranını koruyarak hesaplar.</summary>
@@ -126,6 +127,7 @@
         public static int CalculateWidth(this Image image, int height)
         {
             Guard.ThrowIfNull(image, nameof(image));
+            Guard.ThrowIfZeroOrNegative(height, nameof(height));
             return Convert.ToInt32(image.Width * (Convert.ToSingle(height) / image.Height));
         }
         #endregion

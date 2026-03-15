@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Attributes.DataAnnotations
+namespace UD.Core.Attributes.DataAnnotations
 {
     using System.ComponentModel.DataAnnotations;
     using System.Net.Mail;
@@ -21,24 +21,32 @@
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (Validators.TryMailAddress(email, out MailAddress _ma) && (this.hosts.Length == 0 || this.hosts.Contains(_ma.Host)))
+            if (Validators.TryMailAddress(email, out MailAddress _ma) && (this.hosts.Length == 0 || this.IsHostAllowed(_ma.Host)))
             {
                 validationContext.SetValidatePropertyValue(_ma.Address);
                 return ValidationResult.Success;
             }
             if (this.ErrorMessage.IsNullOrEmpty())
             {
-                string message;
-                if (this.hosts.Length > 0)
-                {
-                    var hostsString = String.Join(", ", this.hosts);
-                    var hostTitle = this.hosts.Length == 1 ? "host" : "hostlar";
-                    message = String.Format($"{ValidationErrorMessageConstants.EMail}, Geçerli {hostTitle}: {hostsString}", validationContext.DisplayName);
-                }
-                else { message = String.Format(ValidationErrorMessageConstants.EMail, validationContext.DisplayName); }
+                var message = String.Format(ValidationErrorMessageConstants.EMail, validationContext.DisplayName);
+                if (this.hosts.Length > 0) { message = $"{message}, Ge�erli {(this.hosts.Length == 1 ? "host" : "hostlar")}: {String.Join(", ", this.hosts)}"; }
                 this.ErrorMessage = message;
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
+        }
+        private bool IsHostAllowed(string host)
+        {
+            foreach (var pattern in this.hosts)
+            {
+                if (pattern.StartsWith("*."))
+                {
+                    var domain = pattern[2..];
+                    if (domain.Length > 0 && (host == domain || host.EndsWith($".{domain}"))) { return true; }
+                    continue;
+                }
+                if (host == pattern) { return true; }
+            }
+            return false;
         }
     }
 }

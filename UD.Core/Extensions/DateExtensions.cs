@@ -2,10 +2,31 @@
 {
     using System;
     using static UD.Core.Helper.GlobalConstants;
+    using static UD.Core.Helper.OrtakTools;
     public static class DateExtensions
     {
         /// <summary>Hafta içi günlerini (Pazartesi, Salı, Çarşamba, Perşembe, Cuma) kontrol eder. Eğer belirtilen <see cref="DayOfWeek"/> değeri bu günlerden biri ise <c>true</c>, aksi halde <c>false</c> döner.</summary>
         public static bool IsWeekDays(this DayOfWeek dayOfWeek) => dayOfWeek.Includes(DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday);
+        /// <summary>Verilen <see cref="DayOfWeek"/> değerinin, belirtilen dile göre gün adını döndürür.</summary>
+        /// <param name="dayOfWeek">Gün bilgisi.</param>
+        /// <param name="isElongated">><see langword="true"/> ise tam gün adı, ><see langword="false"/> ise kısaltılmış gün adı döndürülür.</param>
+        /// <param name="dil">Dil kodu (örnek: &quot;tr&quot;, &quot;en&quot;)</param>
+        /// <returns>Belirtilen dile göre gün adı.</returns>
+        public static string GetDayName(this DayOfWeek dayOfWeek, bool isElongated = true, string dil = "tr")
+        {
+            var dtf = Accessors.GetDateTimeFormat(dil);
+            return isElongated ? dtf.GetDayName(dayOfWeek) : dtf.GetAbbreviatedDayName(dayOfWeek);
+        }
+        /// <summary>Verilen <see cref="DateTime"/> değerinin ay adını, belirtilen dile göre döndürür.</summary>
+        /// <param name="dateTime">Tarih bilgisi.</param>
+        /// <param name="isElongated">><see langword="true"/> ise tam ay adı, ><see langword="false"/> ise kısaltılmış ay adı döndürülür.</param>
+        /// <param name="dil">Dil kodu (örnek: &quot;tr&quot;, &quot;en&quot;)</param>
+        /// <returns>Belirtilen dile göre ay adı.</returns>
+        public static string GetMonthName(this DateTime dateTime, bool isElongated = true, string dil = "tr")
+        { 
+            var dtf = Accessors.GetDateTimeFormat(dil);
+            return isElongated ? dtf.GetMonthName(dateTime.Month) : dtf.GetAbbreviatedMonthName(dateTime.Month);
+        }
         /// <summary>Belirtilen <see cref="DateTime"/> nesnesini yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesine dönüştürür.</summary>
         /// <param name="dateTime">Dönüştürülecek <see cref="DateTime"/> nesnesi.</param>
         /// <returns>Yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesi.</returns>
@@ -58,9 +79,7 @@
             while (previous.DayOfWeek.Includes(DayOfWeek.Saturday, DayOfWeek.Sunday)) { previous = previous.AddDays(-1); }
             return previous;
         }
-        /// <summary>
-        /// Verilen <see cref="DateTime"/> değerinin SQL Server&#39;ın kabul ettiği minimum tarihten (1753-01-01) küçük olup olmadığını kontrol eder. Eğer tarih SQL minimumu olan 1753-01-01 (saat 00:00:00) veya daha büyükse aynı <see cref="DateTime"/> değerini döner; aksi halde <c>null</c> döner.
-        /// </summary>
+        /// <summary>Verilen <see cref="DateTime"/> değerinin SQL Server&#39;ın kabul ettiği minimum tarihten (1753-01-01) küçük olup olmadığını kontrol eder. Eğer tarih SQL minimumu olan 1753-01-01 (saat 00:00:00) veya daha büyükse aynı <see cref="DateTime"/> değerini döner; aksi halde <c>null</c> döner.</summary>
         public static DateTime? SafeSqlDateTimeMin(this DateTime dateTime)
         {
             if (dateTime >= DateConstants.SqlMinValue.ToDateTime(default)) { return dateTime; }

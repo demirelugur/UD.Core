@@ -106,7 +106,7 @@
                 SqlDbType.NVarChar => 231,
                 SqlDbType.NChar => 239,
                 SqlDbType.Xml => 241,
-                _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>(),
+                _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>()
             };
         }
         /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, ADO.NET&#39;in genel veri türü olan <see cref="DbType"/>&#39;a dönüştürür. SQL Server&#39;a özgü veri türlerini platform bağımsız <see cref="DbType"/> türlerine çevirir.</summary>
@@ -139,7 +139,7 @@
                 SqlDbType.NVarChar => DbType.String,
                 SqlDbType.NChar => DbType.StringFixedLength,
                 SqlDbType.Xml => DbType.Xml,
-                _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>(),
+                _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>()
             };
         }
         /// <summary>Verilen <see cref="DbType"/> enum değerini, SQL Server&#39;a özgü <see cref="SqlDbType"/> enum değerine dönüştürür. ADO.NET&#39;in genel veri türleri (<see cref="DbType"/>) ile SQL Server&#39;ın özel veri türleri (<see cref="SqlDbType"/>) arasında eşleme yapar.</summary>
@@ -171,7 +171,7 @@
                 DbType.String => SqlDbType.NVarChar,
                 DbType.StringFixedLength => SqlDbType.NChar,
                 DbType.Xml => SqlDbType.Xml,
-                _ => throw Utilities.ThrowNotSupportedForEnum<DbType>(),
+                _ => throw Utilities.ThrowNotSupportedForEnum<DbType>()
             };
         }
         /// <summary>Bir <see cref="JToken"/> nesnesini belirtilen <typeparamref name="TKey"/> türündeki bir diziye dönüştürür. Eğer <see cref="JToken"/> null ise boş bir dizi döner, array türünde ise içindeki değerleri <typeparamref name="TKey"/> türüne çevirip dizi olarak döner. Diğer durumlarda bir istisna fırlatır.</summary>
@@ -181,7 +181,8 @@
         /// <exception cref="NotSupportedException"><see cref="JToken"/> türü null veya array değilse fırlatılır.</exception>
         public static TKey[] ToArrayFromJToken<TKey>(this JToken jToken)
         {
-            if (jToken == null || jToken.Type.Includes(JTokenType.Null, JTokenType.Undefined)) { return []; }
+            Guard.ThrowIfNull(jToken, nameof(jToken));
+            if (jToken.Type.Includes(JTokenType.Null, JTokenType.Undefined)) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
             throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
@@ -251,6 +252,7 @@
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
+            Guard.ThrowIfNull(services, nameof(services));
             Guard.ThrowIfNull(assembly, nameof(assembly));
             var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,,>))).ToArray();
             foreach (var implementation in types)

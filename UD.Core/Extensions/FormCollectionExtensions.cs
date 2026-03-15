@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Primitives;
     using UD.Core.Helper.Validation;
-
     public static class FormCollectionExtensions
     {
         /// <summary>Belirtilen anahtar ile form verilerinden bir değeri alır ve belirtilen türde bir nesneye dönüştürür.</summary>
@@ -23,8 +22,8 @@
         /// <returns>Değer başarıyla alındıysa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool TryGetStringValue(this IFormCollection form, string key, out string outvalue)
         {
-            form ??= FormCollection.Empty;
             Guard.ThrowIfEmpty(key, nameof(key));
+            form ??= FormCollection.Empty;
             var r = form.TryGetValue(key, out StringValues _sv);
             if (r)
             {

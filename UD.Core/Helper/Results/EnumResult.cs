@@ -21,9 +21,7 @@
             this.text = text;
             this.description = description;
         }
-        /// <summary>
-        /// value için tanımlanan nesneler: EnumResult, IFormCollection, Enum, AnonymousObjectClass
-        /// </summary>
+        /// <summary><paramref name="value"/> için tanımlanan nesneler: EnumResult, IFormCollection, Enum, AnonymousObjectClass</summary>
         public static EnumResult ToEntityFromObject(object value)
         {
             if (value == null) { return new(); }
@@ -42,8 +40,8 @@
             {
                 try
                 {
-                    var tx = Enum.GetName(t, value);
-                    return new(Convert.ToInt64(value), tx, t.GetField(tx).GetDescription());
+                    var text = Enum.GetName(t, value);
+                    return new(Convert.ToInt64(value), text, t.GetField(text).GetDescription());
                 }
                 catch { return new(); }
             }

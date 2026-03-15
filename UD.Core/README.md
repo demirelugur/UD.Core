@@ -889,12 +889,6 @@ Guard.UnSupportLanguage(lang, nameof(lang)); // Desteklenen dil mi? (tr, en)
 ```csharp
 using UD.Core.Enums;
 
-// Türkçe Aylar
-var month = CMonthTR.Ocak;
-
-// Türkçe Haftanın Günleri
-var day = CDayOfWeekTR.Pazartesi;
-
 // API Mesaj Tipleri
 var message = CRetMesaj.basarili;
 message.GetDescriptionFromEnum(); // Açıklama metnini al

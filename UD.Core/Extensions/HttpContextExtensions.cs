@@ -7,7 +7,7 @@
     using UD.Core.Helper.Validation;
     public static class HttpContextExtensions
     {
-        /// <summary> İstemcinin mobil bir cihaz olup olmadığını kontrol eder. </summary>
+        /// <summary>İstemcinin mobil bir cihaz olup olmadığını kontrol eder. </summary>
         /// <param name="context">HttpContext nesnesi.</param>
         /// <returns>Mobil bir cihaz ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsMobileDevice(this HttpContext context)
@@ -17,14 +17,14 @@
             if (useragent != "") { foreach (var item in new string[] { "android", "iphone", "ipad", "mobile" }) { if (useragent.Contains(item)) { return true; } } }
             return false;
         }
-        /// <summary> Mevcut HTTP isteğinin şema (http/https) ve host bilgisini kullanarak uygulamanın temel (base) adresini Uri olarak döner. </summary>
+        /// <summary>Mevcut HTTP isteğinin şema (http/https) ve host bilgisini kullanarak uygulamanın temel (base) adresini Uri olarak döner. </summary>
         public static Uri GetBaseUri(this HttpContext context)
         {
             Guard.ThrowIfNull(context, nameof(context));
             var request = context.Request;
             return new($"{request.Scheme}://{(request.Host.HasValue ? request.Host.Value : "")}");
         }
-        /// <summary> Mevcut HTTP isteğinin tam adresini (base adres + path + query string) Uri formatında döner. </summary>
+        /// <summary>Mevcut HTTP isteğinin tam adresini (base adres + path + query string) Uri formatında döner. </summary>
         public static Uri GetFullRequestUri(this HttpContext context)
         {
             Guard.ThrowIfNull(context, nameof(context));
@@ -47,8 +47,7 @@
             Guard.ThrowIfNull(context, nameof(context));
             if (IPAddress.TryParse(context.Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "", out IPAddress _ip)) { return _ip.MapToIPv4(); }
             _ip = context.Connection.RemoteIpAddress;
-            if (_ip == null) { return IPAddress.Any; }
-            return _ip.MapToIPv4();
+            return (_ip == null ? IPAddress.Any : _ip.MapToIPv4());
         }
     }
 }

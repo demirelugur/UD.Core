@@ -86,5 +86,24 @@
             foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType())) { e.Add(property.Name, property.GetValue(value)); }
             return e as ExpandoObject;
         }
+        /// <summary>Verilen <paramref name="value"/> değerini <typeparamref name="TEnum"/> türüne çevirmeyi dener ve başarısız olursa varsayılan değer döndürür. Sayısal tiplerde (<see cref="Byte"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>) ilgili enum değeri <see cref="Enum.ToObject(Type, object)"/> ile oluşturulmaya çalışılır. String değerlerde önce sayısal parse denenir (Int64), değilse enum adı olarak (büyük/küçük harf duyarsız) parse edilir.</summary>
+        /// <typeparam name="TEnum">Hedef enum türü.</typeparam>
+        /// <param name="value">Enum&#39;a dönüştürülecek değer.</param>
+        /// <returns>Dönüştürülen enum değeri; dönüşüm başarısızsa <c>default</c>.</returns>
+        public static TEnum? TryToEnum<TEnum>(this object value) where TEnum : struct, Enum
+        {
+            if (value is TEnum _enum) { return _enum; }
+            if (value is (Byte or Int16 or Int32 or Int64))
+            {
+                try { return (TEnum)Enum.ToObject(typeof(TEnum), value); }
+                catch { }
+            }
+            if (value is String _s && !_s.IsNullOrEmpty())
+            {
+                if (Int64.TryParse(_s, out long _valueLong)) { return _valueLong.TryToEnum<TEnum>(); }
+                if (Enum.TryParse(_s, true, out _enum)) { return _enum; }
+            }
+            return default;
+        }
     }
 }

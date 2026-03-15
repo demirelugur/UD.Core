@@ -6,7 +6,6 @@
     using System.Linq;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
-
     public static class CollectionExtensions
     {
         #region IDictionary
@@ -41,9 +40,7 @@
             if (dictionary.TryGetValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
             return default;
         }
-        /// <summary>
-        /// ModelStateDictionary nesnesine bir dizi hata mesajını topluca eklemek için kullanılan bir genişletme metodu.
-        /// </summary>
+        /// <summary>ModelStateDictionary nesnesine bir dizi hata mesajını topluca eklemek için kullanılan bir genişletme metodu.</summary>
         /// <param name="modelstate">Hataların ekleneceği ModelStateDictionary nesnesi.</param>
         /// <param name="errors">Eklenecek hata mesajlarını içeren string listesi.</param>
         /// <remarks>
@@ -86,15 +83,11 @@
             hasRight = r != null,
             right = r
         });
-        /// <summary>
-        /// Kaynakdaki elemanların sırasını <b>Fisher-Yates algoritmasını</b> kullanarak rastgele karıştırır ve karıştırılmış bir ICollection olarak geri döner.
-        /// </summary>
+        /// <summary>Kaynakdaki elemanların sırasını <b>Fisher-Yates algoritmasını</b> kullanarak rastgele karıştırır ve karıştırılmış bir ICollection olarak geri döner.</summary>
         /// <typeparam name="T">Kaynağın eleman türü.</typeparam>
         /// <param name="source">Rastgele sıralanacak orijinal kaynak.</param>
         /// <returns>Karıştırılmış elemanları içeren yeni bir ICollection&lt;T&gt; örneği.</returns>
-        /// <remarks>
-        /// Bu metot, verilen IEnumerable&lt;T&gt; kaynakdaki elemanların yerini <b>Fisher-Yates algoritması</b> ile rastgele değiştirir. Karıştırılmış elemanları yeni bir ICollection&lt;T&gt; olarak döndürür. &quot;Random.Shared&quot; ile tek bir Random örneği paylaşılır, bu da çoklu iş parçacıklı senaryolarda daha güvenilir bir kullanım sağlar.
-        /// </remarks>
+        /// <remarks>Bu metot, verilen IEnumerable&lt;T&gt; kaynakdaki elemanların yerini <b>Fisher-Yates algoritması</b> ile rastgele değiştirir. Karıştırılmış elemanları yeni bir ICollection&lt;T&gt; olarak döndürür. &quot;Random.Shared&quot; ile tek bir Random örneği paylaşılır, bu da çoklu iş parçacıklı senaryolarda daha güvenilir bir kullanım sağlar.</remarks>
         public static ICollection<T> Shuffle<T>(this IEnumerable<T> source)
         {
             T temp;

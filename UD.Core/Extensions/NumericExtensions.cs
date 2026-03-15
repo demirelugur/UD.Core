@@ -6,17 +6,11 @@
     using static UD.Core.Helper.GlobalConstants;
     public static class NumericExtensions
     {
-
         /// <summary>Unix zaman damgasını, yerel bir <see cref="DateTime"/> değerine dönüştürür.</summary>
         /// <param name="getTime">Unix zaman damgası (milisaniye cinsinden).</param>
         /// <returns>Dönüştürülen yerel <see cref="DateTime"/> değeri.</returns>
         public static DateTime ToJsDate(this long getTime) => DateTime.UnixEpoch.AddMilliseconds(Convert.ToDouble(getTime)).ToLocalTime();
-        /// <summary>
-        /// Active Directory&#39;de kullanılan FILETIME biçimindeki bir değeri (1 Ocak 1601&#39;den itibaren 100 nanosaniye cinsinden tick) UTC zaman diliminde bir DateTime nesnesine çevirir. 
-        /// <para>
-        /// Eğer filetime değeri 0 veya <see cref="Int64.MaxValue"/> ise, hesap süresiz kabul edilir ve <see cref="DateTime.MaxValue"/> döndürülür. Geçersiz bir filetime değeri durumunda null döner.
-        /// </para>
-        /// </summary>
+        /// <summary>Active Directory&#39;de kullanılan FILETIME biçimindeki bir değeri (1 Ocak 1601&#39;den itibaren 100 nanosaniye cinsinden tick) UTC zaman diliminde bir DateTime nesnesine çevirir. <para>Eğer filetime değeri 0 veya <see cref="Int64.MaxValue"/> ise, hesap süresiz kabul edilir ve <see cref="DateTime.MaxValue"/> döndürülür. Geçersiz bir filetime değeri durumunda null döner.</para></summary>
         /// <param name="fileTime">Çevrilecek 64 bitlik FILETIME değeri.</param>
         /// <returns>Başarılı olursa DateTime nesnesi, süresiz hesaplar için DateTime.MaxValue, geçersiz değerler için null.</returns>
         public static DateTime? ToFileTimeUTC(this long fileTime)
@@ -37,9 +31,7 @@
         /// </para>
         /// </summary>
         /// <param name="tckn">Geçerliliği kontrol edilecek T.C. Kimlik Numarası.</param>
-        /// <returns>
-        /// Geçerli bir T.C. Kimlik Numarası ise <see langword="true"/>, aksi durumda <see langword="false"/> döner.
-        /// </returns>
+        /// <returns>Geçerli bir T.C. Kimlik Numarası ise <see langword="true"/>, aksi durumda <see langword="false"/> döner.</returns>
         public static bool IsTCKimlikNo(this long tckn)
         {
             var r = false;
@@ -51,7 +43,8 @@
             }
             return r;
         }
-        /// <summary>Verilen sayının geçerli bir T.C. Vergi Kimlik Numarası (VKN) olup olmadığını kontrol eder.<para>
+        /// <summary>Verilen sayının geçerli bir T.C. Vergi Kimlik Numarası (VKN) olup olmadığını kontrol eder.
+        /// <para>
         /// VKN doğrulama algoritması şu adımlarla çalışır:
         /// <list type="bullet">
         ///   <item><description>Eğer sayı 10 haneli değilse, başına sıfır(lar) eklenerek 10 haneye tamamlanır.</description></item>

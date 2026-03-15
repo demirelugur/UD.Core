@@ -46,26 +46,33 @@
             /// <item><description><b>TrustServerCertificate</b>: Sunucu sertifikasının doğrulanmadan güvenilir kabul edilmesi sağlanır</description></item>
             /// </list>
             /// </remarks>
-            public static string GetConnectionString(string dataSource, string initialCatalog, string userID, string password) => new SqlConnectionStringBuilder
+            public static string GetConnectionString(string dataSource, string initialCatalog, string userID, string password)
             {
-                DataSource = dataSource,
-                InitialCatalog = initialCatalog,
-                UserID = userID,
-                Password = password,
-                PersistSecurityInfo = true,
-                MultipleActiveResultSets = true,
-                TrustServerCertificate = true
-            }.ToString();
-            /// <summary>
-            /// Verilen sınıfın belirtilen özelliğindeki maksimum karakter uzunluğunu döner. Eğer <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> gibi uzunluk sınırlayıcı öznitelikler atanmışsa, bu değeri alır. Aksi takdirde 0 döner.
-            /// </summary>
+                Guard.ThrowIfEmpty(dataSource, nameof(dataSource));
+                Guard.ThrowIfEmpty(initialCatalog, nameof(initialCatalog));
+                Guard.ThrowIfEmpty(userID, nameof(userID));
+                Guard.ThrowIfEmpty(password, nameof(password));
+                return new SqlConnectionStringBuilder
+                {
+                    DataSource = dataSource,
+                    InitialCatalog = initialCatalog,
+                    UserID = userID,
+                    Password = password,
+                    PersistSecurityInfo = true,
+                    MultipleActiveResultSets = true,
+                    TrustServerCertificate = true
+                }.ToString();
+            }
+            /// <summary>Verilen sınıfın belirtilen özelliğindeki maksimum karakter uzunluğunu döner. Eğer <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> gibi uzunluk sınırlayıcı öznitelikler atanmışsa, bu değeri alır. Aksi takdirde 0 döner.</summary>
             /// <typeparam name="T">Kontrol edilecek sınıf türü.</typeparam>
             /// <param name="name">Kontrol edilecek özelliğin adı.</param>
             /// <returns>Özellik için maksimum uzunluk değeri; öznitelik bulunmazsa 0 döner.</returns>
-            public static int GetStringOrMaxLength<T>(string name) where T : class => typeof(T).GetProperty(name).GetStringOrMaxLength();
-            /// <summary>
-            /// Verilen sınıfın belirli bir string ifadesi için maksimum karakter uzunluğunu döner. <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> atanmışsa bu değeri alır, aksi takdirde 0 döner.
-            /// </summary>
+            public static int GetStringOrMaxLength<T>(string name) where T : class
+            {
+                Guard.ThrowIfEmpty(name, nameof(name));
+                return typeof(T).GetProperty(name).GetStringOrMaxLength();
+            }
+            /// <summary>Verilen sınıfın belirli bir string ifadesi için maksimum karakter uzunluğunu döner. <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> atanmışsa bu değeri alır, aksi takdirde 0 döner.</summary>
             /// <typeparam name="T">Kontrol edilecek sınıf türü.</typeparam>
             /// <param name="expression">Özellik ismini içeren ifade.</param>
             /// <returns>Özellik için maksimum uzunluk değeri; öznitelik bulunmazsa 0 döner.</returns>
@@ -82,21 +89,15 @@
                 if (names.Length == 0) { return ""; }
                 return String.Join(".", names.Select(x => String.Join("", x.ToUpper().Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(x => x[0]).ToArray())));
             }
-            /// <summary>
-            /// Belirtilen dil koduna göre CultureInfo nesnesini döner. Dil kodu &quot;tr&quot; veya &quot;en&quot; olabilir. Diğer diller desteklenmemektedir.
-            /// </summary>
+            /// <summary>Belirtilen dil/kültür koduna ait <see cref="DateTimeFormatInfo"/> bilgisini döndürür.</summary>
             /// <param name="dil">Dil kodu (örnek: &quot;tr&quot;, &quot;en&quot;)</param>
-            /// <returns>CultureInfo nesnesi</returns>
-            /// <exception cref="NotSupportedException">Eğer dil desteklenmiyorsa hata fırlatılır</exception>
-            public static CultureInfo GetCultureInfo(string dil)
+            /// <returns>İlgili kültüre ait tarih ve saat biçimlendirme bilgisi.</returns>
+            public static DateTimeFormatInfo GetDateTimeFormat(string dil)
             {
                 Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
-                if (dil == "en") { return new("en-US"); }
-                return new("tr-TR");
+                return CultureInfo.GetCultureInfo(dil).DateTimeFormat;
             }
-            /// <summary>
-            /// Verilen nesneden &quot;isldate&quot; ve &quot;isluser&quot; bilgilerini çıkarır ve bu bilgileri belirtilen tarih formatında birleştirerek string olarak döndürür. Nesne tipi IFormCollection, JToken, Tuple, ValueTuple veya bir enumerable koleksiyon olabilir. Eğer nesne null ise, &quot;isldate&quot; geçerli bir tarih değilse veya &quot;isluser&quot; boşsa, boş string döndürür.
-            /// </summary>
+            /// <summary>Verilen nesneden &quot;isldate&quot; ve &quot;isluser&quot; bilgilerini çıkarır ve bu bilgileri belirtilen tarih formatında birleştirerek string olarak döndürür. Nesne tipi IFormCollection, JToken, Tuple, ValueTuple veya bir enumerable koleksiyon olabilir. Eğer nesne null ise, &quot;isldate&quot; geçerli bir tarih değilse veya &quot;isluser&quot; boşsa, boş string döndürür.</summary>
             /// <param name="model">Bilgilerin alınacağı nesne.</param>
             /// <param name="dateFormat">Tarih biçimi.</param>
             /// <returns>&quot;isldate&quot; ve &quot;isluser&quot; bilgilerinin birleştirilmiş string hali; geçerli veri yoksa boş string.</returns>
@@ -152,9 +153,7 @@
                     isluser = (string)x.isluser
                 }).Select(x => String.Join(", ", new string[] { (x.isldate.Ticks > 0 ? x.isldate.ToString(dateFormat) : ""), x.isluser.ToStringOrEmpty() }.Where(y => y != "").ToArray())).FirstOrDefault() ?? "";
             }
-            /// <summary>
-            /// Sadece uzantıdan MIME type döner. Eğer herhangi bir kayıt bulunamazsa &quot;application/octet-stream&quot; değerini döner
-            /// </summary>
+            /// <summary>Sadece uzantıdan MIME type döner. Eğer herhangi bir kayıt bulunamazsa &quot;application/octet-stream&quot; değerini döner</summary>
             /// <param name="extension">Dosya uzantısı (.txt, .pdf vb.)</param>
             /// <returns>MIME type değeri</returns>
             public static string GetMimeTypeByExtension(string extension)
@@ -182,17 +181,15 @@
             }
             /// <summary>Metni belirtilen maksimum uzunluğa kadar kısaltır. Metin belirtilen uzunluğu aşıyorsa sonuna üç nokta (...) ekler. Metin boş veya null ise boş string döner. </summary>
             /// <param name="value">İşlem yapılacak metin</param>
-            /// <param name="length">Metnin maksimum uzunluğu</param>
+            /// <param name="maxLength">3 nokta dahil metnin maksimum uzunluğu</param>
             /// <returns>Kısaltılmış ve gerekiyorsa üç nokta eklenmiş metin</returns>
-            public static string SubstringUpToLengthWithEllipsis(string value, int length)
+            public static string SubstringUpToLengthWithEllipsis(string value, int maxLength)
             {
-                value = value.SubstringUpToLength(length);
+                value = value.SubstringUpToLength(maxLength - 3);
                 if (value == "") { return ""; }
                 return String.Concat(value, "...");
             }
-            /// <summary>
-            /// Kimlik kartı veya nüfus cüzdanı seri numarasını maskeleme işlemi yapar. İsteğe bağlı olarak kimlik türü ve dil bilgisi ile birlikte açıklama ekler.
-            /// </summary>
+            /// <summary>Kimlik kartı veya nüfus cüzdanı seri numarasını maskeleme işlemi yapar. İsteğe bağlı olarak kimlik türü ve dil bilgisi ile birlikte açıklama ekler.</summary>
             /// <param name="cuzdanSeriNo">Maske uygulanacak cüzdan seri numarası.</param>
             /// <param name="kimlikTipi">Kimlik türü (yeni kimlik kartı veya eski nüfus cüzdanı).</param>
             /// <param name="showFull"><see langword="true"/> ise seri numarasının tamamı döner; <see langword="false"/> ise ilk 3 hane açık, kalan kısım * ile gizlenmiş döner.
@@ -206,7 +203,7 @@
                 if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
                 if (!kimlikTipi.HasValue) { return cs; }
                 Guard.ThrowIfUnSupportLanguage(dil, nameof(dil));
-                string t = kimlikTipi.Value switch
+                var t = kimlikTipi.Value switch
                 {
                     NVIKimlikTypes.yeni => (dil == "en" ? "New ID Card" : "Yeni Kimlik Kartı"),
                     NVIKimlikTypes.eski => (dil == "en" ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
@@ -214,9 +211,7 @@
                 };
                 return $"{cs} ({t})";
             }
-            /// <summary>
-            /// Doğum tarihini maskeler veya tam tarih olarak döndürür.
-            /// </summary>
+            /// <summary>Doğum tarihini maskeler veya tam tarih olarak döndürür.</summary>
             /// <param name="dogumTarih">Maskelenecek veya gösterilecek doğum tarihi.</param>
             /// <param name="showFull">Eğer <see langword="true"/> ise doğum tarihi tam olarak (dd.MM.yyyy) döner. Eğer <see langword="false"/> ise tarih maskelenir: gün olduğu gibi, ay &#39;**&#39; ile gizlenir, yılın ilk iki hanesi gösterilir ve son iki hanesi &#39;**&#39; ile gizlenir</param>
             /// <returns>Maskelenmiş veya tam doğum tarihi stringi.</returns>
@@ -226,9 +221,7 @@
                 if (showFull) { return d; }
                 return $"{d.Substring(0, 2)}.**.{d.Substring(6, 2)}**";
             }
-            /// <summary>
-            /// Türkiye biçimine uygun telefon numarasını maskeleme işlemi yapar.
-            /// </summary>
+            /// <summary>Türkiye biçimine uygun telefon numarasını maskeleme işlemi yapar.</summary>
             /// <param name="phoneNumberTR">Maske uygulanacak telefon numarası (ülke kodu dahil).</param>
             /// <param name="showFull"><see langword="true"/> ise numara güzelleştirilmiş (biçimlenmiş) haliyle döner; <see langword="false"/> ise numaranın bazı bölümleri * ile gizlenmiş şekilde döner.
             /// </param>
@@ -238,9 +231,7 @@
                 if (showFull) { return phoneNumberTR.BeautifyPhoneNumberTR(); }
                 return (Validators.TryPhoneNumberTR(phoneNumberTR, out string _t) ? $"(**{_t.Substring(2, 1)}) {_t.Substring(3, 1)}**-*{_t.Substring(8, 2)}" : "");
             }
-            /// <summary>
-            /// Verilen sayısal kimlik numarasını (TCKN veya VKN) maskeler. TCKN olarak doğrulanırsa orta kısım 6 adet &#39;*&#39;, VKN olarak doğrulanırsa 5 adet &#39;*&#39; ile gizlenir. Eğer <paramref name="showFull"/> true ise numara olduğu gibi döndürülür. Geçerli bir TCKN veya VKN değilse boş string döndürülür.
-            /// </summary>
+            /// <summary>Verilen sayısal kimlik numarasını (TCKN veya VKN) maskeler. TCKN olarak doğrulanırsa orta kısım 6 adet &#39;*&#39;, VKN olarak doğrulanırsa 5 adet &#39;*&#39; ile gizlenir. Eğer <paramref name="showFull"/> true ise numara olduğu gibi döndürülür. Geçerli bir TCKN veya VKN değilse boş string döndürülür.</summary>
             /// <param name="value">Maskelenecek kimlik numarası.</param>
             /// <param name="showFull">true ise maskesiz tam numara döndürülür; false ise ilgili kısım maskelenir.</param>
             /// <returns>Maskelenmiş veya tam kimlik numarası. Geçerli bir TCKN/VKN değilse boş string döner.</returns>
@@ -277,15 +268,11 @@
             /// <param name="value">Dönüştürülecek değer</param>
             /// <returns><typeparamref name="T"/> türüne dönüştürülmüş değer</returns>
             public static T ChangeType<T>(object value) => (T)ChangeType(value, typeof(T));
-            /// <summary>
-            /// Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.
-            /// </summary>
+            /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.</summary>
             /// <param name="value">JSON&#39;a dönüştürülecek nesne.</param>
             /// <returns>Nesnenin JSON string formatındaki temsili.</returns>
             public static string ToJSON(object value) => JsonConvert.SerializeObject(value, Formatting.None, OtherConstants.JsonSerializerSettings);
-            /// <summary>
-            /// Verilen string ifadeyi tersine çevirir. Bu metot, Türkçe karakterler (ğ, ü, ş, ç, ö, ı, İ vb.) dahil olmak üzere tüm Unicode metin öğelerini dikkate alarak çalışır. Standart char tabanlı ters çevirme yöntemlerinden farklı olarak <see cref="StringInfo"/> sınıfını kullanır ve her bir metin öğesini (text element) ayrı değerlendirir.
-            /// </summary>
+            /// <summary>Verilen string ifadeyi tersine çevirir. Bu metot, Türkçe karakterler (ğ, ü, ş, ç, ö, ı, İ vb.) dahil olmak üzere tüm Unicode metin öğelerini dikkate alarak çalışır. Standart char tabanlı ters çevirme yöntemlerinden farklı olarak <see cref="StringInfo"/> sınıfını kullanır ve her bir metin öğesini (text element) ayrı değerlendirir.</summary>
             /// <param name="value">Tersine çevrilecek string ifade.</param>
             /// <returns>Ters çevrilmiş string ifade.</returns>
             public static string ToReverse(string value)
@@ -299,9 +286,7 @@
                 Array.Reverse(elements);
                 return String.Concat(elements);
             }
-            /// <summary>
-            /// Verilen nesneyi <see cref="SHA256"/> hash string formatına dönüştürür. Eğer değer null ise boş string döner.
-            /// </summary>
+            /// <summary>Verilen nesneyi <see cref="SHA256"/> hash string formatına dönüştürür. Eğer değer null ise boş string döner.</summary>
             /// <param name="value">Hashlenecek nesne.</param>
             /// <returns>Nesnenin <see cref="SHA256"/> hash string temsili.</returns>
             /// <remarks>Not: MSSQL&#39;deki karşılığı SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_256&#39;, &#39;Lorem Ipsum&#39;)), 3, 64) AS HashValue</remarks>
@@ -323,10 +308,7 @@
                 if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
                 throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
             }
-            /// <summary>
-            /// Verilen nesneyi SQL parametrelerine dönüştürür. Eğer nesne <see cref="SqlParameter"/> türünde ise doğrudan SQL parametreleri olarak döner. Özel sınıf türlerinde çalışır ve özellik isimlerine göre SQL parametrelerini oluşturur.
-            /// <para>obj için tanımlanan nesneler: SqlParameter, IEnumerable&lt;SqlParameter&gt;, IDictionary&lt;string, object&gt;, AnonymousObjectClass</para>
-            /// </summary>
+            /// <summary>Verilen nesneyi SQL parametrelerine dönüştürür. Eğer nesne <see cref="SqlParameter"/> türünde ise doğrudan SQL parametreleri olarak döner. Özel sınıf türlerinde çalışır ve özellik isimlerine göre SQL parametrelerini oluşturur.<para><paramref name="obj"/> için tanımlanan nesneler: SqlParameter, IEnumerable&lt;SqlParameter&gt;, IDictionary&lt;string, object&gt;, AnonymousObjectClass</para></summary>
             /// <param name="obj">Dönüştürülecek nesne.</param>
             /// <returns>Nesneyi temsil eden SQL parametrelerinin dizisi.</returns>
             public static SqlParameter[] ToSqlParameterFromObject(object obj)
@@ -340,17 +322,11 @@
                     Value = x.Value ?? DBNull.Value
                 }).ToArray();
             }
-            /// <summary>
-            /// Verilen nesneyi DateOnly tipine dönüştürür.
-            /// <para>obj için tanımlanan nesneler: DateOnly, DateTime, Int64, String(DateOnly, DateTime, Int64 türlerine uygun biçimde olmalıdır)</para>
-            /// </summary>
+            /// <summary>Verilen nesneyi DateOnly tipine dönüştürür.<para><paramref name="obj"/> için tanımlanan nesneler: DateOnly, DateTime, Int64, String(DateOnly, DateTime, Int64 türlerine uygun biçimde olmalıdır)</para></summary>
             /// <param name="obj">Dönüştürülecek nesne.</param>
             /// <returns>DateOnly değeri.</returns>
             public static DateOnly ToDateOnlyFromObject(object obj) => ToDateTimeFromObject(obj, default).ToDateOnly();
-            /// <summary>
-            /// Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.
-            /// <para>obj için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı)</para>
-            /// </summary>
+            /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı)</para></summary>
             /// <param name="obj">Dönüştürülecek nesne.</param>
             /// <param name="timeonly">Zaman bilgisi (isteğe bağlı). <paramref name="obj"/> değeri türü DateOnly iken girilecek değer anlamlıdır</param>
             /// <returns>DateTime değeri.</returns>
@@ -369,9 +345,7 @@
                 }
                 return default;
             }
-            /// <summary>
-            /// Belirtilen dosya yolundan asenkron olarak bir <see cref="IFormFile"/> nesnesi oluşturur. Bu metod, dosya sistemindeki bir dosyayı bellek akışına okuyarak web formları veya API istekleri için uygun hale getirir.
-            /// </summary>
+            /// <summary>Belirtilen dosya yolundan asenkron olarak bir <see cref="IFormFile"/> nesnesi oluşturur. Bu metod, dosya sistemindeki bir dosyayı bellek akışına okuyarak web formları veya API istekleri için uygun hale getirir.</summary>
             /// <param name="filePath">Dönüştürülecek dosyanın sistemdeki tam yolu.</param>
             /// <param name="name">IFormFile nesnesine verilecek ad. Varsayılan olarak &quot;file&quot; kullanılır.</param>
             /// <param name="headerDictionary">Oluşturulacak IFormFile için özel başlıkları içeren sözlük. (Opsiyonel)</param>
@@ -397,9 +371,7 @@
                     ContentType = (provider.TryGetContentType(filePath, out string _contenttype) ? _contenttype : "application/octet-stream")
                 };
             }
-            /// <summary>
-            /// SQL Server&#39;ın sistem tür kimliğini <c>([system_type_id])</c> <see cref="SqlDbType"/> enum değerine dönüştürür.
-            /// </summary>
+            /// <summary>SQL Server&#39;ın sistem tür kimliğini <c>([system_type_id])</c> <see cref="SqlDbType"/> enum değerine dönüştürür.</summary>
             /// <param name="systemTypeId">SQL Server [sys].[types] tablosundaki [system_type_id] değeri.</param>
             /// <returns>Eşleşen <see cref="SqlDbType"/> enum değeri.</returns>
             /// <exception cref="NotSupportedException">Geçersiz veya desteklenmeyen bir sistem tür kimliği verildiğinde fırlatılır.</exception>
@@ -456,20 +428,14 @@
         }
         public sealed class Files
         {
-            /// <summary>
-            /// Verilen fiziksel dosya yolunda bir dosya varsa onu siler.
-            /// </summary>
+            /// <summary>Verilen fiziksel dosya yolunda bir dosya varsa onu siler.</summary>
             /// <param name="physicallyPath">Silinecek dosyanın fiziksel yolu.</param>
             public static void FileExistsThenDelete(string physicallyPath) { if (File.Exists(physicallyPath)) { File.Delete(physicallyPath); } }
-            /// <summary>
-            /// Verilen klasör yolunda bir klasör varsa, isteğe bağlı olarak içindekilerle birlikte siler.
-            /// </summary>
+            /// <summary>Verilen klasör yolunda bir klasör varsa, isteğe bağlı olarak içindekilerle birlikte siler.</summary>
             /// <param name="physicallyPath">Silinecek klasörün fiziksel yolu.</param>
             /// <param name="recursive">Eğer <see langword="true"/> verilirse, dizin ve altındaki tüm dosyalar ve alt dizinler silinir. <see langword="false"/> verilirse, dizin yalnızca boşsa silinir; aksi halde bir <see cref="IOException"/> fırlatılır.</param>
             public static void DirectoryExistsThenDelete(string physicallyPath, bool recursive) { if (Directory.Exists(physicallyPath)) { Directory.Delete(physicallyPath, recursive); } }
-            /// <summary>
-            /// Verilen fiziksel dosya yolunda klasör mevcut değilse, ilgili klasörü ve varsa üst dizinlerini oluşturur.
-            /// </summary>
+            /// <summary>Verilen fiziksel dosya yolunda klasör mevcut değilse, ilgili klasörü ve varsa üst dizinlerini oluşturur.</summary>
             /// <param name="physicallyPath">Oluşturulacak klasörün fiziksel yolu.</param>
             public static void DirectoryCreate(string physicallyPath)
             {
@@ -482,39 +448,28 @@
         {
             /// <summary>
             /// Verilen string&#39;in HTML tag&#39;leri içerip içermediğini kontrol eder. String null, boş veya yalnızca boşluklardan oluşuyorsa <see langword="false"/> döner. HTML tag&#39;leri, düzenli ifade (regex) kullanılarak tespit edilir.
-            /// <code>(!s.IsNullOrEmpty_string() &amp;&amp; Regex.IsMatch(s, @&quot;&lt;/?\w+\s*[^&gt;]*&gt;&quot;, RegexOptions.Compiled))</code>
+            /// <code>(!value.IsNullOrEmpty_string() &amp;&amp; Regex.IsMatch(value, @&quot;&lt;/?\w+\s*[^&gt;]*&gt;&quot;, RegexOptions.Compiled))</code>
             /// </summary>
             /// <param name="value">Kontrol edilecek string.</param>
             /// <returns>String HTML tag&#39;i içeriyorsa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
             public static bool IsHtml(string value) => (!value.IsNullOrEmpty() && Regex.IsMatch(value, @"</?\w+\s*[^>]*>", RegexOptions.Compiled));
-            /// <summary>
-            /// Belirtilen dosyanın tarayıcı tarafından indirilebilir olup olmadığını kontrol eder. PDF veya görüntü dosyaları (image/*) indirme işlemi için uygun değilse <see langword="false"/> döner. Aksi takdirde <see langword="true"/> döner.
-            /// </summary>
+            /// <summary>Belirtilen dosyanın tarayıcı tarafından indirilebilir olup olmadığını kontrol eder. PDF veya görüntü dosyaları (image/*) indirme işlemi için uygun değilse <see langword="false"/> döner. Aksi takdirde <see langword="true"/> döner.</summary>
             /// <param name="path">Kontrol edilecek dosyanın yolu.</param>
             /// <returns>Dosya indirilebilir ise <see langword="true"/>, değilse <see langword="false"/>.</returns>
             public static bool IsDownloadableFile(string path)
             {
-                try
-                {
-                    if (path.IsNullOrEmpty()) { return false; }
-                    var uzn = Path.GetExtension(path).ToLower();
-                    if (uzn == ".pdf") { return false; }
-                    if (new FileExtensionContentTypeProvider().Mappings.Any(x => x.Key == uzn && x.Value.StartsWith("image/"))) { return false; }
-                    return true;
-                }
-                catch { return false; }
+                Guard.ThrowIfEmpty(path, nameof(path));
+                var uzn = Path.GetExtension(path).ToLower();
+                if (uzn == ".pdf") { return false; }
+                if (new FileExtensionContentTypeProvider().Mappings.TryGetValue(uzn, out string _value) && _value.StartsWith("image/")) { return false; }
+                return true;
             }
         }
         public sealed class Utilities
         {
-            /// <summary>
-            /// Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır.
-            /// <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code>
-            /// </summary>
+            /// <summary>Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır. <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code></summary>
             public static TransactionScope TransactionScopeAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
-            /// <summary>
-            /// Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.
-            /// </summary>
+            /// <summary>Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.</summary>
             /// <param name="value">Şifrelenecek metin</param>
             /// <param name="key">Harflerin kaydırılacağı değer</param>
             /// <returns>Şifrelenmiş metin</returns>
@@ -530,9 +485,7 @@
                 }
                 return r;
             }
-            /// <summary>
-            /// Belirtilen nesnenin property adını kullanarak ilgili property&#39;sine değer atar.
-            /// </summary>
+            /// <summary>Belirtilen nesnenin property adını kullanarak ilgili property&#39;sine değer atar.</summary>
             /// <param name="value">Değeri atanac nesne.</param>
             /// <param name="propertyName">Değeri atanacak property&#39;sinin adı.</param>
             /// <param name="data">Property&#39;ye atanacak değer.</param>
@@ -552,13 +505,11 @@
                 if (!pi.CanWrite) { throw new InvalidOperationException(dil == "en" ? $"The \"{nameof(propertyName)}\" property is not writable!" : $"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
                 pi.SetValue(value, data == null ? null : Converters.ChangeType(data, pi.PropertyType));
             }
-            /// <summary>
-            /// Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.
-            /// </summary>
+            /// <summary>Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.</summary>
             /// <typeparam name="TEnum">Enum türü (generic).</typeparam>
             /// <param name="details">Hata mesajına eklenecek isteğe bağlı ek detaylar.</param>
             /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
-            public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : Enum
+            public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : struct, Enum
             {
                 var r = new HashSet<string> { typeof(TEnum).FullName, $"{nameof(Enum)} değeri uyumsuzdur!" };
                 if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
@@ -567,9 +518,7 @@
         }
         public sealed class Validators
         {
-            /// <summary>
-            /// Verilen nesnenin doğrulama kurallarına göre geçerliliğini kontrol eder. Eğer nesne geçerli değilse, doğrulama hatalarını içeren bir dizi döner.
-            /// </summary>
+            /// <summary>Verilen nesnenin doğrulama kurallarına göre geçerliliğini kontrol eder. Eğer nesne geçerli değilse, doğrulama hatalarını içeren bir dizi döner.</summary>
             /// <param name="instance">Doğrulama işlemi yapılacak nesne.</param>
             /// <param name="outvalue">Geçersiz olduğu tespit edilen durumlarda hata mesajlarını içeren dizi.</param>
             /// <returns>Doğrulama işlemi sonucunu belirtir; geçerli ise <see langword="true"/>, geçersiz ise <see langword="false"/> döner.</returns>
@@ -580,9 +529,7 @@
                 outvalue = vrs.Select(x => x.ErrorMessage).ToArray();
                 return vrs.Count > 0;
             }
-            /// <summary>
-            /// Verilen JSON dizisini belirli bir JToken türüne (<see cref="JTokenType"/>) dönüştürmeye çalışır. Dönüşüm başarılı olursa, dönüştürülen değeri döner.
-            /// </summary>
+            /// <summary>Verilen JSON dizisini belirli bir JToken türüne (<see cref="JTokenType"/>) dönüştürmeye çalışır. Dönüşüm başarılı olursa, dönüştürülen değeri döner.</summary>
             /// <typeparam name="TJToken">Hedef JToken türü.</typeparam>
             /// <param name="json">Dönüştürülmek istenen JSON dizisi.</param>
             /// <param name="jTokenType">Beklenen JToken türü.</param>
@@ -603,9 +550,7 @@
                     return false;
                 }
             }
-            /// <summary>
-            /// Verilen e-Posta adresinin geçerli bir MailAddress nesnesine dönüştürülmesini sağlar. Eğer dönüşüm başarılı olursa, MailAddress nesnesini döner.
-            /// </summary>
+            /// <summary>Verilen e-Posta adresinin geçerli bir MailAddress nesnesine dönüştürülmesini sağlar. Eğer dönüşüm başarılı olursa, MailAddress nesnesini döner.</summary>
             /// <param name="address">Geçerliliği kontrol edilecek e-Posta adresi.</param>
             /// <param name="outvalue">Başarılı dönüşümde dönen MailAddress nesnesi.</param>
             /// <returns>e-Posta adresinin geçerli olup olmadığını belirtir; geçerli ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
@@ -624,17 +569,13 @@
             }
             /// <summary>
             /// Verilen nesne üzerinde belirtilen anahtar (property veya sözlük elemanı) aranır.
-            /// <para>
-            /// Eğer nesne bir <see cref="IDictionary{String, Object}"/> ise anahtar sözlükte aranır. Eğer normal ya da anonim bir nesne ise reflection ile public özelliklerde aranır.
-            /// </para>
+            /// <para>Eğer nesne bir <see cref="IDictionary{String, Object}"/> ise anahtar sözlükte aranır. Eğer normal ya da anonim bir nesne ise reflection ile public özelliklerde aranır.</para>
             /// </summary>
             /// <typeparam name="TKey">Beklenen değer tipi.</typeparam>
             /// <param name="value">Üzerinde arama yapılacak nesne (sözlük, anonim tip, dinamik nesne vb.).</param>
             /// <param name="key">Erişilmek istenen property ya da sözlük anahtar adı.</param>
             /// <param name="outvalue">Bulunursa değerin <typeparamref name="TKey"/> tipinde sonucu, aksi halde varsayılan değer.</param>
-            /// <returns>
-            /// Anahtar bulunduysa ve değer istenen tipe dönüştürülebiliyorsa <see langword="true"/>, aksi halde <see langword="false"/>.
-            /// </returns>
+            /// <returns>Anahtar bulunduysa ve değer istenen tipe dönüştürülebiliyorsa <see langword="true"/>, aksi halde <see langword="false"/>.</returns>
             public static bool TryGetProperty<TKey>(object value, string key, out TKey outvalue)
             {
                 try
@@ -691,9 +632,7 @@
                 outvalue = r ? phoneNumberTR : "";
                 return r;
             }
-            /// <summary>
-            /// Verilen türün Nullable (null değeri alabilen) olup olmadığını kontrol eder. Eğer tür nullable ise, outvalue parametresine nullable olmayan tür atanır.
-            /// </summary>
+            /// <summary>Verilen türün Nullable (null değeri alabilen) olup olmadığını kontrol eder. Eğer tür nullable ise, outvalue parametresine nullable olmayan tür atanır.</summary>
             /// <param name="type">Kontrol edilecek tür.</param>
             /// <param name="outvalue">Nullable olmayan tür, dönüş değeri olarak atanır.</param>
             /// <returns>Tür nullable ise <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
@@ -703,9 +642,7 @@
                 outvalue = (t ? type.GenericTypeArguments[0] : type);
                 return t;
             }
-            /// <summary>
-            /// Verilen adresin geçerli bir URI olup olmadığını kontrol eder. Geçerli bir URI ise, outvalue parametresine URI değeri atanır. URI&#39;nın HTTP veya HTTPS protokolüne sahip olması gerekmektedir.
-            /// </summary>
+            /// <summary>Verilen adresin geçerli bir URI olup olmadığını kontrol eder. Geçerli bir URI ise, outvalue parametresine URI değeri atanır. URI&#39;nın HTTP veya HTTPS protokolüne sahip olması gerekmektedir.</summary>
             /// <param name="uriString">Doğrulanacak adres.</param>
             /// <param name="outvalue">Geçerli URI değeri, dönüş değeri olarak atanır.</param>
             /// <returns>Geçerli bir URI ise <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
@@ -715,9 +652,7 @@
                 catch { outvalue = default; }
                 return outvalue != null;
             }
-            /// <summary>
-            /// Verilen türün (Type) özelliklerinden birincil anahtar (Primary Key) olarak işaretlenmiş olanları bulur. Türün özelliklerini tarar ve <see cref="KeyAttribute"/> ile işaretlenmiş özellikleri döndürür.
-            /// </summary>
+            /// <summary>Verilen türün (Type) özelliklerinden birincil anahtar (Primary Key) olarak işaretlenmiş olanları bulur. Türün özelliklerini tarar ve <see cref="KeyAttribute"/> ile işaretlenmiş özellikleri döndürür.</summary>
             /// <param name="type">Kontrol edilecek tür.</param>
             /// <param name="outvalue">Birincil anahtar olarak işaretlenmiş özelliklerin (PropertyInfo) dizisi. Tür null ise boş bir dizi, hata durumunda default döner.</param>
             /// <returns>En az bir birincil anahtar bulunursa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
@@ -734,9 +669,7 @@
                     return false;
                 }
             }
-            /// <summary>
-            /// Belirtilen öğe üzerinde verilen türde bir özel niteliğin (attribute) var olup olmadığını kontrol eder. Eğer nitelik bulunursa, <paramref name="outvalue"/> parametresine niteliğin değeri atanır.
-            /// </summary>
+            /// <summary>Belirtilen öğe üzerinde verilen türde bir özel niteliğin (attribute) var olup olmadığını kontrol eder. Eğer nitelik bulunursa, <paramref name="outvalue"/> parametresine niteliğin değeri atanır.</summary>
             /// <typeparam name="T">Öğenin türü.</typeparam>
             /// <typeparam name="Y">Kontrol edilecek özel niteliğin türü.</typeparam>
             /// <param name="element">Özel niteliği kontrol edilecek öğe.</param>
@@ -755,9 +688,7 @@
                     return false;
                 }
             }
-            /// <summary>
-            /// Verilen byte dizisinden bir resim (<see cref="Image"/>) oluşturmayı dener. Başarılı olursa, <paramref name="outvalue"/> parametresine oluşturulan resim atanır. Resim nesnesinin kullanımında dikkatli olunmalı ve gerektiğinde dispose edilmelidir.
-            /// </summary>
+            /// <summary>Verilen byte dizisinden bir resim (<see cref="Image"/>) oluşturmayı dener. Başarılı olursa, <paramref name="outvalue"/> parametresine oluşturulan resim atanır. Resim nesnesinin kullanımında dikkatli olunmalı ve gerektiğinde dispose edilmelidir.</summary>
             /// <param name="bytes">Resim verilerini içeren byte dizisi.</param>
             /// <param name="outvalue">Oluşturulan resim nesnesi, dönüş değeri olarak atanır.</param>
             /// <returns>Resim başarıyla oluşturulursa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
@@ -778,9 +709,7 @@
                     return false;
                 }
             }
-            /// <summary>
-            /// Verilen değerin geçerli bir MAC adresi olup olmadığını kontrol eder. Eğer geçerliyse, <paramref name="outvalue"/> parametresine temizlenmiş MAC adresi atanır. MAC adresinin belirli bir biçimde olması gerekmektedir.
-            /// </summary>
+            /// <summary>Verilen değerin geçerli bir MAC adresi olup olmadığını kontrol eder. Eğer geçerliyse, <paramref name="outvalue"/> parametresine temizlenmiş MAC adresi atanır. MAC adresinin belirli bir biçimde olması gerekmektedir.</summary>
             /// <param name="value">Kontrol edilecek MAC adresi.</param>
             /// <param name="outvalue">Geçerli MAC adresi, dönüş değeri olarak atanır.</param>
             /// <returns>Geçerli bir MAC adresi varsa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
@@ -847,14 +776,12 @@
             private static bool isGoogleMapsCoordinateCheck(string value) => (Decimal.TryParse(value.Trim(), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out decimal _r) && _r >= Convert.ToDecimal(-180) && _r <= Convert.ToDecimal(180));
             /// <summary>
             /// Verilen bir metni, belirtilen diller arasında asenkron olarak çevirir.
-            /// <para>
-            /// Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;value&quot; parametresindeki metni &quot;from&quot; dilinden &quot;to&quot; diline çevirir. Varsayılan olarak &quot;from&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve false durumu döner.
-            /// </para>
+            /// <para>Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;<paramref name="value"/>&quot; parametresindeki metni &quot;<paramref name="from"/>&quot; dilinden &quot;<paramref name="to"/>&quot; diline çevirir. Varsayılan olarak &quot;<paramref name="from"/>&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve <see langword="false"/> durumu döner.</para>
             /// </summary>
             public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslate(string value, TimeSpan timeout, string to = "en", string from = "tr", CancellationToken cancellationToken = default)
             {
                 value = value.ToStringOrEmpty();
-                if (value == "") { return (false, "", null); }
+                Guard.ThrowIfEmpty(value, nameof(value));
                 Guard.ThrowIfEmpty(to, nameof(to));
                 Guard.ThrowIfEmpty(from, nameof(from));
                 try
