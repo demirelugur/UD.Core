@@ -7,6 +7,7 @@
         T[] items { get; set; }
         PagingInfo? info { get; set; }
     }
+    [Serializable]
     public class Paginate<T> : IPaginate<T>
     {
         private T[] _Items;

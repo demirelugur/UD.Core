@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Helper.Paging
 {
+    [Serializable]
     public sealed class PagingInfo
     {
         public long totalcount { get; set; }
