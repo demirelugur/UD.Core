@@ -65,8 +65,8 @@ namespace UD.Core.Extensions
         public static string CoalesceOrDefault(this string value, params string[] defaultValues)
         {
             value = value.ToStringOrEmpty();
-            if (value != "") { return value; }
-            return (defaultValues ?? []).Select(x => x.ToStringOrEmpty()).FirstOrDefault(x => x != "") ?? "";
+            if (value == "") { return (defaultValues ?? []).Select(x => x.ToStringOrEmpty()).FirstOrDefault(x => x != "") ?? ""; }
+            return value;
         }
         /// <summary>Verilen dize deðerinin null veya boþ olup olmadýðýný kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize.</param>
@@ -129,28 +129,23 @@ namespace UD.Core.Extensions
             Guard.ThrowIfEmpty(methodName, nameof(methodName));
             return $"/{(useFullTypeName ? typeof(T).FullName : typeof(T).Name)}/{methodName}";
         }
-        /// <summary> Metin içerisindeki tab (\t), satýr baþý (\r) ve yeni satýr (\n) karakterlerini boþluk ile deðiþtirir ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null deðerlerde güvenli þekilde çalýþýr.</summary>
+        /// <summary>Metin içerisindeki tab (\t), satýr baþý (\r) ve yeni satýr (\n) karakterlerini boþluk ile deðiþtirir ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null deðerlerde güvenli þekilde çalýþýr.</summary>
         public static string ReplaceTRNSpace(this string value) => value.ToStringOrEmpty().Replace("\t", " ").Replace("\r", " ").Replace("\n", " ").Trim();
-        /// <summary> Metin içerisindeki birden fazla ardýþýk boþluðu tek bir boþluða indirger ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null veya boþ metinlerde güvenli þekilde çalýþýr.</summary>
+        /// <summary>Metin içerisindeki birden fazla ardýþýk boþluðu tek bir boþluða indirger ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null veya boþ metinlerde güvenli þekilde çalýþýr.</summary>
         public static string RemoveMultipleSpace(this string value) => Regex.Replace(value.ToStringOrEmpty(), " +", " ").Trim();
-        /// <summary> Belirtilen karakter ile doldurarak bir string deðerini belirli bir uzunluða getirir.</summary>
+        /// <summary>Belirtilen karakter ile doldurarak bir string deðerini belirli bir uzunluða getirir.</summary>
         /// <param name="value">Uzunluðu ayarlanacak string deðeri. </param>
         /// <param name="totalValueLength">Hedef toplam uzunluk.  Varsayýlan deðer 2&#39;dir.</param>
         /// <param name="c">Dolgu için kullanýlacak karakter.  Varsayýlan deðer 0&#39;dýr.</param>
-        /// <param name="direction">Doldurma yönü. &#39;l&#39; sol tarafa (PadLeft), &#39;r&#39; sað tarafa (PadRight) doldurur.  Varsayýlan deðer l&#39;dir.</param>
-        /// <returns> Belirtilen uzunluða getirilmiþ string deðeri. Eðer deðer boþ ise veya mevcut uzunluk hedef uzunluktan büyük/eþitse orijinal deðeri döndürür. </returns>
+        /// <param name="fillingDirectionIsLeft">Dolgu karakterinin eklenme yönü. <see langword="true"/> ise sol tarafa, <see langword="false"/> ise sað tarafa eklenir. Varsayýlan deðer <see langword="true"/> (sol tarafa doldurma)&#39;dýr.</param>
+        /// <returns>Belirtilen uzunluða getirilmiþ string deðeri. Eðer deðer boþ ise veya mevcut uzunluk hedef uzunluktan büyük/eþitse orijinal deðeri döndürür. </returns>
         /// <exception cref="ArgumentException"><paramref name="totalValueLength"/> parametresi sýfýr veya negatif olduðunda fýrlatýlýr.</exception>
-        public static string Replicate(this string value, int totalValueLength = 2, char c = '0', char direction = 'l')
+        public static string Replicate(this string value, int totalValueLength = 2, char c = '0', bool fillingDirectionIsLeft = true)
         {
             value = value.ToStringOrEmpty();
-            if (value != "")
-            {
-                totalValueLength = Math.Max(1, totalValueLength);
-                if (totalValueLength <= value.Length) { return value; }
-                if (direction == 'l') { return value.PadLeft(totalValueLength, c); }
-                if (direction == 'r') { return value.PadRight(totalValueLength, c); }
-            }
-            return "";
+            if (value == "") { return ""; }
+            if (totalValueLength <= value.Length) { return value; }
+            return (fillingDirectionIsLeft ? value.PadLeft(totalValueLength, c) : value.PadRight(totalValueLength, c));
         }
         /// <summary>Verilen dizeyi belirtilen uzunluða kadar keser. </summary>
         /// <param name="value">Kesilecek dize.</param>

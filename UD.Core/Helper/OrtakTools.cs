@@ -565,24 +565,23 @@
             /// <returns>Anahtar bulunduysa ve değer istenen tipe dönüştürülebiliyorsa <see langword="true"/>, aksi halde <see langword="false"/>.</returns>
             public static bool TryGetProperty<TKey>(object value, string key, out TKey outvalue)
             {
+                Guard.ThrowIfNull(value, nameof(value));
+                Guard.ThrowIfEmpty(key, nameof(key));
                 try
                 {
-                    if (value != null && !key.IsNullOrEmpty())
+                    if (value is IDictionary<string, object> _dic && _dic.TryGetValue(key, out object _dictval) && _dictval is TKey _tdic)
                     {
-                        if (value is IDictionary<string, object> _dic && _dic.TryGetValue(key, out object _dictval) && _dictval is TKey _tdic)
+                        outvalue = _tdic;
+                        return true;
+                    }
+                    var pi = value.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                    if (pi != null)
+                    {
+                        var piValue = pi.GetValue(value);
+                        if (piValue is TKey _tpi)
                         {
-                            outvalue = _tdic;
+                            outvalue = _tpi;
                             return true;
-                        }
-                        var pi = value.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                        if (pi != null)
-                        {
-                            var piValue = pi.GetValue(value);
-                            if (piValue is TKey _tpi)
-                            {
-                                outvalue = _tpi;
-                                return true;
-                            }
                         }
                     }
                     outvalue = default;
@@ -625,7 +624,8 @@
             /// <returns>Tür nullable ise <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
             public static bool TryTypeIsNullable(Type type, out Type outvalue)
             {
-                var t = (type != null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
+                Guard.ThrowIfNull(type, "type");
+                var t = (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
                 outvalue = (t ? type.GenericTypeArguments[0] : type);
                 return t;
             }

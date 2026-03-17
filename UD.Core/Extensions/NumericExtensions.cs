@@ -62,7 +62,7 @@
             if (vkn > 0)
             {
                 var vknString = vkn.ToString();
-                if (vknString.Length < MaximumLengthConstants.Vkn) { vknString = vknString.Replicate(MaximumLengthConstants.Vkn, '0', 'l'); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
+                if (vknString.Length < MaximumLengthConstants.Vkn) { vknString = vknString.Replicate(MaximumLengthConstants.Vkn, '0', true); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
                 if (vknString.Length == MaximumLengthConstants.Vkn)
                 {
                     int i, t;

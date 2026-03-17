@@ -34,8 +34,7 @@
         {
             Guard.ThrowIfNull(validationContext, nameof(validationContext));
             var property = validationContext.ObjectInstance.GetType().GetProperty(validationContext.MemberName);
-            if (property == null) { return false; }
-            return Validators.TryCustomAttribute(property, out RequiredAttribute _);
+            return (property != null && Validators.TryCustomAttribute(property, out RequiredAttribute _));
         }
         /// <summary>Verilen doğrulama bağlamına göre, belirtilen özelliğin değerini günceller. Eğer özellik yazılabilir durumdaysa, yeni değer atanır.</summary>
         /// <param name="validationContext">Doğrulama işlemi sırasında bağlam bilgilerini içeren nesne.</param>
