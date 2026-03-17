@@ -194,6 +194,7 @@
         {
             var querydic = (queryString.HasValue ? HttpUtility.ParseQueryString(queryString.Value) : []);
             key = key.ToStringOrEmpty();
+            Guard.ThrowIfEmpty(key, nameof(key));
             if (querydic.AllKeys.Contains(key)) { return querydic[key].ParseOrDefault<TKey>(); }
             return default;
         }
