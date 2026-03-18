@@ -19,7 +19,8 @@
             try { return DateTime.FromFileTimeUtc(fileTime); }
             catch { return null; }
         }
-        /// <summary>Verilen değerin geçerli bir T.C. Kimlik Numarası olup olmadığını kontrol eder.<para>
+        /// <summary>Verilen değerin geçerli bir T.C. Kimlik Numarası olup olmadığını kontrol eder.
+        /// <para>
         /// Doğrulama adımları:
         /// <list type="bullet">
         /// <item><description>11 haneli olmalıdır.</description></item>
@@ -78,7 +79,7 @@
             }
             return r;
         }
-        /// <summary> <paramref name="value"/> değeri T.C. Kimlik Numarası (TCK) veya Vergi Kimlik Numarası (VKN) ise <see langword="true"/> döner.</summary>
+        /// <summary><paramref name="value"/> değeri T.C. Kimlik Numarası (TCK) veya Vergi Kimlik Numarası (VKN) ise <see langword="true"/> döner.</summary>
         public static bool IsTCKNorVKN(this long value) => (value.IsTCKimlikNo() || value.IsVergiKimlikNo());
         /// <summary>Verilen sayının asal olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek pozitif tamsayı.</param>

@@ -6,13 +6,9 @@
     {
         public enum ConjunctionDilTypes : byte
         {
-            /// <summary>
-            /// Küçük harfe çevirilecek bağlaçlar: <c>Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya</c>
-            /// </summary>
+            /// <summary>Küçük harfe çevirilecek bağlaçlar: <c>Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya</c></summary>
             tr = 1,
-            /// <summary>
-            /// Küçük harfe çevirilecek bağlaçlar: <c>A,An,And,As,By,For,In,İn,Of,On,Or,The,To,With</c>
-            /// </summary>
+            /// <summary>Küçük harfe çevirilecek bağlaçlar: <c>A,An,And,As,By,For,In,İn,Of,On,Or,The,To,With</c></summary>
             en
         }
         private ConjunctionDilTypes[] dils = [ConjunctionDilTypes.tr];

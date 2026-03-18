@@ -9,6 +9,7 @@ namespace UD.Core.Extensions
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
+    using UD.Core.Enums;
     using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public static class StringExtensions
@@ -243,71 +244,44 @@ namespace UD.Core.Extensions
             }
             catch { return (default, default); }
         }
-        /// <summary>
-        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir
-        /// <br/>
-        /// isLowerCase seçenekleri:
-        /// <list type="bullet">
-        /// <item><c><see langword="true"/>: </c><paramref name="value"/> deðerini küçük harfe çevirir (.ToLower()) – varsayýlan davranýþ</item>
-        /// <item><c><see langword="false"/>: </c><paramref name="value"/> deðerini büyük harfe çevirir (.ToUpper())</item>
-        /// <item><c>null</c>: <paramref name="value"/> deðerini orijinal haliyle (deðiþtirmeden) býrakýr</item>
-        /// </list>
-        /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code>
-        /// </summary>
-        public static string LikeContains(this string value, bool? isLowerCase = true)
+        /// <summary>Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code></summary>
+        public static string LikeContains(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
-            if (isLowerCase.HasValue)
+            return caseHandling switch
             {
-                if (isLowerCase.Value) { value = value.ToLower(); }
-                else { value = value.ToUpper(); }
-            }
-            return $"%{value}%";
+                StringCaseHandling.@default => $"%{value}%",
+                StringCaseHandling.lower => $"%{value.ToLower()}%",
+                StringCaseHandling.upper => $"%{value.ToUpper()}%",
+                _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
+            };
         }
-        /// <summary>
-        /// Verilen metni SQL LIKE sorgusu için &quot;<paramref name="value"/>%&quot; biçimine getirir
-        /// <br/>
-        /// isLowerCase seçenekleri:
-        /// <list type="bullet">
-        /// <item><c><see langword="true"/>: </c><paramref name="value"/> deðerini küçük harfe çevirir (.ToLower()) – varsayýlan davranýþ</item>
-        /// <item><c><see langword="false"/>:</c><paramref name="value"/> deðerini büyük harfe çevirir (.ToUpper())</item>
-        /// <item><c>null</c>: <paramref name="value"/> deðerini orijinal haliyle (deðiþtirmeden) býrakýr</item>
-        /// </list>
-        /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeStartWith()))</code>
-        /// </summary>
-        public static string LikeStartWith(this string value, bool? isLowerCase = true)
+        /// <summary>Verilen metni SQL LIKE sorgusu için &quot;<paramref name="value"/>%&quot; biçimine getirir <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeStartWith()))</code></summary>
+        public static string LikeStartWith(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
-            if (isLowerCase.HasValue)
+            return caseHandling switch
             {
-                if (isLowerCase.Value) { value = value.ToLower(); }
-                else { value = value.ToUpper(); }
-            }
-            return String.Concat(value, "%");
+                StringCaseHandling.@default => String.Concat(value, "%"),
+                StringCaseHandling.lower => String.Concat(value.ToLower(), "%"),
+                StringCaseHandling.upper => String.Concat(value.ToUpper(), "%"),
+                _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
+            };
         }
-        /// <summary>
-        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>&quot; biçimine getirir.
-        /// <br/>
-        /// isLowerCase seçenekleri:
-        /// <list type="bullet">
-        /// <item><c><see langword="true"/>: </c><paramref name="value"/> deðerini küçük harfe çevirir (.ToLower()) – varsayýlan davranýþ</item>
-        /// <item><c><see langword="false"/>: </c><paramref name="value"/> deðerini büyük harfe çevirir (.ToUpper())</item>
-        /// <item><c>null</c>: <paramref name="value"/> deðerini orijinal haliyle (deðiþtirmeden) býrakýr</item>
-        /// </list>
-        /// <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeEndsWith()))</code>
-        /// </summary>
-        public static string LikeEndsWith(this string value, bool? isLowerCase = true)
+        /// <summary>Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>&quot; biçimine getirir. <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeEndsWith()))</code></summary>
+        public static string LikeEndsWith(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
-            if (isLowerCase.HasValue)
+            return caseHandling switch
             {
-                if (isLowerCase.Value) { value = value.ToLower(); }
-                else { value = value.ToUpper(); }
-            }
-            return String.Concat("%", value);
+                StringCaseHandling.@default => String.Concat("%", value),
+                StringCaseHandling.lower => String.Concat("%", value.ToLower()),
+                StringCaseHandling.upper => String.Concat("%", value.ToUpper()),
+                _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
+            };
         }
     }
 }

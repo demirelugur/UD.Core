@@ -635,7 +635,7 @@
             /// <returns>Tür nullable ise <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
             public static bool TryTypeIsNullable(Type type, out Type outvalue)
             {
-                Guard.ThrowIfNull(type, "type");
+                Guard.ThrowIfNull(type, nameof(type));
                 var t = (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
                 outvalue = (t ? type.GenericTypeArguments[0] : type);
                 return t;

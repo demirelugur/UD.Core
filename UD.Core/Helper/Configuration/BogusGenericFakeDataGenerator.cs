@@ -11,15 +11,9 @@
     /// <summary>
     /// Sahte veri üretimi için kullanılan genel bir sınıf. Bogus kütüphanesini kullanarak farklı veri türlerinde özelleştirilebilir sahte veriler üretir.
     /// <list type="bullet">
-    /// <item>
-    /// String için özel işaretlenmiş property adları: <c>seo, nms, src, ipaddress, color, mac, tel, adres, ad, name, soyad, surname, kuladi, username, eposta, email</c>
-    /// </item>
-    /// <item>
-    /// Int16(Short) için özel işaretlenmiş property adları: <c>dahili</c>
-    /// </item>
-    /// <item>
-    /// Int64(Long) için özel işaretlenmiş property adları: <c>tckn, vkn</c>
-    /// </item>
+    /// <item>String için özel işaretlenmiş property adları: <c>seo, nms, src, ipaddress, color, mac, tel, adres, ad, name, soyad, surname, kuladi, username, eposta, email</c></item>
+    /// <item>Int16(Short) için özel işaretlenmiş property adları: <c>dahili</c></item>
+    /// <item>Int64(Long) için özel işaretlenmiş property adları: <c>tckn, vkn</c></item>
     /// </list>
     /// </summary>
     public sealed class BogusGenericFakeDataGenerator
@@ -36,9 +30,7 @@
         private decimal decimalMin = Decimal.Zero, decimalMax = Decimal.One;
         private DateTime? dateTimeMin = null, dateTimeMax = null;
         private DateOnly? dateOnlyMin = null, dateOnlyMax = null;
-        /// <summary>
-        /// Varsayılan yapılandırıcı
-        /// </summary>
+        /// <summary>Varsayılan yapılandırıcı</summary>
         /// <param name="locale">Kullanılacak yerel ayar (örneğin, &quot;tr&quot; için Türkçe, &quot;en&quot; için İngilizce).</param>
         /// <param name="nullChange">0 ile 1 arasında bir olasılık değeri (0: asla null, 1: her zaman null).</param>
         /// <param name="arrayMinLength">Array türünde propertylerin minimum oluşabileceği eleman sayısı.</param>

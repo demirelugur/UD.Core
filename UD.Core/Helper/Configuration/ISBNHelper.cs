@@ -13,7 +13,7 @@
             set
             {
                 if (TryIsValid(value, out string _c)) { this.setISBN(_c); }
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"{TitleConstants.Isbn} is incompatible!"); }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException("ISBN is incompatible!"); }
                 throw new NotSupportedException($"{TitleConstants.Isbn} uyumsuzdur!");
             }
         }
@@ -23,7 +23,7 @@
             set
             {
                 if (TryIsValid(value, out string _c)) { this.setISBN(_c); }
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"{TitleConstants.Isbn} is incompatible!"); }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException("ISBN is incompatible!"); }
                 throw new NotSupportedException($"{TitleConstants.Isbn} uyumsuzdur!");
             }
         }
@@ -80,7 +80,7 @@
                 this.isbn13 = "";
             }
         }
-        private static string cleanISBN(string isbn) => isbn.ToStringOrEmpty().Replace("-", "").Replace(" ", "");
+        private static string cleanISBN(string isbn) => isbn.RemoveMultipleSpace().Replace("-", "");
         private static string isbn10Checksum(string isbn)
         {
             int i, rem, sum = 0;
