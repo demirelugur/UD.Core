@@ -42,7 +42,7 @@ public class KullaniciKayitModel
 
     // E-posta validasyonu
     [UDRequired]
-    [EmailAddress(ErrorMessage = ValidationErrorMessageConstants.EMail)]
+    [UDEmail]
     [UDStringLength(MaximumLengthConstants.EMail)]
     public string Eposta { get; set; }
 
@@ -708,16 +708,7 @@ gmailClient.Send(mailMessage);
 var outlookSettings = SmtpClientBasic.SetOutlook("your-email@outlook.com", "your-password");
 
 // Özel SMTP ayarları
-var customSmtp = new SmtpClientBasic(
-    email: "info@mycompany.com",
-    password: "password123",
-    host: "smtp.mycompany.com",
-    port: 587,
-    enablessl: true,
-    usedefaultcredentials: false,
-    deliverymethod: SmtpDeliveryMethod.Network,
-    timeout: 30000
-);
+var customSmtp = new SmtpClientBasic("info@mycompany.com", "password123", "smtp.mycompany.com", 587, true, 30000);
 ```
 
 ### 17. Dosya Yükleme İşlemleri

@@ -13,7 +13,7 @@
             set
             {
                 if (TryIsValid(value, out string _c)) { this.setISBN(_c); }
-                if (Guards.IsUICultureEnglish) { throw new NotSupportedException($"{TitleConstants.Isbn} is incompatible!"); }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"{TitleConstants.Isbn} is incompatible!"); }
                 throw new NotSupportedException($"{TitleConstants.Isbn} uyumsuzdur!");
             }
         }
@@ -23,7 +23,7 @@
             set
             {
                 if (TryIsValid(value, out string _c)) { this.setISBN(_c); }
-                if (Guards.IsUICultureEnglish) { throw new NotSupportedException($"{TitleConstants.Isbn} is incompatible!"); }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"{TitleConstants.Isbn} is incompatible!"); }
                 throw new NotSupportedException($"{TitleConstants.Isbn} uyumsuzdur!");
             }
         }
@@ -35,7 +35,7 @@
                 isbn13 = $"978{isbn10.Substring(0, 9)}";
                 return String.Concat(isbn13, isbn13Checksum(isbn13));
             }
-            if (Guards.IsUICultureEnglish) { throw new ArgumentException($"{nameof(isbn)} value must be 10 characters long!", nameof(isbn)); }
+            if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"{nameof(isbn)} value must be 10 characters long!", nameof(isbn)); }
             throw new ArgumentException($"{nameof(isbn)} değeri 10 karakterden oluşmalıdır!", nameof(isbn));
         }
         public static string Convert13to10(string isbn)
@@ -46,7 +46,7 @@
                 isbn10 = isbn13.Substring(3, 9);
                 return String.Concat(isbn10, isbn10Checksum(isbn10));
             }
-            if (Guards.IsUICultureEnglish) { throw new ArgumentException($"{nameof(isbn)} value must be 13 characters long!", nameof(isbn)); }
+            if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"{nameof(isbn)} value must be 13 characters long!", nameof(isbn)); }
             throw new ArgumentException($"{nameof(isbn)} değeri 13 karakterden oluşmalıdır!", nameof(isbn));
         }
         public static bool IsValid(string isbn) => TryIsValid(isbn, out _);

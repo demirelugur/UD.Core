@@ -14,12 +14,12 @@
         public (double totalHours, int minutes, int seconds, int milliseconds) DecomposeTimeSpan => (Math.Truncate(timeSpan.TotalHours), timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
         public string FormatTimeSpan()
         {
-            var p0 = Guards.IsUICultureEnglish ? "sec." : "sn.";
+            var p0 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "sec." : "sn.";
             if (this.timeSpan == TimeSpan.Zero) { return $"0 {p0}"; }
             var (totalHours, minutes, seconds, milliseconds) = this.DecomposeTimeSpan;
             var r = new List<string>();
-            var p1 = Guards.IsUICultureEnglish ? "min." : "dk.";
-            var p2 = Guards.IsUICultureEnglish ? "hour" : "saat";
+            var p1 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "min." : "dk.";
+            var p2 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "hour" : "saat";
             if (totalHours != 0) { r.Add(String.Join(" ", Math.Abs(totalHours).ToString(), p2)); }
             if (minutes != 0) { r.Add(String.Join(" ", Math.Abs(minutes).ToString(), p1)); }
             if ((seconds > 0 && milliseconds > 0) || (seconds < 0 && milliseconds < 0)) { r.Add($"{Math.Abs(seconds)},{Math.Abs(milliseconds).ToString().Replicate(3)} {p0}"); }

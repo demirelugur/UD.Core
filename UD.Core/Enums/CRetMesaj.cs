@@ -34,7 +34,7 @@
         }
         public static string GetDescriptionLocalizationValue(RetMesaj value)
         {
-            if (Guards.IsUICultureEnglish)
+            if (Guards.IsEnglishDefaultThreadCurrentUICulture)
             {
                 return value switch
                 {

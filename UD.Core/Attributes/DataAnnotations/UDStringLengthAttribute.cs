@@ -9,12 +9,12 @@
     {
         public UDStringLengthAttribute(int maximumlength) : base(maximumlength)
         {
-            this.ErrorMessage = (Guards.IsUICultureEnglish ? "{0}, must be at most {1} characters long." : ValidationErrorMessageConstants.StringLengthMax);
+            this.ErrorMessage = (Guards.IsEnglishDefaultThreadCurrentUICulture ? "{0}, must be at most {1} characters long." : ValidationErrorMessageConstants.StringLengthMax);
         }
         public UDStringLengthAttribute(int maximumlength, int minimumlength) : base(maximumlength)
         {
             this.MinimumLength = minimumlength;
-            this.ErrorMessage = (maximumlength == minimumlength ? (Guards.IsUICultureEnglish ? "{0} must be exactly {1} characters long!" : ValidationErrorMessageConstants.StringLengthEqualMaxMin) : (Guards.IsUICultureEnglish ? "{0} must be at least {2} and at most {1} characters long!" : ValidationErrorMessageConstants.StringLengthBetweenMaxMin));
+            this.ErrorMessage = (maximumlength == minimumlength ? (Guards.IsEnglishDefaultThreadCurrentUICulture ? "{0} must be exactly {1} characters long!" : ValidationErrorMessageConstants.StringLengthEqualMaxMin) : (Guards.IsEnglishDefaultThreadCurrentUICulture ? "{0} must be at least {2} and at most {1} characters long!" : ValidationErrorMessageConstants.StringLengthBetweenMaxMin));
         }
     }
 }

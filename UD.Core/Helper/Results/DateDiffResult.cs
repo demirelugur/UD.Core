@@ -37,9 +37,9 @@
         {
             var r = new List<string>();
             var (yil, ay, gun, _) = this.CalculateDateDifference();
-            var p0 = Guards.IsUICultureEnglish ? "year" : "yıl";
-            var p1 = Guards.IsUICultureEnglish ? "month" : "ay";
-            var p2 = Guards.IsUICultureEnglish ? "day" : "gün";
+            var p0 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "year" : "yıl";
+            var p1 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "month" : "ay";
+            var p2 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "day" : "gün";
             if (yil > 0) { r.Add(String.Join(" ", yil.ToString(), p0)); }
             if (ay > 0) { r.Add(String.Join(" ", ay.ToString(), p1)); }
             if (gun > 0) { r.Add(String.Join(" ", gun.ToString(), p2)); }

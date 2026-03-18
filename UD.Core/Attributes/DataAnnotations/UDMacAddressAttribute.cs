@@ -24,7 +24,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, {TitleConstants.Mac} Adresi biçimine uygun olmalıdır!";
-                if (Guards.IsUICultureEnglish) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid {TitleConstants.Mac} Address format!"; }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid {TitleConstants.Mac} Address format!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

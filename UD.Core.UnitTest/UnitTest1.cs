@@ -1,13 +1,13 @@
 ﻿namespace UD.Core.UnitTest
 {
-    using System.Globalization;
+    using static UD.Core.Helper.OrtakTools;
     [TestFixture]
     public class UnitTest1
     {
         [SetUp]
         public void Setup()
         {
-            CultureInfo.CurrentUICulture = new CultureInfo("tr-TR");
+            Utilities.SetDefaultThreadCulture("tr-TR");
         }
         [Test]
         public void Test1()

@@ -194,8 +194,8 @@
                 if (!kimlikTipi.HasValue) { return cs; }
                 var t = kimlikTipi.Value switch
                 {
-                    NVIKimlikTypes.yeni => (Guards.IsUICultureEnglish ? "New ID Card" : "Yeni Kimlik Kartı"),
-                    NVIKimlikTypes.eski => (Guards.IsUICultureEnglish ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
+                    NVIKimlikTypes.yeni => (Guards.IsEnglishDefaultThreadCurrentUICulture ? "New ID Card" : "Yeni Kimlik Kartı"),
+                    NVIKimlikTypes.eski => (Guards.IsEnglishDefaultThreadCurrentUICulture ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
                     _ => throw Utilities.ThrowNotSupportedForEnum<NVIKimlikTypes>(),
                 };
                 return $"{cs} ({t})";
@@ -295,7 +295,7 @@
                 if (obj is Dictionary<string, object> _d) { return _d; }
                 var t = obj.GetType();
                 if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
-                if (Guards.IsUICultureEnglish) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
                 throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
             }
             /// <summary>Verilen nesneyi SQL parametrelerine dönüştürür. Eğer nesne <see cref="SqlParameter"/> türünde ise doğrudan SQL parametreleri olarak döner. Özel sınıf türlerinde çalışır ve özellik isimlerine göre SQL parametrelerini oluşturur.<para><paramref name="obj"/> için tanımlanan nesneler: SqlParameter, IEnumerable&lt;SqlParameter&gt;, IDictionary&lt;string, object&gt;, AnonymousObjectClass</para></summary>
@@ -408,9 +408,9 @@
             public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string dataUri)
             {
                 dataUri = dataUri.ToStringOrEmpty();
-                if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(Guards.IsUICultureEnglish ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
+                if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(Guards.IsEnglishDefaultThreadCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
                 var parts = dataUri.Substring(5).Split([";base64,"], StringSplitOptions.None);
-                if (parts.Length != 2) { throw new ArgumentException(Guards.IsUICultureEnglish ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
+                if (parts.Length != 2) { throw new ArgumentException(Guards.IsEnglishDefaultThreadCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
                 return (Convert.FromBase64String(parts[1]), parts[0]);
             }
         }
@@ -434,8 +434,8 @@
         }
         public sealed class Guards
         {
-            /// <summary><see cref="CultureInfo.CurrentUICulture"/>&#39;un iki harfli ISO dil kodunun &quot;en&quot; içerip içermediğini kontrol eder. Bu özellik, uygulamanın geçerli kullanıcı arayüzü kültürünün İngilizce olup olmadığını belirlemek için kullanılabilir. Eğer geçerli UI kültürü İngilizce ise <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</summary>
-            public static bool IsUICultureEnglish => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.CurrentCultureIgnoreCase);
+            /// <summary><see cref="CultureInfo.DefaultThreadCurrentUICulture"/>&#39;un iki harfli ISO dil kodunun &quot;en&quot; içerip içermediğini kontrol eder. Bu özellik, uygulamanın geçerli kullanıcı arayüzü kültürünün İngilizce olup olmadığını belirlemek için kullanılabilir. Eğer geçerli UI kültürü İngilizce ise <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</summary>
+            public static bool IsEnglishDefaultThreadCurrentUICulture => CultureInfo.DefaultThreadCurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.CurrentCultureIgnoreCase);
             /// <summary>Verilen string&#39;in HTML tag&#39;leri içerip içermediğini kontrol eder. String null, boş veya yalnızca boşluklardan oluşuyorsa <see langword="false"/> döner. HTML tag&#39;leri, düzenli ifade (regex) kullanılarak tespit edilir.</summary>
             /// <param name="value">Kontrol edilecek string.</param>
             /// <returns>String HTML tag&#39;i içeriyorsa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
@@ -482,17 +482,26 @@
                 var type = value.GetType();
                 if (!type.IsCustomClass())
                 {
-                    if (Guards.IsUICultureEnglish) { throw new ArgumentException($"The \"{nameof(value)}\" argument type must be class!", nameof(value)); }
+                    if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The \"{nameof(value)}\" argument type must be class!", nameof(value)); }
                     throw new ArgumentException($"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value));
                 }
                 var pi = type.GetProperty(propertyName);
                 Guard.ThrowIfNull(pi, nameof(pi));
                 if (!pi.CanWrite)
                 {
-                    if (Guards.IsUICultureEnglish) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
+                    if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
                     throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
                 }
                 pi.SetValue(value, data == null ? null : Converters.ChangeType(data, pi.PropertyType));
+            }
+            /// <summary><paramref name="culture"/> parametresi ile belirtilen kültür bilgisini kullanarak, uygulamanın varsayılan thread kültürünü ve varsayılan thread UI kültürünü ayarlar. Bu metod, uygulamanın farklı kültürlerde çalışmasını sağlamak için kullanılabilir. <paramref name="culture"/> geçerli bir kültür kodu (örneğin &quot;en-US&quot;, &quot;tr-TR&quot;) içermelidir. Eğer geçerli bir kültür kodu sağlanmazsa, bir hata fırlatılır.</summary>
+            public static void SetDefaultThreadCulture(string culture)
+            {
+                Guard.ThrowIfEmpty(culture, nameof(culture));
+                var ci = new CultureInfo(culture);
+                Guard.ThrowIfNull(ci, nameof(ci));
+                CultureInfo.DefaultThreadCurrentCulture = ci;
+                CultureInfo.DefaultThreadCurrentUICulture = ci;
             }
             /// <summary>Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.</summary>
             /// <typeparam name="TEnum">Enum türü (generic).</typeparam>
@@ -500,7 +509,7 @@
             /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
             public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : struct, Enum
             {
-                var r = new HashSet<string> { typeof(TEnum).FullName, (Guards.IsUICultureEnglish ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
+                var r = new HashSet<string> { typeof(TEnum).FullName, (Guards.IsEnglishDefaultThreadCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
                 if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
                 return new(String.Join(" ", r));
             }

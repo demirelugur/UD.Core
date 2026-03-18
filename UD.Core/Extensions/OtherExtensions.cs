@@ -66,7 +66,7 @@
             }
             if (result.IsNullOrEmpty())
             {
-                if (Guards.IsUICultureEnglish) { throw new ArgumentException($"The value of \"{expression}\" is incompatible!", nameof(expression)); }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The value of \"{expression}\" is incompatible!", nameof(expression)); }
                 throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression));
             }
             return result;
@@ -186,7 +186,7 @@
             Guard.ThrowIfNull(jToken, nameof(jToken));
             if (jToken.Type.Includes(JTokenType.Null, JTokenType.Undefined)) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
-            if (Guards.IsUICultureEnglish) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
+            if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
             throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
         /// <summary><see cref="QueryString"/> içindeki belirtilen anahtarı alır ve uygun türde bir değere dönüştürür. Eğer anahtar bulunamazsa veya dönüştürme başarısız olursa, varsayılan değeri döner.</summary>
@@ -256,7 +256,7 @@
         /// <param name="typeInterface">Repository arayüzünün tipi (örneğin, typeof(IRepository&lt;&gt;))</param>
         /// <param name="typeBaseClass">Repository> sınıflarının türediği temel sınıfın tipi (örneğin, typeof(BaseRepository&lt;&gt;))</param>
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
-        public static IServiceCollection AddScopedRepositories(this IServiceCollection services, Assembly assembly, Type typeInterface, Type typeBaseClass)
+        public static IServiceCollection AddScopedRange(this IServiceCollection services, Assembly assembly, Type typeInterface, Type typeBaseClass)
         {
             Guard.ThrowIfNull(services, nameof(services));
             Guard.ThrowIfNull(assembly, nameof(assembly));

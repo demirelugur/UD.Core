@@ -10,7 +10,7 @@
         public UDRequiredAttribute()
         {
             this.AllowEmptyStrings = false;
-            this.ErrorMessage = (Guards.IsUICultureEnglish ? "{0} cannot be left blank!" : ValidationErrorMessageConstants.Required);
+            this.ErrorMessage = (Guards.IsEnglishDefaultThreadCurrentUICulture ? "{0} cannot be left blank!" : ValidationErrorMessageConstants.Required);
         }
     }
 }

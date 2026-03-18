@@ -9,7 +9,7 @@
     {
         public UDRangePositiveInt32Attribute() : base(1, Int32.MaxValue)
         {
-            this.ErrorMessage = (Guards.IsUICultureEnglish ? "{0} must be a value greater than zero!" : ValidationErrorMessageConstants.GreaterThenZero);
+            this.ErrorMessage = (Guards.IsEnglishDefaultThreadCurrentUICulture ? "{0} must be a value greater than zero!" : ValidationErrorMessageConstants.GreaterThenZero);
         }
     }
 }

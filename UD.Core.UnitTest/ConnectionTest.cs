@@ -5,9 +5,9 @@ namespace UD.Core.UnitTest
     using Newtonsoft.Json.Linq;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Globalization;
     using System.IO;
     using UD.Core.Extensions;
+    using static UD.Core.Helper.OrtakTools;
     [TestFixture]
     public class ConnectionTest
     {
@@ -16,7 +16,7 @@ namespace UD.Core.UnitTest
         [SetUp]
         public void Setup()
         {
-            CultureInfo.CurrentUICulture = new CultureInfo("tr-TR");
+            Utilities.SetDefaultThreadCulture("tr-TR");
             this.connection = new("Data Source=:memory:");
             this.connection.Open();
             this.context = new(new DbContextOptionsBuilder<TestDbContext>().UseSqlite(this.connection).Options);

@@ -21,7 +21,7 @@
             {
                 httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 httpContext.Response.ContentType = "application/json";
-                await httpContext.Response.WriteAsJsonAsync(ApiResult.setFailed(Guards.IsUICultureEnglish ? "Token invalid!" : "Token geçersiz!"), httpContext.RequestAborted);
+                await httpContext.Response.WriteAsJsonAsync(ApiResult.setFailed(Guards.IsEnglishDefaultThreadCurrentUICulture ? "Token invalid!" : "Token geçersiz!"), httpContext.RequestAborted);
                 return;
             }
             await next(httpContext);
