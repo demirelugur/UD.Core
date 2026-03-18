@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
+    using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDTcknAttribute : ValidationAttribute
     {
@@ -16,7 +17,11 @@
                 validationContext.SetValidatePropertyValue(valueLong);
                 return ValidationResult.Success;
             }
-            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!"; }
+            if (this.ErrorMessage.IsNullOrEmpty())
+            {
+                this.ErrorMessage = $"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!";
+                if (Guards.IsUICultureEnglish) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid T.C. Identity Number format!"; }
+            }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

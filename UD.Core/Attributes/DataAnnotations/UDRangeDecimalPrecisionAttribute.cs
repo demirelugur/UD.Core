@@ -5,6 +5,7 @@
     using System.Globalization;
     using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
+    using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDRangeDecimalPrecisionAttribute : RangeAttribute
     {
@@ -23,7 +24,11 @@
             if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             var valueDecimal = value.ToDecimal();
             if (valueDecimal >= Convert.ToDecimal(this.Minimum) && valueDecimal <= Convert.ToDecimal(this.Maximum)) { return ValidationResult.Success; }
-            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = String.Format(ValidationErrorMessageConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum); }
+            if (this.ErrorMessage.IsNullOrEmpty())
+            {
+                this.ErrorMessage = String.Format(ValidationErrorMessageConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum);
+                if (Guards.IsUICultureEnglish) { this.ErrorMessage = $"{validationContext.DisplayName} must be between [{this.Minimum} - {this.Maximum}]!"; }
+            }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
         private static string GetMaxString(int precision, int scale)

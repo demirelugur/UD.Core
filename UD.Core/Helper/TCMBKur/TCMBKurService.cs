@@ -7,7 +7,6 @@ namespace UD.Core.Helper.TCMBKur
     using System.Xml.Linq;
     using UD.Core.Extensions;
     using UD.Core.Helper.Validation;
-
     public interface ITCMBKurService // AddSingleton
     {
         Task<TCMBKurResponse> Get(TCMBKurCodeTypes type, DateOnly? date = null, CancellationToken cancellationToken = default);

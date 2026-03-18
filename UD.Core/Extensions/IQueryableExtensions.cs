@@ -56,6 +56,7 @@
         /// <summary>Verilen metin için benzersiz bir SEO dostu string oluşturur.</summary>
         public static async Task<string> GenerateUniqueSEOString(this IQueryable<string> source, string text, int maxLength, CancellationToken cancellationToken = default)
         {
+            Guard.ThrowIfNull(source, nameof(source));
             var i = 0;
             string r, textSeo = text.ToSeoFriendly();
             Guard.ThrowIfEmpty(textSeo, nameof(textSeo));
@@ -79,7 +80,7 @@
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
         public static async Task<Paginate<T>> ToPagedList<T>(this IQueryable<T> source, int pageNumber, int size, string sorting, bool loadInfo = true, CancellationToken cancellationToken = default)
         {
-            if (source == null) { return new(); }
+            Guard.ThrowIfNull(source, nameof(source));
             PagingInfo? p = null;
             if (loadInfo)
             {
@@ -96,7 +97,11 @@
             else
             {
                 try { orderedSource = source.OrderBy(sorting); }
-                catch (Exception ex) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
+                catch (Exception ex)
+                {
+                    if (Guards.IsUICultureEnglish) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
+                    throw new InvalidOperationException($"Sıralama hatası: {sorting}", ex);
+                }
             }
             var items = await orderedSource.Paginate(pageNumber, size).ToArrayAsync(cancellationToken);
             return new(pageNumber, size, items, p);

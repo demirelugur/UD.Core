@@ -169,7 +169,11 @@
             if (type.IsClass)
             {
                 var ctor = type.GetConstructors().FirstOrDefault();
-                if (ctor == null) { throw new InvalidOperationException($"\"{type.FullName}\" için genel bir kurucu (Constructors) bulunamadı!"); }
+                if (ctor == null)
+                {
+                    if (Guards.IsUICultureEnglish) { throw new InvalidOperationException($"No public constructor found for \"{type.FullName}\"!"); }
+                    throw new InvalidOperationException($"\"{type.FullName}\" için genel bir kurucu (Constructors) bulunamadı!");
+                }
                 var args = ctor.GetParameters().Select(x => this.createFakeInstance(x.Name, x.ParameterType, faker)).ToArray();
                 return ctor.Invoke(args);
             }

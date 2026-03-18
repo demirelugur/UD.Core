@@ -1,7 +1,6 @@
 ﻿namespace UD.Core.Helper.MailManagement
 {
     using Microsoft.AspNetCore.Http;
-    using Newtonsoft.Json.Linq;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Net;
@@ -9,7 +8,6 @@
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
-    using static UD.Core.Helper.OrtakTools;
     public sealed class SmtpClientBasic : IEquatable<SmtpClientBasic>
     {
         #region Equals
@@ -68,7 +66,7 @@
         }
         public static SmtpClientBasic SetGmail(string email, string password, int? timeout = null) => new(email, password, "smtp.gmail.com", 587, true, timeout);
         public static SmtpClientBasic SetOutlook(string email, string password, int? timeout = null) => new(email, password, "smtp.office365.com", 587, true, timeout);
-        /// <summary><paramref name="value"/> için tanımlanan nesneler: SmtpClientBasic, IFormCollection, String(JTokenType.Object), AnonymousObjectClass</summary>
+        /// <summary><paramref name="value"/> için tanımlanan nesneler: SmtpClientBasic, IFormCollection, AnonymousObjectClass</summary>
         public static SmtpClientBasic ToEntityFromObject(object value)
         {
             if (value == null) { return new(); }
@@ -84,11 +82,6 @@
                     EnableSsl = _form.ParseOrDefault<bool>(nameof(EnableSsl)),
                     Timeout = _form.ParseOrDefault<int?>(nameof(Timeout))
                 });
-            }
-            if (value is String _json)
-            {
-                if (Validators.TryJson(_json, JTokenType.Object, out JObject _jo)) { return _jo.ToObject<SmtpClientBasic>(); }
-                return new();
             }
             return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new SmtpClientBasic((string)x.Email, (string)x.Password, (string)x.Host, (int)x.Port, (bool)x.EnableSsl, (int?)x.Timeout)).FirstOrDefault();
         }

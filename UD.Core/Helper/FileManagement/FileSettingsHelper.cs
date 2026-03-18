@@ -82,6 +82,10 @@
                 }).ToArray();
                 if (filesArray.Length > fileSettingsHelper.fileCount)
                 {
+                    errors = [
+                       "Yüklenecek maksimum dosya sayısını aştınız!",
+                       $"Maksimum dosya sayısı: {fileSettingsHelper.fileCount}"
+                    ];
                     if (Guards.IsUICultureEnglish)
                     {
                         errors = [
@@ -89,17 +93,15 @@
                            $"Maximum file count: {fileSettingsHelper.fileCount}"
                         ];
                     }
-                    else
-                    {
-                        errors = [
-                           "Yüklenecek maksimum dosya sayısını aştınız!",
-                           $"Maksimum dosya sayısı: {fileSettingsHelper.fileCount}"
-                        ];
-                    }
                     return true;
                 }
                 if (filesArray.Any(x => !x.checkExt))
                 {
+                    errors = [
+                       "Yüklenecek dosya uzantıları uyumsuzdur!",
+                       $"Uyumsuz olan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
+                       $"İzin verilen uzantı türleri: {String.Join(", ", fileSettingsHelper.accept)}"
+                    ];
                     if (Guards.IsUICultureEnglish)
                     {
                         errors = [
@@ -108,32 +110,21 @@
                             $"Allowed extension types: {String.Join(", ", fileSettingsHelper.accept)}"
                         ];
                     }
-                    else
-                    {
-                        errors = [
-                           "Yüklenecek dosya uzantıları uyumsuzdur!",
-                           $"Uyumsuz olan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
-                           $"İzin verilen uzantı türleri: {String.Join(", ", fileSettingsHelper.accept)}"
-                        ];
-                    }
                     return true;
                 }
                 if (filesArray.Any(x => !x.checkSize))
                 {
+                    errors = [
+                       "Tek bir dosya için izin verilen yükleme miktarını aştınız!",
+                       $"Kapasite miktarı aşan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(", ", x.fileName, FormatSize(x.size))).ToArray())}",
+                       $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileSettingsHelper.getformatsize}"
+                    ];
                     if (Guards.IsUICultureEnglish)
                     {
                         errors = [
                             "You have exceeded the allowed upload size for a single file!",
                             $"Files exceeding the size limit: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(", ", x.fileName, FormatSize(x.size))).ToArray())}",
                             $"Maximum allowed size for a single file: {fileSettingsHelper.getformatsize}"
-                        ];
-                    }
-                    else
-                    {
-                        errors = [
-                            "Tek bir dosya için izin verilen yükleme miktarını aştınız!",
-                            $"Kapasite miktarı aşan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(", ", x.fileName, FormatSize(x.size))).ToArray())}",
-                            $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileSettingsHelper.getformatsize}"
                         ];
                     }
                     return true;

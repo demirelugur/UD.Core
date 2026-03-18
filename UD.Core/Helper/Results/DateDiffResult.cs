@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Helper.Results
 {
-    using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public sealed class DateDiffResult
     {
@@ -34,13 +33,13 @@
             }
             return (yil, ay, gun, ((this.bitDate > this.basDate && isNegative) ? new TimeSpan(TimeSpan.TicksPerDay - ts.Negate().Ticks) : ts));
         }
-        public string FormatDateDifference(string p0 = "yıl", string p1 = "ay", string p2 = "gün")
+        public string FormatDateDifference()
         {
-            Guard.ThrowIfEmpty(p0, nameof(p0));
-            Guard.ThrowIfEmpty(p1, nameof(p1));
-            Guard.ThrowIfEmpty(p2, nameof(p2));
             var r = new List<string>();
             var (yil, ay, gun, _) = this.CalculateDateDifference();
+            var p0 = Guards.IsUICultureEnglish ? "year" : "yıl";
+            var p1 = Guards.IsUICultureEnglish ? "month" : "ay";
+            var p2 = Guards.IsUICultureEnglish ? "day" : "gün";
             if (yil > 0) { r.Add(String.Join(" ", yil.ToString(), p0)); }
             if (ay > 0) { r.Add(String.Join(" ", ay.ToString(), p1)); }
             if (gun > 0) { r.Add(String.Join(" ", gun.ToString(), p2)); }

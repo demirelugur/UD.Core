@@ -295,6 +295,7 @@
                 if (obj is Dictionary<string, object> _d) { return _d; }
                 var t = obj.GetType();
                 if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
+                if (Guards.IsUICultureEnglish) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
                 throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
             }
             /// <summary>Verilen nesneyi SQL parametrelerine dönüştürür. Eğer nesne <see cref="SqlParameter"/> türünde ise doğrudan SQL parametreleri olarak döner. Özel sınıf türlerinde çalışır ve özellik isimlerine göre SQL parametrelerini oluşturur.<para><paramref name="obj"/> için tanımlanan nesneler: SqlParameter, IEnumerable&lt;SqlParameter&gt;, IDictionary&lt;string, object&gt;, AnonymousObjectClass</para></summary>
@@ -435,23 +436,16 @@
         {
             /// <summary><see cref="CultureInfo.CurrentUICulture"/>&#39;un iki harfli ISO dil kodunun &quot;en&quot; içerip içermediğini kontrol eder. Bu özellik, uygulamanın geçerli kullanıcı arayüzü kültürünün İngilizce olup olmadığını belirlemek için kullanılabilir. Eğer geçerli UI kültürü İngilizce ise <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</summary>
             public static bool IsUICultureEnglish => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.CurrentCultureIgnoreCase);
-            /// <summary>
-            /// Verilen string&#39;in HTML tag&#39;leri içerip içermediğini kontrol eder. String null, boş veya yalnızca boşluklardan oluşuyorsa <see langword="false"/> döner. HTML tag&#39;leri, düzenli ifade (regex) kullanılarak tespit edilir.
-            /// <code>(!value.IsNullOrEmpty_string() &amp;&amp; Regex.IsMatch(value, @&quot;&lt;/?\w+\s*[^&gt;]*&gt;&quot;, RegexOptions.Compiled))</code>
-            /// </summary>
+            /// <summary>Verilen string&#39;in HTML tag&#39;leri içerip içermediğini kontrol eder. String null, boş veya yalnızca boşluklardan oluşuyorsa <see langword="false"/> döner. HTML tag&#39;leri, düzenli ifade (regex) kullanılarak tespit edilir.</summary>
             /// <param name="value">Kontrol edilecek string.</param>
             /// <returns>String HTML tag&#39;i içeriyorsa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
             public static bool IsHtml(string value) => (!value.IsNullOrEmpty() && Regex.IsMatch(value, @"</?\w+\s*[^>]*>", RegexOptions.Compiled));
-            /// <summary>Belirtilen dosyanın tarayıcı tarafından indirilebilir olup olmadığını kontrol eder. PDF veya görüntü dosyaları (image/*) indirme işlemi için uygun değilse <see langword="false"/> döner. Aksi takdirde <see langword="true"/> döner.</summary>
-            /// <param name="path">Kontrol edilecek dosyanın yolu.</param>
-            /// <returns>Dosya indirilebilir ise <see langword="true"/>, değilse <see langword="false"/>.</returns>
-            public static bool IsDownloadableFile(string path)
+            /// <summary>Belirtilen path&#39;in tarayıcıda görüntülenebilir bir dosya türüne sahip olup olmadığını kontrol eder. Bu metod, dosya uzantısına göre MIME tipi belirleyerek, tarayıcıların desteklediği türleri tespit eder. PDF dosyaları ve görüntü dosyaları (image/*) tarayıcıda görüntülenebilir olarak kabul edilmez, diğer tüm türler görüntülenebilir olarak değerlendirilir.</summary>
+            public static bool IsViewableInBrowser(string path)
             {
                 Guard.ThrowIfEmpty(path, nameof(path));
                 var uzn = Path.GetExtension(path).ToLower();
-                if (uzn == ".pdf") { return false; }
-                if (new FileExtensionContentTypeProvider().Mappings.TryGetValue(uzn, out string _value) && _value.StartsWith("image/")) { return false; }
-                return true;
+                return (uzn == ".pdf" || (new FileExtensionContentTypeProvider().Mappings.TryGetValue(uzn, out string _value) && _value.StartsWith("image/")));
             }
         }
         public sealed class Utilities
@@ -486,10 +480,18 @@
                 Guard.ThrowIfNull(value, nameof(value));
                 Guard.ThrowIfEmpty(propertyName, nameof(propertyName));
                 var type = value.GetType();
-                if (!type.IsCustomClass()) { throw new ArgumentException(Guards.IsUICultureEnglish ? $"The \"{nameof(value)}\" argument type must be class!" : $"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value)); }
+                if (!type.IsCustomClass())
+                {
+                    if (Guards.IsUICultureEnglish) { throw new ArgumentException($"The \"{nameof(value)}\" argument type must be class!", nameof(value)); }
+                    throw new ArgumentException($"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value));
+                }
                 var pi = type.GetProperty(propertyName);
                 Guard.ThrowIfNull(pi, nameof(pi));
-                if (!pi.CanWrite) { throw new InvalidOperationException(Guards.IsUICultureEnglish ? $"The \"{nameof(propertyName)}\" property is not writable!" : $"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
+                if (!pi.CanWrite)
+                {
+                    if (Guards.IsUICultureEnglish) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
+                    throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
+                }
                 pi.SetValue(value, data == null ? null : Converters.ChangeType(data, pi.PropertyType));
             }
             /// <summary>Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.</summary>
@@ -498,7 +500,7 @@
             /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
             public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : struct, Enum
             {
-                var r = new HashSet<string> { typeof(TEnum).FullName, $"{nameof(Enum)} değeri uyumsuzdur!" };
+                var r = new HashSet<string> { typeof(TEnum).FullName, (Guards.IsUICultureEnglish ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
                 if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
                 return new(String.Join(" ", r));
             }

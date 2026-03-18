@@ -3,12 +3,13 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using static UD.Core.Helper.GlobalConstants;
+    using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDRangePositiveInt16Attribute : RangeAttribute
     {
         public UDRangePositiveInt16Attribute() : base(1, Int16.MaxValue)
         {
-            this.ErrorMessage = ValidationErrorMessageConstants.GreaterThenZero;
+            this.ErrorMessage = (Guards.IsUICultureEnglish ? "{0} must be a value greater than zero!" : ValidationErrorMessageConstants.GreaterThenZero);
         }
     }
 }

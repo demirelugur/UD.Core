@@ -13,7 +13,6 @@
     using System.Net.Mail;
     using System.Reflection;
     using System.Web;
-    using UD.Core.Helper.Services;
     using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public static class OtherExtensions
@@ -65,7 +64,11 @@
                     else if (Validators.TryGetProperty(_uce.Value, nameof(MemberInfo.Name), out string _name)) { result = _name; }
                 }
             }
-            if (result.IsNullOrEmpty()) { throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression)); }
+            if (result.IsNullOrEmpty())
+            {
+                if (Guards.IsUICultureEnglish) { throw new ArgumentException($"The value of \"{expression}\" is incompatible!", nameof(expression)); }
+                throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression));
+            }
             return result;
         }
         /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.</summary>
@@ -183,6 +186,7 @@
             Guard.ThrowIfNull(jToken, nameof(jToken));
             if (jToken.Type.Includes(JTokenType.Null, JTokenType.Undefined)) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
+            if (Guards.IsUICultureEnglish) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
             throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
         /// <summary><see cref="QueryString"/> içindeki belirtilen anahtarı alır ve uygun türde bir değere dönüştürür. Eğer anahtar bulunamazsa veya dönüştürme başarısız olursa, varsayılan değeri döner.</summary>
@@ -246,18 +250,22 @@
             }
             catch { return ""; }
         }
-        /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz. </summary>
+        /// <summary>Verilen assembly içerisinde bulunan ve <paramref name="typeInterface"/> arayüzünü uygulayan veya <paramref name="typeBaseClass"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
         /// <param name="services">Bağımlılık enjeksiyon konteyneri</param>
         /// <param name="assembly">Repository sınıflarının bulunduğu assembly</param>
+        /// <param name="typeInterface">Repository arayüzünün tipi (örneğin, typeof(IRepository&lt;&gt;))</param>
+        /// <param name="typeBaseClass">Repository> sınıflarının türediği temel sınıfın tipi (örneğin, typeof(BaseRepository&lt;&gt;))</param>
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
-        public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
+        public static IServiceCollection AddScopedRepositories(this IServiceCollection services, Assembly assembly, Type typeInterface, Type typeBaseClass)
         {
             Guard.ThrowIfNull(services, nameof(services));
             Guard.ThrowIfNull(assembly, nameof(assembly));
-            var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeof(BaseService<,,,,>))).ToArray();
+            Guard.ThrowIfNull(typeInterface, nameof(typeInterface));
+            Guard.ThrowIfNull(typeBaseClass, nameof(typeBaseClass));
+            var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeBaseClass)).ToArray();
             foreach (var implementation in types)
             {
-                var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeof(IBaseService<,,,,>))).ToArray();
+                var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeInterface)).ToArray();
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
             return services;

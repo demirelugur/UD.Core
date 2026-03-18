@@ -5,45 +5,25 @@
     using System.Linq;
     public sealed class SqlServerProperties
     {
-        /// <summary>
-        /// SQL Server ürün versiyonunu alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server ürün versiyonunu alır veya ayarlar.</summary>
         public string? productversion { get; set; }
-        /// <summary>
-        /// SQL Server ürün seviyesini alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server ürün seviyesini alır veya ayarlar.</summary>
         public string? productlevel { get; set; }
-        /// <summary>
-        /// SQL Server sürümünü alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server sürümünü alır veya ayarlar.</summary>
         public string? edition { get; set; }
-        /// <summary>
-        /// SQL Server&#39;ın CLR sürümünü alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server&#39;ın CLR sürümünü alır veya ayarlar.</summary>
         public string? buildclrversion { get; set; }
-        /// <summary>
-        /// SQL Server&#39;ın kullandığı sıralama (collation) ayarını alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server&#39;ın kullandığı sıralama (collation) ayarını alır veya ayarlar.</summary>
         public string? collation { get; set; }
-        /// <summary>
-        /// SQL Server sunucu adını alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server sunucu adını alır veya ayarlar.</summary>
         public string? servername { get; set; }
-        /// <summary>
-        /// SQL Server örnek adını alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server örnek adını alır veya ayarlar.</summary>
         public string? instancename { get; set; }
-        /// <summary>
-        /// SQL Server örneğinin varsayılan veri dosyası yolunu alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server örneğinin varsayılan veri dosyası yolunu alır veya ayarlar.</summary>
         public string? instancedefaultdatapath { get; set; }
-        /// <summary>
-        /// SQL Server örneğinin varsayılan log dosyası yolunu alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server örneğinin varsayılan log dosyası yolunu alır veya ayarlar.</summary>
         public string? instancedefaultlogpath { get; set; }
-        /// <summary>
-        /// SQL Server için LCID (Locale Identifier) değerini alır veya ayarlar.
-        /// </summary>
+        /// <summary>SQL Server için LCID (Locale Identifier) değerini alır veya ayarlar.</summary>
         public int? lcid { get; set; }
         public SqlServerProperties() : this("", "", "", "", "", "", "", "", "", default) { }
         public SqlServerProperties(string productversion, string productlevel, string edition, string buildclrversion, string collation, string servername, string instancename, string instancedefaultdatapath, string instancedefaultlogpath, int? lcid)

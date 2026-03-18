@@ -1,7 +1,8 @@
 ﻿namespace UD.Core.Helper.Results
 {
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validation;
+    using static UD.Core.Helper.OrtakTools;
+
     public sealed class TimeSpanDiffResult
     {
         private readonly TimeSpan timeSpan;
@@ -11,14 +12,14 @@
         }
         public TimeSpanDiffResult(TimeOnly timeOnly) : this(timeOnly.ToTimeSpan()) { }
         public (double totalHours, int minutes, int seconds, int milliseconds) DecomposeTimeSpan => (Math.Truncate(timeSpan.TotalHours), timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-        public string FormatTimeSpan(string p0 = "sn.", string p1 = "dk.", string p2 = "saat")
+        public string FormatTimeSpan()
         {
-            Guard.ThrowIfEmpty(p0, nameof(p0));
+            var p0 = Guards.IsUICultureEnglish ? "sec." : "sn.";
             if (this.timeSpan == TimeSpan.Zero) { return $"0 {p0}"; }
-            Guard.ThrowIfEmpty(p1, nameof(p1));
-            Guard.ThrowIfEmpty(p2, nameof(p2));
             var (totalHours, minutes, seconds, milliseconds) = this.DecomposeTimeSpan;
             var r = new List<string>();
+            var p1 = Guards.IsUICultureEnglish ? "min." : "dk.";
+            var p2 = Guards.IsUICultureEnglish ? "hour" : "saat";
             if (totalHours != 0) { r.Add(String.Join(" ", Math.Abs(totalHours).ToString(), p2)); }
             if (minutes != 0) { r.Add(String.Join(" ", Math.Abs(minutes).ToString(), p1)); }
             if ((seconds > 0 && milliseconds > 0) || (seconds < 0 && milliseconds < 0)) { r.Add($"{Math.Abs(seconds)},{Math.Abs(milliseconds).ToString().Replicate(3)} {p0}"); }

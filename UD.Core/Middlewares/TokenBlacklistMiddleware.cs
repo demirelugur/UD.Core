@@ -4,6 +4,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Services;
+    using static UD.Core.Helper.OrtakTools;
     public sealed class TokenBlacklistMiddleware
     {
         private readonly RequestDelegate next;
@@ -20,7 +21,7 @@
             {
                 httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 httpContext.Response.ContentType = "application/json";
-                await httpContext.Response.WriteAsJsonAsync(ApiResult.setFailed("Token geçersiz!"), httpContext.RequestAborted);
+                await httpContext.Response.WriteAsJsonAsync(ApiResult.setFailed(Guards.IsUICultureEnglish ? "Token invalid!" : "Token geçersiz!"), httpContext.RequestAborted);
                 return;
             }
             await next(httpContext);

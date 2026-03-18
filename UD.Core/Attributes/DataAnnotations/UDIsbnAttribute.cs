@@ -4,6 +4,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Configuration;
     using static UD.Core.Helper.GlobalConstants;
+    using static UD.Core.Helper.OrtakTools;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDIsbnAttribute : ValidationAttribute
     {
@@ -21,7 +22,11 @@
                 validationContext.SetValidatePropertyValue(isbn);
                 return ValidationResult.Success;
             }
-            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, {TitleConstants.Isbn} biçimine uygun olmalıdır!"; }
+            if (this.ErrorMessage.IsNullOrEmpty())
+            {
+                this.ErrorMessage = $"{validationContext.DisplayName}, {TitleConstants.Isbn} biçimine uygun olmalıdır!";
+                if(Guards.IsUICultureEnglish) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid {TitleConstants.Isbn} format!"; }
+            }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

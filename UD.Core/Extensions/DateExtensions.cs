@@ -78,7 +78,7 @@
             return previous;
         }
         /// <summary>Verilen <see cref="DateTime"/> değerinin SQL Server&#39;ın kabul ettiği minimum tarihten (1753-01-01) küçük olup olmadığını kontrol eder. Eğer tarih SQL minimumu olan 1753-01-01 (saat 00:00:00) veya daha büyükse aynı <see cref="DateTime"/> değerini döner; aksi halde <c>null</c> döner.</summary>
-        public static DateTime? SafeSqlDateTimeMin(this DateTime dateTime)
+        public static DateTime? SafeSqlDateTime(this DateTime dateTime)
         {
             if (dateTime >= DateConstants.SqlMinValue.ToDateTime(default)) { return dateTime; }
             return null;
