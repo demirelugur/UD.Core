@@ -19,7 +19,7 @@
         {
             if (!dictionary.TryAdd(key, value)) { dictionary[key] = value; }
         }
-        /// <summary>Verilen koşula uyan tüm anahtar-değer çiftlerini sözlükten kaldırır.</summary>
+        /// <summary>Verilen koşula uyan tüm anahtar - değer çiftlerini sözlükten kaldırır.</summary>
         /// <typeparam name="K">Anahtar tipi.</typeparam>
         /// <typeparam name="V">Değer tipi.</typeparam>
         /// <param name="dictionary">Anahtar-değer çiftlerinin bulunduğu sözlük.</param>
@@ -43,14 +43,10 @@
         /// <summary>ModelStateDictionary nesnesine bir dizi hata mesajını topluca eklemek için kullanılan bir genişletme metodu.</summary>
         /// <param name="modelstate">Hataların ekleneceği ModelStateDictionary nesnesi.</param>
         /// <param name="errors">Eklenecek hata mesajlarını içeren string listesi.</param>
-        /// <remarks>
-        /// Bu metot, verilen hata mesajları listesindeki her bir öğeyi
-        /// ModelState&#39;e tek tek ekler. Key olarak boş bir string (&quot;&quot;) kullanılır.
-        /// Eğer <paramref name="errors"/> null ise işlem yapılmaz.
-        /// </remarks>
+        /// <remarks>Bu metot, verilen hata mesajları listesindeki her bir öğeyi ModelState&#39;e tek tek ekler. Key olarak boş bir string (&quot;&quot;) kullanılır. Eğer <paramref name="errors"/> null ise işlem yapılmaz.</remarks>
         public static void AddModelErrorRange(this ModelStateDictionary modelstate, IEnumerable<string> errors)
         {
-            if (errors != null)
+            if (errors != null && errors.Any())
             {
                 Guard.ThrowIfNull(modelstate, nameof(modelstate));
                 foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("", item); }
@@ -83,11 +79,11 @@
             hasRight = r != null,
             right = r
         });
-        /// <summary>Kaynakdaki elemanların sırasını <b>Fisher-Yates algoritmasını</b> kullanarak rastgele karıştırır ve karıştırılmış bir ICollection olarak geri döner.</summary>
+        /// <summary>Kaynakdaki elemanların sırasını <b>Fisher - Yates algoritmasını</b> kullanarak rastgele karıştırır ve karıştırılmış bir ICollection olarak geri döner.</summary>
         /// <typeparam name="T">Kaynağın eleman türü.</typeparam>
         /// <param name="source">Rastgele sıralanacak orijinal kaynak.</param>
         /// <returns>Karıştırılmış elemanları içeren yeni bir ICollection&lt;T&gt; örneği.</returns>
-        /// <remarks>Bu metot, verilen IEnumerable&lt;T&gt; kaynakdaki elemanların yerini <b>Fisher-Yates algoritması</b> ile rastgele değiştirir. Karıştırılmış elemanları yeni bir ICollection&lt;T&gt; olarak döndürür. &quot;Random.Shared&quot; ile tek bir Random örneği paylaşılır, bu da çoklu iş parçacıklı senaryolarda daha güvenilir bir kullanım sağlar.</remarks>
+        /// <remarks>Bu metot, verilen IEnumerable&lt;T&gt; kaynakdaki elemanların yerini <b>Fisher - Yates algoritması</b> ile rastgele değiştirir. Karıştırılmış elemanları yeni bir ICollection&lt;T&gt; olarak döndürür. &quot;Random.Shared&quot; ile tek bir Random örneği paylaşılır, bu da çoklu iş parçacıklı senaryolarda daha güvenilir bir kullanım sağlar.</remarks>
         public static ICollection<T> Shuffle<T>(this IEnumerable<T> source)
         {
             T temp;
