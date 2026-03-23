@@ -21,7 +21,7 @@
         /// <typeparam name="T">Değer türü.</typeparam>
         /// <param name="value">Değer.</param>
         /// <param name="values">Kontrol edilecek değerler.</param>
-        /// <returns><see langword="true"/>, eğer değer belirtilen değerler arasında ise; aksi halde <see langword="false"/> döner.</returns>
+        /// <returns>Eğer <paramref name="value"/> belirtilen değerler arasında ise <see langword="true"/>; aksi halde <see langword="false"/> döner.</returns>
         public static bool Includes<T>(this T value, params T[] values) => (values ?? []).Contains(value);
         /// <summary>Verilen enum değerinin açıklamasını döner.</summary>
         /// <typeparam name="TEnum">Enum türü.</typeparam>

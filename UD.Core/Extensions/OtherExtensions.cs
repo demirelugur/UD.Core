@@ -13,6 +13,7 @@
     using System.Net.Mail;
     using System.Reflection;
     using System.Web;
+    using UD.Core.Helper.Services;
     using UD.Core.Helper.Validation;
     using static UD.Core.Helper.OrtakTools;
     public static class OtherExtensions
@@ -196,9 +197,8 @@
         /// <returns>Başarılıysa sorgu parametresi uygun türe dönüştürülür, aksi halde varsayılan değer döner.</returns>
         public static TKey ParseOrDefault<TKey>(this QueryString queryString, string key)
         {
-            var querydic = (queryString.HasValue ? HttpUtility.ParseQueryString(queryString.Value) : []);
-            key = key.ToStringOrEmpty();
             Guard.ThrowIfEmpty(key, nameof(key));
+            var querydic = (queryString.HasValue ? HttpUtility.ParseQueryString(queryString.Value) : []);
             if (querydic.AllKeys.Contains(key)) { return querydic[key].ParseOrDefault<TKey>(); }
             return default;
         }
@@ -268,6 +268,12 @@
                 var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeInterface)).ToArray();
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
+            return services;
+        }
+        /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> sınıfından türeyen tüm servis sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
+        public static IServiceCollection AddScopedRangeBaseService(this IServiceCollection services, Assembly assembly)
+        {
+            services.AddScopedRange(assembly, typeof(IBaseService<,,,,>), typeof(BaseService<,,,,>));
             return services;
         }
     }

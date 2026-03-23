@@ -22,10 +22,9 @@
         /// <returns>Değer başarıyla alındıysa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool TryGetStringValue(this IFormCollection form, string key, out string outvalue)
         {
+            Guard.ThrowIfNull(form, nameof(form));
             Guard.ThrowIfEmpty(key, nameof(key));
-            form ??= FormCollection.Empty;
-            var r = form.TryGetValue(key, out StringValues _sv);
-            if (r)
+            if (form.TryGetValue(key, out StringValues _sv))
             {
                 outvalue = _sv.ToStringOrEmpty();
                 return true;
@@ -42,9 +41,9 @@
         /// <remarks>Bu metot, bir form verisindeki (IFormCollection) belirli bir anahtara karşılık gelen değerleri belirtilen türe dönüştürerek bir dizi olarak döndürmek için kullanılır. Eğer anahtar &quot;[]&quot; ile bitmiyorsa, otomatik olarak eklenir. Dönüştürme sırasında hata oluşursa, varsayılan değerler kullanılır.</remarks>
         public static bool TryGetArrayValue<TKey>(this IFormCollection form, string key, out TKey[] outvalues)
         {
+            Guard.ThrowIfNull(form, nameof(form));
             Guard.ThrowIfEmpty(key, nameof(key));
             if (!key.EndsWith("[]")) { key = String.Concat(key, "[]"); }
-            form ??= FormCollection.Empty;
             if (form.TryGetValue(key, out StringValues _sv))
             {
                 outvalues = _sv.Select(x => x.ParseOrDefault<TKey>()).ToArray();
