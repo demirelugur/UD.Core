@@ -31,6 +31,8 @@
         /// <summary>Belirli bir bileşik anahtar(composite key) özelliği ile eski varlığın güncellenmesini sağlar.</summary>
         public static async Task<T> SetCompositeKey<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyValue, CancellationToken cancellationToken = default) where T : class, new()
         {
+            Guard.ThrowIfNull(context, nameof(context));
+            Guard.ThrowIfNull(oldEntity, nameof(oldEntity));
             var type = typeof(T);
             var tableName = type.GetTableName(false);
             var compositeKeyName = compositeKey.GetExpressionName();
@@ -40,8 +42,6 @@
                 isSetCompositeKeyName = x.Name == compositeKeyName,
                 isCompositeKey = x.IsPK() && x.GetDatabaseGeneratedOption() == DatabaseGeneratedOption.None
             }).ToArray();
-            Guard.ThrowIfNull(context, nameof(context));
-            Guard.ThrowIfNull(oldEntity, nameof(oldEntity));
             if (properties.Count(x => x.isCompositeKey) < 2)
             {
                 if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
