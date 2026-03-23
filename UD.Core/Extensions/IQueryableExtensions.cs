@@ -91,7 +91,13 @@
             IOrderedQueryable<T> orderedSource;
             if (sorting.IsNullOrEmpty())
             {
-                if (typeof(T).IsSubclassOfOpenGeneric(typeof(EntityDto<>))) { orderedSource = source.OrderBy(nameof(EntityDto<>.Id)); }
+                if (typeof(T).IsSubclassOfOpenGeneric(typeof(EntityDto<>)))
+                {
+                    var idProperty = typeof(T).GetProperty(nameof(EntityDto<>.Id));
+                    Guard.ThrowIfNull(idProperty, nameof(idProperty));
+                    if (idProperty.PropertyType == typeof(Guid)) { orderedSource = source.OrderBy(x => 0); }
+                    else { orderedSource = source.OrderBy(nameof(EntityDto<>.Id)); }
+                }
                 else { orderedSource = source.OrderBy(x => 0); }
             }
             else

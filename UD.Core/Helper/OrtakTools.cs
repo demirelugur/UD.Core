@@ -212,8 +212,7 @@
             }
             /// <summary>Türkiye biçimine uygun telefon numarasını maskeleme işlemi yapar.</summary>
             /// <param name="phoneNumberTR">Maske uygulanacak telefon numarası (ülke kodu dahil).</param>
-            /// <param name="showFull"><see langword="true"/> ise numara güzelleştirilmiş (biçimlenmiş) haliyle döner; <see langword="false"/> ise numaranın bazı bölümleri * ile gizlenmiş şekilde döner.
-            /// </param>
+            /// <param name="showFull"><see langword="true"/> ise numara güzelleştirilmiş (biçimlenmiş) haliyle döner; <see langword="false"/> ise numaranın bazı bölümleri * ile gizlenmiş şekilde döner.</param>
             /// <returns>Maske uygulanmış veya tam telefon numarası. Geçersiz ise boş string döner.</returns>
             public static string MaskedPhoneNumberTR(string phoneNumberTR, bool showFull)
             {
