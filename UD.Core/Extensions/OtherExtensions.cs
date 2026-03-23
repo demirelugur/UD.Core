@@ -9,6 +9,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Data;
     using System.Diagnostics;
+    using System.Linq.Dynamic.Core.Tokenizer;
     using System.Linq.Expressions;
     using System.Net.Mail;
     using System.Reflection;
@@ -273,6 +274,7 @@
         /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> sınıfından türeyen tüm servis sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
         public static IServiceCollection AddScopedRangeBaseService(this IServiceCollection services, Assembly assembly)
         {
+            Guard.ThrowIfNull(services, nameof(services));
             services.AddScopedRange(assembly, typeof(IBaseService<,,,,>), typeof(BaseService<,,,,>));
             return services;
         }

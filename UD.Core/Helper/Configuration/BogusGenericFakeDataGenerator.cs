@@ -12,8 +12,8 @@
     /// Sahte veri üretimi için kullanılan genel bir sınıf. Bogus kütüphanesini kullanarak farklı veri türlerinde özelleştirilebilir sahte veriler üretir.
     /// <list type="bullet">
     /// <item>String için özel işaretlenmiş property adları: <c>seo, nms, src, ipaddress, color, mac, tel, adres, ad, name, soyad, surname, kuladi, username, eposta, email</c></item>
-    /// <item>Int16(Short) için özel işaretlenmiş property adları: <c>dahili</c></item>
-    /// <item>Int64(Long) için özel işaretlenmiş property adları: <c>tckn, vkn</c></item>
+    /// <item>Int16 için özel işaretlenmiş property adları: <c>dahili</c></item>
+    /// <item>Int64 için özel işaretlenmiş property adları: <c>tckn, vkn</c></item>
     /// </list>
     /// </summary>
     public sealed class BogusGenericFakeDataGenerator
@@ -30,6 +30,7 @@
         private decimal decimalMin = Decimal.Zero, decimalMax = Decimal.One;
         private DateTime? dateTimeMin = null, dateTimeMax = null;
         private DateOnly? dateOnlyMin = null, dateOnlyMax = null;
+        private DateTimeOffset? dateTimeOffsetMin = null, dateTimeOffsetMax = null;
         /// <summary>Varsayılan yapılandırıcı</summary>
         /// <param name="locale">Kullanılacak yerel ayar (örneğin, &quot;tr&quot; için Türkçe, &quot;en&quot; için İngilizce).</param>
         /// <param name="nullChange">0 ile 1 arasında bir olasılık değeri (0: asla null, 1: her zaman null).</param>
@@ -85,6 +86,12 @@
             this.dateOnlyMax = dateOnlyMax;
             return this;
         }
+        public BogusGenericFakeDataGenerator WithDateTimeOffsetRange(DateTimeOffset dateTimeOffsetMin, DateTimeOffset dateTimeOffsetMax)
+        {
+            this.dateTimeOffsetMin = dateTimeOffsetMin;
+            this.dateTimeOffsetMax = dateTimeOffsetMax;
+            return this;
+        }
         public T Generate<T>() where T : class => this.GenerateArray<T>(1)[0];
         public T[] GenerateArray<T>(int count) where T : class
         {
@@ -132,6 +139,7 @@
             if (type == typeof(Guid)) { return faker.Random.Guid(); }
             if (type == typeof(DateTime)) { return ((this.dateTimeMin.HasValue && this.dateTimeMax.HasValue) ? faker.Date.Between(this.dateTimeMin.Value, this.dateTimeMax.Value) : faker.Date.Past()); }
             if (type == typeof(DateOnly)) { return ((this.dateOnlyMin.HasValue && this.dateOnlyMax.HasValue) ? faker.Date.BetweenDateOnly(this.dateOnlyMin.Value, this.dateOnlyMax.Value) : faker.Date.PastDateOnly()); }
+            if (type == typeof(DateTimeOffset)) { return ((this.dateTimeOffsetMin.HasValue && this.dateTimeOffsetMax.HasValue) ? faker.Date.BetweenOffset(this.dateTimeOffsetMin.Value, this.dateTimeOffsetMax.Value) : faker.Date.PastOffset()); }
             if (type == typeof(Uri)) { return new Uri(this.createUri()); }
             if (type == typeof(MailAddress)) { return this.createEMail(faker); }
             if (type == typeof(IPAddress)) { return this.createIPAdress(); }
