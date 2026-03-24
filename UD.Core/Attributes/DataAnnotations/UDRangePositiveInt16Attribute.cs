@@ -2,8 +2,8 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using static UD.Core.Helper.GlobalConstants;
     using UD.Core.Helper;
+    using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDRangePositiveInt16Attribute : RangeAttribute
     {

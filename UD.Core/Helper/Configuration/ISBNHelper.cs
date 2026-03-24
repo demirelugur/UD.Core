@@ -2,8 +2,8 @@
 {
     using System;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     using UD.Core.Helper;
+    using static UD.Core.Helper.GlobalConstants;
     public sealed class ISBNHelper
     {
         public ISBNHelper(string isbn) => this.setISBN(isbn);

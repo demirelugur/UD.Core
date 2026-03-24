@@ -1,8 +1,8 @@
 ﻿namespace UD.Core.Helper.Validation
 {
     using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     using UD.Core.Helper;
+    using static UD.Core.Helper.GlobalConstants;
     public sealed class StrongPasswordValid
     {
         public static readonly StrongPasswordValid Default = new(8, 16, true, true, true);

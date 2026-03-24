@@ -8,9 +8,9 @@
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Text;
+    using UD.Core.Helper;
     using UD.Core.Helper.Database;
     using UD.Core.Helper.Validation;
-    using UD.Core.Helper;
     public static class DbContextExtensions
     {
         /// <summary>Belirtilen varlığın (entity) bir veya daha fazla özelliğinin değiştirilip değiştirilmediğini kontrol eder.</summary>

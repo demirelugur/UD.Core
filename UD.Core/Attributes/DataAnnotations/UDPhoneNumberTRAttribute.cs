@@ -23,7 +23,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, (xxx) xxx-xxxx biçimine uygun telefon numarası olmalıdır!";
-                if(Guards.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid phone number in the format of (xxx) xxx-xxxx!"; }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid phone number in the format of (xxx) xxx-xxxx!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

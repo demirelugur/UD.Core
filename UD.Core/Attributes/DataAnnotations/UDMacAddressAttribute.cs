@@ -2,8 +2,8 @@
 {
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     using UD.Core.Helper;
+    using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDMacAddressAttribute : ValidationAttribute
     {

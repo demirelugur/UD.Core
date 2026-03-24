@@ -10,8 +10,8 @@ namespace UD.Core.Extensions
     using System.Text;
     using System.Text.RegularExpressions;
     using UD.Core.Enums;
-    using UD.Core.Helper.Validation;
     using UD.Core.Helper;
+    using UD.Core.Helper.Validation;
     public static class StringExtensions
     {
         /// <summary>Bir string&#39;i Guid&#39;e dönüþtürür. String null veya geçersizse varsayýlan Guid döner.</summary>

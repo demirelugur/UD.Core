@@ -6,11 +6,11 @@
     using System.Linq;
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
+    using UD.Core.Helper;
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
-    using UD.Core.Helper;
     public static class IQueryableExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>

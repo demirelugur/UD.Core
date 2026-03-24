@@ -9,8 +9,8 @@
     using System.Text.Json.Serialization;
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     using UD.Core.Helper;
+    using static UD.Core.Helper.GlobalConstants;
     public sealed class FileSettingsHelper : IEquatable<FileSettingsHelper>
     {
         #region Equals

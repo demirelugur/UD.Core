@@ -3,8 +3,8 @@
     using System;
     using System.Security.Cryptography;
     using System.Text;
-    using UD.Core.Helper.Validation;
     using UD.Core.Helper;
+    using UD.Core.Helper.Validation;
     public sealed class AESHelper
     {
         #region Private

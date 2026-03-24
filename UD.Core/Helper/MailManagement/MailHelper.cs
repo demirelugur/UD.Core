@@ -2,8 +2,8 @@
 {
     using System.Net.Mail;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validation;
     using UD.Core.Helper;
+    using UD.Core.Helper.Validation;
     public sealed class MailHelper
     {
         public string Subject { get; }

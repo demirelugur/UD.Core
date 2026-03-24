@@ -6,8 +6,8 @@
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
     using System.IO;
-    using UD.Core.Helper.Validation;
     using UD.Core.Helper;
+    using UD.Core.Helper.Validation;
     public static class IOExtensions
     {
         #region byte[]
