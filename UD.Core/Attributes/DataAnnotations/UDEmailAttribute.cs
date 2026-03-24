@@ -4,7 +4,7 @@ namespace UD.Core.Attributes.DataAnnotations
     using System.Net.Mail;
     using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDEmailAttribute : ValidationAttribute
     {

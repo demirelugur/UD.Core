@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Net;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDIPAddressAttribute : ValidationAttribute
     {

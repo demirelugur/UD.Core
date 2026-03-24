@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Reflection;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public static class PropertyInfoExtensions
     {
         /// <summary>Belirtilen özellik bilgilerinin veritabanı kaynaklı haritalanmış bir özellik olup olmadığını kontrol eder.</summary>

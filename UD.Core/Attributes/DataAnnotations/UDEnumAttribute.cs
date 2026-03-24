@@ -3,7 +3,7 @@ namespace UD.Core.Attributes.DataAnnotations
     using System;
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDEnumAttribute<TEnum> : ValidationAttribute where TEnum : struct, Enum
     {

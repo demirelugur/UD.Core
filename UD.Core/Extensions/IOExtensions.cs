@@ -7,7 +7,7 @@
     using System.Drawing.Imaging;
     using System.IO;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public static class IOExtensions
     {
         #region byte[]

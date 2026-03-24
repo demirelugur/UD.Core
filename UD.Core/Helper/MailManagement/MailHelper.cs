@@ -3,7 +3,7 @@
     using System.Net.Mail;
     using UD.Core.Extensions;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public sealed class MailHelper
     {
         public string Subject { get; }

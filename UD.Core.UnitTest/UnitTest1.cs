@@ -1,6 +1,6 @@
 ﻿namespace UD.Core.UnitTest
 {
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     [TestFixture]
     public class UnitTest1
     {

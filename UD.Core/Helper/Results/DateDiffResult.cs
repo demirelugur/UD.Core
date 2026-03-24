@@ -1,6 +1,6 @@
 ﻿namespace UD.Core.Helper.Results
 {
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public sealed class DateDiffResult
     {
         private readonly DateTime basDate;

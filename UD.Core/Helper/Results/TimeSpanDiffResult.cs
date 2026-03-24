@@ -1,8 +1,7 @@
 ﻿namespace UD.Core.Helper.Results
 {
     using UD.Core.Extensions;
-    using static UD.Core.Helper.OrtakTools;
-
+    using UD.Core.Helper;
     public sealed class TimeSpanDiffResult
     {
         private readonly TimeSpan timeSpan;

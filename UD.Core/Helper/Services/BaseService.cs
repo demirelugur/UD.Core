@@ -9,7 +9,7 @@
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public interface IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class, IBaseEntity

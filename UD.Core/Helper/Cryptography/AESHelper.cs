@@ -4,7 +4,7 @@
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public sealed class AESHelper
     {
         #region Private

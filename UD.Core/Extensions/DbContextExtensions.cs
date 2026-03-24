@@ -10,7 +10,7 @@
     using System.Text;
     using UD.Core.Helper.Database;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public static class DbContextExtensions
     {
         /// <summary>Belirtilen varlığın (entity) bir veya daha fazla özelliğinin değiştirilip değiştirilmediğini kontrol eder.</summary>

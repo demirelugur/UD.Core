@@ -2,7 +2,7 @@
 {
     using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public sealed class StrongPasswordValid
     {
         public static readonly StrongPasswordValid Default = new(8, 16, true, true, true);

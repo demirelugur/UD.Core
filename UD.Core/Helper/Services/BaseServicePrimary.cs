@@ -5,7 +5,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public interface IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class, IBaseEntity

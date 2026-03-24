@@ -7,7 +7,7 @@ namespace UD.Core.UnitTest
     using System.ComponentModel.DataAnnotations.Schema;
     using System.IO;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     [TestFixture]
     public class ConnectionTest
     {

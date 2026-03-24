@@ -10,7 +10,7 @@
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public sealed class FileSettingsHelper : IEquatable<FileSettingsHelper>
     {
         #region Equals

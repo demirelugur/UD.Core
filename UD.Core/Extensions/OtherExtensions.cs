@@ -9,14 +9,13 @@
     using System.ComponentModel.DataAnnotations;
     using System.Data;
     using System.Diagnostics;
-    using System.Linq.Dynamic.Core.Tokenizer;
     using System.Linq.Expressions;
     using System.Net.Mail;
     using System.Reflection;
     using System.Web;
+    using UD.Core.Helper;
     using UD.Core.Helper.Services;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.OrtakTools;
     public static class OtherExtensions
     {
         /// <summary>Verilen e-Posta adresindeki &quot;@&quot; karakterini &quot;[at]&quot; ile değiştirir.</summary>

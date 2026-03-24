@@ -2,7 +2,7 @@
 {
     using System.ComponentModel;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public sealed class CRetMesaj
     {
         public enum RetMesaj : byte

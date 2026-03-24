@@ -11,7 +11,7 @@ namespace UD.Core.Extensions
     using System.Text.RegularExpressions;
     using UD.Core.Enums;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.OrtakTools;
+    using UD.Core.Helper;
     public static class StringExtensions
     {
         /// <summary>Bir string&#39;i Guid&#39;e dönüþtürür. String null veya geçersizse varsayýlan Guid döner.</summary>
