@@ -79,6 +79,14 @@
                 throw new ArgumentException($"\"{argName}\" argümanı, {TitleConstants.Isbn} biçimine uygun olmalıdır!", argName);
             }
         }
+        public static void ThrowIfNotValidMAC(string mac, string argName)
+        {
+            if (!Validators.TryMACAddress(mac, out _))
+            {
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of a valid MAC address!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, geçerli bir {TitleConstants.Mac} adresi biçimine uygun olmalıdır!", argName);
+            }
+        }
         public static void ThrowIfNotValidMail(string mail, string argName)
         {
             if (!mail.IsMail())
@@ -164,22 +172,22 @@
             ThrowIfZero(value, argName);
             ThrowIfNegative(value, argName);
         }
-        public static void ThrowIfNotValidEnumDefined(Type type, object value, string argName)
+        public static void ThrowIfNotValidEnumDefined(Type enumType, object value, string argName)
         {
-            ThrowIfNull(type, nameof(type));
-            if (!type.IsEnum)
+            ThrowIfNull(enumType, nameof(enumType));
+            if (!enumType.IsEnum)
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The argument \"{nameof(type)}\" must be a valid \"{nameof(Enum)}\" type!", nameof(type)); }
-                throw new ArgumentException($"\"{type.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(type));
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The argument \"{nameof(enumType)}\" must be a valid \"{nameof(Enum)}\" type!", nameof(enumType)); }
+                throw new ArgumentException($"\"{enumType.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(enumType));
             }
             ThrowIfNull(value, argName);
-            if (!Enum.IsDefined(type, value))
+            if (!Enum.IsDefined(enumType, value))
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" provided for \"{type.FullName}\" is invalid!", argName); }
-                throw new ArgumentException($"\"{type.FullName}\" için sağlanan \"{argName}\" argümanının değeri geçersizdir!", argName);
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" provided for \"{enumType.FullName}\" is invalid!", argName); }
+                throw new ArgumentException($"\"{enumType.FullName}\" için sağlanan \"{argName}\" argümanının değeri geçersizdir!", argName);
             }
         }
-        public static void ThrowIfNotValidCheckEnumDefined<TEnum>(object value, string argName) where TEnum : Enum => ThrowIfNotValidEnumDefined(typeof(TEnum), value, argName);
+        public static void ThrowIfNotValidEnumDefined<TEnum>(object value, string argName) where TEnum : Enum => ThrowIfNotValidEnumDefined(typeof(TEnum), value, argName);
         public static void ThrowIfNotEqualCount<T>(ICollection<T> collection1, ICollection<T> collection2)
         {
             ThrowIfEmpty(collection1, nameof(collection1));

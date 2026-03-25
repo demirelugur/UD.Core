@@ -32,7 +32,7 @@
             Guard.ThrowIfEmpty(this.Subject, nameof(this.Subject));
             Guard.ThrowIfEmpty(this.Body, nameof(this.Body));
             Guard.ThrowIfEmpty(this.Tos, nameof(this.Tos));
-            Guard.ThrowIfNotValidCheckEnumDefined<MailPriority>(this.Priority, nameof(this.Priority));
+            Guard.ThrowIfNotValidEnumDefined<MailPriority>(this.Priority, nameof(this.Priority));
             try
             {
                 smtpClientBasic ??= new();
