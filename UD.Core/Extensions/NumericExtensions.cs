@@ -91,8 +91,8 @@
             if ((value % 2) == 0) { return false; }
             if (value == 5) { return true; }
             if ((value % 5) == 0) { return false; }
-            ulong i, _limit = Convert.ToUInt64(Math.Sqrt(value));
-            for (i = 3; i <= _limit; i += 2) { if ((value % i) == 0) { return false; } }
+            ulong i, limit = Convert.ToUInt64(Math.Sqrt(value));
+            for (i = 3; i <= limit; i += 2) { if ((value % i) == 0) { return false; } }
             return true;
         }
         /// <summary>Bir decimal değeri, InvariantCulture kullanarak string&#39;e dönüştürür.</summary>

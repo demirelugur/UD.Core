@@ -13,6 +13,7 @@
     using System.Net.Mail;
     using System.Reflection;
     using System.Web;
+    using UD.Core.Auditing;
     using UD.Core.Helper;
     using UD.Core.Helper.Services;
     using UD.Core.Helper.Validation;
@@ -275,6 +276,21 @@
         {
             services.AddScopedRange(assembly, typeof(IBaseService<,,,,>), typeof(BaseService<,,,,>));
             return services;
+        }
+        /// <summary>Modeldeki <see cref="ISoftDelete"/> arayüzünü uygulayan tüm entity tiplerine global sorgu filtresi ekleyerek, <c>IsDeleted = true</c> olan (soft delete edilmiş) kayıtların sorgularda varsayılan olarak gelmesini engeller.</summary>
+        /// <remarks>Bu filtre, yalnızca <see cref="ISoftDelete"/> implement eden entity&#39;lere uygulanır. Soft delete edilmiş kayıtları da getirmek gerektiğinde EF Core tarafında <c>IgnoreQueryFilters()</c> kullanılabilir.</remarks>
+        /// <param name="modelBuilder">EF Core modelini yapılandırmak için kullanılan <see cref="ModelBuilder"/>.</param>
+        public static void ApplySoftDeleteQueryFilters(this ModelBuilder modelBuilder)
+        {
+            Guard.ThrowIfNull(modelBuilder, nameof(modelBuilder));
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (!typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType)) { continue; }
+                var parameter = Expression.Parameter(entityType.ClrType, "x");
+                var isDeletedProperty = Expression.Call(typeof(EF), nameof(EF.Property), [typeof(bool)], parameter, Expression.Constant(nameof(ISoftDelete.IsDeleted)));
+                var filter = Expression.Lambda(Expression.Equal(isDeletedProperty, Expression.Constant(false)), parameter);
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+            }
         }
     }
 }
