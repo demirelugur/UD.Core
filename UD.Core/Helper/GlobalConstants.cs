@@ -61,6 +61,7 @@
         public sealed class ValidationErrorMessageConstants
         {
             public const string ArrayMinLength = "{0} boş geçilemez! En az {1} adet eleman içermelidir.";
+            public const string ArrayMaxLength = "{0} boş geçilemez! En çok {1} adet eleman içermelidir.";
             public const string EMail = "{0}, geçerli bir e-Posta adresi olmalıdır!";
             /// <summary>
             /// 1: minimum, 2: maksimum

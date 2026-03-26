@@ -109,7 +109,7 @@
         {
             var leftIsNull = left == null;
             var rightIsNull = right == null;
-            if (((leftIsNull || rightIsNull) && leftIsNull == rightIsNull)) { return true; }
+            if ((leftIsNull || rightIsNull) && leftIsNull == rightIsNull) { return true; }
             if (!leftIsNull && !rightIsNull && left.Count == right.Count && left.All(right.Contains)) { return true; }
             return false;
         }
@@ -128,7 +128,7 @@
             if (other != null && other.Any())
             {
                 if (initial is List<T> _l) { _l.AddRange(other); }
-                else { foreach (var l in other) { initial.Add(l); } }
+                else { foreach (var item in other) { initial.Add(item); } }
             }
         }
         #endregion

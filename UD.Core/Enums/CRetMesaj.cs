@@ -32,11 +32,13 @@
             [Description("Girilebilecek maksimum karakter sınırı aşıldı! Yönetici ile iletişime geçiniz.")]
             maxlength
         }
-        public static string GetDescriptionLocalizationValue(RetMesaj value)
+        public static string GetDescriptionLocalizationValue(object value)
         {
+            var enumValue = value.TryToEnum<RetMesaj>();
+            if (!enumValue.HasValue) { throw Utilities.ThrowNotSupportedForEnum<RetMesaj>(); }
             if (Guards.IsEnglishDefaultThreadCurrentUICulture)
             {
-                return value switch
+                return enumValue.Value switch
                 {
                     RetMesaj.basari => "Your request has been completed successfully.",
                     RetMesaj.hata => "An unexpected result occurred during the process! Contact the administrator.",
@@ -49,7 +51,7 @@
                     _ => throw Utilities.ThrowNotSupportedForEnum<RetMesaj>()
                 };
             }
-            return value.GetDescriptionFromEnum();
+            return enumValue.Value.GetDescriptionFromEnum();
         }
     }
 }

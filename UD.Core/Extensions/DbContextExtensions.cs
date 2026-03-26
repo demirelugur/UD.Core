@@ -29,7 +29,7 @@
             return properties.Any(x => columns.Contains(x.Name));
         }
         /// <summary>Belirli bir bileşik anahtar(composite key) özelliği ile eski varlığın güncellenmesini sağlar.</summary>
-        public static async Task<T> SetCompositeKey<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyValue, CancellationToken cancellationToken = default) where T : class, new()
+        public static async Task<T> SetCompositeKey<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyNewValue, CancellationToken cancellationToken = default) where T : class, new()
         {
             Guard.ThrowIfNull(context, nameof(context));
             Guard.ThrowIfNull(oldEntity, nameof(oldEntity));
@@ -57,7 +57,7 @@
                 {
                     x.name,
                     x.isSetCompositeKeyName
-                }).ToArray()) { Utilities.SetPropertyValue(newEntity, item.name, (item.isSetCompositeKeyName ? compositeKeyValue : entry.Property(item.name).OriginalValue)); }
+                }).ToArray()) { Utilities.SetPropertyValue(newEntity, item.name, (item.isSetCompositeKeyName ? compositeKeyNewValue : entry.Property(item.name).OriginalValue)); }
                 await dbSet.AddAsync(newEntity, cancellationToken);
                 dbSet.Remove(oldEntity);
                 if (autoSave) { await context.SaveChangesAsync(cancellationToken); }

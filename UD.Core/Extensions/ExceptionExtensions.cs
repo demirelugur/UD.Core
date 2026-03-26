@@ -63,39 +63,35 @@
         public static string[] AllExceptionMessage(this Exception exception) => (exception == null ? [] : exception.AllException().Select(x => x.Message).ToArray());
         /// <summary>Verilen bir istisna (Exception) nesnesinden, veritabanı varlık doğrulama hatalarını alır ve her bir hata için özellik adı (property name) ile hata mesajını içeren bir nesne dizisi döndürür. Eğer istisna bir <see cref="DbUpdateException"/> türünde ise, bu istisnanın Entries koleksiyonundaki her bir varlık için doğrulama işlemi gerçekleştirilir. Doğrulama hataları, özellik adı ve hata mesajı olarak anonim nesneler şeklinde listelenir. Herhangi bir hata oluşursa veya doğrulama hataları bulunamazsa, boş bir dizi döndürülür.</summary>
         /// <param name="exception">Hata bilgilerinin alınacağı istisna nesnesi.</param>
-        /// <returns>Doğrulama hatalarını içeren anonim nesnelerden <c>(tableFullName: string, propertyName: string, errorMessage: string)</c> oluşan bir dizi. Hata yoksa veya işlem başarısız olursa boş bir dizi döner.</returns>
-        public static object[] GetDbEntityValidationException(this Exception exception)
+        /// <returns><c>Dictionary&lt;string, object[]&gt;</c> tipinde, anahtar olarak entity tam adı ve değer olarak <c>(propertyName, errorMessage)</c> içeren anonim nesne dizilerini döndürür. Hata yoksa boş sözlük döner.</returns>
+        public static Dictionary<string, object[]> GetValidationDbUpdateException(this Exception exception)
         {
-            Guard.ThrowIfNull(exception, nameof(exception));
-            try
+            var ret = new Dictionary<string, object[]>();
+            if (exception is DbUpdateException _due)
             {
-                var r = new List<object>();
-                if (exception is DbUpdateException _due)
+                foreach (var entry in _due.Entries)
                 {
-                    foreach (var entry in _due.Entries)
+                    if (entry?.Entity == null) { continue; }
+                    var vrs = new List<ValidationResult>();
+                    Validator.TryValidateObject(entry.Entity, new(entry.Entity), vrs, true);
+                    var tableFullName = entry.Entity.GetType().FullName!;
+                    var data = new List<object>();
+                    foreach (var item in vrs)
                     {
-                        if (entry?.Entity == null) { continue; }
-                        var vrs = new List<ValidationResult>();
-                        Validator.TryValidateObject(entry.Entity, new(entry.Entity), vrs, true);
-                        var tableFullName = entry.Entity.GetType().FullName;
-                        foreach (var item in vrs)
+                        if (item.ErrorMessage.IsNullOrEmpty()) { continue; }
+                        foreach (var propertyName in item.MemberNames)
                         {
-                            if (item.ErrorMessage.IsNullOrEmpty()) { continue; }
-                            foreach (var propertyName in item.MemberNames)
+                            data.Add(new
                             {
-                                r.Add(new
-                                {
-                                    tableFullName,
-                                    propertyName,
-                                    errorMessage = item.ErrorMessage
-                                });
-                            }
+                                propertyName,
+                                errorMessage = item.ErrorMessage
+                            });
                         }
                     }
+                    if (data.Count > 0) { ret.AddOrUpdate(tableFullName, data.ToArray()); }
                 }
-                return r.ToArray();
             }
-            catch { return []; }
+            return ret;
         }
     }
 }

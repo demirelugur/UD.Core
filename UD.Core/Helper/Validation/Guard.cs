@@ -188,15 +188,5 @@
             }
         }
         public static void ThrowIfNotValidEnumDefined<TEnum>(object value, string argName) where TEnum : Enum => ThrowIfNotValidEnumDefined(typeof(TEnum), value, argName);
-        public static void ThrowIfNotEqualCount<T>(ICollection<T> collection1, ICollection<T> collection2)
-        {
-            ThrowIfEmpty(collection1, nameof(collection1));
-            ThrowIfEmpty(collection2, nameof(collection2));
-            if (collection1.Count != collection2.Count)
-            {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The number of items in \"{nameof(collection1)} ({collection1.Count})\" and \"{nameof(collection2)} ({collection2.Count})\" must be equal!"); }
-                throw new ArgumentException($"\"{nameof(collection1)} ({collection1.Count})\" ve \"{nameof(collection2)} ({collection2.Count})\" nesne sayıları eşit olmalıdır!");
-            }
-        }
     }
 }

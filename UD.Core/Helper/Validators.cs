@@ -26,7 +26,7 @@
         public static bool TryValidateObject(object instance, out string[] outvalue)
         {
             var vrs = new List<ValidationResult>();
-            Validator.TryValidateObject(instance, new(instance), vrs, true); // Not: TryValidateObject kontrolünde instance içerisinde her hangi bir problem yoksa sonuç true gelmekte
+            if (instance != null) { Validator.TryValidateObject(instance, new(instance), vrs, true); } // Not: TryValidateObject kontrolünde instance içerisinde her hangi bir problem yoksa sonuç true gelmekte
             outvalue = vrs.Select(x => x.ErrorMessage).ToArray();
             return vrs.Count > 0;
         }
@@ -79,23 +79,24 @@
         /// <returns>Anahtar bulunduysa ve değer istenen tipe dönüştürülebiliyorsa <see langword="true"/>, aksi halde <see langword="false"/>.</returns>
         public static bool TryGetProperty<TKey>(object value, string key, out TKey outvalue)
         {
-            Guard.ThrowIfNull(value, nameof(value));
-            Guard.ThrowIfEmpty(key, nameof(key));
             try
             {
-                if (value is IDictionary<string, object> _dic && _dic.TryGetValue(key, out object _dictval) && _dictval is TKey _tdic)
+                if (value != null && !key.IsNullOrEmpty())
                 {
-                    outvalue = _tdic;
-                    return true;
-                }
-                var pi = value.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                if (pi != null)
-                {
-                    var piValue = pi.GetValue(value);
-                    if (piValue is TKey _tpi)
+                    if (value is IDictionary<string, object> _dic && _dic.TryGetValue(key, out object _dictval) && _dictval is TKey _tdic)
                     {
-                        outvalue = _tpi;
+                        outvalue = _tdic;
                         return true;
+                    }
+                    var pi = value.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                    if (pi != null)
+                    {
+                        var piValue = pi.GetValue(value);
+                        if (piValue is TKey _tpi)
+                        {
+                            outvalue = _tpi;
+                            return true;
+                        }
                     }
                 }
                 outvalue = default;
@@ -282,9 +283,13 @@
         public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslate(string value, TimeSpan timeout, string to = "en", string from = "tr", CancellationToken cancellationToken = default)
         {
             value = value.ToStringOrEmpty();
-            Guard.ThrowIfEmpty(value, nameof(value));
-            Guard.ThrowIfEmpty(to, nameof(to));
-            Guard.ThrowIfEmpty(from, nameof(from));
+            to = to.ToStringOrEmpty();
+            from = from.ToStringOrEmpty();
+            if (value == "" || to == "" || from == "")
+            {
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { return (true, "", new ArgumentException("Value, to and from parameters cannot be empty.")); }
+                return (true, "", new ArgumentException("Value, to ve from parametreleri boş olamaz."));
+            }
             try
             {
                 using (var client = new HttpClient

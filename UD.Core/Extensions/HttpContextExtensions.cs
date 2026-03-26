@@ -39,7 +39,7 @@
             Guard.ThrowIfNull(context, nameof(context));
             return context.Request.Headers.Authorization.ToString().Replace("Bearer ", "").ToStringOrEmpty();
         }
-        /// <summary>İstemcinin IP adresini döndürür. Öncelikle <c>X-Forwarded-For</c> HTTP başlığını kontrol eder; eğer geçerli bir IP bulunamazsa bağlantının <see cref="ConnectionInfo.RemoteIpAddress"/> değerini kullanır. Geçerli bir IP adresi elde edilemezse <see cref="IPAddress.None"/> döndürülür.</summary>
+        /// <summary>İstemcinin IP adresini döndürür. Öncelikle <c>X-Forwarded-For</c> HTTP başlığını kontrol eder; eğer geçerli bir IP bulunamazsa bağlantının <see cref="ConnectionInfo.RemoteIpAddress"/> değerini kullanır. Geçerli bir IP adresi elde edilemezse <see cref="IPAddress.Any"/> döndürülür.</summary>
         /// <param name="context">HTTP isteğini temsil eden <see cref="HttpContext"/> nesnesi.</param>
         /// <returns>İstemcinin IPv4 formatındaki IP adresi veya bulunamazsa <see cref="IPAddress.Any"/>.</returns>
         public static IPAddress GetIPAddress(this HttpContext context)
