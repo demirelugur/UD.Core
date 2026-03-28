@@ -1,7 +1,5 @@
 ﻿namespace UD.Core.Helper
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Data.SqlClient;
     using Newtonsoft.Json;
     using System;
@@ -12,8 +10,6 @@
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validation;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class Converters
     {
         /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
@@ -40,7 +36,7 @@
         /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.</summary>
         /// <param name="value">JSON&#39;a dönüştürülecek nesne.</param>
         /// <returns>Nesnenin JSON string formatındaki temsili.</returns>
-        public static string ToJSON(object value) => JsonConvert.SerializeObject(value, Formatting.None, OtherConstants.JsonSerializerSettings);
+        public static string ToJSON(object value) => JsonConvert.SerializeObject(value, Formatting.None, GlobalConstants.JsonSerializerSettings);
         /// <summary>Verilen string ifadeyi tersine çevirir. Bu metot, Türkçe karakterler (ğ, ü, ş, ç, ö, ı, İ vb.) dahil olmak üzere tüm Unicode metin öğelerini dikkate alarak çalışır. Standart char tabanlı ters çevirme yöntemlerinden farklı olarak <see cref="StringInfo"/> sınıfını kullanır ve her bir metin öğesini (text element) ayrı değerlendirir.</summary>
         /// <param name="value">Tersine çevrilecek string ifade.</param>
         /// <returns>Ters çevrilmiş string ifade.</returns>
@@ -61,9 +57,12 @@
         /// <remarks>Not: MSSQL&#39;deki karşılığı SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_256&#39;, &#39;Lorem Ipsum&#39;)), 3, 64) AS HashValue</remarks>
         public static string ToHashSHA256FromObject(object value)
         {
-            if (value == null) { return ""; } // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
+            string source; // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
+            if (value == null) { source = ""; }
+            else if (value is String _s) { source = _s.Trim(); }
+            else { source = ToJSON(value); }
             var r = new List<string>();
-            foreach (var item in SHA256.HashData(Encoding.UTF8.GetBytes(value is String _s ? _s.Trim() : ToJSON(value)))) { r.Add(item.ToString("x2")); }
+            foreach (var item in SHA256.HashData(Encoding.UTF8.GetBytes(source))) { r.Add(item.ToString("x2")); }
             return String.Join("", r);
         }
         /// <summary>Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.</summary>
@@ -115,32 +114,6 @@
             }
             return default;
         }
-        /// <summary>Belirtilen dosya yolundan asenkron olarak bir <see cref="IFormFile"/> nesnesi oluşturur. Bu metod, dosya sistemindeki bir dosyayı bellek akışına okuyarak web formları veya API istekleri için uygun hale getirir.</summary>
-        /// <param name="filePath">Dönüştürülecek dosyanın sistemdeki tam yolu.</param>
-        /// <param name="name">IFormFile nesnesine verilecek ad. Varsayılan olarak &quot;file&quot; kullanılır.</param>
-        /// <param name="headerDictionary">Oluşturulacak IFormFile için özel başlıkları içeren sözlük. (Opsiyonel)</param>
-        /// <param name="cancellationToken">Asenkron işlemin iptali için kullanılan sinyal.</param>
-        /// <returns>Oluşturulan IFormFile nesnesini temsil eden bir <see cref="Task{TResult}"/>.</returns>
-        /// <exception cref="ArgumentException">FilePath veya Name parametreleri boş veya null ise fırlatılır.</exception>
-        /// <exception cref="FileNotFoundException">Belirtilen dosya yolu mevcut değilse fırlatılır.</exception>
-        public static async Task<FormFile> ToIFormFileFromPath(string filePath, string name = "file", HeaderDictionary? headerDictionary = null, CancellationToken cancellationToken = default)
-        {
-            Guard.ThrowIfEmpty(filePath, nameof(filePath));
-            Guard.ThrowIfEmpty(name, nameof(name));
-            if (!File.Exists(filePath)) { throw new FileNotFoundException("Belirtilen dosya bulunamadı!", filePath); }
-            var ms = new MemoryStream();
-            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
-            {
-                await fs.CopyToAsync(ms, cancellationToken);
-            }
-            ms.Position = 0;
-            var provider = new FileExtensionContentTypeProvider();
-            return new(ms, 0, ms.Length, name, Path.GetFileName(filePath))
-            {
-                Headers = headerDictionary ?? [],
-                ContentType = (provider.TryGetContentType(filePath, out string _contenttype) ? _contenttype : "application/octet-stream")
-            };
-        }
         /// <summary>SQL Server&#39;ın sistem tür kimliğini <c>([system_type_id])</c> <see cref="SqlDbType"/> enum değerine dönüştürür.</summary>
         /// <param name="systemTypeId">SQL Server [sys].[types] tablosundaki [system_type_id] değeri.</param>
         /// <returns>Eşleşen <see cref="SqlDbType"/> enum değeri.</returns>
@@ -177,7 +150,7 @@
                 231 => SqlDbType.NVarChar,
                 239 => SqlDbType.NChar,
                 241 => SqlDbType.Xml,
-                _ => throw new NotSupportedException($"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
+                _ => throw new NotSupportedException(Guards.IsEnglishDefaultThreadCurrentUICulture ? $"Invalid or unsupported {nameof(systemTypeId)}: {systemTypeId}" : $"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
             };
         }
         /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="IOExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>

@@ -84,8 +84,8 @@
             PagingInfo? p = null;
             if (loadInfo)
             {
-                var totalcount = await source.LongCountAsync(cancellationToken);
-                var totalpage = Convert.ToInt64(Math.Ceiling(totalcount / Convert.ToDouble(size)));
+                var totalcount = await source.CountAsync(cancellationToken);
+                var totalpage = Convert.ToInt32(Math.Ceiling(totalcount / Convert.ToDouble(size)));
                 p = new(totalcount, totalpage, pageNumber);
             }
             IOrderedQueryable<T> orderedSource;
@@ -93,10 +93,11 @@
             {
                 if (typeof(T).IsSubclassOfOpenGeneric(typeof(EntityDto<>)))
                 {
-                    var idProperty = typeof(T).GetProperty(nameof(EntityDto<>.Id));
+                    var idName = nameof(EntityDto<>.Id);
+                    var idProperty = typeof(T).GetProperty(idName);
                     Guard.ThrowIfNull(idProperty, nameof(idProperty));
                     if (idProperty.PropertyType == typeof(Guid)) { orderedSource = source.OrderBy(x => 0); }
-                    else { orderedSource = source.OrderBy(nameof(EntityDto<>.Id)); }
+                    else { orderedSource = source.OrderBy(idName); }
                 }
                 else { orderedSource = source.OrderBy(x => 0); }
             }

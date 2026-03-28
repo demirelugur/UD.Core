@@ -247,3 +247,30 @@ public static void ThrowIfNotEqualCount<T>(ICollection<T> collection1, ICollecti
     }
 }
 ***************************************
+/// <summary>Belirtilen dosya yolundan asenkron olarak bir <see cref="IFormFile"/> nesnesi oluşturur. Bu metod, dosya sistemindeki bir dosyayı bellek akışına okuyarak web formları veya API istekleri için uygun hale getirir.</summary>
+/// <param name="filePath">Dönüştürülecek dosyanın sistemdeki tam yolu.</param>
+/// <param name="name">IFormFile nesnesine verilecek ad. Varsayılan olarak &quot;file&quot; kullanılır.</param>
+/// <param name="headerDictionary">Oluşturulacak IFormFile için özel başlıkları içeren sözlük. (Opsiyonel)</param>
+/// <param name="cancellationToken">Asenkron işlemin iptali için kullanılan sinyal.</param>
+/// <returns>Oluşturulan IFormFile nesnesini temsil eden bir <see cref="Task{TResult}"/>.</returns>
+/// <exception cref="ArgumentException">FilePath veya Name parametreleri boş veya null ise fırlatılır.</exception>
+/// <exception cref="FileNotFoundException">Belirtilen dosya yolu mevcut değilse fırlatılır.</exception>
+public static async Task<FormFile> ToIFormFileFromPath(string filePath, string name = "file", HeaderDictionary? headerDictionary = null, CancellationToken cancellationToken = default)
+{
+    Guard.ThrowIfEmpty(filePath, nameof(filePath));
+    Guard.ThrowIfEmpty(name, nameof(name));
+    if (!File.Exists(filePath)) { throw new FileNotFoundException("Belirtilen dosya bulunamadı!", filePath); }
+    var ms = new MemoryStream();
+    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
+    {
+        await fs.CopyToAsync(ms, cancellationToken);
+    }
+    ms.Position = 0;
+    var provider = new FileExtensionContentTypeProvider();
+    return new(ms, 0, ms.Length, name, Path.GetFileName(filePath))
+    {
+        Headers = headerDictionary ?? [],
+        ContentType = (provider.TryGetContentType(filePath, out string _contenttype) ? _contenttype : "application/octet-stream")
+    };
+}
+***************************************

@@ -2,29 +2,10 @@
 {
     using System;
     using System.Globalization;
+    using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
     public static class DateExtensions
     {
-        /// <summary>Hafta içi günlerini (Pazartesi, Salı, Çarşamba, Perşembe, Cuma) kontrol eder. Eğer belirtilen <see cref="DayOfWeek"/> değeri bu günlerden biri ise <c>true</c>, aksi halde <c>false</c> döner.</summary>
-        public static bool IsWeekDays(this DayOfWeek dayOfWeek) => dayOfWeek.Includes(DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday);
-        /// <summary>Verilen <see cref="DayOfWeek"/> değerinin, belirtilen dile göre gün adını döndürür.</summary>
-        /// <param name="dayOfWeek">Gün bilgisi.</param>
-        /// <param name="isElongated">><see langword="true"/> ise tam gün adı, ><see langword="false"/> ise kısaltılmış gün adı döndürülür.</param>
-        /// <returns>Belirtilen dile göre gün adı.</returns>
-        public static string GetDayName(this DayOfWeek dayOfWeek, bool isElongated = true)
-        {
-            var dtf = CultureInfo.CurrentUICulture.DateTimeFormat;
-            return isElongated ? dtf.GetDayName(dayOfWeek) : dtf.GetAbbreviatedDayName(dayOfWeek);
-        }
-        /// <summary>Verilen <see cref="DateTime"/> değerinin ay adını, belirtilen dile göre döndürür.</summary>
-        /// <param name="dateTime">Tarih bilgisi.</param>
-        /// <param name="isElongated">><see langword="true"/> ise tam ay adı, ><see langword="false"/> ise kısaltılmış ay adı döndürülür.</param>
-        /// <returns>Belirtilen dile göre ay adı.</returns>
-        public static string GetMonthName(this DateTime dateTime, bool isElongated = true)
-        {
-            var dtf = CultureInfo.CurrentUICulture.DateTimeFormat;
-            return isElongated ? dtf.GetMonthName(dateTime.Month) : dtf.GetAbbreviatedMonthName(dateTime.Month);
-        }
         /// <summary>Belirtilen <see cref="DateTime"/> nesnesini yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesine dönüştürür.</summary>
         /// <param name="dateTime">Dönüştürülecek <see cref="DateTime"/> nesnesi.</param>
         /// <returns>Yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesi.</returns>
@@ -80,8 +61,66 @@
         /// <summary>Verilen <see cref="DateTime"/> değerinin SQL Server&#39;ın kabul ettiği minimum tarihten (1753-01-01) küçük olup olmadığını kontrol eder. Eğer tarih SQL minimumu olan 1753-01-01 (saat 00:00:00) veya daha büyükse aynı <see cref="DateTime"/> değerini döner; aksi halde <c>null</c> döner.</summary>
         public static DateTime? SafeSqlDateTime(this DateTime dateTime)
         {
-            if (dateTime >= DateConstants.SqlMinValue.ToDateTime(default)) { return dateTime; }
+            if (dateTime >= DateConstants.SqlServerMinValue.ToDateTime(default)) { return dateTime; }
             return null;
+        }
+        /// <summary>Verilen <see cref="DateTime"/> değerinin ay adını, belirtilen dile göre döndürür.</summary>
+        /// <param name="dateTime">Tarih bilgisi.</param>
+        /// <param name="isElongated">><see langword="true"/> ise tam ay adı, ><see langword="false"/> ise kısaltılmış ay adı döndürülür.</param>
+        /// <returns>Belirtilen dile göre ay adı.</returns>
+        public static string GetMonthName(this DateTime dateTime, bool isElongated = true)
+        {
+            var dtf = CultureInfo.DefaultThreadCurrentUICulture.DateTimeFormat;
+            return isElongated ? dtf.GetMonthName(dateTime.Month) : dtf.GetAbbreviatedMonthName(dateTime.Month);
+        }
+        /// <summary>Hafta içi günlerini (Pazartesi, Salı, Çarşamba, Perşembe, Cuma) kontrol eder. Eğer belirtilen <see cref="DayOfWeek"/> değeri bu günlerden biri ise <c>true</c>, aksi halde <c>false</c> döner.</summary>
+        public static bool IsWeekDays(this DayOfWeek dayOfWeek) => dayOfWeek.Includes(DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday);
+        /// <summary>Verilen <see cref="DayOfWeek"/> değerinin, belirtilen dile göre gün adını döndürür.</summary>
+        /// <param name="dayOfWeek">Gün bilgisi.</param>
+        /// <param name="isElongated">><see langword="true"/> ise tam gün adı, ><see langword="false"/> ise kısaltılmış gün adı döndürülür.</param>
+        /// <returns>Belirtilen dile göre gün adı.</returns>
+        public static string GetDayName(this DayOfWeek dayOfWeek, bool isElongated = true)
+        {
+            var dtf = CultureInfo.DefaultThreadCurrentUICulture.DateTimeFormat;
+            return isElongated ? dtf.GetDayName(dayOfWeek) : dtf.GetAbbreviatedDayName(dayOfWeek);
+        }
+        /// <summary><paramref name="timeSpan"/> değerini, gece yarısından (00:00:00) itibaren geçen toplam süre olarak temsil eden bir <see cref="TimeOnly"/> nesnesine dönüştürür. Dönüşüm sırasında, <paramref name="timeSpan"/> değerinin gün kısmı dikkate alınmaz ve yalnızca saat, dakika, saniye ve milisaniye bilgisi kullanılır. Bu sayede, <paramref name="timeSpan"/> değeri 24 saatten büyük olsa bile, sonuç her zaman 00:00:00 ile 23:59:59.999 arasında bir zaman dilimini temsil eder.</summary>
+        public static TimeOnly ToTimeOnly(this TimeSpan timeSpan) => TimeOnly.FromTimeSpan(timeSpan - TimeSpan.FromDays((int)timeSpan.TotalDays));
+        /// <summary>TimeSpan değerini gün, saat, dakika ve saniye (milisaniye dahil) bileşenlerine ayırarak okunabilir bir metne dönüştürür. Negatif süreleri destekler.</summary>
+        public static string ToPretty(this TimeSpan timeSpan)
+        {
+            var isEnglish = Guards.IsEnglishDefaultThreadCurrentUICulture;
+            var secondText = isEnglish ? "sec." : "sn.";
+            if (timeSpan == TimeSpan.Zero) { return String.Concat("0 ", secondText); }
+            var isNegative = timeSpan < TimeSpan.Zero;
+            var ts = isNegative ? timeSpan.Duration() : timeSpan;
+            var parts = new List<string>();
+            if (ts.Days > 0)
+            {
+                var dayText = isEnglish ? (ts.Days > 1 ? "days" : "day") : "gün";
+                parts.Add(String.Join(" ", ts.Days, dayText));
+            }
+            if (ts.Hours > 0)
+            {
+                var hourText = isEnglish ? (ts.Hours > 1 ? "hours" : "hour") : "saat";
+                parts.Add(String.Join(" ", ts.Hours.ToString().Replicate(), hourText));
+            }
+            if (ts.Minutes > 0)
+            {
+                var minuteText = isEnglish ? "min." : "dk.";
+                parts.Add(String.Join(" ", ts.Minutes.ToString().Replicate(), minuteText));
+            }
+            if (ts.Seconds > 0 || ts.Milliseconds > 0)
+            {
+                if (ts.Milliseconds > 0)
+                {
+                    var nf = CultureInfo.DefaultThreadCurrentUICulture.NumberFormat;
+                    parts.Add($"{(ts.Seconds > 0 ? ts.Seconds.ToString().Replicate() : "0")}{nf.CurrencyDecimalSeparator}{ts.Milliseconds.ToString().Replicate(3)} {secondText}");
+                }
+                else { parts.Add(String.Join(" ", ts.Seconds.ToString().Replicate(), secondText)); }
+            }
+            var result = String.Join(" ", parts);
+            return isNegative ? String.Concat("- ", result) : result;
         }
     }
 }
