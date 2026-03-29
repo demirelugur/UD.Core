@@ -1,9 +1,7 @@
 namespace UD.Core.Extensions
 {
     using System;
-    using System.ComponentModel;
     using System.Globalization;
-    using System.Net;
     using System.Net.Mail;
     using System.Numerics;
     using System.Reflection;
@@ -193,56 +191,8 @@ namespace UD.Core.Extensions
         /// <returns>Dönüþtürülen deðeri veya dönüþüm baþarýsýzsa varsayýlan deðeri döner.</returns>
         public static TKey ParseOrDefault<TKey>(this string value)
         {
-            var pd = parseOrDefault(value, typeof(TKey));
-            if (pd.value == null) { return default; }
-            try { return (TKey)Convert.ChangeType(pd.value, pd.genericBaseType); }
-            catch { return default; }
-        }
-        private static (object value, Type genericBaseType) parseOrDefault(string value, Type propertyType)
-        {
-            try
-            {
-                value = value.ToStringOrEmpty();
-                if (value == "") { return (default, default); }
-                _ = Validators.TryTypeIsNullable(propertyType, out Type _genericBaseType);
-                if (_genericBaseType.IsEnum)
-                {
-                    if (Enum.TryParse(_genericBaseType, value, true, out object _enum) && Enum.IsDefined(_genericBaseType, _enum)) { return (_enum, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(bool))
-                {
-                    if (value == "0") { return (false, _genericBaseType); }
-                    if (value == "1") { return (true, _genericBaseType); }
-                    if (Boolean.TryParse(value, out bool _bo)) { return (_bo, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(DateOnly))
-                {
-                    if (DateOnly.TryParse(value, out DateOnly _da)) { return (_da, _genericBaseType); }
-                    var date = value.ParseOrDefault<DateTime?>();
-                    if (date.HasValue) { return (date.Value.ToDateOnly(), _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(Uri))
-                {
-                    if (Validators.TryUri(value, out Uri _u)) { return (_u, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(MailAddress))
-                {
-                    if (Validators.TryMailAddress(value, out MailAddress _ma)) { return (_ma, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(IPAddress))
-                {
-                    if (IPAddress.TryParse(value, out IPAddress _ip)) { return (_ip, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (value.IndexOf('.') > -1 && _genericBaseType.Includes(typeof(float), typeof(double), typeof(decimal))) { value = value.Replace(".", ",", StringComparison.InvariantCulture); }
-                return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(value), _genericBaseType);
-            }
-            catch { return (default, default); }
+            var pd = Converters.ParseOrDefault(value, typeof(TKey));
+            return pd is TKey _tValue ? _tValue : default;
         }
         /// <summary>Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code></summary>
         public static string LikeContains(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower)

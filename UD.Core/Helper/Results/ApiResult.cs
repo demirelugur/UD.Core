@@ -13,7 +13,7 @@
         public ApiResult(bool status, string[] errors)
         {
             this.status = status;
-            this.errors = (status ? [] : (errors.IsNullOrCountZero() ? [RetMesaj.hata.GetDescriptionFromEnum()] : errors));
+            this.errors = (status ? [] : (errors.IsNullOrCountZero() ? [GetDescriptionLocalizationValue(RetMesaj.hata)] : errors));
         }
         public static ApiResult setFailed(params string[] errors) => new(false, errors);
     }

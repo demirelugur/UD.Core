@@ -1,8 +1,14 @@
 ﻿namespace UD.Core.Extensions
 {
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Primitives;
+    using System.Globalization;
+    using UD.Core.Helper;
     using UD.Core.Helper.Validation;
+    using static UD.Core.Enums.CRetMesaj;
+
     public static class FormCollectionExtensions
     {
         /// <summary>Belirtilen anahtar ile form verilerinden bir değeri alır ve belirtilen türde bir nesneye dönüştürür.</summary>
@@ -24,7 +30,7 @@
         {
             Guard.ThrowIfNull(form, nameof(form));
             Guard.ThrowIfEmpty(key, nameof(key));
-            if (form.TryGetValue(key, out StringValues _sv))
+            if (form.TryGetValue(key, out StringValues _sv) && _sv.Count > 0)
             {
                 outvalue = _sv.ToStringOrEmpty();
                 return true;
@@ -44,13 +50,55 @@
             Guard.ThrowIfNull(form, nameof(form));
             Guard.ThrowIfEmpty(key, nameof(key));
             if (!key.EndsWith("[]")) { key = String.Concat(key, "[]"); }
-            if (form.TryGetValue(key, out StringValues _sv))
+            if (form.TryGetValue(key, out StringValues _sv) && _sv.Count > 0)
             {
                 outvalues = _sv.Select(x => x.ParseOrDefault<TKey>()).ToArray();
                 return true;
             }
             outvalues = [];
             return false;
+        }
+        /// <summary>
+        /// Verilen <see cref="IFormCollection"/> verisini kullanarak belirtilen türde (<typeparamref name="T"/>) bir modeli model binding mekanizması ile oluşturmaya çalışır İşlem sırasında oluşan doğrulama hatalarını <see cref="ModelStateDictionary"/> üzerinden toplar ve sonuçla birlikte döner. Binding veya doğrulama hatası oluşursa hata mesajları ile birlikte başarısız sonucu; aksi durumda oluşturulan modeli döndürür.
+        /// <br/>
+        /// Eğer <paramref name="httpContext"/> parametresi verilmezse, varsayılan bir <see cref="HttpContext"/> oluşturularak kullanılır.
+        /// </summary>
+        /// <typeparam name="T">Binding işlemi sonucu oluşturulacak model tipi.</typeparam>
+        /// <param name="form">Binding işlemi için kullanılacak form verileri.</param>
+        /// <param name="httpContext">Opsiyonel <see cref="HttpContext"/> örneği.</param>
+        /// <returns>
+        /// Tuple olarak;
+        /// <list type="bullet">
+        /// <item><description><c>hasError</c>: İşlem sırasında hata oluşup oluşmadığını belirtir.</description></item>
+        /// <item><description><c>model</c>: Başarılı ise oluşturulan model, aksi halde <c>null</c>.</description></item>
+        /// <item><description><c>errors</c>: Oluşan hata mesajları.</description></item>
+        /// </list>
+        /// </returns>
+        public static async Task<(bool hasError, T model, string[] errors)> TryBindFromFormAsync<T>(this IFormCollection form, HttpContext? httpContext = null) where T : class, new()
+        {
+            Guard.ThrowIfNull(form, nameof(form));
+            httpContext ??= Utilities.GetDefaultHttpContext;
+            var model = new T();
+            var modelState = new ModelStateDictionary();
+            var bindingContext = new DefaultModelBindingContext
+            {
+                ModelName = typeof(T).Name,
+                ValueProvider = new FormValueProvider(BindingSource.Form, form, CultureInfo.CurrentCulture),
+                ModelState = modelState,
+                ModelMetadata = httpContext.RequestServices.GetRequiredService<IModelMetadataProvider>().GetMetadataForType(typeof(T)),
+                Model = model,
+                IsTopLevelObject = true
+            };
+            var binder = httpContext.RequestServices.GetRequiredService<IModelBinderFactory>().CreateBinder(new ModelBinderFactoryContext
+            {
+                Metadata = bindingContext.ModelMetadata,
+                BindingInfo = new BindingInfo { BindingSource = BindingSource.Form }
+            });
+            await binder.BindModelAsync(bindingContext);
+            var errors = (modelState.IsValid ? [] : modelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).Distinct().ToArray());
+            if (errors.Length > 0) { return (true, default, errors); }
+            if (bindingContext.Result.IsModelSet && bindingContext.Result.Model is T _t) { return (false, _t, default); }
+            return (true, default, [GetDescriptionLocalizationValue(RetMesaj.hata)]);
         }
     }
 }

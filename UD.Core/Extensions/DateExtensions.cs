@@ -110,15 +110,12 @@
                 var minuteText = isEnglish ? "min." : "dk.";
                 parts.Add(String.Join(" ", ts.Minutes.ToString().Replicate(), minuteText));
             }
-            if (ts.Seconds > 0 || ts.Milliseconds > 0)
+            if (ts.Milliseconds > 0)
             {
-                if (ts.Milliseconds > 0)
-                {
-                    var nf = CultureInfo.DefaultThreadCurrentUICulture.NumberFormat;
-                    parts.Add($"{(ts.Seconds > 0 ? ts.Seconds.ToString().Replicate() : "0")}{nf.CurrencyDecimalSeparator}{ts.Milliseconds.ToString().Replicate(3)} {secondText}");
-                }
-                else { parts.Add(String.Join(" ", ts.Seconds.ToString().Replicate(), secondText)); }
+                var nf = CultureInfo.DefaultThreadCurrentUICulture.NumberFormat;
+                parts.Add($"{(ts.Seconds > 0 ? ts.Seconds.ToString().Replicate() : "0")}{nf.CurrencyDecimalSeparator}{ts.Milliseconds.ToString().Replicate(3)} {secondText}");
             }
+            else if (ts.Seconds > 0) { parts.Add(String.Join(" ", ts.Seconds.ToString().Replicate(), secondText)); }
             var result = String.Join(" ", parts);
             return isNegative ? String.Concat("- ", result) : result;
         }

@@ -1,5 +1,7 @@
 ﻿namespace UD.Core.Helper
 {
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -10,6 +12,20 @@
     {
         /// <summary>Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır. <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code></summary>
         public static TransactionScope TransactionScopeAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
+        /// <summary>Default HttpContext nesnesi oluşturur. Bu nesne, ASP.NET Core uygulamalarında HTTP isteklerini ve yanıtlarını temsil eder. Bu özellik, testler veya diğer durumlarda gerçek bir HTTP bağlamına ihtiyaç duyulduğunda kullanılabilir. Oluşturulan HttpContext nesnesi, MVC Core ve Server-Side Blazor hizmetlerini içeren bir servis sağlayıcıya sahiptir, böylece bu hizmetlere erişim sağlanabilir.</summary>
+        public static HttpContext GetDefaultHttpContext
+        {
+            get
+            {
+                var service = new ServiceCollection();
+                service.AddMvcCore();
+                service.AddServerSideBlazor();
+                return new DefaultHttpContext
+                {
+                    RequestServices = service.BuildServiceProvider()
+                };
+            }
+        }
         /// <summary>Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.</summary>
         /// <param name="value">Şifrelenecek metin</param>
         /// <param name="key">Harflerin kaydırılacağı değer</param>

@@ -1,0 +1,30 @@
+﻿namespace UD.Core.Helper.Results
+{
+    using UD.Core.Helper;
+    public sealed class DateIntervalResult
+    {
+        public int yil { get; set; }
+        public int ay { get; set; }
+        public int gun { get; set; }
+        public TimeOnly ts { get; set; }
+        public DateIntervalResult() : this(default, default, default, default) { }
+        public DateIntervalResult(int yil, int ay, int gun, TimeOnly ts)
+        {
+            this.yil = yil;
+            this.ay = ay;
+            this.gun = gun;
+            this.ts = ts;
+        }
+        public string ToPrettyString()
+        {
+            var p0 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "year" : "yıl";
+            var p1 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "month" : "ay";
+            var p2 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "day" : "gün";
+            var r = new List<string>();
+            if (this.yil > 0) { r.Add(String.Join(" ", this.yil.ToString(), p0)); }
+            if (this.ay > 0) { r.Add(String.Join(" ", this.ay.ToString(), p1)); }
+            if (this.gun > 0) { r.Add(String.Join(" ", this.gun.ToString(), p2)); }
+            return (r.Count > 0 ? String.Join(", ", r) : "");
+        }
+    }
+}

@@ -11,6 +11,7 @@
     using System.Linq.Expressions;
     using System.Security.Cryptography;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class Accessors
@@ -171,5 +172,29 @@
         /// <param name="value">Türkçe karakterlerin değiştirileceği metin.</param>
         /// <returns>Değiştirilmiş metni döner.</returns>
         public static string ReplaceTurkishChars(string value) => value.ToStringOrEmpty().Replace('Ç', 'C').Replace('ç', 'c').Replace('Ğ', 'G').Replace('ğ', 'g').Replace('İ', 'I').Replace('ı', 'i').Replace('Ö', 'O').Replace('ö', 'o').Replace('Ş', 'S').Replace('ş', 's').Replace('Ü', 'U').Replace('ü', 'u');
+        /// <summary><paramref name="basDate"/> ile <paramref name="bitDate"/> arasındaki farkı yıl, ay, gün ve saat:dakika:saniye biçiminde hesaplar. Başlangıç tarihi bitiş tarihinden sonra ise hata fırlatır.</summary>
+        public static DateIntervalResult GetDateInterval(DateTime basDate, DateTime bitDate)
+        {
+            if (basDate > bitDate)
+            {
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
+                throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!");
+            }
+            var ts = (bitDate - basDate).ToTimeOnly();
+            var yil = bitDate.Year - basDate.Year;
+            var ay = bitDate.Month - basDate.Month;
+            var gun = bitDate.Day - basDate.Day;
+            if (gun < 0)
+            {
+                ay--;
+                gun += DateTime.DaysInMonth(bitDate.Year, bitDate.Month == 1 ? 12 : bitDate.Month - 1);
+            }
+            if (ay < 0)
+            {
+                yil--;
+                ay += 12;
+            }
+            return new(yil, ay, gun, ts);
+        }
     }
 }

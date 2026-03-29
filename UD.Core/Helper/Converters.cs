@@ -4,35 +4,17 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Data;
     using System.Globalization;
     using System.Linq;
+    using System.Net;
+    using System.Net.Mail;
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Extensions;
     public sealed class Converters
     {
-        /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
-        /// <param name="value">Dönüştürülecek değer</param>
-        /// <param name="type">Dönüştürülecek hedef tür</param>
-        /// <returns>Dönüştürülmüş değer</returns>
-        public static object ChangeType(object value, Type type)
-        {
-            var t = Validators.TryTypeIsNullable(type, out Type _genericBaseType);
-            if (value == null)
-            {
-                if (t) { return null; }
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException("Value cannot be null for a non-nullable type!"); }
-                throw new ArgumentException("Null değer alamayan bir tür için değer null olamaz!");
-            }
-            if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
-            return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericBaseType);
-        }
-        /// <summary><paramref name="value"/> değerini <typeparamref name="T"/> türüne dönüştürür.</summary>
-        /// <typeparam name="T">Dönüştürülecek hedef tür</typeparam>
-        /// <param name="value">Dönüştürülecek değer</param>
-        /// <returns><typeparamref name="T"/> türüne dönüştürülmüş değer</returns>
-        public static T ChangeType<T>(object value) => (T)ChangeType(value, typeof(T));
         /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.</summary>
         /// <param name="value">JSON&#39;a dönüştürülecek nesne.</param>
         /// <returns>Nesnenin JSON string formatındaki temsili.</returns>
@@ -91,10 +73,6 @@
                 Value = x.Value ?? DBNull.Value
             }).ToArray();
         }
-        /// <summary>Verilen nesneyi DateOnly tipine dönüştürür.<para><paramref name="obj"/> için tanımlanan nesneler: DateOnly, DateTime, Int64, String(DateOnly, DateTime, Int64 türlerine uygun biçimde olmalıdır)</para></summary>
-        /// <param name="obj">Dönüştürülecek nesne.</param>
-        /// <returns>DateOnly değeri.</returns>
-        public static DateOnly ToDateOnlyFromObject(object obj) => ToDateTimeFromObject(obj, default).ToDateOnly();
         /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı)</para></summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>
         /// <param name="timeonly">Zaman bilgisi (isteğe bağlı). <paramref name="obj"/> değeri türü DateOnly iken girilecek değer anlamlıdır</param>
@@ -165,6 +143,81 @@
             var parts = dataUri.Substring(5).Split([";base64,"], StringSplitOptions.None);
             if (parts.Length != 2) { throw new ArgumentException(Guards.IsEnglishDefaultThreadCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
             return (Convert.FromBase64String(parts[1]), parts[0]);
+        }
+        /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
+        /// <param name="value">Dönüştürülecek değer</param>
+        /// <param name="type">Dönüştürülecek hedef tür</param>
+        /// <returns>Dönüştürülmüş değer</returns>
+        public static object ChangeType(object value, Type type)
+        {
+            var t = Validators.TryTypeIsNullable(type, out Type _genericBaseType);
+            if (value == null)
+            {
+                if (t) { return null; }
+                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException("Value cannot be null for a non-nullable type!"); }
+                throw new ArgumentException("Null değer alamayan bir tür için değer null olamaz!");
+            }
+            if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
+            return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericBaseType);
+        }
+        /// <summary><paramref name="value"/> değerini <typeparamref name="T"/> türüne dönüştürür.</summary>
+        /// <typeparam name="T">Dönüştürülecek hedef tür</typeparam>
+        /// <param name="value">Dönüştürülecek değer</param>
+        /// <returns><typeparamref name="T"/> türüne dönüştürülmüş değer</returns>
+        public static T ChangeType<T>(object value) => (T)ChangeType(value, typeof(T));
+        /// <summary><paramref name="value"/> değerini belirtilen <paramref name="type"/> türüne dönüştürmeye çalışır. Dönüştürme işlemi başarısız olursa veya değer null ise, nullable türler için null, nullable olmayan türler için default değer döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür. Ayrıca bool, DateOnly, Uri, MailAddress ve IPAddress türleri için özel dönüşüm mantığı içerir.</summary>
+        public static object ParseOrDefault(string value, Type type)
+        {
+            var pd = parseOrDefault(value, type);
+            if (pd.value == null) { return null; }
+            try { return Convert.ChangeType(pd.value, pd.genericBaseType); }
+            catch { return null; }
+        }
+        private static (object value, Type genericBaseType) parseOrDefault(string value, Type propertyType)
+        {
+            try
+            {
+                value = value.ToStringOrEmpty();
+                if (value == "") { return (default, default); }
+                _ = Validators.TryTypeIsNullable(propertyType, out Type _genericBaseType);
+                if (_genericBaseType.IsEnum)
+                {
+                    if (Enum.TryParse(_genericBaseType, value, true, out object _enum) && Enum.IsDefined(_genericBaseType, _enum)) { return (_enum, _genericBaseType); }
+                    return (default, _genericBaseType);
+                }
+                if (_genericBaseType == typeof(bool))
+                {
+                    if (value == "0") { return (false, _genericBaseType); }
+                    if (value == "1") { return (true, _genericBaseType); }
+                    if (Boolean.TryParse(value, out bool _bo)) { return (_bo, _genericBaseType); }
+                    return (default, _genericBaseType);
+                }
+                if (_genericBaseType == typeof(DateOnly))
+                {
+                    if (DateOnly.TryParse(value, out DateOnly _da)) { return (_da, _genericBaseType); }
+                    var date = value.ParseOrDefault<DateTime?>();
+                    if (date.HasValue) { return (date.Value.ToDateOnly(), _genericBaseType); }
+                    return (default, _genericBaseType);
+                }
+                if (_genericBaseType == typeof(Uri))
+                {
+                    if (Validators.TryUri(value, out Uri _u)) { return (_u, _genericBaseType); }
+                    return (default, _genericBaseType);
+                }
+                if (_genericBaseType == typeof(MailAddress))
+                {
+                    if (Validators.TryMailAddress(value, out MailAddress _ma)) { return (_ma, _genericBaseType); }
+                    return (default, _genericBaseType);
+                }
+                if (_genericBaseType == typeof(IPAddress))
+                {
+                    if (IPAddress.TryParse(value, out IPAddress _ip)) { return (_ip, _genericBaseType); }
+                    return (default, _genericBaseType);
+                }
+                if (value.IndexOf('.') > -1 && _genericBaseType.Includes(typeof(float), typeof(double), typeof(decimal))) { value = value.Replace(".", ",", StringComparison.InvariantCulture); }
+                return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(value), _genericBaseType);
+            }
+            catch { return (default, default); }
         }
     }
 }
