@@ -32,9 +32,9 @@
             [Description("Girilebilecek maksimum karakter sınırı aşıldı! Yönetici ile iletişime geçiniz.")]
             maxlength
         }
-        public static string GetDescriptionLocalizationValue(object value)
+        public static string GetDescriptionLocalizationValue(object data)
         {
-            var enumValue = value.TryToEnum<RetMesaj>();
+            var enumValue = data.TryToEnum<RetMesaj>();
             if (!enumValue.HasValue) { throw Utilities.ThrowNotSupportedForEnum<RetMesaj>(); }
             if (Guards.IsEnglishDefaultThreadCurrentUICulture)
             {

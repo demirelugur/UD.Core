@@ -8,7 +8,6 @@
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     using static UD.Core.Enums.CRetMesaj;
-
     public static class FormCollectionExtensions
     {
         /// <summary>Belirtilen anahtar ile form verilerinden bir değeri alır ve belirtilen türde bir nesneye dönüştürür.</summary>
