@@ -244,6 +244,8 @@ namespace UD.Core.Extensions
         /// <returns>Bulunan property deðeri belirtilen türe (T) dönüþtürülerek döndürülür. Property bulunamazsa, null ise veya JSON geçersizse varsayýlan deðer (default(T)) döndürülür.</returns>
         public static T JObjectGetProperty<T>(this string jsonData, string key)
         {
+            key = key.ToStringOrEmpty();
+            Guard.ThrowIfEmpty(key, nameof(key));
             if (Validators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
             {
                 var k = _jo[key];
