@@ -249,7 +249,7 @@ namespace UD.Core.Extensions
             if (Validators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
             {
                 var k = _jo[key];
-                if (k == null || k.Type.Includes(JTokenType.Null, JTokenType.Undefined)) { return default; }
+                if (k.IsNullorUndefined()) { return default; }
                 return k.ToString().ParseOrDefault<T>();
             }
             return default;
