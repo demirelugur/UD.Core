@@ -13,16 +13,18 @@
         /// <summary>Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır. <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code></summary>
         public static TransactionScope TransactionScopeAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
         /// <summary>Default HttpContext nesnesi oluşturur. Bu nesne, ASP.NET Core uygulamalarında HTTP isteklerini ve yanıtlarını temsil eder. Bu özellik, testler veya diğer durumlarda gerçek bir HTTP bağlamına ihtiyaç duyulduğunda kullanılabilir. Oluşturulan HttpContext nesnesi, MVC Core ve Server-Side Blazor hizmetlerini içeren bir servis sağlayıcıya sahiptir, böylece bu hizmetlere erişim sağlanabilir.</summary>
-        public static HttpContext GetDefaultHttpContext
+        public static DefaultHttpContext GetDefaultHttpContext
         {
             get
             {
                 var service = new ServiceCollection();
+                service.AddLogging();
                 service.AddMvcCore();
                 service.AddServerSideBlazor();
                 return new DefaultHttpContext
                 {
-                    RequestServices = service.BuildServiceProvider()
+                    RequestServices = service.BuildServiceProvider(),
+                    RequestAborted = CancellationToken.None
                 };
             }
         }

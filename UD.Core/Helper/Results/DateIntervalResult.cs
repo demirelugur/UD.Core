@@ -17,13 +17,22 @@
         }
         public string ToPrettyString()
         {
-            var p0 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "year" : "yıl";
-            var p1 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "month" : "ay";
-            var p2 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "day" : "gün";
             var r = new List<string>();
-            if (this.yil > 0) { r.Add(String.Join(" ", this.yil.ToString(), p0)); }
-            if (this.ay > 0) { r.Add(String.Join(" ", this.ay.ToString(), p1)); }
-            if (this.gun > 0) { r.Add(String.Join(" ", this.gun.ToString(), p2)); }
+            if (this.yil > 0)
+            {
+                var p0 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "year" : "yıl";
+                r.Add(String.Join(" ", this.yil.ToString(), p0));
+            }
+            if (this.ay > 0)
+            {
+                var p1 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "month" : "ay";
+                r.Add(String.Join(" ", this.ay.ToString(), p1));
+            }
+            if (this.gun > 0)
+            {
+                var p2 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "day" : "gün";
+                r.Add(String.Join(" ", this.gun.ToString(), p2));
+            }
             return (r.Count > 0 ? String.Join(", ", r) : "");
         }
     }

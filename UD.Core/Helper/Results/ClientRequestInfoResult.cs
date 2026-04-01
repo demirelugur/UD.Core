@@ -39,7 +39,12 @@
             if (value is ClientRequestInfoResult _c) { return _c; }
             if (value is IHttpContextAccessor _hca) { return ToEntityFromObject(_hca.HttpContext); }
             if (value is HttpContext _context) { return new(_context.IsMobileDevice(), _context.GetIPAddress()); }
-            if (value is IFormCollection _form) { return new(_form.ParseOrDefault<bool>(nameof(ismobil)), _form.ParseOrDefault<string>(nameof(ipaddress)) ?? ""); }
+            if (value is IFormCollection _form)
+            {
+                var (hasError, model, errors) = _form.TryBindFromFormAsync<ClientRequestInfoResult>().GetAwaiter().GetResult();
+                if (hasError) { throw errors.ToNestedException(); }
+                return model;
+            }
             return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ClientRequestInfoResult((bool)x.ismobil, (object)x.ipaddress)).FirstOrDefault();
         }
     }

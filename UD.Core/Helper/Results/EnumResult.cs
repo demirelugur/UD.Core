@@ -28,12 +28,9 @@
             if (value is EnumResult _er) { return _er; }
             if (value is IFormCollection _form)
             {
-                return ToEntityFromObject(new
-                {
-                    value = _form.ParseOrDefault<long>(nameof(value)),
-                    text = _form.ParseOrDefault<string>(nameof(text)) ?? "",
-                    description = _form.ParseOrDefault<string>(nameof(description)) ?? ""
-                });
+                var (hasError, model, errors) = _form.TryBindFromFormAsync<EnumResult>().GetAwaiter().GetResult();
+                if (hasError) { throw errors.ToNestedException(); }
+                return model;
             }
             var t = value.GetType();
             if (t.IsEnum)

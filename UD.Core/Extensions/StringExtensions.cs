@@ -1,5 +1,6 @@
 namespace UD.Core.Extensions
 {
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Globalization;
     using System.Net.Mail;
@@ -84,11 +85,14 @@ namespace UD.Core.Extensions
         /// <param name="value">Kontrol edilecek e-Posta adresi.</param>
         /// <returns>Geçerli bir e-Posta adresi ise <see langword="true"/>, deðilse <see langword="false"/> döner.</returns>
         public static bool IsMail(this string value) => Validators.TryMailAddress(value, out _);
-        /// <summary>Verilen string&#39;in geçerli bir e-Posta adresi olup olmadýðýný ve bu adresin host kýsmýnýn belirtilen host ile eþleþip eþleþmediðini kontrol eder. Host karþýlaþtýrmasý büyük/küçük harfe duyarlý deðildir ve host parametresi &#39;@&#39; ile baþlýyorsa bu karakter yok sayýlýr.</summary>
+        /// <summary><paramref name="value"/> deðerinin geçerli bir e-Posta adresi olup olmadýðýný ve e-Posta adresinin host kýsmýnýn <paramref name="host"/> parametresiyle eþleþip eþleþmediðini kontrol eder.</summary>
+        /// <param name="value">Kontrol edilecek e-Posta adresi.</param>
+        /// <param name="host">Kontrol edilecek host.</param>
+        /// <returns><see langword="true"/>, eðer e-Posta adresi geçerli ve host kýsmý belirtilen host ile eþleþiyorsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsMailFromHost(this string value, string host)
         {
             host = host.ToStringOrEmpty().TrimStart('@').ToLower();
-            if (host == "") { return false; }
+            Guard.ThrowIfEmpty(host, nameof(host));
             return Validators.TryMailAddress(value, out MailAddress _ma) && _ma.Host == host;
         }
         /// <summary>Verilen dize deðerinin geçerli bir URI olup olmadýðýný kontrol eder.</summary>
@@ -232,6 +236,21 @@ namespace UD.Core.Extensions
                 StringCaseHandling.upper => String.Concat("%", value.ToUpper()),
                 _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
             };
+        }
+        /// <summary>JSON string&#39;inden belirtilen anahtara (key) karþýlýk gelen deðeri tip güvenli þekilde çeker.</summary>
+        /// <typeparam name="T">Döndürülecek deðerin tipi (string, int, bool, DateTime, Guid vb.)</typeparam>
+        /// <param name="jsonData">Ýçinden deðer okunacak JSON string&#39;i (JObject olmalýdýr)</param>
+        /// <param name="key">Deðeri alýnacak property&#39;nin anahtarý (key)</param>
+        /// <returns>Bulunan property deðeri belirtilen türe (T) dönüþtürülerek döndürülür. Property bulunamazsa, null ise veya JSON geçersizse varsayýlan deðer (default(T)) döndürülür.</returns>
+        public static T JObjectGetProperty<T>(this string jsonData, string key)
+        {
+            if (Validators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
+            {
+                var k = _jo[key];
+                if (k == null || k.Type.Includes(JTokenType.Null, JTokenType.Undefined)) { return default; }
+                return k.ToString().ParseOrDefault<T>();
+            }
+            return default;
         }
     }
 }

@@ -77,15 +77,14 @@
         {
             Guard.ThrowIfNull(form, nameof(form));
             httpContext ??= Utilities.GetDefaultHttpContext;
-            var model = new T();
             var modelState = new ModelStateDictionary();
             var bindingContext = new DefaultModelBindingContext
             {
-                ModelName = typeof(T).Name,
-                ValueProvider = new FormValueProvider(BindingSource.Form, form, CultureInfo.CurrentCulture),
+                ModelName = "",
+                ValueProvider = new FormValueProvider(BindingSource.Form, form, CultureInfo.InvariantCulture),
                 ModelState = modelState,
                 ModelMetadata = httpContext.RequestServices.GetRequiredService<IModelMetadataProvider>().GetMetadataForType(typeof(T)),
-                Model = model,
+                Model = new T(),
                 IsTopLevelObject = true
             };
             var binder = httpContext.RequestServices.GetRequiredService<IModelBinderFactory>().CreateBinder(new ModelBinderFactoryContext
@@ -96,7 +95,11 @@
             await binder.BindModelAsync(bindingContext);
             var errors = (modelState.IsValid ? [] : modelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).Distinct().ToArray());
             if (errors.Length > 0) { return (true, default, errors); }
-            if (bindingContext.Result.IsModelSet && bindingContext.Result.Model is T _t) { return (false, _t, default); }
+            if (bindingContext.Result.IsModelSet && bindingContext.Result.Model is T _t)
+            {
+                if (Validators.TryValidateObject(_t, out errors)) { return (true, default, errors); }
+                return (false, _t, default);
+            }
             return (true, default, [GetDescriptionLocalizationValue(RetMesaj.hata)]);
         }
     }

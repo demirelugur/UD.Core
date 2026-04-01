@@ -199,6 +199,18 @@
                     if (date.HasValue) { return (date.Value.ToDateOnly(), _genericBaseType); }
                     return (default, _genericBaseType);
                 }
+                if (_genericBaseType == typeof(TimeSpan))
+                {
+                    if (TimeSpan.TryParse(value, out TimeSpan _ts)) { return (_ts, _genericBaseType); }
+                    return (default, _genericBaseType);
+                }
+                if (_genericBaseType == typeof(TimeOnly))
+                {
+                    if (TimeOnly.TryParse(value, out TimeOnly _to)) { return (_to, _genericBaseType); }
+                    var ts = value.ParseOrDefault<TimeSpan?>();
+                    if (ts.HasValue) { return (ts.Value.ToTimeOnly(), _genericBaseType); }
+                    return (default, _genericBaseType);
+                }
                 if (_genericBaseType == typeof(Uri))
                 {
                     if (Validators.TryUri(value, out Uri _u)) { return (_u, _genericBaseType); }

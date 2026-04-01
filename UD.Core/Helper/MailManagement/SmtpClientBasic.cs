@@ -73,15 +73,9 @@
             if (value is SmtpClientBasic _ssh) { return _ssh; }
             if (value is IFormCollection _form)
             {
-                return ToEntityFromObject(new
-                {
-                    Email = _form.ParseOrDefault<string>(nameof(Email)) ?? "",
-                    Password = _form.ParseOrDefault<string>(nameof(Password)) ?? "",
-                    Host = _form.ParseOrDefault<string>(nameof(Host)) ?? "",
-                    Port = _form.ParseOrDefault<int>(nameof(Port)),
-                    EnableSsl = _form.ParseOrDefault<bool>(nameof(EnableSsl)),
-                    Timeout = _form.ParseOrDefault<int?>(nameof(Timeout))
-                });
+                var (hasError, model, errors) = _form.TryBindFromFormAsync<SmtpClientBasic>().GetAwaiter().GetResult();
+                if (hasError) { throw errors.ToNestedException(); }
+                return model;
             }
             return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new SmtpClientBasic((string)x.Email, (string)x.Password, (string)x.Host, (int)x.Port, (bool)x.EnableSsl, (int?)x.Timeout)).FirstOrDefault();
         }
