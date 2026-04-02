@@ -123,7 +123,7 @@
         public static void ThrowIfNotValidOutOfLength<T>(string value, Expression<Func<T, string>> expression) where T : class
         {
             var p = expression.GetExpressionName();
-            var m = Accessors.GetStringOrMaxLength<T>(p);
+            var m = Utilities.GetStringOrMaxLength<T>(p);
             ThrowIfZeroOrNegative(m, p);
             ThrowIfNotValidOutOfLength(value, m, p);
         }

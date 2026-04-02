@@ -2,15 +2,145 @@
 {
     using Ganss.Xss;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.StaticFiles;
+    using Microsoft.Data.SqlClient;
     using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Globalization;
+    using System.Linq.Expressions;
+    using System.Security.Cryptography;
     using System.Transactions;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
     public sealed class Utilities
     {
+        /// <summary>
+        /// Veritabanı bağlantı dizesi oluşturur. 
+        /// <para><c>Data Source=###;Initial Catalog=###;Persist Security Info=True;User ID=###;Password=###;MultipleActiveResultSets=True;TrustServerCertificate=True</c></para>
+        /// </summary>
+        /// <param name="dataSource">Veritabanı sunucu adı veya IP adresi (DataSource)</param>
+        /// <param name="initialCatalog">Bağlanılacak veritabanı adı (Initial Catalog)</param>
+        /// <param name="userID">Veritabanı kullanıcı adı (User ID)</param>
+        /// <param name="password">Veritabanı kullanıcı şifresi (Password)</param>
+        /// <returns>Oluşturulan SQL bağlantı dizesini döndürür</returns>
+        /// <remarks>
+        /// Oluşturulan bağlantı dizesinde aşağıdaki özellikler ayarlanır:
+        /// <list type="bullet">
+        /// <item><description><b>PersistSecurityInfo</b>: Güvenlik bilgilerinin bağlantı dizesinde kalması sağlanır</description></item>
+        /// <item><description><b>MultipleActiveResultSets</b>: Aynı bağlantı üzerinde birden fazla aktif sonuç kümesine izin verilir (MARS)</description></item>
+        /// <item><description><b>TrustServerCertificate</b>: Sunucu sertifikasının doğrulanmadan güvenilir kabul edilmesi sağlanır</description></item>
+        /// </list>
+        /// </remarks>
+        public static string GetConnectionString(string dataSource, string initialCatalog, string userID, string password)
+        {
+            Guard.ThrowIfEmpty(dataSource, nameof(dataSource));
+            Guard.ThrowIfEmpty(initialCatalog, nameof(initialCatalog));
+            Guard.ThrowIfEmpty(userID, nameof(userID));
+            Guard.ThrowIfEmpty(password, nameof(password));
+            return new SqlConnectionStringBuilder
+            {
+                DataSource = dataSource,
+                InitialCatalog = initialCatalog,
+                UserID = userID,
+                Password = password,
+                PersistSecurityInfo = true,
+                MultipleActiveResultSets = true,
+                TrustServerCertificate = true
+            }.ToString();
+        }
+        /// <summary>Verilen sınıfın belirtilen özelliğindeki maksimum karakter uzunluğunu döner. Eğer <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> gibi uzunluk sınırlayıcı öznitelikler atanmışsa, bu değeri alır. Aksi takdirde 0 döner.</summary>
+        /// <typeparam name="T">Kontrol edilecek sınıf türü.</typeparam>
+        /// <param name="name">Kontrol edilecek özelliğin adı.</param>
+        /// <returns>Özellik için maksimum uzunluk değeri; öznitelik bulunmazsa 0 döner.</returns>
+        public static int GetStringOrMaxLength<T>(string name) where T : class
+        {
+            Guard.ThrowIfEmpty(name, nameof(name));
+            return typeof(T).GetProperty(name).GetStringOrMaxLength();
+        }
+        /// <summary>Verilen sınıfın belirli bir string ifadesi için maksimum karakter uzunluğunu döner. <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> atanmışsa bu değeri alır, aksi takdirde 0 döner.</summary>
+        /// <typeparam name="T">Kontrol edilecek sınıf türü.</typeparam>
+        /// <param name="expression">Özellik ismini içeren ifade.</param>
+        /// <returns>Özellik için maksimum uzunluk değeri; öznitelik bulunmazsa 0 döner.</returns>
+        public static int GetStringOrMaxLength<T>(Expression<Func<T, string>> expression) where T : class => GetStringOrMaxLength<T>(expression.GetExpressionName());
+        /// <summary>
+        /// Verilen string dizisinden kısaltma oluşturur. Her bir kelimenin baş harfini alarak noktalarla ayrılmış bir kısaltma döner. Boş veya null değerler atlanır.
+        /// <example><br />Örnek: <br />Uğur DEMİREL -> U.D <br />Mustafa Kemal ATATÜRK -> MK.A</example>
+        /// </summary>
+        /// <param name="names">Kısaltma için kullanılacak isim dizisi.</param>
+        /// <returns>Verilen isimlerin baş harflerinden oluşan kısaltma. Eğer parametreler boş veya geçersizse boş string döner.</returns>
+        public static string GetNameInitials(params string[] names)
+        {
+            names = (names ?? []).Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
+            if (names.Length == 0) { return ""; }
+            return String.Join(".", names.Select(x => String.Join("", x.ToUpper().Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(x => x[0]).ToArray())));
+        }
+        /// <summary>Sadece uzantıdan MIME type döner. Eğer herhangi bir kayıt bulunamazsa &quot;application/octet-stream&quot; değerini döner</summary>
+        /// <param name="extension">Dosya uzantısı (.txt, .pdf vb.)</param>
+        /// <returns>MIME type değeri</returns>
+        public static string GetMimeTypeByExtension(string extension)
+        {
+            extension = extension.ToStringOrEmpty().ToLower();
+            if (extension != "")
+            {
+                if (extension[0] != '.') { extension = String.Concat(".", extension); }
+                if (new FileExtensionContentTypeProvider().Mappings.TryGetValue(extension, out string _v)) { return _v; }
+            }
+            return "application/octet-stream";
+        }
+        /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
+        /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
+        /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
+        public static byte[] GenerateRandomKey(int length)
+        {
+            Guard.ThrowIfZeroOrNegative(length, nameof(length));
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                var byteArray = new byte[length];
+                rng.GetBytes(byteArray);
+                return byteArray;
+            }
+        }
+        /// <summary>Metni belirtilen maksimum uzunluğa kadar kısaltır. Metin belirtilen uzunluğu aşıyorsa sonuna üç nokta (...) ekler. Metin boş veya null ise boş string döner. </summary>
+        /// <param name="value">İşlem yapılacak metin</param>
+        /// <param name="maxLength">3 nokta dahil metnin maksimum uzunluğu</param>
+        /// <returns>Kısaltılmış ve gerekiyorsa üç nokta eklenmiş metin</returns>
+        public static string SubstringUpToLengthWithEllipsis(string value, int maxLength)
+        {
+            value = value.SubstringUpToLength(maxLength - 3);
+            if (value == "") { return ""; }
+            return String.Concat(value, "...");
+        }
+        /// <summary>Verilen metindeki Türkçe özel karakterleri (Ç, ç, Ğ, ğ, İ, ı, Ö, ö, Ş, ş, Ü, ü) karşılık gelen İngilizce karakterlerle (C, c, G, g, I, i, O, o, S, s, U, u) değiştirir. Eğer metin null ise, boş bir string döner.</summary>
+        /// <param name="value">Türkçe karakterlerin değiştirileceği metin.</param>
+        /// <returns>Değiştirilmiş metni döner.</returns>
+        public static string ReplaceTurkishChars(string value) => value.ToStringOrEmpty().Replace('Ç', 'C').Replace('ç', 'c').Replace('Ğ', 'G').Replace('ğ', 'g').Replace('İ', 'I').Replace('ı', 'i').Replace('Ö', 'O').Replace('ö', 'o').Replace('Ş', 'S').Replace('ş', 's').Replace('Ü', 'U').Replace('ü', 'u');
+        /// <summary><paramref name="basDate"/> ile <paramref name="bitDate"/> arasındaki farkı yıl, ay, gün ve saat:dakika:saniye biçiminde hesaplar. Başlangıç tarihi bitiş tarihinden sonra ise hata fırlatır.</summary>
+        public static DateIntervalResult GetDateInterval(DateTime basDate, DateTime bitDate)
+        {
+            if (basDate > bitDate)
+            {
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
+                throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!");
+            }
+            var ts = (bitDate - basDate).ToTimeOnly();
+            var yil = bitDate.Year - basDate.Year;
+            var ay = bitDate.Month - basDate.Month;
+            var gun = bitDate.Day - basDate.Day;
+            if (gun < 0)
+            {
+                ay--;
+                gun += DateTime.DaysInMonth(bitDate.Year, bitDate.Month == 1 ? 12 : bitDate.Month - 1);
+            }
+            if (ay < 0)
+            {
+                yil--;
+                ay += 12;
+            }
+            return new(yil, ay, gun, ts);
+        }
         /// <summary>Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır. <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code></summary>
         public static TransactionScope TransactionScopeAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
         /// <summary>Default HttpContext nesnesi oluşturur. Bu nesne, ASP.NET Core uygulamalarında HTTP isteklerini ve yanıtlarını temsil eder. Bu özellik, testler veya diğer durumlarda gerçek bir HTTP bağlamına ihtiyaç duyulduğunda kullanılabilir. Oluşturulan HttpContext nesnesi, MVC Core ve Server-Side Blazor hizmetlerini içeren bir servis sağlayıcıya sahiptir, böylece bu hizmetlere erişim sağlanabilir.</summary>

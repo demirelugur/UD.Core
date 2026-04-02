@@ -274,3 +274,60 @@ public static async Task<FormFile> ToIFormFileFromPath(string filePath, string n
     };
 }
 ***************************************
+/// <summary>Verilen nesneden &quot;isldate&quot; ve &quot;isluser&quot; bilgilerini çıkarır ve bu bilgileri belirtilen tarih formatında birleştirerek string olarak döndürür. Nesne tipi IFormCollection, JToken, Tuple, ValueTuple veya bir enumerable koleksiyon olabilir. Eğer nesne null ise, &quot;isldate&quot; geçerli bir tarih değilse veya &quot;isluser&quot; boşsa, boş string döndürür.</summary>
+/// <param name="model">Bilgilerin alınacağı nesne.</param>
+/// <param name="dateFormat">Tarih biçimi.</param>
+/// <returns>&quot;isldate&quot; ve &quot;isluser&quot; bilgilerinin birleştirilmiş string hali; geçerli veri yoksa boş string.</returns>
+public static string GetIslemInfoFromObject(object model, string dateFormat = DateConstants.ddMMyyyy_HHmmss)
+{
+    if (model == null) { return ""; }
+    if (model is IFormCollection _form)
+    {
+        return GetIslemInfoFromObject(new
+        {
+            isldate = _form.ParseOrDefault<DateTime>("isldate"),
+            isluser = _form.ParseOrDefault<string>("isluser") ?? ""
+        }, dateFormat);
+    }
+    if (model is JToken _j)
+    {
+        return GetIslemInfoFromObject(new
+        {
+            isldate = _j["isldate"].ToEnumerable().Select(x => (x != null && x.Type == JTokenType.Date) ? Convert.ToDateTime(x) : DateTime.MinValue).FirstOrDefault(),
+            isluser = _j["isluser"].ToEnumerable().Select(x => (x != null && x.Type == JTokenType.String) ? Convert.ToString(x) : "").FirstOrDefault()
+        }, dateFormat);
+    }
+    var type = model.GetType();
+    if (type.FullName.StartsWith("System.Tuple") || type.FullName.StartsWith("System.ValueTuple"))
+    {
+        var args = type.GetGenericArguments();
+        if (args.Length >= 2)
+        {
+            var types = new[] { typeof(DateTime), typeof(DateOnly), typeof(DateTimeOffset) };
+            if (types.Contains(args[0]) && args[1] == typeof(string))
+            {
+                dynamic t = model;
+                return GetIslemInfoFromObject(new
+                {
+                    isldate = (object)t.Item1,
+                    isluser = (string)t.Item2
+                }, dateFormat);
+            }
+            if (args[0] == typeof(string) && types.Contains(args[1]))
+            {
+                dynamic t = model;
+                return GetIslemInfoFromObject(new
+                {
+                    isldate = (object)t.Item2,
+                    isluser = (string)t.Item1
+                }, dateFormat);
+            }
+        }
+    }
+    return model.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new
+    {
+        isldate = Converters.ToDateTimeFromObject((object)x.isldate, default),
+        isluser = (string)x.isluser
+    }).Select(x => String.Join(", ", new string[] { (x.isldate.Ticks > 0 ? x.isldate.ToString(dateFormat) : ""), x.isluser.ToStringOrEmpty() }.Where(y => y != "").ToArray())).FirstOrDefault() ?? "";
+}
+***************************************

@@ -296,15 +296,18 @@
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
             }
         }
-        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _cache = new();
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> cacheSanitize = new();
         /// <summary><paramref name="sanitizer"/> değeri kullanılarak, <paramref name="entity"/> nesnesinin tüm string türündeki özelliklerini temizler (sanitize eder). Temizleme işlemi sırasında, <see cref="SkipSanitizeAttribute"/> ile işaretlenmiş özellikler atlanır. Bu metod, özellikle kullanıcı tarafından sağlanan verilerin güvenliğini sağlamak ve potansiyel XSS saldırılarını önlemek için kullanılabilir.</summary>
         public static void SanitizeEntity(this IHtmlSanitizer sanitizer, object entity)
         {
-            var props = _cache.GetOrAdd(entity.GetType(), x => x.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(y => y.PropertyType == typeof(string) && !Attribute.IsDefined(y, typeof(SkipSanitizeAttribute)) && y.IsMapped()).ToArray());
+            Guard.ThrowIfNull(sanitizer, nameof(sanitizer));
+            Guard.ThrowIfNull(entity, nameof(entity));
+            var props = cacheSanitize.GetOrAdd(entity.GetType(), x => x.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(y => y.PropertyType == typeof(string) && !Attribute.IsDefined(y, typeof(SkipSanitizeAttribute)) && y.IsMapped()).ToArray());
             foreach (var prop in props)
             {
-                var value = (string?)prop.GetValue(entity);
-                prop.SetValue(entity, sanitizer.Sanitize(value ?? "").ParseOrDefault<string>());
+                var value = prop.GetValue(entity).ToStringOrEmpty();
+                if (value == "") { prop.SetValue(entity, default(string)); }
+                else { prop.SetValue(entity, sanitizer.Sanitize(value).ParseOrDefault<string>()); }
             }
         }
     }
