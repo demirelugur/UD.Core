@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Attributes.DefaultValue
+﻿namespace UD.Core.Attributes.DefaultValues
 {
     using System;
     using System.ComponentModel;

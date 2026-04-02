@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Helper
 {
+    using Ganss.Xss;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
     using System;
@@ -68,7 +69,7 @@
                 if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
                 throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
             }
-            pi.SetValue(value, data == null ? null : Converters.ChangeType(data, pi.PropertyType));
+            pi.SetValue(value, Converters.ChangeType(data, pi.PropertyType));
         }
         /// <summary><paramref name="culture"/> parametresi ile belirtilen kültür bilgisini kullanarak, uygulamanın varsayılan thread kültürünü ve varsayılan thread UI kültürünü ayarlar. Bu metod, uygulamanın farklı kültürlerde çalışmasını sağlamak için kullanılabilir. <paramref name="culture"/> geçerli bir kültür kodu (örneğin &quot;en-US&quot;, &quot;tr-TR&quot;) içermelidir. Eğer geçerli bir kültür kodu sağlanmazsa, bir hata fırlatılır.</summary>
         public static void SetDefaultThreadCulture(string culture)
@@ -88,6 +89,13 @@
             var r = new HashSet<string> { typeof(TEnum).FullName, (Guards.IsEnglishDefaultThreadCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
             if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
             return new(String.Join(" ", r));
+        }
+        /// <summary>Script etiketlerini varsayılan olarak temizleyen bir HtmlSanitizer nesnesi oluşturur. Bu metod, HTML içeriğini temizlemek ve güvenli hale getirmek için kullanılabilir. Oluşturulan HtmlSanitizer nesnesi, script etiketlerini temizleyerek potansiyel XSS saldırılarına karşı koruma sağlar. İsteğe bağlı olarak, farklı temizleme seçenekleri belirten bir HtmlSanitizerOptions nesnesi de sağlanabilir.</summary>
+        public static HtmlSanitizer CreateSanitizer(HtmlSanitizerOptions? options = null)
+        {
+            var hs = new HtmlSanitizer(options ?? new());
+            hs.AllowedTags.Remove("script");
+            return hs;
         }
     }
 }
