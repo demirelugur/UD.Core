@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Attributes.Disables
+﻿namespace UD.Core.Attributes
 {
     using System;
     using UD.Core.Middlewares;

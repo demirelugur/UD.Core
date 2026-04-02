@@ -3,8 +3,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using UD.Core.Attributes.Disables;
-
+    using UD.Core.Attributes;
     public sealed class TransactionMiddleware<TContext> where TContext : DbContext
     {
         private readonly RequestDelegate next;

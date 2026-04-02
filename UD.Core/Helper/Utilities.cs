@@ -93,8 +93,10 @@
         /// <summary>Script etiketlerini varsayılan olarak temizleyen bir HtmlSanitizer nesnesi oluşturur. Bu metod, HTML içeriğini temizlemek ve güvenli hale getirmek için kullanılabilir. Oluşturulan HtmlSanitizer nesnesi, script etiketlerini temizleyerek potansiyel XSS saldırılarına karşı koruma sağlar. İsteğe bağlı olarak, farklı temizleme seçenekleri belirten bir HtmlSanitizerOptions nesnesi de sağlanabilir.</summary>
         public static HtmlSanitizer CreateSanitizer(HtmlSanitizerOptions? options = null)
         {
-            var hs = new HtmlSanitizer(options ?? new());
+            var hs = new HtmlSanitizer(options ?? new()); // XSS örnekleri: https://github.com/pgaijin66/XSS-Payloads/blob/master/payload/payload.txt
             hs.AllowedTags.Remove("script");
+            hs.AllowedAttributes.Remove("onerror");
+            hs.AllowedAttributes.Remove("onclick");
             return hs;
         }
     }

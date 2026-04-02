@@ -1,10 +1,12 @@
 ﻿namespace UD.Core.Extensions
 {
+    using Ganss.Xss;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json.Linq;
     using System;
+    using System.Collections.Concurrent;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Data;
@@ -13,6 +15,7 @@
     using System.Net.Mail;
     using System.Reflection;
     using System.Web;
+    using UD.Core.Attributes;
     using UD.Core.Auditing;
     using UD.Core.Helper;
     using UD.Core.Helper.Services;
@@ -291,6 +294,17 @@
                 var isDeletedProperty = Expression.Call(typeof(EF), nameof(EF.Property), [typeof(bool)], parameter, Expression.Constant(nameof(ISoftDelete.IsDeleted)));
                 var filter = Expression.Lambda(Expression.Equal(isDeletedProperty, Expression.Constant(false)), parameter);
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+            }
+        }
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _cache = new();
+        /// <summary><paramref name="sanitizer"/> değeri kullanılarak, <paramref name="entity"/> nesnesinin tüm string türündeki özelliklerini temizler (sanitize eder). Temizleme işlemi sırasında, <see cref="SkipSanitizeAttribute"/> ile işaretlenmiş özellikler atlanır. Bu metod, özellikle kullanıcı tarafından sağlanan verilerin güvenliğini sağlamak ve potansiyel XSS saldırılarını önlemek için kullanılabilir.</summary>
+        public static void SanitizeEntity(this IHtmlSanitizer sanitizer, object entity)
+        {
+            var props = _cache.GetOrAdd(entity.GetType(), x => x.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(y => y.PropertyType == typeof(string) && !Attribute.IsDefined(y, typeof(SkipSanitizeAttribute)) && y.IsMapped()).ToArray());
+            foreach (var prop in props)
+            {
+                var value = (string?)prop.GetValue(entity);
+                prop.SetValue(entity, (value.IsNullOrEmpty() ? null : sanitizer.Sanitize(value).ParseOrDefault<string>()));
             }
         }
     }
