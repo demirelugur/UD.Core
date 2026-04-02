@@ -182,7 +182,7 @@
                 _ = Validators.TryTypeIsNullable(propertyType, out Type _genericBaseType);
                 if (_genericBaseType.IsEnum)
                 {
-                    if (Enum.TryParse(_genericBaseType, value, true, out object _enum) && Enum.IsDefined(_genericBaseType, _enum)) { return (_enum, _genericBaseType); }
+                    if (Enum.TryParse(_genericBaseType, value, true, out object _enum)) { return (_enum, _genericBaseType); }
                     return (default, _genericBaseType);
                 }
                 if (_genericBaseType == typeof(bool))
