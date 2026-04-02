@@ -57,7 +57,7 @@ namespace UD.Core.Extensions
         /// </summary>
         /// <param name="phoneNumberTR">Dönüþtürülmek istenen telefon numarasý.</param>
         /// <returns>Biçimlenmiþ Türk telefon numarasý ya da geçerli deðilse boþ bir string.</returns>
-        public static string ToPrettyPhoneNumberTR(this string phoneNumberTR) => (Validators.TryPhoneNumberTR(phoneNumberTR, out string _s) ? $"({_s.Substring(0, 3)}) {_s.Substring(3, 3)}-{_s.Substring(6, 4)}" : "");
+        public static string ToPrettyPhoneNumberTR(this string phoneNumberTR) => (TryValidators.TryPhoneNumberTR(phoneNumberTR, out string _s) ? $"({_s.Substring(0, 3)}) {_s.Substring(3, 3)}-{_s.Substring(6, 4)}" : "");
         /// <summary>Verilen string deðer null veya boþ (&quot;&quot;) ise, parametre olarak girilen alternatif string deðerler arasýnda ilk dolu olaný döndürür. Eðer hiçbir alternatif deðer dolu deðilse boþ string (&quot;&quot;) döner.</summary>
         /// <param name="value">Kontrol edilecek ana string deðer.</param>
         /// <param name="defaultValues">Alternatif string deðerler listesi.</param>
@@ -84,7 +84,7 @@ namespace UD.Core.Extensions
         /// <summary>Belirtilen string deðerinin geçerli bir e-Posta adresi olup olmadýðýný kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek e-Posta adresi.</param>
         /// <returns>Geçerli bir e-Posta adresi ise <see langword="true"/>, deðilse <see langword="false"/> döner.</returns>
-        public static bool IsMail(this string value) => Validators.TryMailAddress(value, out _);
+        public static bool IsMail(this string value) => TryValidators.TryMailAddress(value, out _);
         /// <summary><paramref name="value"/> deðerinin geçerli bir e-Posta adresi olup olmadýðýný ve e-Posta adresinin host kýsmýnýn <paramref name="host"/> parametresiyle eþleþip eþleþmediðini kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek e-Posta adresi.</param>
         /// <param name="host">Kontrol edilecek host.</param>
@@ -93,12 +93,12 @@ namespace UD.Core.Extensions
         {
             host = host.ToStringOrEmpty().TrimStart('@').ToLower();
             Guard.ThrowIfEmpty(host, nameof(host));
-            return Validators.TryMailAddress(value, out MailAddress _ma) && _ma.Host == host;
+            return TryValidators.TryMailAddress(value, out MailAddress _ma) && _ma.Host == host;
         }
         /// <summary>Verilen dize deðerinin geçerli bir URI olup olmadýðýný kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize (URI).</param>
         /// <returns><see langword="true"/>, eðer dize geçerli bir URI ise; aksi takdirde <see langword="false"/>.</returns>
-        public static bool IsUri(this string value) => Validators.TryUri(value, out _);
+        public static bool IsUri(this string value) => TryValidators.TryUri(value, out _);
         /// <summary>Verilen dizeyi bir nesnenin üyeleri ile biçimlendirir.</summary>
         /// <typeparam name="TArgument">Biçimlendirilecek nesnenin türü.</typeparam>
         /// <param name="value">Dize.</param>
@@ -246,7 +246,7 @@ namespace UD.Core.Extensions
         {
             key = key.ToStringOrEmpty();
             Guard.ThrowIfEmpty(key, nameof(key));
-            if (Validators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
+            if (TryValidators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
             {
                 var k = _jo[key];
                 if (k.IsNullorUndefined()) { return default; }

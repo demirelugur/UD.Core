@@ -21,7 +21,7 @@ namespace UD.Core.Attributes.DataAnnotations
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (Validators.TryMailAddress(email, out MailAddress _ma) && (this.hosts.Length == 0 || this.IsHostAllowed(_ma.Host)))
+            if (TryValidators.TryMailAddress(email, out MailAddress _ma) && (this.hosts.Length == 0 || this.IsHostAllowed(_ma.Host)))
             {
                 validationContext.SetValidatePropertyValue(_ma.Address);
                 return ValidationResult.Success;
@@ -30,7 +30,7 @@ namespace UD.Core.Attributes.DataAnnotations
             {
                 var message = String.Format(ValidationErrorMessageConstants.EMail, validationContext.DisplayName);
                 if (this.hosts.Length > 0) { message = $"{message}, Geçerli {(this.hosts.Length == 1 ? "host" : "hostlar")}: {String.Join(", ", this.hosts)}"; }
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture)
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture)
                 {
                     message = String.Concat(validationContext.DisplayName, " must be a valid email address!");
                     if (this.hosts.Length > 0) { message = $"{message}, Valid {(this.hosts.Length == 1 ? "host" : "hosts")}: {String.Join(", ", this.hosts)}"; }

@@ -59,14 +59,14 @@
             var type = value.GetType();
             if (!type.IsCustomClass())
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The \"{nameof(value)}\" argument type must be class!", nameof(value)); }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The \"{nameof(value)}\" argument type must be class!", nameof(value)); }
                 throw new ArgumentException($"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value));
             }
             var pi = type.GetProperty(propertyName);
             Guard.ThrowIfNull(pi, nameof(pi));
             if (!pi.CanWrite)
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
                 throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
             }
             pi.SetValue(value, Converters.ChangeType(data, pi.PropertyType));
@@ -86,7 +86,7 @@
         /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
         public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : struct, Enum
         {
-            var r = new HashSet<string> { typeof(TEnum).FullName, (Guards.IsEnglishDefaultThreadCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
+            var r = new HashSet<string> { typeof(TEnum).FullName, (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
             if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
             return new(String.Join(" ", r));
         }

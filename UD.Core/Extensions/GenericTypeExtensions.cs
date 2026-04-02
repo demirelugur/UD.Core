@@ -1,7 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
     using System;
-
     public static class GenericTypeExtensions
     {
         /// <summary>Verilen değeri varsayılan (default) değerine eşit ise null döner; aksi halde değeri döner.</summary>

@@ -65,7 +65,7 @@
                 return false;
             }
             fileSettingsHelper ??= new();
-            if (Validators.TryValidateObject(fileSettingsHelper, out errors)) { return false; }
+            if (TryValidators.TryValidateObject(fileSettingsHelper, out errors)) { return false; }
             try
             {
                 var filesArray = files.Select(file => new
@@ -86,7 +86,7 @@
                        "Yüklenecek maksimum dosya sayısını aştınız!",
                        $"Maksimum dosya sayısı: {fileSettingsHelper.fileCount}"
                     ];
-                    if (Guards.IsEnglishDefaultThreadCurrentUICulture)
+                    if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture)
                     {
                         errors = [
                            "You have exceeded the maximum number of files allowed to upload!",
@@ -102,7 +102,7 @@
                        $"Uyumsuz olan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
                        $"İzin verilen uzantı türleri: {String.Join(", ", fileSettingsHelper.accept)}"
                     ];
-                    if (Guards.IsEnglishDefaultThreadCurrentUICulture)
+                    if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture)
                     {
                         errors = [
                             "The file extensions are not compatible!",
@@ -119,7 +119,7 @@
                        $"Kapasite miktarı aşan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(", ", x.fileName, FormatSize(x.size))).ToArray())}",
                        $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileSettingsHelper.getformatsize}"
                     ];
-                    if (Guards.IsEnglishDefaultThreadCurrentUICulture)
+                    if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture)
                     {
                         errors = [
                             "You have exceeded the allowed upload size for a single file!",

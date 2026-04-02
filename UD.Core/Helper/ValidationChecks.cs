@@ -6,7 +6,7 @@
     using System.Text.RegularExpressions;
     using UD.Core.Extensions;
     using UD.Core.Helper.Validation;
-    public sealed class Guards
+    public sealed class ValidationChecks
     {
         /// <summary><see cref="CultureInfo.DefaultThreadCurrentUICulture"/>&#39;un iki harfli ISO dil kodunun &quot;en&quot; içerip içermediğini kontrol eder. Bu özellik, uygulamanın geçerli kullanıcı arayüzü kültürünün İngilizce olup olmadığını belirlemek için kullanılabilir. Eğer geçerli UI kültürü İngilizce ise <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</summary>
         public static bool IsEnglishDefaultThreadCurrentUICulture => CultureInfo.DefaultThreadCurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.CurrentCultureIgnoreCase);

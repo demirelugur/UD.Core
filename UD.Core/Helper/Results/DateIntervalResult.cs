@@ -20,17 +20,17 @@
             var r = new List<string>();
             if (this.yil > 0)
             {
-                var p0 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "year" : "yıl";
+                var p0 = ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "year" : "yıl";
                 r.Add(String.Join(" ", this.yil.ToString(), p0));
             }
             if (this.ay > 0)
             {
-                var p1 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "month" : "ay";
+                var p1 = ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "month" : "ay";
                 r.Add(String.Join(" ", this.ay.ToString(), p1));
             }
             if (this.gun > 0)
             {
-                var p2 = Guards.IsEnglishDefaultThreadCurrentUICulture ? "day" : "gün";
+                var p2 = ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "day" : "gün";
                 r.Add(String.Join(" ", this.gun.ToString(), p2));
             }
             return (r.Count > 0 ? String.Join(", ", r) : "");

@@ -36,7 +36,7 @@
         {
             var enumValue = data.TryToEnum<RetMesaj>();
             if (!enumValue.HasValue) { throw Utilities.ThrowNotSupportedForEnum<RetMesaj>(); }
-            if (Guards.IsEnglishDefaultThreadCurrentUICulture)
+            if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture)
             {
                 return enumValue.Value switch
                 {

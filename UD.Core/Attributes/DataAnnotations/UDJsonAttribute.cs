@@ -19,7 +19,7 @@
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (Validators.TryJson(valueString, this.jTokenType, out JToken _jToken))
+            if (TryValidators.TryJson(valueString, this.jTokenType, out JToken _jToken))
             {
                 if (_jToken.HasValues)
                 {
@@ -35,7 +35,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, JSON biçimine ({this.jTokenType:g}) uygun olmalıdır!";
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in JSON format ({this.jTokenType:g})!"; }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in JSON format ({this.jTokenType:g})!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

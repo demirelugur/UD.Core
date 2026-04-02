@@ -177,7 +177,7 @@
         {
             if (basDate > bitDate)
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
                 throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!");
             }
             var ts = (bitDate - basDate).ToTimeOnly();

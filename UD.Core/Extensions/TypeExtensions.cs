@@ -14,7 +14,7 @@
         public static bool IsMappedTable(this Type type)
         {
             Guard.ThrowIfNull(type, nameof(type));
-            return Validators.TryCustomAttribute(type, out TableAttribute _);
+            return TryValidators.TryCustomAttribute(type, out TableAttribute _);
         }
         /// <summary>Belirtilen türün nullable olup olmadığını kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
@@ -22,7 +22,7 @@
         public static bool IsNullable(this Type type)
         {
             Guard.ThrowIfNull(type, nameof(type));
-            return Validators.TryTypeIsNullable(type, out _);
+            return TryValidators.TryTypeIsNullable(type, out _);
         }
         /// <summary>Belirtilen türün özel bir sınıf olup olmadığını kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
@@ -40,14 +40,14 @@
         public static string GetTableName(this Type type, bool isSquareBrackets)
         {
             Guard.ThrowIfNull(type, nameof(type));
-            if (Validators.TryCustomAttribute(type, out TableAttribute _ta))
+            if (TryValidators.TryCustomAttribute(type, out TableAttribute _ta))
             {
                 Guard.ThrowIfEmpty(_ta.Name, nameof(_ta.Name));
                 var r = new List<string> { _ta.Schema.CoalesceOrDefault("dbo"), _ta.Name };
                 if (isSquareBrackets) { return String.Join(".", r.Select(x => $"[{x}]").ToArray()); }
                 return String.Join(".", r);
             }
-            if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"The type \"{type.FullName}\" does not have the \"{typeof(TableAttribute).FullName}\" attribute. ", new Exception("To get the table name, the relevant class must be decorated with the [Table(\"TableName\")] attribute.")); }
+            if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"The type \"{type.FullName}\" does not have the \"{typeof(TableAttribute).FullName}\" attribute. ", new Exception("To get the table name, the relevant class must be decorated with the [Table(\"TableName\")] attribute.")); }
             throw new NotSupportedException($"\"{type.FullName}\" tipi üzerinde \"{typeof(TableAttribute).FullName}\" özniteliği bulunmamaktadır. ", new Exception("Tablo adını alabilmek için ilgili sınıfa [Table(\"TabloAdi\")] özniteliği eklenmelidir."));
         }
         /// <summary>Belirtilen türü enum dizisine dönüştürür.</summary>
@@ -58,7 +58,7 @@
             Guard.ThrowIfNull(type, nameof(type));
             if (!type.IsEnum)
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The type \"{type.FullName}\" must be a valid \"{nameof(Enum)}\" type!", nameof(type)); }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The type \"{type.FullName}\" must be a valid \"{nameof(Enum)}\" type!", nameof(type)); }
                 throw new ArgumentException($"\"{type.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(type));
             }
             var values = Enum.GetValues(type);

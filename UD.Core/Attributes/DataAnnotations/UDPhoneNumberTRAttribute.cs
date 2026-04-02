@@ -15,7 +15,7 @@
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (Validators.TryPhoneNumberTR(phoneTR, out string _phonetr))
+            if (TryValidators.TryPhoneNumberTR(phoneTR, out string _phonetr))
             {
                 validationContext.SetValidatePropertyValue(_phonetr);
                 return ValidationResult.Success;
@@ -23,7 +23,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, (xxx) xxx-xxxx biçimine uygun telefon numarası olmalıdır!";
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid phone number in the format of (xxx) xxx-xxxx!"; }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid phone number in the format of (xxx) xxx-xxxx!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

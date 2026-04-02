@@ -97,7 +97,7 @@
             if (errors.Length > 0) { return (true, default, errors); }
             if (bindingContext.Result.IsModelSet && bindingContext.Result.Model is T _t)
             {
-                if (Validators.TryValidateObject(_t, out errors)) { return (true, default, errors); }
+                if (TryValidators.TryValidateObject(_t, out errors)) { return (true, default, errors); }
                 return (false, _t, default);
             }
             return (true, default, [GetDescriptionLocalizationValue(RetMesaj.hata)]);

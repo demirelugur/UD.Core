@@ -18,8 +18,8 @@
             if (!kimlikTipi.HasValue) { return cs; }
             var t = kimlikTipi.Value switch
             {
-                NVIKimlikTypes.yeni => (Guards.IsEnglishDefaultThreadCurrentUICulture ? "New ID Card" : "Yeni Kimlik Kartı"),
-                NVIKimlikTypes.eski => (Guards.IsEnglishDefaultThreadCurrentUICulture ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
+                NVIKimlikTypes.yeni => (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "New ID Card" : "Yeni Kimlik Kartı"),
+                NVIKimlikTypes.eski => (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
                 _ => throw Utilities.ThrowNotSupportedForEnum<NVIKimlikTypes>(),
             };
             return $"{cs} ({t})";
@@ -41,7 +41,7 @@
         public static string PhoneNumberTR(string phoneNumberTR, bool showFull)
         {
             if (showFull) { return phoneNumberTR.ToPrettyPhoneNumberTR(); }
-            return (Validators.TryPhoneNumberTR(phoneNumberTR, out string _t) ? $"(**{_t.Substring(2, 1)}) {_t.Substring(3, 1)}**-*{_t.Substring(8, 2)}" : "");
+            return (TryValidators.TryPhoneNumberTR(phoneNumberTR, out string _t) ? $"(**{_t.Substring(2, 1)}) {_t.Substring(3, 1)}**-*{_t.Substring(8, 2)}" : "");
         }
         /// <summary>Verilen sayısal kimlik numarasını (TCKN veya VKN) maskeler. TCKN olarak doğrulanırsa orta kısım 6 adet &#39;*&#39;, VKN olarak doğrulanırsa 5 adet &#39;*&#39; ile gizlenir. Eğer <paramref name="showFull"/> true ise numara olduğu gibi döndürülür. Geçerli bir TCKN veya VKN değilse boş string döndürülür.</summary>
         /// <param name="value">Maskelenecek kimlik numarası.</param>

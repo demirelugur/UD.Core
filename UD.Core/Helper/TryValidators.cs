@@ -17,7 +17,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Validation;
     using static UD.Core.Helper.GlobalConstants;
-    public sealed class Validators
+    public sealed class TryValidators
     {
         /// <summary>Verilen nesnenin doğrulama kurallarına göre geçerliliğini kontrol eder. Eğer nesne geçerli değilse, doğrulama hatalarını içeren bir dizi döner.</summary>
         /// <param name="instance">Doğrulama işlemi yapılacak nesne.</param>
@@ -287,7 +287,7 @@
             from = from.ToStringOrEmpty();
             if (value == "" || to == "" || from == "")
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { return (true, "", new ArgumentException("Value, to and from parameters cannot be empty.")); }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { return (true, "", new ArgumentException("Value, to and from parameters cannot be empty.")); }
                 return (true, "", new ArgumentException("Value, to ve from parametreleri boş olamaz."));
             }
             try

@@ -24,7 +24,7 @@
         public static bool IsPK(this PropertyInfo propertyInfo)
         {
             Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
-            return Validators.TryCustomAttribute(propertyInfo, out KeyAttribute _);
+            return TryValidators.TryCustomAttribute(propertyInfo, out KeyAttribute _);
         }
         /// <summary>Verilen <see cref="PropertyInfo"/> nesnesinin <see cref="NotMappedAttribute"/> ile işaretlenip işaretlenmediğini kontrol eder.</summary>
         /// <param name="propertyInfo">Kontrol edilecek özellik (<see cref="PropertyInfo"/> nesnesi).</param>
@@ -33,7 +33,7 @@
         public static bool IsNotMapped(this PropertyInfo propertyInfo)
         {
             Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
-            return Validators.TryCustomAttribute(propertyInfo, out NotMappedAttribute _);
+            return TryValidators.TryCustomAttribute(propertyInfo, out NotMappedAttribute _);
         }
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) veritabanındaki sütun adını döndürür. Özellik <see cref="ColumnAttribute"/> ile işaretlenmişse, bu özniteliğin belirttiği sütun adını; aksi takdirde özelliğin adını döndürür.</summary>
         /// <param name="propertyInfo">Sütun adı alınacak özellik.</param>
@@ -41,7 +41,7 @@
         public static string GetColumnName(this PropertyInfo propertyInfo)
         {
             Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
-            return Validators.TryCustomAttribute(propertyInfo, out ColumnAttribute _ca) ? _ca.Name : propertyInfo.Name;
+            return TryValidators.TryCustomAttribute(propertyInfo, out ColumnAttribute _ca) ? _ca.Name : propertyInfo.Name;
         }
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) veritabanında nasıl oluşturulduğunu belirten <see cref="DatabaseGeneratedOption"/> değerini döndürür. Özellik <see cref="DatabaseGeneratedAttribute"/> ile işaretlenmişse, bu özniteliğin belirttiği seçeneği; aksi takdirde null döner.</summary>
         /// <param name="propertyInfo">Kontrol edilecek özellik.</param>
@@ -49,7 +49,7 @@
         public static DatabaseGeneratedOption? GetDatabaseGeneratedOption(this PropertyInfo propertyInfo)
         {
             Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
-            return (Validators.TryCustomAttribute(propertyInfo, out DatabaseGeneratedAttribute _dga) ? _dga.DatabaseGeneratedOption : null);
+            return (TryValidators.TryCustomAttribute(propertyInfo, out DatabaseGeneratedAttribute _dga) ? _dga.DatabaseGeneratedOption : null);
         }
         /// <summary>Verilen <see cref="PropertyInfo"/> nesnesinin string uzunluğunu belirleyen attribute&#39;lerden <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> var ise maksimum uzunluğunu döndürür. Attribute yoksa veya property null ise 0 döner.</summary>
         /// <param name="propertyInfo">Uzunluğu alınacak property&#39;si temsil eden <see cref="PropertyInfo"/> nesnesi.</param>
@@ -57,8 +57,8 @@
         public static int GetStringOrMaxLength(this PropertyInfo propertyInfo)
         {
             Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
-            if (Validators.TryCustomAttribute(propertyInfo, out StringLengthAttribute _sl)) { return _sl.MaximumLength; }
-            if (Validators.TryCustomAttribute(propertyInfo, out MaxLengthAttribute _ml)) { return _ml.Length; }
+            if (TryValidators.TryCustomAttribute(propertyInfo, out StringLengthAttribute _sl)) { return _sl.MaximumLength; }
+            if (TryValidators.TryCustomAttribute(propertyInfo, out MaxLengthAttribute _ml)) { return _ml.Length; }
             return 0;
         }
     }

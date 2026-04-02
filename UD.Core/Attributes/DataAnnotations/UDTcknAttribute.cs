@@ -20,7 +20,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!";
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid T.C. Identity Number format!"; }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid T.C. Identity Number format!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

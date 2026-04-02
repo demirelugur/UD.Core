@@ -104,7 +104,7 @@
         private IPAddress createIPAdress() => this.fakerEN.Internet.IpAddress().MapToIPv4();
         private object createFakeInstance(string parametername, Type type, Faker faker)
         {
-            if (Validators.TryTypeIsNullable(type, out Type _genericbasetype)) { return faker.Random.Bool(this.nullChange) ? null : this.createFakeInstance(parametername, _genericbasetype, faker); }
+            if (TryValidators.TryTypeIsNullable(type, out Type _genericbasetype)) { return faker.Random.Bool(this.nullChange) ? null : this.createFakeInstance(parametername, _genericbasetype, faker); }
             if (type == typeof(string))
             {
                 if (parametername == "seo") { return createFullName(faker).ToSeoFriendly(); }
@@ -171,7 +171,7 @@
                 var ctor = type.GetConstructors().FirstOrDefault();
                 if (ctor == null)
                 {
-                    if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"No public constructor found for \"{type.FullName}\"!"); }
+                    if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"No public constructor found for \"{type.FullName}\"!"); }
                     throw new InvalidOperationException($"\"{type.FullName}\" için genel bir kurucu (Constructors) bulunamadı!");
                 }
                 var args = ctor.GetParameters().Select(x => this.createFakeInstance(x.Name, x.ParameterType, faker)).ToArray();

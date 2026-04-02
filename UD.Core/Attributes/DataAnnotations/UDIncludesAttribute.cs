@@ -52,12 +52,12 @@
                 if (this.isequal)
                 {
                     this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerlerinden biri olmalıdır!";
-                    if (Guards.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be one of the values [{String.Join(", ", this.values)}]!"; }
+                    if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be one of the values [{String.Join(", ", this.values)}]!"; }
                 }
                 else
                 {
                     this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerleri dışında farklı bir değer olmalıdır!";
-                    if (Guards.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a different value than [{String.Join(", ", this.values)}]!"; }
+                    if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a different value than [{String.Join(", ", this.values)}]!"; }
                 }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);

@@ -44,7 +44,7 @@
             }).ToArray();
             if (properties.Count(x => x.isCompositeKey) < 2)
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
                 throw new KeyNotFoundException($"İşleme devam edebilmek için \"{tableName}\" tablosunda en az 2 özelliğin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" içermesi gerekmektedir!");
             }
             if (properties.Any(x => x.isSetCompositeKeyName && x.isCompositeKey))
@@ -63,7 +63,7 @@
                 if (autoSave) { await context.SaveChangesAsync(cancellationToken); }
                 return newEntity;
             }
-            if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
+            if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
             throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" özelliğinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
         }
         /// <summary> Bağlı bulunulan <see cref="DbContext"/> üzerinden SQL Server sunucusuna ait sistem özelliklerini asenkron olarak sorgular ve <see cref="SqlServerProperties"/> nesnesi olarak döndürür. </summary>
@@ -111,7 +111,7 @@
         }
         private static (string columnName, string sqlDbTypeName) getprimarykeyinfo(Type mappedtabletype)
         {
-            if (Validators.TryTableisKeyAttribute(mappedtabletype, out PropertyInfo[] _properties) && _properties.Length == 1 && _properties[0].IsPK() && _properties[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
+            if (TryValidators.TryTableisKeyAttribute(mappedtabletype, out PropertyInfo[] _properties) && _properties.Length == 1 && _properties[0].IsPK() && _properties[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
             {
                 var propertytype = _properties[0].PropertyType;
                 if (propertytype.IsEnum) { propertytype = Enum.GetUnderlyingType(propertytype); }

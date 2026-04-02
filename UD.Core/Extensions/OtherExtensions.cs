@@ -38,7 +38,7 @@
         {
             Guard.ThrowIfNull(validationContext, nameof(validationContext));
             var property = validationContext.ObjectInstance.GetType().GetProperty(validationContext.MemberName);
-            return (property != null && Validators.TryCustomAttribute(property, out RequiredAttribute _));
+            return (property != null && TryValidators.TryCustomAttribute(property, out RequiredAttribute _));
         }
         /// <summary>Verilen doğrulama bağlamına göre, belirtilen özelliğin değerini günceller. Eğer özellik yazılabilir durumdaysa, yeni değer atanır.</summary>
         /// <param name="validationContext">Doğrulama işlemi sırasında bağlam bilgilerini içeren nesne.</param>
@@ -66,12 +66,12 @@
                 else if (_ue.Operand is MethodCallExpression _umce && _umce.Object is ConstantExpression _uce && _uce.Value != null)
                 {
                     if (_uce.Value is MemberInfo _mi) { result = _mi.Name; }
-                    else if (Validators.TryGetProperty(_uce.Value, nameof(MemberInfo.Name), out string _name)) { result = _name; }
+                    else if (TryValidators.TryGetProperty(_uce.Value, nameof(MemberInfo.Name), out string _name)) { result = _name; }
                 }
             }
             if (result.IsNullOrEmpty())
             {
-                if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The value of \"{expression}\" is incompatible!", nameof(expression)); }
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The value of \"{expression}\" is incompatible!", nameof(expression)); }
                 throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression));
             }
             return result;
@@ -192,7 +192,7 @@
         {
             if (jToken.IsNullorUndefined()) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
-            if (Guards.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
+            if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
             throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
         /// <summary><see cref="QueryString"/> içindeki belirtilen anahtarı alır ve uygun türde bir değere dönüştürür. Eğer anahtar bulunamazsa veya dönüştürme başarısız olursa, varsayılan değeri döner.</summary>
@@ -304,7 +304,7 @@
             foreach (var prop in props)
             {
                 var value = (string?)prop.GetValue(entity);
-                prop.SetValue(entity, (value.IsNullOrEmpty() ? null : sanitizer.Sanitize(value).ParseOrDefault<string>()));
+                prop.SetValue(entity, sanitizer.Sanitize(value ?? "").ParseOrDefault<string>());
             }
         }
     }
