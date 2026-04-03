@@ -48,6 +48,12 @@
             Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
             return TryValidators.TryCustomAttribute(propertyInfo, out SkipSanitizeAttribute _);
         }
+        /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) zorunlu (required) olup olmadığını kontrol eder. Özellik, <see cref="RequiredAttribute"/> ile işaretlenmişse, bu metot <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
+        public static bool IsRequired(this PropertyInfo propertyInfo)
+        {
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
+            return TryValidators.TryCustomAttribute(propertyInfo, out RequiredAttribute _);
+        }
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) veritabanındaki sütun adını döndürür. Özellik <see cref="ColumnAttribute"/> ile işaretlenmişse, bu özniteliğin belirttiği sütun adını; aksi takdirde özelliğin adını döndürür.</summary>
         /// <param name="propertyInfo">Sütun adı alınacak özellik.</param>
         /// <returns>Özelliğin veritabanındaki sütun adı veya özellik adı.</returns>

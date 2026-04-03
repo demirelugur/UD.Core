@@ -15,9 +15,9 @@
     using System.Net.Mail;
     using System.Reflection;
     using System.Web;
-    using UD.Core.Attributes;
     using UD.Core.Auditing;
     using UD.Core.Helper;
+    using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Services;
     using UD.Core.Helper.Validation;
     public static class OtherExtensions
@@ -296,18 +296,35 @@
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
             }
         }
-        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> cacheSanitize = new();
-        /// <summary><paramref name="sanitizer"/> değeri kullanılarak, <paramref name="entity"/> nesnesinin tüm string türündeki özelliklerini temizler (sanitize eder). Temizleme işlemi sırasında, <see cref="SkipSanitizeAttribute"/> ile işaretlenmiş özellikler atlanır. Bu metod, özellikle kullanıcı tarafından sağlanan verilerin güvenliğini sağlamak ve potansiyel XSS saldırılarını önlemek için kullanılabilir.</summary>
-        public static void SanitizeEntity(this IHtmlSanitizer sanitizer, object entity)
+        private static readonly ConcurrentDictionary<Type, StringPropAccessor[]> _cache = new();
+        /// <summary> Nesne içindeki string alanları sanitize eder, boş olanları null yapar ve maksimum uzunluk kısıtlarına göre düzenler.</summary>
+        public static void SanitizeAndConstrainStrings(this IHtmlSanitizer sanitizer, object entity)
         {
             Guard.ThrowIfNull(sanitizer, nameof(sanitizer));
             Guard.ThrowIfNull(entity, nameof(entity));
-            var props = cacheSanitize.GetOrAdd(entity.GetType(), x => x.GetProperties().Where(y => y.PropertyType == typeof(string) && !y.IsSkipSanitize() && y.IsMapped()).ToArray());
-            foreach (var prop in props)
+            var accessors = _cache.GetOrAdd(entity.GetType(), StringPropAccessor.BuildAccessors);
+            string sanitized;
+            foreach (var acc in accessors)
             {
-                var value = prop.GetValue(entity).ToStringOrEmpty();
-                if (value == "") { prop.SetValue(entity, default(string)); }
-                else { prop.SetValue(entity, sanitizer.Sanitize(value).ParseOrDefault<string>()); }
+                var original = acc.Getter(entity);
+                if (original.IsNullOrWhiteSpace())
+                {
+                    if (original != null) { acc.Setter(entity, null); }
+                    continue;
+                }
+                if (acc.SkipSanitize) { sanitized = original; }
+                else
+                {
+                    sanitized = sanitizer.Sanitize(original).Trim();
+                    if (sanitized.IsNullOrWhiteSpace())
+                    {
+                        acc.Setter(entity, null);
+                        continue;
+                    }
+                }
+                if (acc.MaxLength > 0) { sanitized = sanitized.SubstringUpToLength(acc.MaxLength); }
+                if (String.Equals(original, sanitized, StringComparison.Ordinal)) { continue; }
+                acc.Setter(entity, sanitized);
             }
         }
     }
