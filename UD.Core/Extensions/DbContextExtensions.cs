@@ -1,7 +1,8 @@
-ï»¿namespace UD.Core.Extensions
+namespace UD.Core.Extensions
 {
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -13,12 +14,12 @@
     using UD.Core.Helper.Validation;
     public static class DbContextExtensions
     {
-        /// <summary>Belirtilen varlÄ±ÄŸÄ±n (entity) bir veya daha fazla Ã¶zelliÄŸinin deÄŸiÅŸtirilip deÄŸiÅŸtirilmediÄŸini kontrol eder.</summary>
-        /// <typeparam name="T">Kontrol edilecek varlÄ±k tÃ¼rÃ¼.</typeparam>
-        /// <param name="context">DbContext Ã¶rneÄŸi.</param>
-        /// <param name="entity">DeÄŸiÅŸiklik durumu kontrol edilecek varlÄ±k.</param>
-        /// <param name="expressions">Kontrol edilecek Ã¶zelliklerin ifadeleri.</param>
-        /// <returns>DeÄŸiÅŸtirilmiÅŸse <see langword="true"/>, deÄŸilse <see langword="false"/> dÃ¶ner.</returns>
+        /// <summary>Belirtilen varlığın (entity) bir veya daha fazla özelliğinin değiştirilip değiştirilmediğini kontrol eder.</summary>
+        /// <typeparam name="T">Kontrol edilecek varlık türü.</typeparam>
+        /// <param name="context">DbContext örneği.</param>
+        /// <param name="entity">Değişiklik durumu kontrol edilecek varlık.</param>
+        /// <param name="expressions">Kontrol edilecek özelliklerin ifadeleri.</param>
+        /// <returns>Değiştirilmişse <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsModified<T>(this DbContext context, T entity, params Expression<Func<T, object>>[] expressions) where T : class
         {
             Guard.ThrowIfNull(context, nameof(context));
@@ -28,7 +29,7 @@
             if (columns.Length == 0) { return properties.Length > 0; }
             return properties.Any(x => columns.Contains(x.Name));
         }
-        /// <summary>Belirli bir bileÅŸik anahtar(composite key) Ã¶zelliÄŸi ile eski varlÄ±ÄŸÄ±n gÃ¼ncellenmesini saÄŸlar.</summary>
+        /// <summary>Belirli bir bileşik anahtar(composite key) özelliği ile eski varlığın güncellenmesini sağlar.</summary>
         public static async Task<T> SetCompositeKey<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyNewValue, CancellationToken cancellationToken = default) where T : class, new()
         {
             Guard.ThrowIfNull(context, nameof(context));
@@ -45,7 +46,7 @@
             if (properties.Count(x => x.isCompositeKey) < 2)
             {
                 if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
-                throw new KeyNotFoundException($"Ä°ÅŸleme devam edebilmek iÃ§in \"{tableName}\" tablosunda en az 2 Ã¶zelliÄŸin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" iÃ§ermesi gerekmektedir!");
+                throw new KeyNotFoundException($"İşleme devam edebilmek için \"{tableName}\" tablosunda en az 2 özelliğin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" içermesi gerekmektedir!");
             }
             if (properties.Any(x => x.isSetCompositeKeyName && x.isCompositeKey))
             {
@@ -64,29 +65,29 @@
                 return newEntity;
             }
             if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
-            throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" Ã¶zelliÄŸinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
+            throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" özelliğinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
         }
-        /// <summary> BaÄŸlÄ± bulunulan <see cref="DbContext"/> Ã¼zerinden SQL Server sunucusuna ait sistem Ã¶zelliklerini asenkron olarak sorgular ve <see cref="SqlServerProperties"/> nesnesi olarak dÃ¶ndÃ¼rÃ¼r. </summary>
-        /// <param name="context"> Sorgunun Ã§alÄ±ÅŸtÄ±rÄ±lacaÄŸÄ± veritabanÄ± baÄŸlamÄ±.</param>
-        /// <param name="cancellationToken"> Ä°ÅŸlemi iptal etmek iÃ§in kullanÄ±labilecek isteÄŸe baÄŸlÄ± <see cref="CancellationToken"/>.</param>
+        /// <summary> Bağlı bulunulan <see cref="DbContext"/> üzerinden SQL Server sunucusuna ait sistem özelliklerini asenkron olarak sorgular ve <see cref="SqlServerProperties"/> nesnesi olarak döndürür. </summary>
+        /// <param name="context"> Sorgunun çalıştırılacağı veritabanı bağlamı.</param>
+        /// <param name="cancellationToken"> İşlemi iptal etmek için kullanılabilecek isteğe bağlı <see cref="CancellationToken"/>.</param>
         public static Task<SqlServerProperties> GetServerProperty(this DbContext context, CancellationToken cancellationToken = default) => context.Database.SqlQueryRaw<SqlServerProperties>(SqlServerProperties.query()).FirstOrDefaultAsync(cancellationToken);
         /// <summary>
-        /// Belirtilen entity tÃ¼rlerine karÅŸÄ±lÄ±k gelen tablolar iÃ§in, Identity Ã¶zelliÄŸine sahip birincil anahtar alanlarÄ±nÄ±n mevcut maksimum deÄŸerini baz alarak yeniden numaralandÄ±rma (RESEED) iÅŸlemini asenkron olarak gerÃ§ekleÅŸtirir. Metot, her tablo iÃ§in ilgili birincil anahtar kolonunun mevcut en bÃ¼yÃ¼k deÄŸerini (MAX) hesaplar ve <c>DBCC CHECKIDENT</c> komutu ile Identity deÄŸerini bu deÄŸere eÅŸitler. BÃ¶ylece manuel veri ekleme, toplu veri taÅŸÄ±ma veya seed iÅŸlemleri sonrasÄ± oluÅŸabilecek kimlik (Identity) kaymalarÄ±nÄ±n Ã¶nÃ¼ne geÃ§ilmiÅŸ olur.
+        /// Belirtilen entity türlerine karşılık gelen tablolar için, Identity özelliğine sahip birincil anahtar alanlarının mevcut maksimum değerini baz alarak yeniden numaralandırma (RESEED) işlemini asenkron olarak gerçekleştirir. Metot, her tablo için ilgili birincil anahtar kolonunun mevcut en büyük değerini (MAX) hesaplar ve <c>DBCC CHECKIDENT</c> komutu ile Identity değerini bu değere eşitler. Böylece manuel veri ekleme, toplu veri taşıma veya seed işlemleri sonrası oluşabilecek kimlik (Identity) kaymalarının önüne geçilmiş olur.
         /// <br />
         /// <br />
         /// Sadece
         /// <list type="number">
         /// <item><description>Tek kolonlu birincil anahtara sahip</description></item>
-        /// <item><description><see cref="DatabaseGeneratedOption.Identity"/> olarak iÅŸaretlenmiÅŸ</description></item>
+        /// <item><description><see cref="DatabaseGeneratedOption.Identity"/> olarak işaretlenmiş</description></item>
         /// <item><description>Veri tipi TINYINT, SMALLINT, INT veya BIGINT olan</description></item>
         /// </list>
-        /// tablolar iÃ§in iÅŸlem uygulanÄ±r. <paramref name="isDebug"/> parametresi <see langword="true"/> olduÄŸunda herhangi bir SQL komutu Ã§alÄ±ÅŸtÄ±rÄ±lmaz ve metot 0 dÃ¶ner. Ä°ÅŸlem uygulanacak tablo bulunamazsa yine 0 dÃ¶ndÃ¼rÃ¼lÃ¼r.
+        /// tablolar için işlem uygulanır. <paramref name="isDebug"/> parametresi <see langword="true"/> olduğunda herhangi bir SQL komutu çalıştırılmaz ve metot 0 döner. İşlem uygulanacak tablo bulunamazsa yine 0 döndürülür.
         /// </summary>
-        /// <param name="context"> SQL komutunun Ã§alÄ±ÅŸtÄ±rÄ±lacaÄŸÄ± <see cref="DbContext"/> Ã¶rneÄŸi.</param>
-        /// <param name="isDebug"> Debug modunu belirtir. <see langword="true"/> ise reseed iÅŸlemi yapÄ±lmaz.</param>
-        /// <param name="mappedTables"> Reseed iÅŸlemi uygulanacak entity tÃ¼rleri. </param>
-        /// <param name="cancellationToken"> Ä°ÅŸlemi iptal etmek iÃ§in kullanÄ±labilecek isteÄŸe baÄŸlÄ± <see cref="CancellationToken"/>.</param>
-        /// <returns>Ã‡alÄ±ÅŸtÄ±rÄ±lan SQL komutundan etkilenen satÄ±r sayÄ±sÄ±nÄ± temsil eden <see cref="Task{Int32}"/>. </returns>
+        /// <param name="context"> SQL komutunun çalıştırılacağı <see cref="DbContext"/> örneği.</param>
+        /// <param name="isDebug"> Debug modunu belirtir. <see langword="true"/> ise reseed işlemi yapılmaz.</param>
+        /// <param name="mappedTables"> Reseed işlemi uygulanacak entity türleri. </param>
+        /// <param name="cancellationToken"> İşlemi iptal etmek için kullanılabilecek isteğe bağlı <see cref="CancellationToken"/>.</param>
+        /// <returns>Çalıştırılan SQL komutundan etkilenen satır sayısını temsil eden <see cref="Task{Int32}"/>. </returns>
         public static Task<int> TableReseed(this DbContext context, bool isDebug, Type[] mappedTables, CancellationToken cancellationToken = default)
         {
             if (isDebug) { return Task.FromResult(0); }
@@ -122,5 +123,25 @@
             }
             return ("", "");
         }
+        public static ChangeEntry[] GetAdded(this DbContext context) => context.ChangeTracker.Entries().Where(e => e.State == EntityState.Added).Select(x =>
+        {
+            var currentObject = x.CurrentValues.ToObject();
+            return new ChangeEntry(x.Entity, x.Metadata.ClrType, x.State, x.CurrentValues.Properties.ToDictionary(y => y.PropertyInfo.GetColumnName(), y => new ChangePropertyInfo(null, y.PropertyInfo.GetValue(currentObject), y.IsPrimaryKey(), y.IsForeignKey())));
+        }).ToArray();
+        public static ChangeEntry[] GetModified(this DbContext context) => context.ChangeTracker.Entries().Where(x => x.State == EntityState.Modified).Select(x =>
+        {
+            var originalObject = x.OriginalValues.ToObject();
+            var currentObject = x.CurrentValues.ToObject();
+            return new ChangeEntry(x.Entity, x.Metadata.ClrType, x.State, x.OriginalValues.Properties.Select(y => (property: y, value: y.PropertyInfo.GetValue(originalObject))).Zip(x.CurrentValues.Properties.Select(y => (property: y, value: y.PropertyInfo.GetValue(currentObject))), (t1, t2) => new
+            {
+                t1,
+                t2
+            }).Where(y => Comparer.Default.Compare(y.t1.value, y.t2.value) != 0).ToDictionary(y => y.t1.property.PropertyInfo.GetColumnName(), y => new ChangePropertyInfo(y.t1.value, y.t2.value, y.t1.property.IsPrimaryKey(), y.t1.property.IsForeignKey())));
+        }).ToArray();
+        public static ChangeEntry[] GetDeleted(this DbContext context) => context.ChangeTracker.Entries().Where(e => e.State == EntityState.Deleted).Select(x =>
+        {
+            var originalObject = x.OriginalValues.ToObject();
+            return new ChangeEntry(x.Entity, x.Metadata.ClrType, x.State, x.OriginalValues.Properties.ToDictionary(y => y.PropertyInfo.GetColumnName(), y => new ChangePropertyInfo(y.PropertyInfo.GetValue(originalObject), null, y.IsPrimaryKey(), y.IsForeignKey())));
+        }).ToArray();
     }
 }

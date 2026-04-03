@@ -31,7 +31,10 @@ namespace UD.Core.UnitTest
         [Test]
         public async Task Test2()
         {
-            await this.context.Ils.FindAsync((byte)1);
+            //await this.context.Ils.FindAsync((byte)1);
+
+
+            var p = await this.context.Ils.Where(x => x.BuyukSehir).MaxOrDefault(x => x.Id);
         }
 
         [TearDown]
