@@ -1,4 +1,4 @@
-namespace UD.Core.Extensions
+namespace UD.Core.Extensions.Common
 {
     using Newtonsoft.Json.Linq;
     using System;
@@ -9,6 +9,7 @@ namespace UD.Core.Extensions
     using System.Text;
     using System.Text.RegularExpressions;
     using UD.Core.Enums;
+    using UD.Core.Extensions;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     public static class StringExtensions
@@ -244,10 +245,9 @@ namespace UD.Core.Extensions
         /// <returns>Bulunan property deðeri belirtilen türe (T) dönüþtürülerek döndürülür. Property bulunamazsa, null ise veya JSON geçersizse varsayýlan deðer (default(T)) döndürülür.</returns>
         public static T JObjectGetProperty<T>(this string jsonData, string key)
         {
-            key = key.ToStringOrEmpty();
-            Guard.ThrowIfEmpty(key, nameof(key));
             if (TryValidators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
             {
+                key = key.ToStringOrEmpty();
                 var k = _jo[key];
                 if (k.IsNullOrUndefined()) { return default; }
                 return k.ToString().ParseOrDefault<T>();

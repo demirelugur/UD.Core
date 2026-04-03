@@ -3,6 +3,8 @@
     using Microsoft.AspNetCore.Http;
     using System;
     using UD.Core.Extensions;
+    using UD.Core.Extensions.Common;
+
     public class EnumResult : IEquatable<EnumResult>
     {
         #region Equals

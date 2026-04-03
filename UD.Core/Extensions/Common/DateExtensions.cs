@@ -1,7 +1,8 @@
-﻿namespace UD.Core.Extensions
+﻿namespace UD.Core.Extensions.Common
 {
     using System;
     using System.Globalization;
+    using UD.Core.Extensions;
     using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
     public static class DateExtensions

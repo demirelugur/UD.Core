@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Extensions
+﻿namespace UD.Core.Extensions.Common
 {
     using System;
     using System.Collections.Generic;

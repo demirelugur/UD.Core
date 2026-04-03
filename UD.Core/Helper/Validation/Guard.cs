@@ -6,6 +6,7 @@
     using System.Linq.Expressions;
     using System.Net;
     using UD.Core.Extensions;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using UD.Core.Helper.Configuration;
     using static UD.Core.Helper.GlobalConstants;
@@ -122,7 +123,7 @@
         }
         public static void ThrowIfNotValidOutOfLength<T>(string value, Expression<Func<T, string>> expression) where T : class
         {
-            var p = expression.GetExpressionName();
+            var p = expression.GetMemberName();
             var m = Utilities.GetStringOrMaxLength<T>(p);
             ThrowIfZeroOrNegative(m, p);
             ThrowIfNotValidOutOfLength(value, m, p);

@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Extensions
+﻿namespace UD.Core.Extensions.Common
 {
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -6,6 +6,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Net;
+    using UD.Core.Extensions;
     using UD.Core.Helper.Validation;
     public static class ExceptionExtensions
     {

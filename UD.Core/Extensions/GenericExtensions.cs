@@ -1,12 +1,12 @@
 ﻿namespace UD.Core.Extensions
 {
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
-    public static class CollectionExtensions
+    public static class GenericExtensions
     {
         #region IDictionary
         /// <summary>Belirtilen anahtar ve değeri bir sözlüğe ekler. Eğer anahtar zaten mevcutsa, değeri günceller; mevcut değilse, yeni bir anahtar-değer çifti olarak ekler.</summary>
@@ -35,22 +35,9 @@
         /// <returns>Sözlükte belirtilen anahtara karşılık gelen değeri <typeparamref name="TKey"/> türüne dönüştürülmüş şekilde döndürür. Anahtar yoksa veya geçersizse, <typeparamref name="TKey"/> türünün varsayılan değerini döndürür.</returns>
         public static TKey ParseOrDefault<TKey>(this IDictionary<string, string> dictionary, string key)
         {
-            Guard.ThrowIfEmpty(key, nameof(key));
             dictionary ??= new Dictionary<string, string>();
-            if (dictionary.TryGetValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
+            if (dictionary.TryGetValue(key.ToStringOrEmpty(), out string _value)) { return _value.ParseOrDefault<TKey>(); }
             return default;
-        }
-        /// <summary>ModelStateDictionary nesnesine bir dizi hata mesajını topluca eklemek için kullanılan bir genişletme metodu.</summary>
-        /// <param name="modelstate">Hataların ekleneceği ModelStateDictionary nesnesi.</param>
-        /// <param name="errors">Eklenecek hata mesajlarını içeren string listesi.</param>
-        /// <remarks>Bu metot, verilen hata mesajları listesindeki her bir öğeyi ModelState&#39;e tek tek ekler. Key olarak boş bir string (&quot;&quot;) kullanılır. Eğer <paramref name="errors"/> null ise işlem yapılmaz.</remarks>
-        public static void AddModelErrorRange(this ModelStateDictionary modelstate, IEnumerable<string> errors)
-        {
-            if (errors != null && errors.Any())
-            {
-                Guard.ThrowIfNull(modelstate, nameof(modelstate));
-                foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("", item); }
-            }
         }
         #endregion
         #region IEnumerable
@@ -130,25 +117,6 @@
                 if (initial is List<T> _l) { _l.AddRange(other); }
                 else { foreach (var item in other) { initial.Add(item); } }
             }
-        }
-        #endregion
-        #region string[]
-        /// <summary>Hata mesajları dizisini iç içe geçmiş istisnalara dönüştürür.</summary>
-        /// <param name="errors">Hata mesajlarının yer aldığı dizi.</param>
-        /// <returns>İç içe geçmiş <see cref="Exception"/> nesnesi.</returns>
-        public static Exception ToNestedException(this string[] errors)
-        {
-            errors = (errors ?? []).Reverse().ToArray();
-            Guard.ThrowIfEmpty(errors, nameof(errors));
-            Exception ex = null;
-            var i = errors.Length - 1;
-            while (i >= 0)
-            {
-                if (ex == null) { ex = new(errors[i]); }
-                else { ex = new(errors[i], ex); }
-                i--;
-            }
-            return ex;
         }
         #endregion
     }

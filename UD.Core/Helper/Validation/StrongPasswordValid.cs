@@ -1,6 +1,7 @@
 ﻿namespace UD.Core.Helper.Validation
 {
     using UD.Core.Extensions;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class StrongPasswordValid

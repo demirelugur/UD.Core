@@ -331,3 +331,13 @@ public static string GetIslemInfoFromObject(object model, string dateFormat = Da
     }).Select(x => String.Join(", ", new string[] { (x.isldate.Ticks > 0 ? x.isldate.ToString(dateFormat) : ""), x.isluser.ToStringOrEmpty() }.Where(y => y != "").ToArray())).FirstOrDefault() ?? "";
 }
 ***************************************
+/// <summary>Verilen e-Posta adresindeki &quot;@&quot; karakterini &quot;[at]&quot; ile değiştirir.</summary>
+/// <param name="mailAddress">MailAddress nesnesi.</param>
+/// <returns>Dönüştürülmüş e-Posta adresi.</returns>
+/// <exception cref="ArgumentNullException">Verilen e-Posta adresi null ise fırlatılır.</exception>
+public static string ReplaceAT(this MailAddress mailAddress)
+{
+    Guard.ThrowIfNull(mailAddress, nameof(mailAddress));
+    return mailAddress.Address.Replace("@", "[at]");
+}
+***************************************

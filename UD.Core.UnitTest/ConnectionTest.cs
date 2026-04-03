@@ -6,7 +6,7 @@ namespace UD.Core.UnitTest
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.IO;
-    using UD.Core.Extensions;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     [TestFixture]
     public class ConnectionTest

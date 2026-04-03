@@ -9,11 +9,14 @@ namespace UD.Core.Extensions
     using System.Reflection;
     using System.Text;
     using UD.Core.Attributes;
+    using UD.Core.Auditing;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using UD.Core.Helper.Database;
     using UD.Core.Helper.Validation;
-    public static class DbContextExtensions
+    public static class EntityFrameworkCoreExtensions
     {
+        #region DbContext
         /// <summary>Belirtilen varlýðýn (entity) bir veya daha fazla özelliðinin deðiþtirilip deðiþtirilmediðini kontrol eder.</summary>
         /// <typeparam name="T">Kontrol edilecek varlýk türü.</typeparam>
         /// <param name="context">DbContext örneði.</param>
@@ -25,7 +28,7 @@ namespace UD.Core.Extensions
             Guard.ThrowIfNull(context, nameof(context));
             var entry = context.Entry(entity);
             var properties = typeof(T).GetProperties().Where(x => x.IsMapped() && entry.Property(x.Name).IsModified).ToArray();
-            var columns = (expressions ?? []).Select(x => x.GetExpressionName()).ToArray();
+            var columns = (expressions ?? []).Select(x => x.GetMemberName()).ToArray();
             if (columns.Length == 0) { return properties.Length > 0; }
             return properties.Any(x => columns.Contains(x.Name));
         }
@@ -36,7 +39,7 @@ namespace UD.Core.Extensions
             Guard.ThrowIfNull(oldEntity, nameof(oldEntity));
             var type = typeof(T);
             var tableName = type.GetTableName(false);
-            var compositeKeyName = compositeKey.GetExpressionName();
+            var compositeKeyName = compositeKey.GetMemberName();
             var properties = type.GetProperties().Where(x => x.IsMapped()).Select(x => new
             {
                 name = x.Name,
@@ -192,5 +195,21 @@ namespace UD.Core.Extensions
             );
             return new ChangeEntry(entry, changes);
         }).ToArray();
+        #endregion
+        /// <summary>Modeldeki <see cref="ISoftDelete"/> arayüzünü uygulayan tüm entity tiplerine global sorgu filtresi ekleyerek, <c>IsDeleted = true</c> olan (soft delete edilmiþ) kayýtlarýn sorgularda varsayýlan olarak gelmesini engeller.</summary>
+        /// <remarks>Bu filtre, yalnýzca <see cref="ISoftDelete"/> implement eden entity&#39;lere uygulanýr. Soft delete edilmiþ kayýtlarý da getirmek gerektiðinde EF Core tarafýnda <c>IgnoreQueryFilters()</c> kullanýlabilir.</remarks>
+        /// <param name="modelBuilder">EF Core modelini yapýlandýrmak için kullanýlan <see cref="ModelBuilder"/>.</param>
+        public static void ApplySoftDeleteQueryFilters(this ModelBuilder modelBuilder)
+        {
+            Guard.ThrowIfNull(modelBuilder, nameof(modelBuilder));
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (!typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType)) { continue; }
+                var parameter = Expression.Parameter(entityType.ClrType, "x");
+                var isDeletedProperty = Expression.Call(typeof(EF), nameof(EF.Property), [typeof(bool)], parameter, Expression.Constant(nameof(ISoftDelete.IsDeleted)));
+                var filter = Expression.Lambda(Expression.Equal(isDeletedProperty, Expression.Constant(false)), parameter);
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+            }
+        }
     }
 }

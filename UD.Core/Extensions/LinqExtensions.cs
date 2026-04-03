@@ -6,12 +6,13 @@
     using System.Linq;
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
-    public static class IQueryableExtensions
+    public static class LinqExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>
         public static IQueryable<T> WhereIf<T>(this IQueryable<T> source, bool condition, Expression<Func<T, bool>> predicate)

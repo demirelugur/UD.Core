@@ -1,14 +1,17 @@
 ﻿namespace UD.Core.Extensions
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Reflection;
     using UD.Core.Attributes;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
-    public static class PropertyInfoExtensions
+    public static class ReflectionExtensions
     {
+        #region PropertyInfo
         /// <summary>Belirtilen özellik bilgilerinin veritabanı kaynaklı haritalanmış bir özellik olup olmadığını kontrol eder.</summary>
         /// <param name="propertyInfo">Kontrol edilecek özellik bilgisi.</param>
         /// <returns>Haritalanmış bir özellik ise <see langword="true"/>, değilse false <see langword="false"/>.</returns>
@@ -80,5 +83,30 @@
             if (TryValidators.TryCustomAttribute(propertyInfo, out MaxLengthAttribute _ml)) { return _ml.Length; }
             return 0;
         }
+        #endregion
+        #region MemberInfo
+        /// <summary>Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DescriptionAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.</summary>
+        public static string GetDescription(this MemberInfo memberInfo)
+        {
+            Guard.ThrowIfNull(memberInfo, nameof(memberInfo));
+            try
+            {
+                var attr = memberInfo.GetCustomAttribute<DescriptionAttribute>();
+                return attr == null ? "" : attr.Description.ToStringOrEmpty();
+            }
+            catch { return ""; }
+        }
+        /// <summary>Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DisplayAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.</summary>
+        public static string GetDisplayName(this MemberInfo memberInfo)
+        {
+            Guard.ThrowIfNull(memberInfo, nameof(memberInfo));
+            try
+            {
+                var attr = memberInfo.GetCustomAttribute<DisplayAttribute>();
+                return attr == null ? "" : attr.GetName().ToStringOrEmpty();
+            }
+            catch { return ""; }
+        }
+        #endregion
     }
 }

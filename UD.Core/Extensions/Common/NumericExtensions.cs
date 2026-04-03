@@ -1,8 +1,9 @@
-﻿namespace UD.Core.Extensions
+﻿namespace UD.Core.Extensions.Common
 {
     using System;
     using System.Globalization;
     using System.Linq;
+    using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
     public static class NumericExtensions
     {

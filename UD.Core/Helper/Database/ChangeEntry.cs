@@ -5,6 +5,8 @@
     using System.Linq;
     using UD.Core.Attributes;
     using UD.Core.Extensions;
+    using UD.Core.Extensions.Common;
+
     public sealed class ChangeEntry
     {
         public string entityName { get; set; }

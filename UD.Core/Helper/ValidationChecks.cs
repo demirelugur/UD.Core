@@ -4,7 +4,7 @@
     using System;
     using System.Globalization;
     using System.Text.RegularExpressions;
-    using UD.Core.Extensions;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper.Validation;
     public sealed class ValidationChecks
     {

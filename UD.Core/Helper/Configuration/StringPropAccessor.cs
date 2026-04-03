@@ -20,11 +20,11 @@
         .Where(p => p.PropertyType == typeof(string) && p.IsMapped())
         .Select(p =>
         {
-            var instance = Expression.Parameter(typeof(object), "obj");
+            var instance = Expression.Parameter(typeof(object), "x");
             var casted = Expression.Convert(instance, type);
             var property = Expression.Property(casted, p);
             var getter = Expression.Lambda<Func<object, string?>>(property, instance).Compile();
-            var valueParam = Expression.Parameter(typeof(string), "value");
+            var valueParam = Expression.Parameter(typeof(string), "y");
             var assign = Expression.Assign(property, valueParam);
             var setter = Expression.Lambda<Action<object, string?>>(assign, instance, valueParam).Compile();
             return new StringPropAccessor(getter, setter, p.IsSkipSanitize(), p.GetStringOrMaxLength());

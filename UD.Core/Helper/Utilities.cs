@@ -13,6 +13,7 @@
     using System.Security.Cryptography;
     using System.Transactions;
     using UD.Core.Extensions;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
     public sealed class Utilities
@@ -58,13 +59,15 @@
         public static int GetStringOrMaxLength<T>(string name) where T : class
         {
             Guard.ThrowIfEmpty(name, nameof(name));
-            return typeof(T).GetProperty(name).GetStringOrMaxLength();
+            var prop = typeof(T).GetProperty(name);
+            Guard.ThrowIfNull(prop, nameof(name));
+            return prop.GetStringOrMaxLength();
         }
         /// <summary>Verilen sınıfın belirli bir string ifadesi için maksimum karakter uzunluğunu döner. <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> atanmışsa bu değeri alır, aksi takdirde 0 döner.</summary>
         /// <typeparam name="T">Kontrol edilecek sınıf türü.</typeparam>
         /// <param name="expression">Özellik ismini içeren ifade.</param>
         /// <returns>Özellik için maksimum uzunluk değeri; öznitelik bulunmazsa 0 döner.</returns>
-        public static int GetStringOrMaxLength<T>(Expression<Func<T, string>> expression) where T : class => GetStringOrMaxLength<T>(expression.GetExpressionName());
+        public static int GetStringOrMaxLength<T>(Expression<Func<T, string>> expression) where T : class => GetStringOrMaxLength<T>(expression.GetMemberName());
         /// <summary>
         /// Verilen string dizisinden kısaltma oluşturur. Her bir kelimenin baş harfini alarak noktalarla ayrılmış bir kısaltma döner. Boş veya null değerler atlanır.
         /// <example><br />Örnek: <br />Uğur DEMİREL -> U.D <br />Mustafa Kemal ATATÜRK -> MK.A</example>
@@ -176,21 +179,21 @@
             return r;
         }
         /// <summary>Belirtilen nesnenin property adını kullanarak ilgili property&#39;sine değer atar.</summary>
-        /// <param name="value">Değeri atanac nesne.</param>
+        /// <param name="entity">Değeri atanac nesne.</param>
         /// <param name="propertyName">Değeri atanacak property&#39;sinin adı.</param>
-        /// <param name="data">Property&#39;ye atanacak değer.</param>
-        /// <exception cref="ArgumentException"><paramref name="value"/> nesnesi sınıf türünde değilse fırlatılır.</exception>
+        /// <param name="propertyNewValue">Property&#39;ye atanacak değer.</param>
+        /// <exception cref="ArgumentException"><paramref name="entity"/> nesnesi sınıf türünde değilse fırlatılır.</exception>
         /// <exception cref="InvalidOperationException">Property yazılabilir değilse fırlatılır.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> veya <paramref name="propertyName"/> null ise fırlatılır.</exception>
-        public static void SetPropertyValue(object value, string propertyName, object data)
+        /// <exception cref="ArgumentNullException"><paramref name="entity"/> veya <paramref name="propertyName"/> null ise fırlatılır.</exception>
+        public static void SetPropertyValue(object entity, string propertyName, object propertyNewValue)
         {
-            Guard.ThrowIfNull(value, nameof(value));
+            Guard.ThrowIfNull(entity, nameof(entity));
             Guard.ThrowIfEmpty(propertyName, nameof(propertyName));
-            var type = value.GetType();
+            var type = entity.GetType();
             if (!type.IsCustomClass())
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The \"{nameof(value)}\" argument type must be class!", nameof(value)); }
-                throw new ArgumentException($"\"{nameof(value)}\" argümanı türü class olmalıdır!", nameof(value));
+                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The \"{nameof(entity)}\" argument type must be class!", nameof(entity)); }
+                throw new ArgumentException($"\"{nameof(entity)}\" argümanı türü class olmalıdır!", nameof(entity));
             }
             var pi = type.GetProperty(propertyName);
             Guard.ThrowIfNull(pi, nameof(pi));
@@ -199,7 +202,7 @@
                 if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
                 throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
             }
-            pi.SetValue(value, Converters.ChangeType(data, pi.PropertyType));
+            pi.SetValue(entity, Converters.ChangeType(propertyNewValue, pi.PropertyType));
         }
         /// <summary><paramref name="culture"/> parametresi ile belirtilen kültür bilgisini kullanarak, uygulamanın varsayılan thread kültürünü ve varsayılan thread UI kültürünü ayarlar. Bu metod, uygulamanın farklı kültürlerde çalışmasını sağlamak için kullanılabilir. <paramref name="culture"/> geçerli bir kültür kodu (örneğin &quot;en-US&quot;, &quot;tr-TR&quot;) içermelidir. Eğer geçerli bir kültür kodu sağlanmazsa, bir hata fırlatılır.</summary>
         public static void SetDefaultThreadCulture(string culture)

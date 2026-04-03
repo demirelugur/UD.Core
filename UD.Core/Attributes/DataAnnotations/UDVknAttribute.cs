@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
+    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDVknAttribute : ValidationAttribute
