@@ -7,8 +7,8 @@
         public ChangePropertyInfo() : this(default, default) { }
         public ChangePropertyInfo(object originalValue, object currentValue)
         {
-            this.originalValue = ChangeEntry.maskHTML(originalValue);
-            this.currentValue = ChangeEntry.maskHTML(currentValue);
+            this.originalValue = originalValue;
+            this.currentValue = currentValue;
         }
     }
 }

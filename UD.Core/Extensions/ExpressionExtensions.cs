@@ -1,6 +1,7 @@
 ﻿namespace UD.Core.Extensions
 {
     using System.Linq.Expressions;
+    using UD.Core.Helper.Configuration;
     public static class LinqExtension
     {
         /// <summary>Expression&lt;Func&lt;T, bool&gt;&gt; türündeki iki predicate&#39;i mantıksal AND (&amp;&amp;) operatörü ile birleştirir.</summary>
@@ -14,22 +15,9 @@
         private static Expression<Func<T, bool>> CombineLambdas<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right, ExpressionType expressionType)
         {
             var leftParameter = left.Parameters[0];
-            var visitor = new SubstituteParameterVisitor(new Dictionary<Expression, Expression>
-            {
-                { right.Parameters[0], leftParameter }
-            });
+            var visitor = new SubstituteParameterVisitor(leftParameter, right.Parameters[0]);
             var body = Expression.MakeBinary(expressionType, left.Body, visitor.Visit(right.Body));
             return Expression.Lambda<Func<T, bool>>(body, leftParameter);
         }
-    }
-    internal class SubstituteParameterVisitor : ExpressionVisitor
-    {
-        public Dictionary<Expression, Expression> sub { get; set; }
-        public SubstituteParameterVisitor() : this(default) { }
-        public SubstituteParameterVisitor(Dictionary<Expression, Expression> sub)
-        {
-            this.sub = sub ?? [];
-        }
-        protected override Expression VisitParameter(ParameterExpression node) => (this.sub.TryGetValue(node, out Expression _exp) ? _exp : node);
     }
 }

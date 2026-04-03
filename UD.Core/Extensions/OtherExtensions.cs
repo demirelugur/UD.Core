@@ -302,7 +302,7 @@
         {
             Guard.ThrowIfNull(sanitizer, nameof(sanitizer));
             Guard.ThrowIfNull(entity, nameof(entity));
-            var props = cacheSanitize.GetOrAdd(entity.GetType(), x => x.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(y => y.PropertyType == typeof(string) && !Attribute.IsDefined(y, typeof(SkipSanitizeAttribute)) && y.IsMapped()).ToArray());
+            var props = cacheSanitize.GetOrAdd(entity.GetType(), x => x.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(y => y.PropertyType == typeof(string) && !y.IsSkipSanitize() && y.IsMapped()).ToArray());
             foreach (var prop in props)
             {
                 var value = prop.GetValue(entity).ToStringOrEmpty();

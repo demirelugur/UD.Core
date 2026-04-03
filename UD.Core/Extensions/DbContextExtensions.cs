@@ -8,6 +8,7 @@ namespace UD.Core.Extensions
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Text;
+    using UD.Core.Attributes;
     using UD.Core.Helper;
     using UD.Core.Helper.Database;
     using UD.Core.Helper.Validation;
@@ -122,51 +123,72 @@ namespace UD.Core.Extensions
             }
             return ("", "");
         }
-        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added), güncellenmiþ (Modified) ve silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Her entity için original ve current deðerler karþýlaþtýrýlarak deðiþim bilgileri içeren bir ChangeEntry listesi oluþturulur. Bu metot, veri deðiþikliklerini izlemek ve kaydetmek için kullanýlabilir. Deðiþiklik türüne göre property bazýnda eski ve yeni deðerler birlikte tutulur.</summary>
-        public static ChangeEntry[] GetAllChanges(this DbContext context) => context.GetAdded().Union(context.GetModified()).Union(context.GetDeleted()).ToArray();
-        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added) durumdaki entity&#39;leri tespit eder. Her entity için mevcut (current) deðerler alýnarak ChangeEntry listesi oluþturulur. Eklenen kayýtlar için original deðerler bulunmadýðýndan null olarak atanýr. Property bazýnda bir sözlük (Dictionary) ile deðiþim bilgileri döndürülür.</summary>
+        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added), güncellenmiþ (Modified) ve silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, her bir durum için ayrý ayrý olmak üzere, deðiþikliklerin detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, eklenen, güncellenen ve silinen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
+        /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
+        /// <returns>Deðiþiklik türlerini anahtar olarak kullanan ve ilgili <see cref="ChangeEntry"/> dizilerini deðer olarak içeren bir sözlük (Dictionary) döndürür.</returns>
+        public static Dictionary<EntityState, ChangeEntry[]> GetAllChanges(this DbContext context)
+        {
+            var dic = new Dictionary<EntityState, ChangeEntry[]>
+            {
+                { EntityState.Added, context.GetAdded() },
+                { EntityState.Modified, context.GetModified() },
+                { EntityState.Deleted, context.GetDeleted() }
+            };
+            dic.RemoveWhere(x => x.Value.Length == 0);
+            return dic;
+        }
+        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, eklenen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, eklenen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
+        /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
+        /// <returns>Eklenen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
         public static ChangeEntry[] GetAdded(this DbContext context) => context.ChangeTracker
         .Entries()
         .Where(e => e.State == EntityState.Added)
         .Select(entry =>
         {
-            var changes = entry.CurrentValues.Properties.Where(prop => prop.PropertyInfo.IsMapped())
+            var changes = entry.CurrentValues.Properties
+            .Where(prop => prop.PropertyInfo.IsMapped())
             .ToDictionary(
                prop => prop.PropertyInfo.GetColumnName(),
-               prop => new ChangePropertyInfo(null, entry.CurrentValues[prop])
+               prop => new ChangePropertyInfo(null, (prop.PropertyInfo.IsHtmlContent() ? HtmlContentAttribute.title : entry.CurrentValues[prop]))
             );
             return new ChangeEntry(entry, changes);
         }).ToArray();
-        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden güncellenmiþ (Modified) durumdaki entity&#39;leri tespit eder. Her entity için hem original hem current deðerler karþýlaþtýrýlýr. Sadece deðeri deðiþmiþ olan property&#39;ler filtrelenerek ChangeEntry listesi oluþturulur. Property bazýnda eski ve yeni deðerler birlikte tutulur.</summary>
+        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden güncellenmiþ (Modified) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, güncellenen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, güncellenen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
+        /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
+        /// <returns>Güncellenen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
         public static ChangeEntry[] GetModified(this DbContext context) => context.ChangeTracker
         .Entries()
         .Where(e => e.State == EntityState.Modified)
         .Select(entry =>
         {
-            var changes = entry.OriginalValues.Properties.Where(prop => prop.PropertyInfo.IsMapped())
-                .Select(prop => new
-                {
-                    Property = prop,
-                    Original = entry.OriginalValues[prop],
-                    Current = entry.CurrentValues[prop]
-                })
-                .Where(x => !Equals(x.Original, x.Current))
-                .ToDictionary(
-                    prop => prop.Property.PropertyInfo.GetColumnName(),
-                    prop => new ChangePropertyInfo(prop.Original, prop.Current)
-                );
+            var changes = entry.OriginalValues.Properties
+            .Where(prop => prop.PropertyInfo.IsMapped())
+            .Select(prop => new
+            {
+                Property = prop,
+                Original = entry.OriginalValues[prop],
+                Current = entry.CurrentValues[prop]
+            })
+            .Where(x => !Equals(x.Original, x.Current))
+            .ToDictionary(
+                prop => prop.Property.PropertyInfo.GetColumnName(),
+                prop => (prop.Property.PropertyInfo.IsHtmlContent() ? new ChangePropertyInfo(HtmlContentAttribute.title, HtmlContentAttribute.title) : new ChangePropertyInfo(prop.Original, prop.Current))
+            );
             return new ChangeEntry(entry, changes);
         }).ToArray();
-        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Silinen kayýtlar için sadece original deðerler alýnýr, current deðerler null olarak atanýr. Property bazýnda bir sözlük (Dictionary) ile silinmeden önceki deðerler döndürülür.</summary>
+        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, silinen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, silinen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
+        /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
+        /// <returns>Silinen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
         public static ChangeEntry[] GetDeleted(this DbContext context) => context.ChangeTracker
         .Entries()
         .Where(e => e.State == EntityState.Deleted)
         .Select(entry =>
         {
-            var changes = entry.OriginalValues.Properties.Where(prop => prop.PropertyInfo.IsMapped())
+            var changes = entry.OriginalValues.Properties
+            .Where(prop => prop.PropertyInfo.IsMapped())
             .ToDictionary(
                 prop => prop.PropertyInfo.GetColumnName(),
-                prop => new ChangePropertyInfo(entry.OriginalValues[prop], null)
+                prop => new ChangePropertyInfo(prop.PropertyInfo.IsHtmlContent() ? HtmlContentAttribute.title : entry.OriginalValues[prop], null)
             );
             return new ChangeEntry(entry, changes);
         }).ToArray();

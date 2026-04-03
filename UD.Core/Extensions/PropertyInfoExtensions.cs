@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Reflection;
+    using UD.Core.Attributes;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     public static class PropertyInfoExtensions
@@ -34,6 +35,18 @@
         {
             Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
             return TryValidators.TryCustomAttribute(propertyInfo, out NotMappedAttribute _);
+        }
+        /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) HTML içeriği içerip içermediğini kontrol eder. Özellik, <see cref="HtmlContentAttribute"/> ile işaretlenmişse, bu metot <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
+        public static bool IsHtmlContent(this PropertyInfo propertyInfo)
+        {
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
+            return TryValidators.TryCustomAttribute(propertyInfo, out HtmlContentAttribute _);
+        }
+        /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) temizlenmeden (sanitize) geçirilmesi gerektiğini belirten <see cref="SkipSanitizeAttribute"/> ile işaretlenip işaretlenmediğini kontrol eder. Eğer özellik bu özniteliğe sahipse, bu metot <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
+        public static bool IsSkipSanitize(this PropertyInfo propertyInfo)
+        {
+            Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
+            return TryValidators.TryCustomAttribute(propertyInfo, out SkipSanitizeAttribute _);
         }
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) veritabanındaki sütun adını döndürür. Özellik <see cref="ColumnAttribute"/> ile işaretlenmişse, bu özniteliğin belirttiği sütun adını; aksi takdirde özelliğin adını döndürür.</summary>
         /// <param name="propertyInfo">Sütun adı alınacak özellik.</param>
