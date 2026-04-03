@@ -133,7 +133,7 @@ namespace UD.Core.Extensions
             var changes = entry.CurrentValues.Properties.Where(prop => prop.PropertyInfo.IsMapped())
             .ToDictionary(
                prop => prop.PropertyInfo.GetColumnName(),
-               prop => new ChangePropertyInfo(null, entry.CurrentValues[prop], prop.IsPrimaryKey(), prop.IsForeignKey())
+               prop => new ChangePropertyInfo(null, entry.CurrentValues[prop])
             );
             return new ChangeEntry(entry, changes);
         }).ToArray();
@@ -153,7 +153,7 @@ namespace UD.Core.Extensions
                 .Where(x => !Equals(x.Original, x.Current))
                 .ToDictionary(
                     prop => prop.Property.PropertyInfo.GetColumnName(),
-                    prop => new ChangePropertyInfo(prop.Original, prop.Current, prop.Property.IsPrimaryKey(), prop.Property.IsForeignKey())
+                    prop => new ChangePropertyInfo(prop.Original, prop.Current)
                 );
             return new ChangeEntry(entry, changes);
         }).ToArray();
@@ -166,7 +166,7 @@ namespace UD.Core.Extensions
             var changes = entry.OriginalValues.Properties.Where(prop => prop.PropertyInfo.IsMapped())
             .ToDictionary(
                 prop => prop.PropertyInfo.GetColumnName(),
-                prop => new ChangePropertyInfo(entry.OriginalValues[prop], null, prop.IsPrimaryKey(), prop.IsForeignKey())
+                prop => new ChangePropertyInfo(entry.OriginalValues[prop], null)
             );
             return new ChangeEntry(entry, changes);
         }).ToArray();

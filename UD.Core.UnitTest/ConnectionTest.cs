@@ -31,20 +31,8 @@ namespace UD.Core.UnitTest
         [Test]
         public async Task Test2()
         {
+            await Task.CompletedTask;
             //var il = await this.context.Ils.FindAsync((byte)1);
-
-            this.context.Ilces.Add(new Ilce
-            {
-                Id = 999,
-                IlId = 1,
-                Name = "Test İlçe",
-                TelefonKodu = 123
-            });
-            var a = this.context.GetAdded();
-
-            var c = Converters.ToJSON(a);
-            //await this.context.SaveChangesAsync();
-
         }
 
         [TearDown]
