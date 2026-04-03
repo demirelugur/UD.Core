@@ -108,7 +108,7 @@ namespace UD.Core.Extensions
         {
             HashSet<string> arm;
             string p;
-            foreach (var pi in typeof(TArgument).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).ToArray())
+            foreach (var pi in typeof(TArgument).GetProperties())
             {
                 arm = [];
                 foreach (Match item in Regex.Matches(value, String.Concat(@"\{", pi.Name, @"(\:.*?)?\}")))
@@ -249,7 +249,7 @@ namespace UD.Core.Extensions
             if (TryValidators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
             {
                 var k = _jo[key];
-                if (k.IsNullorUndefined()) { return default; }
+                if (k.IsNullOrUndefined()) { return default; }
                 return k.ToString().ParseOrDefault<T>();
             }
             return default;
