@@ -2,18 +2,17 @@
 {
     public sealed class ChangePropertyInfo
     {
-        public string propertyname { get; set; }
-        public object originalvalue { get; set; }
-        public object currentvalue { get; set; }
-        public bool isprimarykey { get; set; }
-        public bool isforeignkey { get; set; }
+        public object originalValue { get; set; }
+        public object currentValue { get; set; }
+        public bool isPrimaryKey { get; set; }
+        public bool isForeignKey { get; set; }
         public ChangePropertyInfo() : this(default, default, default, default) { }
-        public ChangePropertyInfo(object originalvalue, object currentvalue, bool isprimarykey, bool isforeignkey)
+        public ChangePropertyInfo(object originalValue, object currentValue, bool isPrimaryKey, bool isForeignKey)
         {
-            this.originalvalue = checkHTML(originalvalue);
-            this.currentvalue = checkHTML(currentvalue);
-            this.isprimarykey = isprimarykey;
-            this.isforeignkey = isforeignkey;
+            this.originalValue = checkHTML(originalValue);
+            this.currentValue = checkHTML(currentValue);
+            this.isPrimaryKey = isPrimaryKey;
+            this.isForeignKey = isForeignKey;
         }
         private object checkHTML(object value)
         {

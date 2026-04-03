@@ -2,7 +2,6 @@ namespace UD.Core.Extensions
 {
     using Microsoft.EntityFrameworkCore;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -97,7 +96,7 @@ namespace UD.Core.Extensions
             var index = 0;
             foreach (var type in mappedTables.Where(x => x.IsMappedTable()).ToArray())
             {
-                var (columnName, sqlDbTypeName) = getprimarykeyinfo(type);
+                var (columnName, sqlDbTypeName) = getPrimaryKeyInfo(type);
                 if (columnName == "" || sqlDbTypeName == "") { continue; }
                 var tableName = type.GetTableName(true);
                 var variableName = $"@MAXID_{index}";
@@ -110,7 +109,7 @@ namespace UD.Core.Extensions
             if (sb.Length == 0) { return Task.FromResult(0); }
             return context.Database.ExecuteSqlRawAsync(sb.ToString(), [], cancellationToken);
         }
-        private static (string columnName, string sqlDbTypeName) getprimarykeyinfo(Type mappedtabletype)
+        private static (string columnName, string sqlDbTypeName) getPrimaryKeyInfo(Type mappedtabletype)
         {
             if (TryValidators.TryTableisKeyAttribute(mappedtabletype, out PropertyInfo[] _properties) && _properties.Length == 1 && _properties[0].IsPK() && _properties[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
             {
@@ -123,25 +122,53 @@ namespace UD.Core.Extensions
             }
             return ("", "");
         }
-        public static ChangeEntry[] GetAdded(this DbContext context) => context.ChangeTracker.Entries().Where(e => e.State == EntityState.Added).Select(x =>
+        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added), güncellenmiþ (Modified) ve silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Her entity için original ve current deðerler karþýlaþtýrýlarak deðiþim bilgileri içeren bir ChangeEntry listesi oluþturulur. Bu metot, veri deðiþikliklerini izlemek ve kaydetmek için kullanýlabilir. Deðiþiklik türüne göre property bazýnda eski ve yeni deðerler birlikte tutulur.</summary>
+        public static ChangeEntry[] GetAllChanges(this DbContext context) => context.GetAdded().Union(context.GetModified()).Union(context.GetDeleted()).ToArray();
+        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added) durumdaki entity&#39;leri tespit eder. Her entity için mevcut (current) deðerler alýnarak ChangeEntry listesi oluþturulur. Eklenen kayýtlar için original deðerler bulunmadýðýndan null olarak atanýr. Property bazýnda bir sözlük (Dictionary) ile deðiþim bilgileri döndürülür.</summary>
+        public static ChangeEntry[] GetAdded(this DbContext context) => context.ChangeTracker
+        .Entries()
+        .Where(e => e.State == EntityState.Added)
+        .Select(entry =>
         {
-            var currentObject = x.CurrentValues.ToObject();
-            return new ChangeEntry(x.Entity, x.Metadata.ClrType, x.State, x.CurrentValues.Properties.ToDictionary(y => y.PropertyInfo.GetColumnName(), y => new ChangePropertyInfo(null, y.PropertyInfo.GetValue(currentObject), y.IsPrimaryKey(), y.IsForeignKey())));
+            var changes = entry.CurrentValues.Properties.Where(prop => prop.PropertyInfo.IsMapped())
+            .ToDictionary(
+               prop => prop.PropertyInfo.GetColumnName(),
+               prop => new ChangePropertyInfo(null, entry.CurrentValues[prop], prop.IsPrimaryKey(), prop.IsForeignKey())
+            );
+            return new ChangeEntry(entry, changes);
         }).ToArray();
-        public static ChangeEntry[] GetModified(this DbContext context) => context.ChangeTracker.Entries().Where(x => x.State == EntityState.Modified).Select(x =>
+        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden güncellenmiþ (Modified) durumdaki entity&#39;leri tespit eder. Her entity için hem original hem current deðerler karþýlaþtýrýlýr. Sadece deðeri deðiþmiþ olan property&#39;ler filtrelenerek ChangeEntry listesi oluþturulur. Property bazýnda eski ve yeni deðerler birlikte tutulur.</summary>
+        public static ChangeEntry[] GetModified(this DbContext context) => context.ChangeTracker
+        .Entries()
+        .Where(e => e.State == EntityState.Modified)
+        .Select(entry =>
         {
-            var originalObject = x.OriginalValues.ToObject();
-            var currentObject = x.CurrentValues.ToObject();
-            return new ChangeEntry(x.Entity, x.Metadata.ClrType, x.State, x.OriginalValues.Properties.Select(y => (property: y, value: y.PropertyInfo.GetValue(originalObject))).Zip(x.CurrentValues.Properties.Select(y => (property: y, value: y.PropertyInfo.GetValue(currentObject))), (t1, t2) => new
-            {
-                t1,
-                t2
-            }).Where(y => Comparer.Default.Compare(y.t1.value, y.t2.value) != 0).ToDictionary(y => y.t1.property.PropertyInfo.GetColumnName(), y => new ChangePropertyInfo(y.t1.value, y.t2.value, y.t1.property.IsPrimaryKey(), y.t1.property.IsForeignKey())));
+            var changes = entry.OriginalValues.Properties.Where(prop => prop.PropertyInfo.IsMapped())
+                .Select(prop => new
+                {
+                    Property = prop,
+                    Original = entry.OriginalValues[prop],
+                    Current = entry.CurrentValues[prop]
+                })
+                .Where(x => !Equals(x.Original, x.Current))
+                .ToDictionary(
+                    prop => prop.Property.PropertyInfo.GetColumnName(),
+                    prop => new ChangePropertyInfo(prop.Original, prop.Current, prop.Property.IsPrimaryKey(), prop.Property.IsForeignKey())
+                );
+            return new ChangeEntry(entry, changes);
         }).ToArray();
-        public static ChangeEntry[] GetDeleted(this DbContext context) => context.ChangeTracker.Entries().Where(e => e.State == EntityState.Deleted).Select(x =>
+        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Silinen kayýtlar için sadece original deðerler alýnýr, current deðerler null olarak atanýr. Property bazýnda bir sözlük (Dictionary) ile silinmeden önceki deðerler döndürülür.</summary>
+        public static ChangeEntry[] GetDeleted(this DbContext context) => context.ChangeTracker
+        .Entries()
+        .Where(e => e.State == EntityState.Deleted)
+        .Select(entry =>
         {
-            var originalObject = x.OriginalValues.ToObject();
-            return new ChangeEntry(x.Entity, x.Metadata.ClrType, x.State, x.OriginalValues.Properties.ToDictionary(y => y.PropertyInfo.GetColumnName(), y => new ChangePropertyInfo(y.PropertyInfo.GetValue(originalObject), null, y.IsPrimaryKey(), y.IsForeignKey())));
+            var changes = entry.OriginalValues.Properties.Where(prop => prop.PropertyInfo.IsMapped())
+            .ToDictionary(
+                prop => prop.PropertyInfo.GetColumnName(),
+                prop => new ChangePropertyInfo(entry.OriginalValues[prop], null, prop.IsPrimaryKey(), prop.IsForeignKey())
+            );
+            return new ChangeEntry(entry, changes);
         }).ToArray();
     }
 }

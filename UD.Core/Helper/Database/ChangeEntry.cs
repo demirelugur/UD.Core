@@ -1,20 +1,22 @@
 ﻿namespace UD.Core.Helper.Database
 {
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using UD.Core.Extensions;
-    public class ChangeEntry
+    public sealed class ChangeEntry
     {
         public object entity { get; set; }
-        public string entityname { get; set; }
-        public string entitystate { get; set; }
-        public Dictionary<string, ChangePropertyInfo> changeproperties { get; set; }
+        public string entityName { get; set; }
+        public string entityState { get; set; }
+        public Dictionary<string, ChangePropertyInfo> changeProperties { get; set; }
         public ChangeEntry() : this(default, default, default, default) { }
-        public ChangeEntry(object entity, Type entityType, EntityState entitystate, Dictionary<string, ChangePropertyInfo> changeproperties)
+        public ChangeEntry(EntityEntry entry, Dictionary<string, ChangePropertyInfo> changeProperties) : this(entry.Entity, entry.Metadata.ClrType, entry.State, changeProperties) { }
+        public ChangeEntry(object entity, Type entityType, EntityState entityState, Dictionary<string, ChangePropertyInfo> changeProperties)
         {
             this.entity = entity;
-            this.entityname = entityType.GetTableName(true);
-            this.entitystate = entitystate.ToString("g");
-            this.changeproperties = changeproperties ?? [];
+            this.entityName = entityType.GetTableName(true);
+            this.entityState = entityState.ToString("g");
+            this.changeProperties = changeProperties ?? [];
         }
     }
 }
