@@ -62,7 +62,7 @@
         public static string GetColumnName(this PropertyInfo propertyInfo)
         {
             Guard.ThrowIfNull(propertyInfo, nameof(propertyInfo));
-            return TryValidators.TryCustomAttribute(propertyInfo, out ColumnAttribute _ca) ? _ca.Name : propertyInfo.Name;
+            return (TryValidators.TryCustomAttribute(propertyInfo, out ColumnAttribute _ca) && !_ca.Name.IsNullOrEmpty()) ? _ca.Name : propertyInfo.Name;
         }
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) veritabanında nasıl oluşturulduğunu belirten <see cref="DatabaseGeneratedOption"/> değerini döndürür. Özellik <see cref="DatabaseGeneratedAttribute"/> ile işaretlenmişse, bu özniteliğin belirttiği seçeneği; aksi takdirde null döner.</summary>
         /// <param name="propertyInfo">Kontrol edilecek özellik.</param>
