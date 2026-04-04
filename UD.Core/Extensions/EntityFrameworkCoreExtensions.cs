@@ -1,7 +1,11 @@
 namespace UD.Core.Extensions
 {
+    using Ganss.Xss;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using Microsoft.EntityFrameworkCore.Metadata;
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -125,52 +129,20 @@ namespace UD.Core.Extensions
             }
             return ("", "");
         }
-        /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added), güncellenmiþ (Modified) ve silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, her bir durum için ayrý ayrý olmak üzere, deðiþikliklerin detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, eklenen, güncellenen ve silinen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
-        /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
-        /// <returns>Deðiþiklik türlerini anahtar olarak kullanan ve ilgili <see cref="ChangeEntry"/> dizilerini deðer olarak içeren bir sözlük (Dictionary) döndürür.</returns>
-        public static Dictionary<EntityState, ChangeEntry[]> GetAllChanges(this DbContext context)
-        {
-            var dic = new Dictionary<EntityState, ChangeEntry[]>
-            {
-                { EntityState.Added, context.GetAdded() },
-                { EntityState.Modified, context.GetModified() },
-                { EntityState.Deleted, context.GetDeleted() }
-            };
-            dic.RemoveWhere(x => x.Value.Length == 0);
-            return dic;
-        }
         /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, eklenen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, eklenen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
         /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
         /// <returns>Eklenen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
-        public static ChangeEntry[] GetAdded(this DbContext context) => context.ChangeTracker.Entries().Where(x => x.State == EntityState.Added).Select(x => new ChangeEntry(x, default)).ToArray();
+        public static ChangeEntry[] GetAdded(this DbContext context) => context.ChangeTracker.Entries().Where(x => x.State == EntityState.Added).Select(ChangeEntry.ToEntityFromObject).ToArray();
         /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden güncellenmiþ (Modified) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, güncellenen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, güncellenen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
         /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
         /// <returns>Güncellenen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
-        public static ChangeEntry[] GetModified(this DbContext context) => context.ChangeTracker
-        .Entries()
-        .Where(e => e.State == EntityState.Modified)
-        .Select(entry =>
-        {
-            var changes = entry.OriginalValues.Properties
-            .Where(prop => prop.PropertyInfo.IsMapped())
-            .Select(prop => new
-            {
-                Property = prop,
-                Original = entry.OriginalValues[prop],
-                Current = entry.CurrentValues[prop]
-            })
-            .Where(x => !Equals(x.Original, x.Current))
-            .ToDictionary(
-                prop => prop.Property.PropertyInfo.GetColumnName(),
-                prop => (prop.Property.PropertyInfo.IsHtmlContent() ? new ChangePropertyInfo(HtmlContentAttribute.title, HtmlContentAttribute.title) : new ChangePropertyInfo(prop.Original, prop.Current))
-            );
-            return new ChangeEntry(entry, changes);
-        }).ToArray();
+        public static ChangeEntry[] GetModified(this DbContext context) => context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified).Select(ChangeEntry.ToEntityFromObject).ToArray();
         /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, silinen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, silinen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
         /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
         /// <returns>Silinen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
-        public static ChangeEntry[] GetDeleted(this DbContext context) => context.ChangeTracker.Entries().Where(e => e.State == EntityState.Deleted).Select(entry => new ChangeEntry(entry, default)).ToArray();
+        public static ChangeEntry[] GetDeleted(this DbContext context) => context.ChangeTracker.Entries().Where(e => e.State == EntityState.Deleted).Select(ChangeEntry.ToEntityFromObject).ToArray();
         #endregion
+        #region ModelBuilder
         /// <summary>Modeldeki <see cref="ISoftDelete"/> arayüzünü uygulayan tüm entity tiplerine global sorgu filtresi ekleyerek, <c>IsDeleted = true</c> olan (soft delete edilmiþ) kayýtlarýn sorgularda varsayýlan olarak gelmesini engeller.</summary>
         /// <remarks>Bu filtre, yalnýzca <see cref="ISoftDelete"/> implement eden entity&#39;lere uygulanýr. Soft delete edilmiþ kayýtlarý da getirmek gerektiðinde EF Core tarafýnda <c>IgnoreQueryFilters()</c> kullanýlabilir.</remarks>
         /// <param name="modelBuilder">EF Core modelini yapýlandýrmak için kullanýlan <see cref="ModelBuilder"/>.</param>
@@ -186,5 +158,52 @@ namespace UD.Core.Extensions
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
             }
         }
+        #endregion
+        #region EntityEntry
+        private record SanitizeStringTruncateAccessor(IProperty property, int maxLength);
+        private record NullableStructNullifyAccessor(IProperty property, Type underlyingType);
+        private static SanitizeStringTruncateAccessor[] SanitizeCreateTruncateAccessor(IEntityType entityType) => entityType.GetProperties().Where(p => p.ClrType == typeof(string) && p.PropertyInfo != null && p.PropertyInfo.IsMapped()).Select(p => new SanitizeStringTruncateAccessor(p, p.GetMaxLength() ?? 0)).ToArray();
+        private static NullableStructNullifyAccessor[] CreateNullifyAccessor(IEntityType entityType) => entityType.GetProperties().Where(p => p.ClrType.IsNullable() && p.PropertyInfo != null && p.PropertyInfo.IsMapped()).Select(p => new NullableStructNullifyAccessor(p, Nullable.GetUnderlyingType(p.ClrType))).ToArray();
+        private static readonly ConcurrentDictionary<Type, SanitizeStringTruncateAccessor[]> _sanitizeTruncateCache = new();
+        private static readonly ConcurrentDictionary<Type, NullableStructNullifyAccessor[]> _nullifyCache = new();
+        /// <summary><paramref name="entry"/> nesnesine ait string türündeki özelliklerin deðerlerini, belirtilen <paramref name="sanitizer"/> aracýlýðýyla temizler. Bu iþlem, potansiyel olarak zararlý HTML içeriðinin etkisiz hale getirilmesini saðlar. Özellikle kullanýcý tarafýndan saðlanan verilerin güvenliðini artýrmak amacýyla kullanýlabilir. Temizleme iþlemi sýrasýnda, özelliklerin üzerinde <see cref="SkipSanitizeAttribute"/> özniteliði bulunuyorsa, bu özellikler atlanýr ve temizlenmez. Bu sayede, belirli özelliklerin temizlenmeden kalmasý saðlanabilir.</summary>
+        public static void SanitizeHtmlStrings(this EntityEntry entry, IHtmlSanitizer sanitizer)
+        {
+            Guard.ThrowIfNull(entry, nameof(entry));
+            Guard.ThrowIfNull(sanitizer, nameof(sanitizer));
+            var accessor = _sanitizeTruncateCache.GetOrAdd(entry.Metadata.ClrType, _ => SanitizeCreateTruncateAccessor(entry.Metadata));
+            foreach (var item in accessor)
+            {
+                if (item.property.PropertyInfo.IsSkipSanitize()) { continue; }
+                var propEntry = entry.Property(item.property.Name);
+                if (propEntry.CurrentValue is String _s) { propEntry.CurrentValue = sanitizer.Sanitize(_s).ParseOrDefault<string>(); }
+            }
+        }
+        /// <summary><paramref name="entry"/> nesnesine ait string türündeki özelliklerin deðerlerini, ilgili özellikler için tanýmlanmýþ maksimum uzunluklara göre keser. Bu iþlem, veritabaný þemasýnda belirtilen maksimum uzunluk sýnýrlarýna uyum saðlamak ve olasý veri kaybýný önlemek amacýyla kullanýlabilir.</summary>
+        public static void TruncateStringsToMaxLength(this EntityEntry entry)
+        {
+            Guard.ThrowIfNull(entry, nameof(entry));
+            var accessor = _sanitizeTruncateCache.GetOrAdd(entry.Metadata.ClrType, _ => SanitizeCreateTruncateAccessor(entry.Metadata));
+            foreach (var item in accessor)
+            {
+                if (item.maxLength <= 0) { continue; }
+                var propEntry = entry.Property(item.property.Name);
+                if (propEntry.CurrentValue is String _s) { propEntry.CurrentValue = _s.SubstringUpToLength(item.maxLength).ParseOrDefault<string>(); }
+            }
+        }
+        /// <summary><paramref name="entry"/> nesnesine ait nullable struct türündeki özelliklerin deðerlerini, eðer mevcut deðerleri ilgili struct türünün varsayýlan deðeriyle eþitse, null olarak günceller. Bu iþlem, veritabanýnda gereksiz yere varsayýlan deðerlerin saklanmasýný önlemek ve veri bütünlüðünü artýrmak amacýyla kullanýlabilir. Özellikle, nullable struct türlerinin kullanýldýðý durumlarda, bu tür özelliklerin null olarak kalmasý tercih edilebilir ve bu metot bu durumu saðlamak için tasarlanmýþtýr.</summary>
+        public static void NullifyDefaultStructs(this EntityEntry entry)
+        {
+            Guard.ThrowIfNull(entry, nameof(entry));
+            var accessor = _nullifyCache.GetOrAdd(entry.Metadata.ClrType, _ => CreateNullifyAccessor(entry.Metadata));
+            foreach (var item in accessor)
+            {
+                var propEntry = entry.Property(item.property.Name);
+                if (propEntry.CurrentValue == null) { continue; }
+                var defaultValue = Activator.CreateInstance(item.underlyingType);
+                if (Equals(propEntry.CurrentValue, defaultValue)) { propEntry.CurrentValue = null; }
+            }
+        }
+        #endregion
     }
 }
