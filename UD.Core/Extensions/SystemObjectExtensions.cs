@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Extensions.Common
+﻿namespace UD.Core.Extensions
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using System.Dynamic;
     using System.Globalization;
     using UD.Core.Helper.Validation;
-    public static class ObjectExtensions
+    public static class SystemObjectExtensions
     {
         /// <summary>Nesneyi string değere dönüştürür. Nesne null ise boş string döndürür.</summary>
         /// <param name="value">String&#39;e dönüştürülecek nesne</param>

@@ -3,7 +3,6 @@ namespace UD.Core.Attributes.DataAnnotations
     using System.ComponentModel.DataAnnotations;
     using System.Net.Mail;
     using UD.Core.Extensions;
-    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]

@@ -1,8 +1,7 @@
 ﻿namespace UD.Core.Helper.Configuration
 {
     using System.Text.RegularExpressions;
-    using UD.Core.Extensions.Common;
-
+    using UD.Core.Extensions;
     public sealed class TitleCaseConfiguration
     {
         public enum ConjunctionDilTypes : byte

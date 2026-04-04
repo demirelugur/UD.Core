@@ -5,7 +5,6 @@
     using System.Net;
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
-    using UD.Core.Extensions.Common;
     using static UD.Core.Helper.GlobalConstants;
     public class ClientRequestInfoResult : IEquatable<ClientRequestInfoResult>
     {

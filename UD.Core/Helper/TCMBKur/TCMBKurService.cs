@@ -5,7 +5,7 @@ namespace UD.Core.Helper.TCMBKur
     using System.Globalization;
     using System.Text;
     using System.Xml.Linq;
-    using UD.Core.Extensions.Common;
+    using UD.Core.Extensions;
     using UD.Core.Helper.Validation;
     public interface ITCMBKurService // AddSingleton
     {

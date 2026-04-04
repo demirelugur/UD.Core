@@ -3,7 +3,6 @@
     using System.Text;
     using System.Text.RegularExpressions;
     using UD.Core.Extensions;
-    using UD.Core.Extensions.Common;
 
     public sealed class PasswordGenerator
     {

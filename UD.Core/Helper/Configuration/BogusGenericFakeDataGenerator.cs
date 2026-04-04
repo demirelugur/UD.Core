@@ -7,7 +7,6 @@
     using System.Net;
     using System.Net.Mail;
     using UD.Core.Extensions;
-    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     /// <summary>
     /// Sahte veri üretimi için kullanılan genel bir sınıf. Bogus kütüphanesini kullanarak farklı veri türlerinde özelleştirilebilir sahte veriler üretir.

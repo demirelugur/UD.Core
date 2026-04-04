@@ -3,8 +3,6 @@
     using System.ComponentModel;
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
-    using UD.Core.Extensions.Common;
-
     public interface ISearchAndPaginateDto
     {
         int pagenumber { get; set; }

@@ -1,10 +1,10 @@
-﻿namespace UD.Core.Extensions.Common
+﻿namespace UD.Core.Extensions
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
     using UD.Core.Helper.Validation;
-    public static class UriExtensions
+    public static class SystemUriExtensions
     {
         /// <summary>Verilen dizeye &quot;v&quot; parametresiyle bir sürüm numarası ekleyerek yeni bir URL oluşturur.</summary>
         /// <param name="uri">Temel URL.</param>

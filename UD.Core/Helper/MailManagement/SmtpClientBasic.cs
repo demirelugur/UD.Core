@@ -7,7 +7,6 @@
     using System.Net.Mail;
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
-    using UD.Core.Extensions.Common;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class SmtpClientBasic : IEquatable<SmtpClientBasic>
     {

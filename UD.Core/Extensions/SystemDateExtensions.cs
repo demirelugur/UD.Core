@@ -1,11 +1,10 @@
-﻿namespace UD.Core.Extensions.Common
+﻿namespace UD.Core.Extensions
 {
     using System;
     using System.Globalization;
-    using UD.Core.Extensions;
     using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
-    public static class DateExtensions
+    public static class SystemDateExtensions
     {
         /// <summary>Belirtilen <see cref="DateTime"/> nesnesini yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesine dönüştürür.</summary>
         /// <param name="dateTime">Dönüştürülecek <see cref="DateTime"/> nesnesi.</param>

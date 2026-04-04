@@ -1,10 +1,10 @@
-﻿namespace UD.Core.Extensions.Common
+﻿namespace UD.Core.Extensions
 {
     using System;
     using System.Linq;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
-    public static class ArrayExtensions
+    public static class SystemArrayExtensions
     {
         /// <summary>Hata mesajları dizisini iç içe geçmiş istisnalara dönüştürür.</summary>
         /// <param name="errors">Hata mesajlarının yer aldığı dizi.</param>

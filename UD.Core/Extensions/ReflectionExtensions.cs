@@ -6,7 +6,6 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Reflection;
     using UD.Core.Attributes;
-    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     public static class ReflectionExtensions

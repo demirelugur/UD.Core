@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Helper.MailManagement
 {
     using System.Net.Mail;
-    using UD.Core.Extensions.Common;
+    using UD.Core.Extensions;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     public sealed class MailHelper

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using UD.Core.Extensions.Common;
+    using UD.Core.Extensions;
     using UD.Core.Helper.Results;
     public class BaseEnumCache<TEnum> where TEnum : struct, Enum
     {

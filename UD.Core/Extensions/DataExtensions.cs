@@ -1,8 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
     using System.Data;
-    using UD.Core.Extensions;
-    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     public static class DataExtensions

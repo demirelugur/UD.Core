@@ -13,7 +13,6 @@
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Extensions;
-    using UD.Core.Extensions.Common;
     public sealed class Converters
     {
         /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.</summary>
@@ -132,7 +131,7 @@
                 _ => throw new NotSupportedException(ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? $"Invalid or unsupported {nameof(systemTypeId)}: {systemTypeId}" : $"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
             };
         }
-        /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="ArrayExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>
+        /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="SystemArrayExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>
         /// <param name="dataUri">Dönüştürülecek data URI string&#39;i. Biçim: &quot;data:[MIME-type];base64,[base64-encoded-data]&quot;</param>
         /// <returns>Binary veri (byte[]) ve MIME tipini içeren bir tuple döner.</returns>
         /// <exception cref="ArgumentException">Geçersiz data URI biçimi veya eksik MIME tipi/base64 verisi durumunda fırlatılır.</exception>

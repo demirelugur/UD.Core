@@ -10,7 +10,6 @@ namespace UD.Core.Extensions
     using System.Text;
     using UD.Core.Attributes;
     using UD.Core.Auditing;
-    using UD.Core.Extensions.Common;
     using UD.Core.Helper;
     using UD.Core.Helper.Database;
     using UD.Core.Helper.Validation;
@@ -143,19 +142,7 @@ namespace UD.Core.Extensions
         /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden eklenmiþ (Added) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, eklenen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, eklenen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
         /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
         /// <returns>Eklenen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
-        public static ChangeEntry[] GetAdded(this DbContext context) => context.ChangeTracker
-        .Entries()
-        .Where(e => e.State == EntityState.Added)
-        .Select(entry =>
-        {
-            var changes = entry.CurrentValues.Properties
-            .Where(prop => prop.PropertyInfo.IsMapped())
-            .ToDictionary(
-               prop => prop.PropertyInfo.GetColumnName(),
-               prop => new ChangePropertyInfo(null, (prop.PropertyInfo.IsHtmlContent() ? HtmlContentAttribute.title : entry.CurrentValues[prop]))
-            );
-            return new ChangeEntry(entry, changes);
-        }).ToArray();
+        public static ChangeEntry[] GetAdded(this DbContext context) => context.ChangeTracker.Entries().Where(x => x.State == EntityState.Added).Select(x => new ChangeEntry(x, default)).ToArray();
         /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden güncellenmiþ (Modified) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, güncellenen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, güncellenen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
         /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
         /// <returns>Güncellenen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
@@ -182,19 +169,7 @@ namespace UD.Core.Extensions
         /// <summary><paramref name="context"/> içerisindeki <see cref="DbContext.ChangeTracker"/> üzerinden silinmiþ (Deleted) durumdaki entity&#39;leri tespit eder. Her entity için property bazýnda eski ve yeni deðerler karþýlaþtýrýlarak sadece deðeri deðiþmiþ olanlar filtrelenir. Sonuç olarak, silinen kayýtlarýn detaylarýný içeren bir sözlük (Dictionary) yapýsý döndürülür. Bu yapý, silinen kayýtlarýn kapsamlý bir þekilde izlenmesini saðlar.</summary>
         /// <param name="context">Ýþlem yapýlacak <see cref="DbContext"/> örneði.</param>
         /// <returns>Silinen kayýtlarýn detaylarýný içeren bir <see cref="ChangeEntry"/> dizisi döndürür.</returns>
-        public static ChangeEntry[] GetDeleted(this DbContext context) => context.ChangeTracker
-        .Entries()
-        .Where(e => e.State == EntityState.Deleted)
-        .Select(entry =>
-        {
-            var changes = entry.OriginalValues.Properties
-            .Where(prop => prop.PropertyInfo.IsMapped())
-            .ToDictionary(
-                prop => prop.PropertyInfo.GetColumnName(),
-                prop => new ChangePropertyInfo(prop.PropertyInfo.IsHtmlContent() ? HtmlContentAttribute.title : entry.OriginalValues[prop], null)
-            );
-            return new ChangeEntry(entry, changes);
-        }).ToArray();
+        public static ChangeEntry[] GetDeleted(this DbContext context) => context.ChangeTracker.Entries().Where(e => e.State == EntityState.Deleted).Select(entry => new ChangeEntry(entry, default)).ToArray();
         #endregion
         /// <summary>Modeldeki <see cref="ISoftDelete"/> arayüzünü uygulayan tüm entity tiplerine global sorgu filtresi ekleyerek, <c>IsDeleted = true</c> olan (soft delete edilmiþ) kayýtlarýn sorgularda varsayýlan olarak gelmesini engeller.</summary>
         /// <remarks>Bu filtre, yalnýzca <see cref="ISoftDelete"/> implement eden entity&#39;lere uygulanýr. Soft delete edilmiþ kayýtlarý da getirmek gerektiðinde EF Core tarafýnda <c>IgnoreQueryFilters()</c> kullanýlabilir.</remarks>

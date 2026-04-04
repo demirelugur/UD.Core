@@ -1,4 +1,4 @@
-namespace UD.Core.Extensions.Common
+namespace UD.Core.Extensions
 {
     using Newtonsoft.Json.Linq;
     using System;
@@ -9,10 +9,9 @@ namespace UD.Core.Extensions.Common
     using System.Text;
     using System.Text.RegularExpressions;
     using UD.Core.Enums;
-    using UD.Core.Extensions;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
-    public static class StringExtensions
+    public static class SystemStringExtensions
     {
         /// <summary>Bir string&#39;i Guid&#39;e dönüþtürür. String null veya geçersizse varsayýlan Guid döner.</summary>
         /// <param name="value">Dönüþtürülecek string.</param>

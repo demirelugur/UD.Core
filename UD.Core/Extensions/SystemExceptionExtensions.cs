@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Extensions.Common
+﻿namespace UD.Core.Extensions
 {
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -6,9 +6,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Net;
-    using UD.Core.Extensions;
     using UD.Core.Helper.Validation;
-    public static class ExceptionExtensions
+    public static class SystemExceptionExtensions
     {
         /// <summary>Verilen istisnanın en içteki (inner) istisnasını döner.</summary>
         /// <param name="exception">İşlem yapılacak istisna.</param>

@@ -1,11 +1,10 @@
-﻿namespace UD.Core.Extensions.Common
+﻿namespace UD.Core.Extensions
 {
     using System;
     using System.Globalization;
     using System.Linq;
-    using UD.Core.Extensions;
     using static UD.Core.Helper.GlobalConstants;
-    public static class NumericExtensions
+    public static class SystemNumericExtensions
     {
         /// <summary>Unix zaman damgasını, yerel bir <see cref="DateTime"/> değerine dönüştürür.</summary>
         /// <param name="getTime">Unix zaman damgası (milisaniye cinsinden).</param>
