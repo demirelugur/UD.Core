@@ -67,7 +67,7 @@
                 i++;
             }
             if (r.Length <= maxLength) { return r; }
-            if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
+            if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
             throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxLength} karakterlik maksimum uzunluğu aşıyor!");
         }
         /// <summary>IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>
@@ -106,7 +106,7 @@
                 try { orderedSource = source.OrderBy(sorting); }
                 catch (Exception ex)
                 {
-                    if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
+                    if (ValidationChecks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
                     throw new InvalidOperationException($"Sıralama hatası: {sorting}", ex);
                 }
             }

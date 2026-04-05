@@ -23,7 +23,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, geçerli bir \"http, https\" protokollerine uygun {nameof(Uri)} adresi olmalıdır!";
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid {nameof(Uri)} address in the \"http, https\" protocols!"; }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid {nameof(Uri)} address in the \"http, https\" protocols!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

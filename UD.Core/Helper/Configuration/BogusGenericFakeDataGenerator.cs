@@ -171,7 +171,7 @@
                 var ctor = type.GetConstructors().FirstOrDefault();
                 if (ctor == null)
                 {
-                    if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"No public constructor found for \"{type.FullName}\"!"); }
+                    if (ValidationChecks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"No public constructor found for \"{type.FullName}\"!"); }
                     throw new InvalidOperationException($"\"{type.FullName}\" için genel bir kurucu (Constructors) bulunamadı!");
                 }
                 var args = ctor.GetParameters().Select(x => this.createFakeInstance(x.Name, x.ParameterType, faker)).ToArray();

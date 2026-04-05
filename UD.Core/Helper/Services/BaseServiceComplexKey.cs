@@ -32,7 +32,7 @@
         protected BaseServiceComplexKey(TContext Context, IMapper Mapper) : base(Context, Mapper) { }
         public virtual async Task<TEntityDto?> GetById(object[] keyValues, CancellationToken cancellationToken = default)
         {
-            if (keyValues.IsNullOrCountZero()) { return default; }
+            if (keyValues.IsNullOrEmptyOrAllNull()) { return default; }
             var entity = await this.DbSet.FindAsync(keyValues, cancellationToken);
             return entity == null ? default : this.Mapper.Map<TEntityDto>(entity);
         }
@@ -45,7 +45,7 @@
         }
         public virtual async Task Update(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            if (!keyValues.IsNullOrCountZero())
+            if (!keyValues.IsNullOrEmptyOrAllNull())
             {
                 Guard.ThrowIfNull(updateDto, nameof(updateDto));
                 var entity = await this.DbSet.FindAsync(keyValues, cancellationToken);
@@ -58,7 +58,7 @@
         }
         public virtual async Task DeleteById(object[] keyValues, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            if (!keyValues.IsNullOrCountZero())
+            if (!keyValues.IsNullOrEmptyOrAllNull())
             {
                 var entity = await this.DbSet.FindAsync(keyValues, cancellationToken);
                 await base.Delete(entity, autoSave, cancellationToken);

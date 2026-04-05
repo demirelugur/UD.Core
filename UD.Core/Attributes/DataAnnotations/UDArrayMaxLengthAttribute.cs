@@ -8,7 +8,7 @@
     {
         public UDArrayMaxLengthAttribute(int maximumLength) : base(maximumLength)
         {
-            this.ErrorMessage = ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "{0} cannot contain more than {1} elements." : ValidationErrorMessageConstants.ArrayMaxLength;
+            this.ErrorMessage = ValidationChecks.IsEnglishCurrentUICulture ? "{0} cannot contain more than {1} elements." : ValidationErrorMessageConstants.ArrayMaxLength;
         }
     }
 }

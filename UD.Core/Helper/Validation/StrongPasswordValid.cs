@@ -26,39 +26,39 @@
             var r = new List<string>();
             if (!PasswordGenerator.IsStrongPassword(value, this.minimumLength))
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { r.Add($"The password must have a minimum of {this.minimumLength} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { r.Add($"The password must have a minimum of {this.minimumLength} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
                 else { r.Add($"Şifre minimum {this.minimumLength} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }
             }
             if (this.maximumLength.HasValue && value.Length > this.maximumLength.Value)
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { r.Add($"Password can be maximum {this.maximumLength.Value} characters!"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { r.Add($"Password can be maximum {this.maximumLength.Value} characters!"); }
                 else { r.Add($"Şifre maksimum {this.maximumLength.Value} karakter olabilir!"); }
             }
             if (this.isConsecutive && this.checkConsecutive(value))
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { r.Add("The password must not contain 3 consecutive numbers! (123, 987 etc...)"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { r.Add("The password must not contain 3 consecutive numbers! (123, 987 etc...)"); }
                 else { r.Add("Şifre içerisinde 3 ardışık sayı (123, 987 vb...) bulunmamalıdır!"); }
             }
             if (this.isEmpty && value.Contains(' '))
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { r.Add("There should be no empty characters in the password!"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { r.Add("There should be no empty characters in the password!"); }
                 else { r.Add("Şifre içerisinde boş karakter bulunmamalıdır!"); }
             }
             if (this.isTurkishSpecialCharacter && value.Any(ArrayConstants.TurkishSpecialCharacters.Contains))
             {
                 var t = String.Join(", ", ArrayConstants.TurkishSpecialCharacters);
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { r.Add($"The password must not contain any letters specific to the Turkish language! ({t})"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { r.Add($"The password must not contain any letters specific to the Turkish language! ({t})"); }
                 else { r.Add($"Şifre içerisinde Türk diline özgü harf ({t}) bulunmamalıdır!"); }
             }
             var passwordSeo = value.ToSeoFriendly();
             if (this.checkNameSurname(passwordSeo, name))
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { r.Add("Your name(s) must not appear in the password!"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { r.Add("Your name(s) must not appear in the password!"); }
                 else { r.Add("Şifre içerisinde adınız/adlarınız geçmemelidir!"); }
             }
             if (this.checkNameSurname(passwordSeo, surname))
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { r.Add("Your surname(s) must not appear in the password!"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { r.Add("Your surname(s) must not appear in the password!"); }
                 else { r.Add("Şifre içerisinde soyadınız/soyadlarınız geçmemelidir!"); }
             }
             errors = r.ToArray();

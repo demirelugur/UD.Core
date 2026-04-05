@@ -16,7 +16,7 @@
         {
             if (jToken.IsNullOrUndefined()) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
-            if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
+            if (ValidationChecks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
             throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
     }

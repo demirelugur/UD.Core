@@ -22,7 +22,7 @@ namespace UD.Core.Attributes.DataAnnotations
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, {typeofEnum.FullName} türünden bir {nameof(Enum)} değeri olmalıdır!";
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid {nameof(Enum)} value of type {typeofEnum.FullName}!"; }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid {nameof(Enum)} value of type {typeofEnum.FullName}!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

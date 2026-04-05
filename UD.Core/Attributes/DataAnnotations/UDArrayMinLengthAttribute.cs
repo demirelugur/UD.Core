@@ -9,7 +9,7 @@
         public UDArrayMinLengthAttribute() : this(1) { }
         public UDArrayMinLengthAttribute(int minimumLength) : base(minimumLength)
         {
-            this.ErrorMessage = minimumLength > 1 ? (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "{0} cannot be left blank! It must contain at least {1} element." : ValidationErrorMessageConstants.ArrayMinLength) : (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "{0} cannot be left blank!" : ValidationErrorMessageConstants.Required);
+            this.ErrorMessage = minimumLength > 1 ? (ValidationChecks.IsEnglishCurrentUICulture ? "{0} cannot be left blank! It must contain at least {1} element." : ValidationErrorMessageConstants.ArrayMinLength) : (ValidationChecks.IsEnglishCurrentUICulture ? "{0} cannot be left blank!" : ValidationErrorMessageConstants.Required);
         }
     }
 }

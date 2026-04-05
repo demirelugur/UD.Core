@@ -75,22 +75,22 @@
         {
             var type = typeof(TEntity);
             var properties = this.Context.Model.FindEntityType(type)?.FindPrimaryKey()?.Properties;
-            var keyName = (properties != null && properties.Count > 0) ? properties[0].Name : "";
+            var keyName = (properties.IsNullOrEmptyOrAllNull() ? "" : properties[0].Name);
             if (keyName.IsNullOrEmpty())
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException("PK not found"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new InvalidOperationException("PK not found"); }
                 throw new InvalidOperationException("Birincil Anahtar(PK) bulunamadı!");
             }
             var property = type.GetProperty(keyName);
             if (property == null)
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"Property \"{keyName}\" not found on {type.Name}"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Property \"{keyName}\" not found on {type.Name}"); }
                 throw new InvalidOperationException($"\"{keyName}\" özelliği \"{type.Name}\" üzerinde bulunamadı!");
             }
             var value = property.GetValue(entity);
             if (value == null)
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"Key value is null"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Key value is null"); }
                 throw new InvalidOperationException($"Anahtar(Key) değeri boş.");
             }
             return (TKey)value;

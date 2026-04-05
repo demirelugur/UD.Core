@@ -25,7 +25,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, geçerli bir IP adresi olmalıdır!";
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid IP address!"; }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid IP address!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

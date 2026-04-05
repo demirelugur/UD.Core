@@ -5,9 +5,9 @@ namespace UD.Core.UnitTest
     using Newtonsoft.Json.Linq;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Globalization;
     using System.IO;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     [TestFixture]
     public class ConnectionTest
     {
@@ -16,7 +16,8 @@ namespace UD.Core.UnitTest
         [SetUp]
         public void Setup()
         {
-            Utilities.SetDefaultThreadCulture("tr-TR");
+            CultureInfo.CurrentCulture = new("en-US");
+            CultureInfo.CurrentUICulture = new("en-US");
             this.connection = new("Data Source=:memory:");
             this.connection.Open();
             this.context = new(new DbContextOptionsBuilder<TestDbContext>().UseSqlite(this.connection).Options);
@@ -32,9 +33,7 @@ namespace UD.Core.UnitTest
         public async Task Test2()
         {
             await Task.CompletedTask;
-            //var il = await this.context.Ils.FindAsync((byte)1);
         }
-
         [TearDown]
         public void Cleanup()
         {
@@ -42,7 +41,6 @@ namespace UD.Core.UnitTest
             this.context.Dispose();
             this.connection.Dispose();
         }
-
         private void SeedIlAndIlceData()
         {
             var json = File.ReadAllText(ResolveJsonFilePath);

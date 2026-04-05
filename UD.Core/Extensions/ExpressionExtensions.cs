@@ -28,7 +28,7 @@
             }
             if (result.IsNullOrEmpty())
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The value of \"{expression}\" is incompatible!", nameof(expression)); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The value of \"{expression}\" is incompatible!", nameof(expression)); }
                 throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression));
             }
             return result;

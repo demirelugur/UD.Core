@@ -65,24 +65,17 @@
             hasRight = r != null,
             right = r
         });
-        /// <summary>Kaynakdaki elemanların sırasını <b>Fisher - Yates algoritmasını</b> kullanarak rastgele karıştırır ve karıştırılmış bir ICollection olarak geri döner.</summary>
-        /// <typeparam name="T">Kaynağın eleman türü.</typeparam>
-        /// <param name="source">Rastgele sıralanacak orijinal kaynak.</param>
-        /// <returns>Karıştırılmış elemanları içeren yeni bir ICollection&lt;T&gt; örneği.</returns>
-        /// <remarks>Bu metot, verilen IEnumerable&lt;T&gt; kaynakdaki elemanların yerini <b>Fisher - Yates algoritması</b> ile rastgele değiştirir. Karıştırılmış elemanları yeni bir ICollection&lt;T&gt; olarak döndürür. &quot;Random.Shared&quot; ile tek bir Random örneği paylaşılır, bu da çoklu iş parçacıklı senaryolarda daha güvenilir bir kullanım sağlar.</remarks>
-        public static ICollection<T> Shuffle<T>(this IEnumerable<T> source)
+        /// <summary><paramref name="source"/> koleksiyonunun null, boş veya tüm öğelerinin null olup olmadığını kontrol eder. Koleksiyon null ise, boş ise veya tüm öğeleri null ise <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
+        public static bool IsNullOrEmptyOrAllNull<T>(this IEnumerable<T> source)
         {
-            T temp;
-            var r = (source == null ? [] : source.ToList());
-            int i, j, _count = (r.Count - 1);
-            for (i = _count; i > 0; i--)
+            if (source == null) { return true; } // Alternatif: (source == null || !source.Any() || source.All(x => x == null))
+            using (var enumerator = source.GetEnumerator())
             {
-                j = Random.Shared.Next(0, i + 1);
-                temp = r[i];
-                r[i] = r[j];
-                r[j] = temp;
+                if (!enumerator.MoveNext()) { return true; }
+                do { if (enumerator.Current != null) { return false; } }
+                while (enumerator.MoveNext());
             }
-            return r;
+            return true;
         }
         #endregion
         #region ICollection
@@ -99,11 +92,6 @@
             if (!leftIsNull && !rightIsNull && left.Count == right.Count && left.All(right.Contains)) { return true; }
             return false;
         }
-        /// <summary>Verilen koleksiyonun boş veya null olup olmadığını kontrol eder.</summary>
-        /// <typeparam name="T">Koleksiyon tipi.</typeparam>
-        /// <param name="source">Kontrol edilecek koleksiyon.</param>
-        /// <returns>Boş veya null ise <see langword="true"/>, aksi halde <see langword="false"/> döner.</returns>
-        public static bool IsNullOrCountZero<T>(this ICollection<T> source) => (source == null || source.Count == 0 || source.All(x => x == null));
         /// <summary>Başka bir koleksiyondan mevcut koleksiyona öğeleri topluca ekler. <see cref="List{T}"/> için optimize edilmiş bir yöntemdir.</summary>
         /// <typeparam name="T">Koleksiyon tipi.</typeparam>
         /// <param name="initial">Öğelerin ekleneceği mevcut koleksiyon.</param>
@@ -111,7 +99,7 @@
         public static void AddRangeOptimized<T>(this ICollection<T> initial, IEnumerable<T> other)
         {
             Guard.ThrowIfNull(initial, nameof(initial));
-            if (other != null && other.Any())
+            if (!other.IsNullOrEmptyOrAllNull())
             {
                 if (initial is List<T> _l) { _l.AddRange(other); }
                 else { foreach (var item in other) { initial.Add(item); } }

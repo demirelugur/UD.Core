@@ -89,7 +89,7 @@
         /// <summary>TimeSpan değerini gün, saat, dakika ve saniye (milisaniye dahil) bileşenlerine ayırarak okunabilir bir metne dönüştürür. Negatif süreleri destekler.</summary>
         public static string ToPretty(this TimeSpan timeSpan)
         {
-            var isEnglish = ValidationChecks.IsEnglishDefaultThreadCurrentUICulture;
+            var isEnglish = ValidationChecks.IsEnglishCurrentUICulture;
             var secondText = isEnglish ? "sec." : "sn.";
             if (timeSpan == TimeSpan.Zero) { return String.Concat("0 ", secondText); }
             var isNegative = timeSpan < TimeSpan.Zero;

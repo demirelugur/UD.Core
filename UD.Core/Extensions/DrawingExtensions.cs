@@ -33,7 +33,7 @@
             Guard.ThrowIfNull(image, nameof(image));
             if (size.IsEmpty)
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"{nameof(size)} parameter must be valid!", nameof(size)); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"{nameof(size)} parameter must be valid!", nameof(size)); }
                 throw new ArgumentException($"{nameof(size)} parametresi geçerli olmalıdır!", nameof(size));
             }
             var bm = new Bitmap(size.Width, size.Height); // Not: using kullanılırsa bitmap değerleri iletilmemekte

@@ -27,10 +27,10 @@
             }
             return services;
         }
-        /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> arayüzünü uygulayan veya <see cref="BaseService{TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto}"/> sınıfından türeyen tüm servis sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
-        public static IServiceCollection AddScopedRangeBaseService(this IServiceCollection services, Assembly assembly)
+        /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseInfrastructureService{TContext, TEntity}"/> arayüzünü uygulayan veya <see cref="BaseInfrastructureService{TContext, TEntity}"/> sınıfından türeyen tüm servis sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
+        public static IServiceCollection AddScopedRangeBaseInfrastructureService(this IServiceCollection services, Assembly assembly)
         {
-            services.AddScopedRange(assembly, typeof(IBaseService<,,,,>), typeof(BaseService<,,,,>));
+            services.AddScopedRange(assembly, typeof(IBaseInfrastructureService<,>), typeof(BaseInfrastructureService<,>));
             return services;
         }
     }

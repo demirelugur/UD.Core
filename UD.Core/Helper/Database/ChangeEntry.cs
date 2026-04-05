@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Helper.Database
 {
-    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System.Linq;
@@ -18,7 +17,7 @@
             this.entity = entity ?? [];
             this.changeProperties = changeProperties ?? [];
         }
-        /// <summary><paramref name="value"/> için tanımlanan nesneler: ChangeEntry, EntityEntry, IFormCollection, AnonymousObjectClass</summary>
+        /// <summary><paramref name="value"/> için tanımlanan nesneler: ChangeEntry, EntityEntry, AnonymousObjectClass</summary>
         public static ChangeEntry ToEntityFromObject(object value)
         {
             if (value == null) { return new(); }
@@ -44,12 +43,12 @@
                 }
                 return new(_ee.Metadata.ClrType.GetTableName(true), extractScalarProperties(_ee.Entity, _ee.Metadata.ClrType), changes);
             }
-            if (value is IFormCollection _form)
-            {
-                var (hasError, model, errors) = _form.TryBindFromFormAsync<ChangeEntry>().GetAwaiter().GetResult();
-                if (hasError) { throw errors.ToNestedException(); }
-                return model;
-            }
+            //if (value is IFormCollection _form)
+            //{
+            //    var (hasError, model, errors) = _form.TryBindFromFormAsync<ChangeEntry>().GetAwaiter().GetResult();
+            //    if (hasError) { throw errors.ToNestedException(); }
+            //    return model;
+            //}
             return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ChangeEntry((string)x.entityName, (Dictionary<string, object>)x.entity, (Dictionary<string, ChangePropertyInfo>)x.changeProperties)).FirstOrDefault();
         }
         private static Dictionary<string, object> extractScalarProperties(object entity, Type entityType)

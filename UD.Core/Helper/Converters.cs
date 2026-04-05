@@ -56,7 +56,7 @@
             if (obj is Dictionary<string, object> _d) { return _d; }
             var t = obj.GetType();
             if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
-            if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
+            if (ValidationChecks.IsEnglishCurrentUICulture) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
             throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
         }
         /// <summary>Verilen nesneyi SQL parametrelerine dönüştürür. Eğer nesne <see cref="SqlParameter"/> türünde ise doğrudan SQL parametreleri olarak döner. Özel sınıf türlerinde çalışır ve özellik isimlerine göre SQL parametrelerini oluşturur.<para><paramref name="obj"/> için tanımlanan nesneler: SqlParameter, IEnumerable&lt;SqlParameter&gt;, IDictionary&lt;string, object&gt;, AnonymousObjectClass</para></summary>
@@ -128,7 +128,7 @@
                 231 => SqlDbType.NVarChar,
                 239 => SqlDbType.NChar,
                 241 => SqlDbType.Xml,
-                _ => throw new NotSupportedException(ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? $"Invalid or unsupported {nameof(systemTypeId)}: {systemTypeId}" : $"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
+                _ => throw new NotSupportedException(ValidationChecks.IsEnglishCurrentUICulture ? $"Invalid or unsupported {nameof(systemTypeId)}: {systemTypeId}" : $"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
             };
         }
         /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="SystemArrayExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>
@@ -139,9 +139,9 @@
         public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string dataUri)
         {
             dataUri = dataUri.ToStringOrEmpty();
-            if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
+            if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(ValidationChecks.IsEnglishCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
             var parts = dataUri.Substring(5).Split([";base64,"], StringSplitOptions.None);
-            if (parts.Length != 2) { throw new ArgumentException(ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
+            if (parts.Length != 2) { throw new ArgumentException(ValidationChecks.IsEnglishCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
             return (Convert.FromBase64String(parts[1]), parts[0]);
         }
         /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
@@ -154,7 +154,7 @@
             if (value == null)
             {
                 if (t) { return null; }
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException("Value cannot be null for a non-nullable type!"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException("Value cannot be null for a non-nullable type!"); }
                 throw new ArgumentException("Null değer alamayan bir tür için değer null olamaz!");
             }
             if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
@@ -175,59 +175,61 @@
         }
         private static (object value, Type genericBaseType) parseOrDefault(string value, Type propertyType)
         {
+            value = value.ToStringOrEmpty();
+            if (value == "") { return (default, default); }
+            _ = TryValidators.TryTypeIsNullable(propertyType, out Type _genericBaseType);
+            if (_genericBaseType.IsEnum)
+            {
+                if (Enum.TryParse(_genericBaseType, value, true, out object _enum)) { return (_enum, _genericBaseType); }
+                return (default, _genericBaseType);
+            }
+            if (_genericBaseType == typeof(bool))
+            {
+                if (value == "0") { return (false, _genericBaseType); }
+                if (value == "1") { return (true, _genericBaseType); }
+                if (Boolean.TryParse(value, out bool _bo)) { return (_bo, _genericBaseType); }
+                return (default, _genericBaseType);
+            }
+            if (_genericBaseType == typeof(DateOnly))
+            {
+                if (DateOnly.TryParse(value, out DateOnly _da)) { return (_da, _genericBaseType); }
+                var date = value.ParseOrDefault<DateTime?>();
+                if (date.HasValue) { return (date.Value.ToDateOnly(), _genericBaseType); }
+                return (default, _genericBaseType);
+            }
+            if (_genericBaseType == typeof(TimeSpan))
+            {
+                if (TimeSpan.TryParse(value, out TimeSpan _ts)) { return (_ts, _genericBaseType); }
+                return (default, _genericBaseType);
+            }
+            if (_genericBaseType == typeof(TimeOnly))
+            {
+                if (TimeOnly.TryParse(value, out TimeOnly _to)) { return (_to, _genericBaseType); }
+                var ts = value.ParseOrDefault<TimeSpan?>();
+                if (ts.HasValue) { return (ts.Value.ToTimeOnly(), _genericBaseType); }
+                return (default, _genericBaseType);
+            }
+            if (_genericBaseType == typeof(Uri))
+            {
+                if (TryValidators.TryUri(value, out Uri _u)) { return (_u, _genericBaseType); }
+                return (default, _genericBaseType);
+            }
+            if (_genericBaseType == typeof(MailAddress))
+            {
+                if (TryValidators.TryMailAddress(value, out MailAddress _ma)) { return (_ma, _genericBaseType); }
+                return (default, _genericBaseType);
+            }
+            if (_genericBaseType == typeof(IPAddress))
+            {
+                if (IPAddress.TryParse(value, out IPAddress _ip)) { return (_ip, _genericBaseType); }
+                return (default, _genericBaseType);
+            }
+            if (value.IndexOf('.') > -1 && _genericBaseType.Includes(typeof(float), typeof(double), typeof(decimal))) { value = value.Replace(".", ",", StringComparison.InvariantCulture); }
             try
             {
-                value = value.ToStringOrEmpty();
-                if (value == "") { return (default, default); }
-                _ = TryValidators.TryTypeIsNullable(propertyType, out Type _genericBaseType);
-                if (_genericBaseType.IsEnum)
-                {
-                    if (Enum.TryParse(_genericBaseType, value, true, out object _enum)) { return (_enum, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(bool))
-                {
-                    if (value == "0") { return (false, _genericBaseType); }
-                    if (value == "1") { return (true, _genericBaseType); }
-                    if (Boolean.TryParse(value, out bool _bo)) { return (_bo, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(DateOnly))
-                {
-                    if (DateOnly.TryParse(value, out DateOnly _da)) { return (_da, _genericBaseType); }
-                    var date = value.ParseOrDefault<DateTime?>();
-                    if (date.HasValue) { return (date.Value.ToDateOnly(), _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(TimeSpan))
-                {
-                    if (TimeSpan.TryParse(value, out TimeSpan _ts)) { return (_ts, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(TimeOnly))
-                {
-                    if (TimeOnly.TryParse(value, out TimeOnly _to)) { return (_to, _genericBaseType); }
-                    var ts = value.ParseOrDefault<TimeSpan?>();
-                    if (ts.HasValue) { return (ts.Value.ToTimeOnly(), _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(Uri))
-                {
-                    if (TryValidators.TryUri(value, out Uri _u)) { return (_u, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(MailAddress))
-                {
-                    if (TryValidators.TryMailAddress(value, out MailAddress _ma)) { return (_ma, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (_genericBaseType == typeof(IPAddress))
-                {
-                    if (IPAddress.TryParse(value, out IPAddress _ip)) { return (_ip, _genericBaseType); }
-                    return (default, _genericBaseType);
-                }
-                if (value.IndexOf('.') > -1 && _genericBaseType.Includes(typeof(float), typeof(double), typeof(decimal))) { value = value.Replace(".", ",", StringComparison.InvariantCulture); }
-                return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(value), _genericBaseType);
+                var converter = TypeDescriptor.GetConverter(propertyType);
+                var aaa = converter.CanConvertFrom(typeof(string));
+                return (converter.ConvertFrom(value), _genericBaseType);
             }
             catch { return (default, default); }
         }

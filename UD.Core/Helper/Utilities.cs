@@ -124,7 +124,7 @@
         {
             if (basDate > bitDate)
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
                 throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!");
             }
             var ts = (bitDate - basDate).ToTimeOnly();
@@ -191,26 +191,17 @@
             var type = entity.GetType();
             if (!type.IsCustomClass())
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new ArgumentException($"The \"{nameof(entity)}\" argument type must be class!", nameof(entity)); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The \"{nameof(entity)}\" argument type must be class!", nameof(entity)); }
                 throw new ArgumentException($"\"{nameof(entity)}\" argümanı türü class olmalıdır!", nameof(entity));
             }
             var pi = type.GetProperty(propertyName);
             Guard.ThrowIfNull(pi, nameof(pi));
             if (!pi.CanWrite)
             {
-                if (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
+                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
                 throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
             }
             pi.SetValue(entity, Converters.ChangeType(propertyNewValue, pi.PropertyType));
-        }
-        /// <summary><paramref name="culture"/> parametresi ile belirtilen kültür bilgisini kullanarak, uygulamanın varsayılan thread kültürünü ve varsayılan thread UI kültürünü ayarlar. Bu metod, uygulamanın farklı kültürlerde çalışmasını sağlamak için kullanılabilir. <paramref name="culture"/> geçerli bir kültür kodu (örneğin &quot;en-US&quot;, &quot;tr-TR&quot;) içermelidir. Eğer geçerli bir kültür kodu sağlanmazsa, bir hata fırlatılır.</summary>
-        public static void SetDefaultThreadCulture(string culture)
-        {
-            Guard.ThrowIfEmpty(culture, nameof(culture));
-            var ci = new CultureInfo(culture);
-            Guard.ThrowIfNull(ci, nameof(ci));
-            CultureInfo.DefaultThreadCurrentCulture = ci;
-            CultureInfo.DefaultThreadCurrentUICulture = ci;
         }
         /// <summary>Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.</summary>
         /// <typeparam name="TEnum">Enum türü (generic).</typeparam>
@@ -218,8 +209,8 @@
         /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
         public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : struct, Enum
         {
-            var r = new HashSet<string> { typeof(TEnum).FullName, (ValidationChecks.IsEnglishDefaultThreadCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
-            if (!details.IsNullOrCountZero()) { r.AddRangeOptimized(details); }
+            var r = new HashSet<string> { typeof(TEnum).FullName, (ValidationChecks.IsEnglishCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
+            if (!details.IsNullOrEmptyOrAllNull()) { r.AddRangeOptimized(details); }
             return new(String.Join(" ", r));
         }
         /// <summary>Script etiketlerini varsayılan olarak temizleyen bir HtmlSanitizer nesnesi oluşturur. Bu metod, HTML içeriğini temizlemek ve güvenli hale getirmek için kullanılabilir. Oluşturulan HtmlSanitizer nesnesi, script etiketlerini temizleyerek potansiyel XSS saldırılarına karşı koruma sağlar. İsteğe bağlı olarak, farklı temizleme seçenekleri belirten bir HtmlSanitizerOptions nesnesi de sağlanabilir.</summary>
