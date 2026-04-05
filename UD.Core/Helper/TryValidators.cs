@@ -287,7 +287,7 @@
             from = from.ToStringOrEmpty();
             if (value == "" || to == "" || from == "")
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { return (true, "", new ArgumentException("Value, to and from parameters cannot be empty.")); }
+                if (Checks.IsEnglishCurrentUICulture) { return (true, "", new ArgumentException("Value, to and from parameters cannot be empty.")); }
                 return (true, "", new ArgumentException("Value, to ve from parametreleri boş olamaz."));
             }
             try

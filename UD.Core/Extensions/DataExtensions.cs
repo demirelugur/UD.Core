@@ -123,7 +123,7 @@
                 key = key.ToStringOrEmpty();
                 var value = reader[key];
                 if (value == null || value == DBNull.Value) { return default; }
-                return value.ToString().ParseOrDefault<TKey>();
+                return value.ParseOrDefault<TKey>();
             }
             catch { return default; }
         }

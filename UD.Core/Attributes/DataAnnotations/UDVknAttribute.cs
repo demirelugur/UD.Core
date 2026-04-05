@@ -20,7 +20,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, T.C. Vergi Kimlik Numarası biçimine uygun olmalıdır!";
-                if (ValidationChecks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid T.C. Tax Identity Number format!"; }
+                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid T.C. Tax Identity Number format!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

@@ -8,7 +8,6 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Globalization;
     using System.Linq.Expressions;
     using System.Security.Cryptography;
     using System.Transactions;
@@ -69,7 +68,13 @@
         public static int GetStringOrMaxLength<T>(Expression<Func<T, string>> expression) where T : class => GetStringOrMaxLength<T>(expression.GetMemberName());
         /// <summary>
         /// Verilen string dizisinden kısaltma oluşturur. Her bir kelimenin baş harfini alarak noktalarla ayrılmış bir kısaltma döner. Boş veya null değerler atlanır.
-        /// <example><br />Örnek: <br />Uğur DEMİREL -> U.D <br />Mustafa Kemal ATATÜRK -> MK.A</example>
+        /// <example>
+        /// <para>Örnek:</para>
+        /// <list type="bullet">
+        /// <item><description><b>Uğur DEMİREL</b> -&gt; <b>U.D</b></description></item>
+        /// <item><description><b>Mustafa Kemal ATATÜRK</b> -&gt; <b>MK.A</b></description></item>
+        /// </list>
+        /// </example>
         /// </summary>
         /// <param name="names">Kısaltma için kullanılacak isim dizisi.</param>
         /// <returns>Verilen isimlerin baş harflerinden oluşan kısaltma. Eğer parametreler boş veya geçersizse boş string döner.</returns>
@@ -124,7 +129,7 @@
         {
             if (basDate > bitDate)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
                 throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!");
             }
             var ts = (bitDate - basDate).ToTimeOnly();
@@ -191,14 +196,14 @@
             var type = entity.GetType();
             if (!type.IsCustomClass())
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The \"{nameof(entity)}\" argument type must be class!", nameof(entity)); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The \"{nameof(entity)}\" argument type must be class!", nameof(entity)); }
                 throw new ArgumentException($"\"{nameof(entity)}\" argümanı türü class olmalıdır!", nameof(entity));
             }
             var pi = type.GetProperty(propertyName);
             Guard.ThrowIfNull(pi, nameof(pi));
             if (!pi.CanWrite)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
                 throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
             }
             pi.SetValue(entity, Converters.ChangeType(propertyNewValue, pi.PropertyType));
@@ -209,7 +214,7 @@
         /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
         public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : struct, Enum
         {
-            var r = new HashSet<string> { typeof(TEnum).FullName, (ValidationChecks.IsEnglishCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
+            var r = new HashSet<string> { typeof(TEnum).FullName, (Checks.IsEnglishCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
             if (!details.IsNullOrEmptyOrAllNull()) { r.AddRangeOptimized(details); }
             return new(String.Join(" ", r));
         }

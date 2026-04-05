@@ -32,10 +32,10 @@
         /// <param name="dictionary">Anahtar - Değer çiftleri içeren sözlük.</param>
         /// <param name="key">Sözlükte aranan anahtar (key).</param>
         /// <returns>Sözlükte belirtilen anahtara karşılık gelen değeri <typeparamref name="TKey"/> türüne dönüştürülmüş şekilde döndürür. Anahtar yoksa veya geçersizse, <typeparamref name="TKey"/> türünün varsayılan değerini döndürür.</returns>
-        public static TKey ParseOrDefault<TKey>(this IDictionary<string, string> dictionary, string key)
+        public static TKey ParseOrDefault<TKey>(this IDictionary<string, object> dictionary, string key)
         {
-            dictionary ??= new Dictionary<string, string>();
-            if (dictionary.TryGetValue(key.ToStringOrEmpty(), out string _value)) { return _value.ParseOrDefault<TKey>(); }
+            dictionary ??= new Dictionary<string, object>();
+            if (dictionary.TryGetValue(key.ToStringOrEmpty(), out object _value)) { return _value.ParseOrDefault<TKey>(); }
             return default;
         }
         #endregion

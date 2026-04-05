@@ -3,6 +3,8 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using System.Globalization;
+    using System.Security.Cryptography;
+
     public sealed class GlobalConstants
     {
         public const string Example = "https://example.com";
@@ -40,7 +42,10 @@
         {
             public const int CuzdanSeriNo = 9;
             public const int EMail = 50;
-            public const int Hash = 64;
+            /// <summary><see cref="SHA256.HashSizeInBytes"/> değerinin 2 katı</summary>
+            public const int HashSHA256 = 64;
+            /// <summary><see cref="SHA512.HashSizeInBytes"/> değerinin 2 katı</summary>
+            public const int HashSHA512 = 128;
             public const int IPAddress = 15;
             public const int Mac = 17;
             public const int Tckn = 11;

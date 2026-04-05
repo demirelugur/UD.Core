@@ -5,9 +5,19 @@
     using System.ComponentModel;
     using System.Dynamic;
     using System.Globalization;
+    using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     public static class SystemObjectExtensions
     {
+        /// <summary>Verilen bir dizeyi, belirtilen türde bir değere dönüştürür. Dönüşüm başarısız olursa, varsayılan değeri döner.</summary>
+        /// <typeparam name="TKey">Dönüşüm yapılacak hedef tür.</typeparam>
+        /// <param name="value">Dönüştürülecek dize değeri.</param>
+        /// <returns>Dönüştürülen değeri veya dönüşüm başarısızsa varsayılan değeri döner.</returns>
+        public static TKey ParseOrDefault<TKey>(this object value)
+        {
+            var pd = Converters.ParseOrDefault(value, typeof(TKey));
+            return pd is TKey _tValue ? _tValue : default;
+        }
         /// <summary>Nesneyi string değere dönüştürür. Nesne null ise boş string döndürür.</summary>
         /// <param name="value">String&#39;e dönüştürülecek nesne</param>
         /// <param name="provider">Kültüre özgü biçimlendirme bilgisi sağlayan nesne (opsiyonel)</param>
@@ -74,7 +84,8 @@
         public static decimal ToDecimal(this object value, decimal defaultValue = Decimal.Zero)
         {
             if (value == null) { return defaultValue; }
-            return value.ToStringOrEmpty(CultureInfo.InvariantCulture).ParseOrDefault<decimal?>() ?? defaultValue;
+            if (value is String) { value = value.ToStringOrEmpty(CultureInfo.InvariantCulture); }
+            return value.ParseOrDefault<decimal?>() ?? defaultValue;
         }
         /// <summary>Bir nesneyi dinamik bir nesneye (<see cref="ExpandoObject"/>) dönüştürür. Dönüştürülen nesne, içindeki tüm özellik adları ve değerleriyle birlikte dinamik bir yapı sunar.</summary>
         /// <param name="value">Dönüştürülecek nesne.</param>

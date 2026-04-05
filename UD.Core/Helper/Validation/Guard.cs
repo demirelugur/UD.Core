@@ -19,7 +19,7 @@
         {
             if (value.IsNullOrEmpty())
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentNullException(argName, $"The argument \"{argName}\" cannot be null or just a space!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentNullException(argName, $"The argument \"{argName}\" cannot be null or just a space!"); }
                 throw new ArgumentNullException(argName, $"\"{argName}\" argümanı boş (null) veya sadece boşluk olamaz!");
             }
         }
@@ -27,7 +27,7 @@
         {
             if (guid == Guid.Empty)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentNullException(argName, $"The argument \"{argName}\" cannot be \"{Guid.Empty}\"!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentNullException(argName, $"The argument \"{argName}\" cannot be \"{Guid.Empty}\"!"); }
                 throw new ArgumentNullException(argName, $"\"{argName}\" argümanı \"{Guid.Empty}\" değerini alamaz!");
             }
         }
@@ -35,7 +35,7 @@
         {
             if (source.IsNullOrEmptyOrAllNull())
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentNullException(argName, $"The argument \"{argName}\" cannot be null and must contain at least one item!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentNullException(argName, $"The argument \"{argName}\" cannot be null and must contain at least one item!"); }
                 throw new ArgumentNullException(argName, $"\"{argName}\" argümanı boş (null) olamaz ve en az bir öğe içermelidir!");
             }
         }
@@ -43,7 +43,7 @@
         {
             if (!TryValidators.TryJson<JToken>(json, jTokenType, out _))
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new JsonReaderException($"The argument \"{argName}\" must be in \"JSON\" format and of type \"{typeof(JTokenType).FullName}\"!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new JsonReaderException($"The argument \"{argName}\" must be in \"JSON\" format and of type \"{typeof(JTokenType).FullName}\"!"); }
                 throw new JsonReaderException($"\"{argName}\" argümanı, \"JSON\" biçimine uygun olmalı ve türü \"{typeof(JTokenType).FullName}\" olmalıdır!");
             }
         }
@@ -51,7 +51,7 @@
         {
             if (!TryValidators.TryPhoneNumberTR(phoneNumberTR, out _))
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be a valid phone number in the format of (xxx) xxx-xxxx!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be a valid phone number in the format of (xxx) xxx-xxxx!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanının değeri telefon numarası \"(5xx) (xxx-xxxx)\" biçimine uygun olmalıdır!", argName);
             }
         }
@@ -59,7 +59,7 @@
         {
             if (!tckn.IsTCKimlikNo())
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Identification Number!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Identification Number!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, T.C. Kimlik Numarası biçimine uygun olmalıdır!", argName);
             }
         }
@@ -67,7 +67,7 @@
         {
             if (!vkn.IsVergiKimlikNo())
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Tax Identity Number!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Tax Identity Number!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, T.C. Vergi Kimlik Numarası biçimine uygun olmalıdır!", argName);
             }
         }
@@ -75,7 +75,7 @@
         {
             if (!ISBNHelper.IsValid(isbn))
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of {TitleConstants.Isbn}!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of {TitleConstants.Isbn}!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, {TitleConstants.Isbn} biçimine uygun olmalıdır!", argName);
             }
         }
@@ -83,7 +83,7 @@
         {
             if (!TryValidators.TryMACAddress(mac, out _))
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of a valid MAC address!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of a valid MAC address!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, geçerli bir {TitleConstants.Mac} adresi biçimine uygun olmalıdır!", argName);
             }
         }
@@ -91,7 +91,7 @@
         {
             if (!mail.IsMail())
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of an e-Mail address!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of an e-Mail address!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, e-Posta yapısına uygun olmalıdır!", argName);
             }
         }
@@ -99,7 +99,7 @@
         {
             if (!uriString.IsUri())
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid URL format!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid URL format!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, URL biçimine uygun olmalıdır!", argName);
             }
         }
@@ -107,7 +107,7 @@
         {
             if (!IPAddress.TryParse(ipString, out _))
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid IP address format!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid IP address format!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, IP adresi biçiminde olmalıdır!", argName);
             }
         }
@@ -116,7 +116,7 @@
             var l = value.ToStringOrEmpty().Length;
             if (l > maxLength)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" cannot be longer than \"{maxLength}\" characters!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" cannot be longer than \"{maxLength}\" characters!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, karakter uzunluğu \"{maxLength}\" değerinden uzun olamaz!", argName);
             }
         }
@@ -131,7 +131,7 @@
         {
             if (value.Includes(values))
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" cannot be one of the following values: \"{String.Join(", ", values)}\"!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" cannot be one of the following values: \"{String.Join(", ", values)}\"!"); }
                 throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, \"{String.Join(", ", values)}\" değerlerinden biri olmamalıdır!");
             }
         }
@@ -139,7 +139,7 @@
         {
             if (!value.Includes(values))
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" can only be one of the following values: \"{String.Join(", ", values)}\"!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" can only be one of the following values: \"{String.Join(", ", values)}\"!"); }
                 throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, \"{String.Join(", ", values)}\" değerlerinden biri olabilir!");
             }
         }
@@ -147,7 +147,7 @@
         {
             if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" must be between the values of [{min} - {max}]!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" must be between the values of [{min} - {max}]!"); }
                 throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, [{min} - {max}] değerleri arasında olmalıdır!");
             }
         }
@@ -155,7 +155,7 @@
         {
             if (value.CompareTo(default) == 0)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" cannot be \"0 (zero)\"!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" cannot be \"0 (zero)\"!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, \"0 (sıfır)\" olamaz!", argName);
             }
         }
@@ -163,7 +163,7 @@
         {
             if (value.CompareTo(default) < 0)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" cannot be negative!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" cannot be negative!"); }
                 throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, negatif olamaz!");
             }
         }
@@ -177,13 +177,13 @@
             ThrowIfNull(enumType, nameof(enumType));
             if (!enumType.IsEnum)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{nameof(enumType)}\" must be a valid \"{nameof(Enum)}\" type!", nameof(enumType)); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{nameof(enumType)}\" must be a valid \"{nameof(Enum)}\" type!", nameof(enumType)); }
                 throw new ArgumentException($"\"{enumType.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(enumType));
             }
             ThrowIfNull(value, argName);
             if (!Enum.IsDefined(enumType, value))
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" provided for \"{enumType.FullName}\" is invalid!", argName); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" provided for \"{enumType.FullName}\" is invalid!", argName); }
                 throw new ArgumentException($"\"{enumType.FullName}\" için sağlanan \"{argName}\" argümanının değeri geçersizdir!", argName);
             }
         }

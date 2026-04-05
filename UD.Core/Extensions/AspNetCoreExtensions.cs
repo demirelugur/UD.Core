@@ -107,8 +107,7 @@
         }
         /// <summary>
         /// Verilen <see cref="IFormCollection"/> verisini kullanarak belirtilen türde (<typeparamref name="T"/>) bir modeli model binding mekanizması ile oluşturmaya çalışır İşlem sırasında oluşan doğrulama hatalarını <see cref="ModelStateDictionary"/> üzerinden toplar ve sonuçla birlikte döner. Binding veya doğrulama hatası oluşursa hata mesajları ile birlikte başarısız sonucu; aksi durumda oluşturulan modeli döndürür.
-        /// <br/>
-        /// Eğer <paramref name="httpContext"/> parametresi verilmezse, varsayılan bir <see cref="HttpContext"/> oluşturularak kullanılır.
+        /// <para>Eğer <paramref name="httpContext"/> parametresi verilmezse, varsayılan bir <see cref="HttpContext"/> oluşturularak kullanılır.</para>
         /// </summary>
         /// <typeparam name="T">Binding işlemi sonucu oluşturulacak model tipi.</typeparam>
         /// <param name="form">Binding işlemi için kullanılacak form verileri.</param>

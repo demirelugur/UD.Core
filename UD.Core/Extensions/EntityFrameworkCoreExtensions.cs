@@ -51,7 +51,7 @@ namespace UD.Core.Extensions
             }).ToArray();
             if (properties.Count(x => x.isCompositeKey) < 2)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
                 throw new KeyNotFoundException($"Ýþleme devam edebilmek için \"{tableName}\" tablosunda en az 2 özelliðin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" içermesi gerekmektedir!");
             }
             if (properties.Any(x => x.isSetCompositeKeyName && x.isCompositeKey))
@@ -70,7 +70,7 @@ namespace UD.Core.Extensions
                 if (autoSave) { await context.SaveChangesAsync(cancellationToken); }
                 return newEntity;
             }
-            if (ValidationChecks.IsEnglishCurrentUICulture) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
+            if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
             throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" özelliðinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
         }
         /// <summary> Baðlý bulunulan <see cref="DbContext"/> üzerinden SQL Server sunucusuna ait sistem özelliklerini asenkron olarak sorgular ve <see cref="SqlServerProperties"/> nesnesi olarak döndürür. </summary>
@@ -79,9 +79,7 @@ namespace UD.Core.Extensions
         public static Task<SqlServerProperties> GetServerProperty(this DbContext context, CancellationToken cancellationToken = default) => context.Database.SqlQueryRaw<SqlServerProperties>(SqlServerProperties.query()).FirstOrDefaultAsync(cancellationToken);
         /// <summary>
         /// Belirtilen entity türlerine karþýlýk gelen tablolar için, Identity özelliðine sahip birincil anahtar alanlarýnýn mevcut maksimum deðerini baz alarak yeniden numaralandýrma (RESEED) iþlemini asenkron olarak gerçekleþtirir. Metot, her tablo için ilgili birincil anahtar kolonunun mevcut en büyük deðerini (MAX) hesaplar ve <c>DBCC CHECKIDENT</c> komutu ile Identity deðerini bu deðere eþitler. Böylece manuel veri ekleme, toplu veri taþýma veya seed iþlemleri sonrasý oluþabilecek kimlik (Identity) kaymalarýnýn önüne geçilmiþ olur.
-        /// <br />
-        /// <br />
-        /// Sadece
+        /// <para>Sadece</para>
         /// <list type="number">
         /// <item><description>Tek kolonlu birincil anahtara sahip</description></item>
         /// <item><description><see cref="DatabaseGeneratedOption.Identity"/> olarak iþaretlenmiþ</description></item>
@@ -101,7 +99,8 @@ namespace UD.Core.Extensions
             Guard.ThrowIfEmpty(mappedTables, nameof(mappedTables));
             var sb = new StringBuilder();
             var index = 0;
-            foreach (var type in mappedTables.Where(x => x.IsMappedTable()).ToArray())
+            var types = mappedTables.Where(x => x.IsMappedTable()).ToArray();
+            foreach (var type in types)
             {
                 var (columnName, sqlDbTypeName) = getPrimaryKeyInfo(type);
                 if (columnName == "" || sqlDbTypeName == "") { continue; }
@@ -186,9 +185,8 @@ namespace UD.Core.Extensions
             var accessor = _sanitizeTruncateCache.GetOrAdd(entry.Metadata.ClrType, _ => SanitizeCreateTruncateAccessor(entry.Metadata));
             foreach (var item in accessor)
             {
-                if (item.maxLength <= 0) { continue; }
                 var propEntry = entry.Property(item.property.Name);
-                if (propEntry.CurrentValue is String _s) { propEntry.CurrentValue = _s.SubstringUpToLength(item.maxLength).ParseOrDefault<string>(); }
+                if (propEntry.CurrentValue is String _s) { propEntry.CurrentValue = (item.maxLength > 0 ? _s.SubstringUpToLength(item.maxLength) : _s).ParseOrDefault<string>(); }
             }
         }
         /// <summary><paramref name="entry"/> nesnesine ait nullable struct türündeki özelliklerin deðerlerini, eðer mevcut deðerleri ilgili struct türünün varsayýlan deðeriyle eþitse, null olarak günceller. Bu iþlem, veritabanýnda gereksiz yere varsayýlan deðerlerin saklanmasýný önlemek ve veri bütünlüðünü artýrmak amacýyla kullanýlabilir. Özellikle, nullable struct türlerinin kullanýldýðý durumlarda, bu tür özelliklerin null olarak kalmasý tercih edilebilir ve bu metot bu durumu saðlamak için tasarlanmýþtýr.</summary>

@@ -27,7 +27,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = String.Format(ValidationErrorMessageConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum);
-                if (ValidationChecks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be between [{this.Minimum} - {this.Maximum}]!"; }
+                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be between [{this.Minimum} - {this.Maximum}]!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

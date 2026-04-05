@@ -25,7 +25,7 @@
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 this.ErrorMessage = $"{validationContext.DisplayName}, {TitleConstants.Isbn} biçimine uygun olmalıdır!";
-                if (ValidationChecks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid {TitleConstants.Isbn} format!"; }
+                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid {TitleConstants.Isbn} format!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

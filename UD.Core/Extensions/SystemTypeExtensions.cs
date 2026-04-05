@@ -47,7 +47,7 @@
                 if (isSquareBrackets) { return String.Join(".", r.Select(x => $"[{x}]").ToArray()); }
                 return String.Join(".", r);
             }
-            if (ValidationChecks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"The type \"{type.FullName}\" does not have the \"{typeof(TableAttribute).FullName}\" attribute. ", new Exception("To get the table name, the relevant class must be decorated with the [Table(\"TableName\")] attribute.")); }
+            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"The type \"{type.FullName}\" does not have the \"{typeof(TableAttribute).FullName}\" attribute. ", new Exception("To get the table name, the relevant class must be decorated with the [Table(\"TableName\")] attribute.")); }
             throw new NotSupportedException($"\"{type.FullName}\" tipi üzerinde \"{typeof(TableAttribute).FullName}\" özniteliği bulunmamaktadır. ", new Exception("Tablo adını alabilmek için ilgili sınıfa [Table(\"TabloAdi\")] özniteliği eklenmelidir."));
         }
         /// <summary>Belirtilen türü enum dizisine dönüştürür.</summary>
@@ -58,7 +58,7 @@
             Guard.ThrowIfNull(type, nameof(type));
             if (!type.IsEnum)
             {
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The type \"{type.FullName}\" must be a valid \"{nameof(Enum)}\" type!", nameof(type)); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The type \"{type.FullName}\" must be a valid \"{nameof(Enum)}\" type!", nameof(type)); }
                 throw new ArgumentException($"\"{type.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(type));
             }
             var values = Enum.GetValues(type);

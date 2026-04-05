@@ -18,8 +18,8 @@
             if (!kimlikTipi.HasValue) { return cs; }
             var t = kimlikTipi.Value switch
             {
-                NVIKimlikTypes.yeni => (ValidationChecks.IsEnglishCurrentUICulture ? "New ID Card" : "Yeni Kimlik Kartı"),
-                NVIKimlikTypes.eski => (ValidationChecks.IsEnglishCurrentUICulture ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
+                NVIKimlikTypes.yeni => (Checks.IsEnglishCurrentUICulture ? "New ID Card" : "Yeni Kimlik Kartı"),
+                NVIKimlikTypes.eski => (Checks.IsEnglishCurrentUICulture ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
                 _ => throw Utilities.ThrowNotSupportedForEnum<NVIKimlikTypes>(),
             };
             return $"{cs} ({t})";

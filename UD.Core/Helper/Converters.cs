@@ -13,6 +13,8 @@
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Extensions;
+    using static UD.Core.Helper.GlobalConstants;
+
     public sealed class Converters
     {
         /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.</summary>
@@ -33,19 +35,67 @@
             Array.Reverse(elements);
             return String.Concat(elements);
         }
-        /// <summary>Verilen nesneyi <see cref="SHA256"/> hash string formatına dönüştürür. Eğer değer null ise boş string döner.</summary>
-        /// <param name="value">Hashlenecek nesne.</param>
-        /// <returns>Nesnenin <see cref="SHA256"/> hash string temsili.</returns>
-        /// <remarks>Not: MSSQL&#39;deki karşılığı SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_256&#39;, &#39;Lorem Ipsum&#39;)), 3, 64) AS HashValue</remarks>
-        public static string ToHashSHA256FromObject(object value)
+        /// <summary>
+        /// Verilen <paramref name="value"/> değerini SHA-256 algoritması ile hash&#39;ler ve sonucu küçük harf hex (0-9, a-f) biçiminde string olarak döndürür.
+        /// </summary>
+        /// <remarks>
+        /// <para>Hash&#39;e girecek kaynak metin (<c>source</c>) şu kurallarla belirlenir:</para>
+        /// <list type="bullet">
+        ///   <item>
+        ///     <description><paramref name="value"/> <c>null</c> ise boş string (<c>&quot;&quot;</c>) kullanılır.</description>
+        ///   </item>
+        ///   <item>
+        ///     <description><paramref name="value"/> bir <see cref="string"/> ise <see cref="string.Trim()"/> uygulanmış hali kullanılır.</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>Diğer tüm tiplerde <c><see cref="ToJSON(object)"/></c> ile JSON&#39;a çevrilmiş hali kullanılır.</description>
+        ///   </item>
+        /// </list>
+        /// <para>Üretilen çıktı 32 bayt (256 bit) hash&#39;in 64 karakterlik hex karşılığıdır.</para>
+        /// </remarks>
+        /// <param name="value">Hash&#39;lenecek değer.</param>
+        /// <returns>SHA-256 hash&#39;inin 64 karakterlik küçük harf hex gösterimi.</returns>
+        public static string ToHashSHA256(object value)
         {
             string source; // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
             if (value == null) { source = ""; }
             else if (value is String _s) { source = _s.Trim(); }
             else { source = ToJSON(value); }
-            var r = new List<string>();
-            foreach (var item in SHA256.HashData(Encoding.UTF8.GetBytes(source))) { r.Add(item.ToString("x2")); }
-            return String.Join("", r);
+            var hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(source));
+            var sb = new StringBuilder(hashBytes.Length * 2);
+            foreach (var item in hashBytes) { sb.Append(item.ToString("x2")); }
+            return sb.ToString();
+        }
+        /// <summary>
+        /// Verilen <paramref name="value"/> değerini SHA-512 algoritması ile hash&#39;ler ve sonucu küçük harf hex (0-9, a-f) biçiminde string olarak döndürür.
+        /// </summary>
+        /// <remarks>
+        /// <para>Hash&#39;e girecek kaynak metin (<c>source</c>) şu kurallarla belirlenir:</para>
+        /// <list type="bullet">
+        ///   <item>
+        ///     <description><paramref name="value"/> <c>null</c> ise boş string (<c>&quot;&quot;</c>) kullanılır.</description>
+        ///   </item>
+        ///   <item>
+        ///     <description><paramref name="value"/> bir <see cref="string"/> ise <see cref="String.Trim()"/> uygulanmış hali kullanılır.</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>Diğer tüm tiplerde <c><see cref="ToJSON(object)"/></c> ile JSON&#39;a çevrilmiş hali kullanılır.</description>
+        ///   </item>
+        /// </list>
+        /// <para>Üretilen çıktı 64 bayt (512 bit) hash&#39;in 128 karakterlik hex karşılığıdır.</para>
+        /// </remarks>
+        /// <param name="value">Hash&#39;lenecek değer.</param>
+        /// <returns>SHA-512 hash&#39;inin 128 karakterlik küçük harf hex gösterimi.</returns>
+        public static string ToHashSHA512(object value)
+        {
+            string source; // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128)
+            if (value == null) { source = ""; }
+            else if (value is String _s) { source = _s.Trim(); }
+            else { source = ToJSON(value); }
+            var hashBytes = SHA512.HashData(Encoding.UTF8.GetBytes(source));
+            var sb = new StringBuilder(hashBytes.Length * 2);
+            foreach (var item in hashBytes) { sb.Append(item.ToString("x2")); }
+            return sb.ToString();
         }
         /// <summary>Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.</summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>
@@ -56,7 +106,7 @@
             if (obj is Dictionary<string, object> _d) { return _d; }
             var t = obj.GetType();
             if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
-            if (ValidationChecks.IsEnglishCurrentUICulture) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
+            if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
             throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
         }
         /// <summary>Verilen nesneyi SQL parametrelerine dönüştürür. Eğer nesne <see cref="SqlParameter"/> türünde ise doğrudan SQL parametreleri olarak döner. Özel sınıf türlerinde çalışır ve özellik isimlerine göre SQL parametrelerini oluşturur.<para><paramref name="obj"/> için tanımlanan nesneler: SqlParameter, IEnumerable&lt;SqlParameter&gt;, IDictionary&lt;string, object&gt;, AnonymousObjectClass</para></summary>
@@ -128,7 +178,7 @@
                 231 => SqlDbType.NVarChar,
                 239 => SqlDbType.NChar,
                 241 => SqlDbType.Xml,
-                _ => throw new NotSupportedException(ValidationChecks.IsEnglishCurrentUICulture ? $"Invalid or unsupported {nameof(systemTypeId)}: {systemTypeId}" : $"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
+                _ => throw new NotSupportedException(Checks.IsEnglishCurrentUICulture ? $"Invalid or unsupported {nameof(systemTypeId)}: {systemTypeId}" : $"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
             };
         }
         /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="SystemArrayExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>
@@ -139,9 +189,9 @@
         public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string dataUri)
         {
             dataUri = dataUri.ToStringOrEmpty();
-            if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(ValidationChecks.IsEnglishCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
+            if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
             var parts = dataUri.Substring(5).Split([";base64,"], StringSplitOptions.None);
-            if (parts.Length != 2) { throw new ArgumentException(ValidationChecks.IsEnglishCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
+            if (parts.Length != 2) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
             return (Convert.FromBase64String(parts[1]), parts[0]);
         }
         /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
@@ -154,7 +204,7 @@
             if (value == null)
             {
                 if (t) { return null; }
-                if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentException("Value cannot be null for a non-nullable type!"); }
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("Value cannot be null for a non-nullable type!"); }
                 throw new ArgumentException("Null değer alamayan bir tür için değer null olamaz!");
             }
             if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
@@ -166,71 +216,75 @@
         /// <returns><typeparamref name="T"/> türüne dönüştürülmüş değer</returns>
         public static T ChangeType<T>(object value) => (T)ChangeType(value, typeof(T));
         /// <summary><paramref name="value"/> değerini belirtilen <paramref name="type"/> türüne dönüştürmeye çalışır. Dönüştürme işlemi başarısız olursa veya değer null ise, nullable türler için null, nullable olmayan türler için default değer döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür. Ayrıca bool, DateOnly, Uri, MailAddress ve IPAddress türleri için özel dönüşüm mantığı içerir.</summary>
-        public static object ParseOrDefault(string value, Type type)
+        public static object ParseOrDefault(object value, Type type)
         {
             var pd = parseOrDefault(value, type);
             if (pd.value == null) { return null; }
-            try { return Convert.ChangeType(pd.value, pd.genericBaseType); }
+            try { return Convert.ChangeType(pd.value, pd.baseType); }
             catch { return null; }
         }
-        private static (object value, Type genericBaseType) parseOrDefault(string value, Type propertyType)
+        private static (object value, Type baseType) parseOrDefault(object value, Type propertyType)
         {
-            value = value.ToStringOrEmpty();
-            if (value == "") { return (default, default); }
-            _ = TryValidators.TryTypeIsNullable(propertyType, out Type _genericBaseType);
-            if (_genericBaseType.IsEnum)
+            if (value == null) { return (default, default); }
+            _ = TryValidators.TryTypeIsNullable(propertyType, out Type _baseType);
+            var valueString = value.ToStringOrEmpty();
+            if (valueString == "") { return (default, default); }
+            if (_baseType.IsEnum)
             {
-                if (Enum.TryParse(_genericBaseType, value, true, out object _enum)) { return (_enum, _genericBaseType); }
-                return (default, _genericBaseType);
+                if (value.GetType() == _baseType) { return (value, _baseType); }
+                if (Enum.TryParse(_baseType, valueString, true, out object _enum)) { return (_enum, _baseType); }
+                return (default, _baseType);
             }
-            if (_genericBaseType == typeof(bool))
+            if (_baseType == typeof(bool))
             {
-                if (value == "0") { return (false, _genericBaseType); }
-                if (value == "1") { return (true, _genericBaseType); }
-                if (Boolean.TryParse(value, out bool _bo)) { return (_bo, _genericBaseType); }
-                return (default, _genericBaseType);
+                if (value is bool _bo) { return (_bo, _baseType); }
+                if (valueString == "0") { return (false, _baseType); }
+                if (valueString == "1") { return (true, _baseType); }
+                if (Boolean.TryParse(valueString, out _bo)) { return (_bo, _baseType); }
+                return (default, _baseType);
             }
-            if (_genericBaseType == typeof(DateOnly))
+            if (_baseType == typeof(DateOnly))
             {
-                if (DateOnly.TryParse(value, out DateOnly _da)) { return (_da, _genericBaseType); }
+                if (value is DateOnly _da) { return (_da, _baseType); }
+                if (DateOnly.TryParse(valueString, out _da)) { return (_da, _baseType); }
                 var date = value.ParseOrDefault<DateTime?>();
-                if (date.HasValue) { return (date.Value.ToDateOnly(), _genericBaseType); }
-                return (default, _genericBaseType);
+                if (date.HasValue) { return (date.Value.ToDateOnly(), _baseType); }
+                return (default, _baseType);
             }
-            if (_genericBaseType == typeof(TimeSpan))
+            if (_baseType == typeof(TimeSpan))
             {
-                if (TimeSpan.TryParse(value, out TimeSpan _ts)) { return (_ts, _genericBaseType); }
-                return (default, _genericBaseType);
+                if (value is TimeSpan _ts) { return (_ts, _baseType); }
+                if (TimeSpan.TryParse(valueString, out _ts)) { return (_ts, _baseType); }
+                return (default, _baseType);
             }
-            if (_genericBaseType == typeof(TimeOnly))
+            if (_baseType == typeof(TimeOnly))
             {
-                if (TimeOnly.TryParse(value, out TimeOnly _to)) { return (_to, _genericBaseType); }
+                if (value is TimeOnly _to) { return (_to, _baseType); }
+                if (TimeOnly.TryParse(valueString, out _to)) { return (_to, _baseType); }
                 var ts = value.ParseOrDefault<TimeSpan?>();
-                if (ts.HasValue) { return (ts.Value.ToTimeOnly(), _genericBaseType); }
-                return (default, _genericBaseType);
+                if (ts.HasValue) { return (ts.Value.ToTimeOnly(), _baseType); }
+                return (default, _baseType);
             }
-            if (_genericBaseType == typeof(Uri))
+            if (_baseType == typeof(Uri))
             {
-                if (TryValidators.TryUri(value, out Uri _u)) { return (_u, _genericBaseType); }
-                return (default, _genericBaseType);
+                if (value is Uri _u) { return (_u, _baseType); }
+                if (TryValidators.TryUri(valueString, out _u)) { return (_u, _baseType); }
+                return (default, _baseType);
             }
-            if (_genericBaseType == typeof(MailAddress))
+            if (_baseType == typeof(MailAddress))
             {
-                if (TryValidators.TryMailAddress(value, out MailAddress _ma)) { return (_ma, _genericBaseType); }
-                return (default, _genericBaseType);
+                if (value is MailAddress _ma) { return (_ma, _baseType); }
+                if (TryValidators.TryMailAddress(valueString, out _ma)) { return (_ma, _baseType); }
+                return (default, _baseType);
             }
-            if (_genericBaseType == typeof(IPAddress))
+            if (_baseType == typeof(IPAddress))
             {
-                if (IPAddress.TryParse(value, out IPAddress _ip)) { return (_ip, _genericBaseType); }
-                return (default, _genericBaseType);
+                if (value is IPAddress _ip) { return (_ip, _baseType); }
+                if (IPAddress.TryParse(valueString, out _ip)) { return (_ip, _baseType); }
+                return (default, _baseType);
             }
-            if (value.IndexOf('.') > -1 && _genericBaseType.Includes(typeof(float), typeof(double), typeof(decimal))) { value = value.Replace(".", ",", StringComparison.InvariantCulture); }
-            try
-            {
-                var converter = TypeDescriptor.GetConverter(propertyType);
-                var aaa = converter.CanConvertFrom(typeof(string));
-                return (converter.ConvertFrom(value), _genericBaseType);
-            }
+            if (valueString.IndexOf('.') > -1 && _baseType.Includes(typeof(float), typeof(double), typeof(decimal))) { valueString = valueString.Replace(".", ",", StringComparison.InvariantCulture); }
+            try { return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(valueString), _baseType); }
             catch { return (default, default); }
         }
     }

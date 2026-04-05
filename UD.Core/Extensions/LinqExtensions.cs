@@ -67,7 +67,7 @@
                 i++;
             }
             if (r.Length <= maxLength) { return r; }
-            if (ValidationChecks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
+            if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
             throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxLength} karakterlik maksimum uzunluğu aşıyor!");
         }
         /// <summary>IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>
@@ -106,7 +106,7 @@
                 try { orderedSource = source.OrderBy(sorting); }
                 catch (Exception ex)
                 {
-                    if (ValidationChecks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
+                    if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
                     throw new InvalidOperationException($"Sıralama hatası: {sorting}", ex);
                 }
             }
@@ -117,7 +117,7 @@
         /// IOrderedQueryable kaynaklarının sayfalama işlemini gerçekleştirir.
         /// <para>
         /// <example>
-        /// SQL Örneği: <br/>
+        /// <para>SQL Örneği:</para>
         /// SELECT * FROM [dbo].[LoremIpsum] ORDER BY [Key] OFFSET ((@pagenumber - 1) * @size) ROWS FETCH NEXT @size ROWS ONLY
         /// </example>
         /// </para>

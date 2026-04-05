@@ -189,15 +189,6 @@ namespace UD.Core.Extensions
             }
             return sb.ToString();
         }
-        /// <summary>Verilen bir dizeyi, belirtilen türde bir deðere dönüþtürür. Dönüþüm baþarýsýz olursa, varsayýlan deðeri döner.</summary>
-        /// <typeparam name="TKey">Dönüþüm yapýlacak hedef tür.</typeparam>
-        /// <param name="value">Dönüþtürülecek dize deðeri.</param>
-        /// <returns>Dönüþtürülen deðeri veya dönüþüm baþarýsýzsa varsayýlan deðeri döner.</returns>
-        public static TKey ParseOrDefault<TKey>(this string value)
-        {
-            var pd = Converters.ParseOrDefault(value, typeof(TKey));
-            return pd is TKey _tValue ? _tValue : default;
-        }
         /// <summary>Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code></summary>
         public static string LikeContains(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower)
         {
@@ -244,12 +235,12 @@ namespace UD.Core.Extensions
         /// <returns>Bulunan property deðeri belirtilen türe (T) dönüþtürülerek döndürülür. Property bulunamazsa, null ise veya JSON geçersizse varsayýlan deðer (default(T)) döndürülür.</returns>
         public static T JObjectGetProperty<T>(this string jsonData, string key)
         {
-            if (TryValidators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
+            key = key.ToStringOrEmpty();
+            if (key != "" && TryValidators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
             {
-                key = key.ToStringOrEmpty();
                 var k = _jo[key];
                 if (k.IsNullOrUndefined()) { return default; }
-                return k.ToString().ParseOrDefault<T>();
+                return k.ParseOrDefault<T>();
             }
             return default;
         }

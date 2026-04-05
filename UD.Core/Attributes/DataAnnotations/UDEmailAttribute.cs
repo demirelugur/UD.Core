@@ -30,7 +30,7 @@ namespace UD.Core.Attributes.DataAnnotations
             {
                 var message = String.Format(ValidationErrorMessageConstants.EMail, validationContext.DisplayName);
                 if (this.hosts.Length > 0) { message = $"{message}, Geçerli {(this.hosts.Length == 1 ? "host" : "hostlar")}: {String.Join(", ", this.hosts)}"; }
-                if (ValidationChecks.IsEnglishCurrentUICulture)
+                if (Checks.IsEnglishCurrentUICulture)
                 {
                     message = String.Concat(validationContext.DisplayName, " must be a valid email address!");
                     if (this.hosts.Length > 0) { message = $"{message}, Valid {(this.hosts.Length == 1 ? "host" : "hosts")}: {String.Join(", ", this.hosts)}"; }
