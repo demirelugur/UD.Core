@@ -10,10 +10,8 @@
     using System.Linq;
     using System.Net;
     using System.Net.Mail;
-    using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
 
     public sealed class Converters
     {
@@ -61,10 +59,7 @@
             if (value == null) { source = ""; }
             else if (value is String _s) { source = _s.Trim(); }
             else { source = ToJSON(value); }
-            var hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(source));
-            var sb = new StringBuilder(hashBytes.Length * 2);
-            foreach (var item in hashBytes) { sb.Append(item.ToString("x2")); }
-            return sb.ToString();
+            return Encoding.UTF8.GetBytes(source).ToSHA256Hexadecimal();
         }
         /// <summary>
         /// Verilen <paramref name="value"/> değerini SHA-512 algoritması ile hash&#39;ler ve sonucu küçük harf hex (0-9, a-f) biçiminde string olarak döndürür.
@@ -92,10 +87,7 @@
             if (value == null) { source = ""; }
             else if (value is String _s) { source = _s.Trim(); }
             else { source = ToJSON(value); }
-            var hashBytes = SHA512.HashData(Encoding.UTF8.GetBytes(source));
-            var sb = new StringBuilder(hashBytes.Length * 2);
-            foreach (var item in hashBytes) { sb.Append(item.ToString("x2")); }
-            return sb.ToString();
+            return Encoding.UTF8.GetBytes(source).ToSHA512Hexadecimal();
         }
         /// <summary>Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.</summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>

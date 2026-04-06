@@ -84,6 +84,17 @@
         }
         #endregion
         #region MemberInfo
+        /// <summary>Verilen <paramref name="memberInfo"/> nesnesinin <see cref="SkipAuditLogAttribute"/> ile işaretlenip işaretlenmediğini kontrol eder. Eğer nesne bu özniteliğe sahipse, bu metot <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
+        public static bool IsSkipAuditLog(this MemberInfo memberInfo)
+        {
+            Guard.ThrowIfNull(memberInfo, nameof(memberInfo));
+            try
+            {
+                var attr = memberInfo.GetCustomAttribute<SkipAuditLogAttribute>();
+                return attr != null;
+            }
+            catch { return false; }
+        }
         /// <summary>Verilen <see cref="MemberInfo"/> nesnesine tanımlanmış olan <see cref="DescriptionAttribute"/> bilgisini döndürür. Eğer attribute yoksa veya hata oluşursa boş string (&quot;&quot;) döner.</summary>
         public static string GetDescription(this MemberInfo memberInfo)
         {

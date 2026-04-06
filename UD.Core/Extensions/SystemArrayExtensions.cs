@@ -2,6 +2,8 @@
 {
     using System;
     using System.Linq;
+    using System.Security.Cryptography;
+    using System.Text;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     public static class SystemArrayExtensions
@@ -24,6 +26,22 @@
             return ex;
         }
         #region byte[]
+        /// <summary><paramref name="source"/> dizisinin SHA256 hash&#39;ini hesaplar ve sonucu hexadecimal biçiminde bir dize olarak döndürür. Eğer <paramref name="source"/> null ise, boş bir dizi olarak kabul edilir ve hash değeri buna göre hesaplanır. Hash hesaplama işlemi, .NET&#39;in yerleşik SHA256 algoritması kullanılarak gerçekleştirilir. Sonuç olarak, döndürülen dize, her byte&#39;ın iki karakterle temsil edildiği hexadecimal biçiminde olacaktır.</summary>
+        public static string ToSHA256Hexadecimal(this byte[] source)
+        {
+            var hashBytes = SHA256.HashData(source ?? []);
+            var sb = new StringBuilder(hashBytes.Length * 2);
+            foreach (var item in hashBytes) { sb.Append(item.ToString("x2")); }
+            return sb.ToString();
+        }
+        /// <summary><paramref name="source"/> dizisinin SHA512 hash&#39;ini hesaplar ve sonucu hexadecimal biçiminde bir dize olarak döndürür. Eğer <paramref name="source"/> null ise, boş bir dizi olarak kabul edilir ve hash değeri buna göre hesaplanır. Hash hesaplama işlemi, .NET&#39;in yerleşik SHA512 algoritması kullanılarak gerçekleştirilir. Sonuç olarak, döndürülen dize, her byte&#39;ın iki karakterle temsil edildiği hexadecimal biçiminde olacaktır.</summary>
+        public static string ToSHA512Hexadecimal(this byte[] source)
+        {
+            var hashBytes = SHA512.HashData(source ?? []);
+            var sb = new StringBuilder(hashBytes.Length * 2);
+            foreach (var item in hashBytes) { sb.Append(item.ToString("x2")); }
+            return sb.ToString();
+        }
         /// <summary>İkili verileri base64 biçiminde bir dizeye dönüştürür. <see cref="Converters.ToBinaryFromBase64String(string)"/> işleminin tersidir</summary>
         /// <param name="bytes">Dönüştürülecek byte dizisi.</param>
         /// <param name="mimeType">Mime türü.</param>
@@ -50,11 +68,7 @@
         {
             file1 ??= [];
             file2 ??= [];
-            if (file1.Length == 0 && file2.Length == 0) { return true; }
-            if (file1.Length != file2.Length) { return false; }
-            int i, _l = file1.Length;
-            for (i = 0; i < _l; i++) { if (file1[i] != file2[i]) { return false; } }
-            return true;
+            return file1.AsSpan().SequenceEqual(file2.AsSpan());
         }
         #endregion
     }
