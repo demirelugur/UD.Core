@@ -16,7 +16,7 @@
         #region Equals
         public override bool Equals(object other) => this.Equals(other as FileSettingsHelper);
         public override int GetHashCode() => HashCode.Combine(this.accept, this.size, this.fileCount);
-        public bool Equals(FileSettingsHelper other) => (other != null && this.accept.IsEqual(other.accept) && this.size == other.size && this.fileCount == other.fileCount);
+        public bool Equals(FileSettingsHelper other) => (other != null && this.accept.IsUnorderedEqual(other.accept) && this.size == other.size && this.fileCount == other.fileCount);
         #endregion
         private string[] _Accept;
         [UDRequired]

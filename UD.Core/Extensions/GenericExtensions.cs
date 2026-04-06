@@ -77,21 +77,17 @@
             }
             return true;
         }
+        /// <summary><paramref name="objA"/> ve <paramref name="objB"/> koleksiyonlarının sırasız olarak eşit olup olmadığını kontrol eder. İki koleksiyonun aynı öğeleri içerip içermediğini, ancak sıralarının önemli olmadığı durumlarda kullanılır. Her iki koleksiyonun da aynı öğeleri içerdiği, ancak farklı sıralarda olabilirlerse <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
+        public static bool IsUnorderedEqual<T>(this IEnumerable<T> objA, IEnumerable<T> objB)
+        {
+            if (ReferenceEquals(objA, objB)) { return true; }
+            if (objA == null || objB == null) { return false; }
+            var objASet = objA.ToHashSet();
+            var objBSet = objB.ToHashSet();
+            return objASet.SetEquals(objBSet);
+        }
         #endregion
         #region ICollection
-        /// <summary>İki koleksiyonun eşitliğini kontrol eder. Eşitlik, koleksiyonların aynı öğeleri içermesine ve aynı sayıda öğeye sahip olmasına bağlıdır. Öğelerin sıralaması dikkate alınmaz; [1, 2, 3, 4, 5] ve [4, 3, 2, 5, 1] eşit kabul edilir.</summary>
-        /// <typeparam name="T">Koleksiyonun öğelerinin türü.</typeparam>
-        /// <param name="left">Karşılaştırılacak ilk koleksiyon.</param>
-        /// <param name="right">Karşılaştırılacak ikinci koleksiyon.</param>
-        /// <returns>İki koleksiyon eşitse <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
-        public static bool IsEqual<T>(this ICollection<T> left, ICollection<T> right)
-        {
-            var leftIsNull = left == null;
-            var rightIsNull = right == null;
-            if ((leftIsNull || rightIsNull) && leftIsNull == rightIsNull) { return true; }
-            if (!leftIsNull && !rightIsNull && left.Count == right.Count && left.All(right.Contains)) { return true; }
-            return false;
-        }
         /// <summary>Başka bir koleksiyondan mevcut koleksiyona öğeleri topluca ekler. <see cref="List{T}"/> için optimize edilmiş bir yöntemdir.</summary>
         /// <typeparam name="T">Koleksiyon tipi.</typeparam>
         /// <param name="initial">Öğelerin ekleneceği mevcut koleksiyon.</param>

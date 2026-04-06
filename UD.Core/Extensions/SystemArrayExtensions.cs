@@ -60,16 +60,6 @@
                 fs.Close();
             }
         }
-        /// <summary>İki byte dizisinin içeriğinin aynı olup olmadığını kontrol eder. Diziler null ise boş dizi olarak kabul edilir. Eğer her iki dizi de boşsa, <see langword="true"/> döner. Dizilerin uzunlukları farklıysa, <see langword="false"/> döner. Elemanların sıralaması önemlidir; örneğin, [1, 2, 3] ve [1, 3, 2] dizileri aynı kabul edilmez. Her bir eleman sırayla karşılaştırılır ve herhangi bir farklılıkta <see langword="false"/> döner.</summary>
-        /// <param name="file1">Karşılaştırılacak ilk byte dizisi.</param>
-        /// <param name="file2">Karşılaştırılacak ikinci byte dizisi.</param>
-        /// <returns>Diziler aynıysa <see langword="true"/>, farklıysa <see langword="false"/> döner.</returns>
-        public static bool IsFileBytesEqual(this byte[] file1, byte[] file2)
-        {
-            file1 ??= [];
-            file2 ??= [];
-            return file1.AsSpan().SequenceEqual(file2.AsSpan());
-        }
         #endregion
     }
 }
