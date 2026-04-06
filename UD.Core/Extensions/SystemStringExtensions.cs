@@ -244,5 +244,23 @@ namespace UD.Core.Extensions
             }
             return default;
         }
+        /// <summary>Verilen string ifadesinin SHA-256 hash deðerini hesaplar ve hexadecimal (hex) formatýnda döndürür.</summary>
+        /// <param name="value">Hash deðeri hesaplanacak string ifade.</param>
+        /// <returns>SHA-256 hash&#39;inin 64 karakterlik hexadecimal string deðeri.</returns>
+        /// <remarks>
+        /// <para>Bu extension method, string&#39;i önce UTF-8 byte dizisine çevirir ve ardýndan SHA-256 algoritmasý ile hash&#39;ler.</para>
+        /// <para>SQL Server karþýlýðý:</para>
+        /// <code>SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_256&#39;, &#39;Lorem Ipsum&#39;)), 3, 64)</code>
+        /// </remarks>
+        public static string ToSHA256Hexadecimal(this string value) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ToSHA256Hexadecimal(); // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
+        /// <summary>Verilen string ifadesinin SHA-512 hash deðerini hesaplar ve hexadecimal (hex) formatýnda döndürür.</summary>
+        /// <param name="value">Hash deðeri hesaplanacak string ifade.</param>
+        /// <returns>SHA-512 hash&#39;inin 128 karakterlik hexadecimal string deðeri.</returns>
+        /// <remarks>
+        /// <para>Bu extension method, string&#39;i önce UTF-8 byte dizisine çevirir ve ardýndan SHA-512 algoritmasý ile hash&#39;ler.</para>
+        /// <para>SQL Server karþýlýðý:</para>
+        /// <code>SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_512&#39;, &#39;Lorem Ipsum&#39;)), 3, 128)</code>
+        /// </remarks>
+        public static string ToSHA512Hexadecimal(this string value) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ToSHA512Hexadecimal(); // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128)
     }
 }

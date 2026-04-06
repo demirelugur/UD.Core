@@ -4,7 +4,6 @@
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
     using UD.Core.Extensions;
     public sealed class ChangeEntry
     {
@@ -18,6 +17,7 @@
             this.entity = entity ?? [];
             this.changeProperties = changeProperties ?? [];
         }
+        private static bool isMapped(PropertyInfo propertyInfo) => (!propertyInfo.IsSkipAuditLog() && propertyInfo.IsMapped());
         private static bool isTypeByteArrayOrHtmlContent(PropertyInfo propertyInfo) => (propertyInfo.PropertyType == typeof(byte[]) || propertyInfo.IsHtmlContent());
         private static bool areEqual(object objA, object objB)
         {
@@ -26,21 +26,16 @@
         }
         private static string toSHA512Hexadecimal(object value)
         {
-            byte[] source;
-            if (value == null) { source = []; }
-            else if (value is String _s) { source = Encoding.UTF8.GetBytes(_s.Trim()); }
-            else if (value is byte[] _byteArray) { source = _byteArray; }
-            else
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"{nameof(toSHA512Hexadecimal)} method only supports null, string and byte[] values"); }
-                throw new NotSupportedException($"{nameof(toSHA512Hexadecimal)} metodu sadece null, string ve byte[] değerlerini destekler.");
-            }
-            return source.ToSHA512Hexadecimal();
+            if (value == null) { return Array.Empty<byte>().ToSHA512Hexadecimal(); }
+            if (value is String _s) { return _s.ToSHA512Hexadecimal(); }
+            if (value is byte[] _byteArray) { return _byteArray.ToSHA512Hexadecimal(); }
+            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"{nameof(toSHA512Hexadecimal)} method only supports null, string and byte[] values"); }
+            throw new NotSupportedException($"{nameof(toSHA512Hexadecimal)} metodu sadece null, string ve byte[] değerlerini destekler.");
         }
         private static Dictionary<string, object> extractScalarProperties(object entity, Type entityType)
         {
             if (entity == null) { return []; }
-            return entityType.GetProperties().Where(x => !x.IsSkipAuditLog() && x.IsMapped()).ToDictionary(x => x.GetColumnName(), x => (isTypeByteArrayOrHtmlContent(x) ? toSHA512Hexadecimal(x.GetValue(entity)) : x.GetValue(entity)));
+            return entityType.GetProperties().Where(isMapped).ToDictionary(x => x.GetColumnName(), x => (isTypeByteArrayOrHtmlContent(x) ? toSHA512Hexadecimal(x.GetValue(entity)) : x.GetValue(entity)));
         }
         /// <summary><paramref name="value"/> için tanımlanan nesneler: ChangeEntry, EntityEntry, AnonymousObjectClass</summary>
         public static ChangeEntry ToEntityFromObject(object value)
@@ -53,7 +48,7 @@
                 if (_ee.State == EntityState.Modified)
                 {
                     changes = _ee.OriginalValues.Properties
-                    .Where(x => !x.PropertyInfo.IsSkipAuditLog() && x.PropertyInfo.IsMapped())
+                    .Where(x => isMapped(x.PropertyInfo))
                     .Select(x => new
                     {
                         x.PropertyInfo,

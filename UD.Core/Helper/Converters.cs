@@ -10,9 +10,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Mail;
-    using System.Text;
     using UD.Core.Extensions;
-
     public sealed class Converters
     {
         /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.</summary>
@@ -32,62 +30,6 @@
             for (i = 0; i < length; i++) { elements[i] = si.SubstringByTextElements(i, 1); }
             Array.Reverse(elements);
             return String.Concat(elements);
-        }
-        /// <summary>
-        /// Verilen <paramref name="value"/> değerini SHA-256 algoritması ile hash&#39;ler ve sonucu küçük harf hex (0-9, a-f) biçiminde string olarak döndürür.
-        /// </summary>
-        /// <remarks>
-        /// <para>Hash&#39;e girecek kaynak metin (<c>source</c>) şu kurallarla belirlenir:</para>
-        /// <list type="bullet">
-        ///   <item>
-        ///     <description><paramref name="value"/> <c>null</c> ise boş string (<c>&quot;&quot;</c>) kullanılır.</description>
-        ///   </item>
-        ///   <item>
-        ///     <description><paramref name="value"/> bir <see cref="string"/> ise <see cref="string.Trim()"/> uygulanmış hali kullanılır.</description>
-        ///   </item>
-        ///   <item>
-        ///     <description>Diğer tüm tiplerde <c><see cref="ToJSON(object)"/></c> ile JSON&#39;a çevrilmiş hali kullanılır.</description>
-        ///   </item>
-        /// </list>
-        /// <para>Üretilen çıktı 32 bayt (256 bit) hash&#39;in 64 karakterlik hex karşılığıdır.</para>
-        /// </remarks>
-        /// <param name="value">Hash&#39;lenecek değer.</param>
-        /// <returns>SHA-256 hash&#39;inin 64 karakterlik küçük harf hex gösterimi.</returns>
-        public static string ToHashSHA256(object value)
-        {
-            string source; // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
-            if (value == null) { source = ""; }
-            else if (value is String _s) { source = _s.Trim(); }
-            else { source = ToJSON(value); }
-            return Encoding.UTF8.GetBytes(source).ToSHA256Hexadecimal();
-        }
-        /// <summary>
-        /// Verilen <paramref name="value"/> değerini SHA-512 algoritması ile hash&#39;ler ve sonucu küçük harf hex (0-9, a-f) biçiminde string olarak döndürür.
-        /// </summary>
-        /// <remarks>
-        /// <para>Hash&#39;e girecek kaynak metin (<c>source</c>) şu kurallarla belirlenir:</para>
-        /// <list type="bullet">
-        ///   <item>
-        ///     <description><paramref name="value"/> <c>null</c> ise boş string (<c>&quot;&quot;</c>) kullanılır.</description>
-        ///   </item>
-        ///   <item>
-        ///     <description><paramref name="value"/> bir <see cref="string"/> ise <see cref="String.Trim()"/> uygulanmış hali kullanılır.</description>
-        ///   </item>
-        ///   <item>
-        ///     <description>Diğer tüm tiplerde <c><see cref="ToJSON(object)"/></c> ile JSON&#39;a çevrilmiş hali kullanılır.</description>
-        ///   </item>
-        /// </list>
-        /// <para>Üretilen çıktı 64 bayt (512 bit) hash&#39;in 128 karakterlik hex karşılığıdır.</para>
-        /// </remarks>
-        /// <param name="value">Hash&#39;lenecek değer.</param>
-        /// <returns>SHA-512 hash&#39;inin 128 karakterlik küçük harf hex gösterimi.</returns>
-        public static string ToHashSHA512(object value)
-        {
-            string source; // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128)
-            if (value == null) { source = ""; }
-            else if (value is String _s) { source = _s.Trim(); }
-            else { source = ToJSON(value); }
-            return Encoding.UTF8.GetBytes(source).ToSHA512Hexadecimal();
         }
         /// <summary>Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.</summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>
