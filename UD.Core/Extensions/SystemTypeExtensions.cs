@@ -53,7 +53,7 @@
         /// <summary>Belirtilen türü enum dizisine dönüştürür.</summary>
         /// <param name="type">Enum türü.</param>
         /// <returns>Enum sonuçları dizisi.</returns>
-        public static EnumResult[] ToEnumArray(this Type type)
+        public static EnumResult[] ToEnumResultArray(this Type type)
         {
             Guard.ThrowIfNull(type, nameof(type));
             if (!type.IsEnum)

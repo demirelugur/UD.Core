@@ -4,7 +4,6 @@
     using Newtonsoft.Json.Converters;
     using System.Globalization;
     using System.Security.Cryptography;
-
     public sealed class GlobalConstants
     {
         public const string Example = "https://example.com";

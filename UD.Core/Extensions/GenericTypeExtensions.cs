@@ -32,7 +32,7 @@
         {
             yield return value;
         }
-        /// <summary><paramref name="objA"/> ve <paramref name="objB"/> dizilerinin elemanlarının sırasına ve değerlerine göre eşit olup olmadığını kontrol eder. Her iki dizi de null ise eşit kabul edilir. Bir dizi null ise ve diğeri boş değilse eşit kabul edilmez.</summary>
+        /// <summary><paramref name="objA"/> ve <paramref name="objB"/> dizilerinin elemanlarının sırasına ve değerlerine göre eşit olup olmadığını kontrol eder. Her iki dizi de null veya boş ise eşit kabul edilir.</summary>
         public static bool IsAbsoluteEqual<T>(this T[] objA, T[] objB)
         {
             objA ??= [];

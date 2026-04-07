@@ -10,21 +10,21 @@
     {
         #region Equals
         public override bool Equals(object other) => this.Equals(other as ClientRequestInfoResult);
-        public override int GetHashCode() => HashCode.Combine(this.ismobil, this.ipaddress);
-        public bool Equals(ClientRequestInfoResult other) => (other != null && this.ismobil == other.ismobil && this.ipaddress == other.ipaddress);
+        public override int GetHashCode() => HashCode.Combine(this.isMobil, this.ipAddress);
+        public bool Equals(ClientRequestInfoResult other) => (other != null && this.isMobil == other.isMobil && this.ipAddress == other.ipAddress);
         #endregion
         [UDRequired]
         [Display(Name = "Mobil")]
-        public bool ismobil { get; set; }
+        public bool isMobil { get; set; }
         [UDStringLength(MaximumLengthConstants.IPAddress)]
         [UDIPAddress]
         [Display(Name = "IP Adresi")]
-        public string? ipaddress { get; set; }
+        public string? ipAddress { get; set; }
         public ClientRequestInfoResult() : this(default, default) { }
-        public ClientRequestInfoResult(bool ismobil, object ipaddress)
+        public ClientRequestInfoResult(bool isMobil, object ipAddress)
         {
-            this.ismobil = ismobil;
-            this.ipaddress = this.ipAddressCast(ipaddress);
+            this.isMobil = isMobil;
+            this.ipAddress = this.ipAddressCast(ipAddress);
         }
         private string? ipAddressCast(object ipaddress)
         {

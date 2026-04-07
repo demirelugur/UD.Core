@@ -17,14 +17,14 @@
         public async Task Invoke(HttpContext httpContext)
         {
             var token = httpContext.GetToken();
-            if (!token.IsNullOrEmpty() && await tokenBlacklistService.Any(token))
+            if (!token.IsNullOrEmpty() && await this.tokenBlacklistService.Any(token))
             {
                 httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 httpContext.Response.ContentType = "application/json";
                 await httpContext.Response.WriteAsJsonAsync(ApiResult.setFailed(Checks.IsEnglishCurrentUICulture ? "Token invalid!" : "Token geçersiz!"), httpContext.RequestAborted);
                 return;
             }
-            await next(httpContext);
+            await this.next(httpContext);
         }
     }
 }

@@ -5,7 +5,7 @@
     using UD.Core.Extensions;
     public interface ISearchAndPaginateDto
     {
-        int pagenumber { get; set; }
+        int pageNumber { get; set; }
         int size { get; set; }
         string? sorting { get; set; }
         Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken);
@@ -16,18 +16,18 @@
         private string? _Sorting;
         [UDRangePositiveInt32]
         [DefaultValue(1)]
-        public int pagenumber { get; set; }
+        public int pageNumber { get; set; }
         [UDRangePositiveInt32]
         [DefaultValue(20)]
         public int size { get; set; }
         public string? sorting { get { return _Sorting; } set { _Sorting = value.ParseOrDefault<string>(); } }
         public SearchAndPaginateDto() : this(default, default, default) { }
-        public SearchAndPaginateDto(int pagenumber, int size, string? sorting)
+        public SearchAndPaginateDto(int pageNumber, int size, string? sorting)
         {
-            this.pagenumber = pagenumber;
+            this.pageNumber = pageNumber;
             this.size = size;
             this.sorting = sorting;
         }
-        public virtual Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedList(this.pagenumber, this.size, this.sorting, loadInfo, cancellationToken);
+        public virtual Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedList(this.pageNumber, this.size, this.sorting, loadInfo, cancellationToken);
     }
 }

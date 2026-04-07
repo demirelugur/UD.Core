@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Http;
     using System;
     using UD.Core.Extensions;
-
     public class EnumResult : IEquatable<EnumResult>
     {
         #region Equals
@@ -14,7 +13,7 @@
         public long value { get; }
         public string text { get; }
         public string description { get; }
-        public string descseo => this.description.ToSeoFriendly();
+        public string descSeo => this.description.ToSeoFriendly();
         public EnumResult() : this(default, "", "") { }
         public EnumResult(long value, string text, string description)
         {

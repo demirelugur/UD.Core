@@ -165,28 +165,32 @@ namespace UD.Core.Extensions
         private static NullableStructNullifyAccessor[] CreateNullifyAccessor(IEntityType entityType) => entityType.GetProperties().Where(p => p.ClrType.IsNullable() && p.PropertyInfo.IsMapped()).Select(p => new NullableStructNullifyAccessor(p, Nullable.GetUnderlyingType(p.ClrType))).ToArray();
         private static readonly ConcurrentDictionary<Type, SanitizeStringTruncateAccessor[]> _sanitizeTruncateCache = new();
         private static readonly ConcurrentDictionary<Type, NullableStructNullifyAccessor[]> _nullifyCache = new();
-        /// <summary><paramref name="entry"/> nesnesine ait string türündeki özelliklerin deðerlerini, belirtilen <paramref name="sanitizer"/> aracýlýðýyla temizler. Bu iþlem, potansiyel olarak zararlý HTML içeriðinin etkisiz hale getirilmesini saðlar. Özellikle kullanýcý tarafýndan saðlanan verilerin güvenliðini artýrmak amacýyla kullanýlabilir. Temizleme iþlemi sýrasýnda, özelliklerin üzerinde <see cref="SkipSanitizeAttribute"/> özniteliði bulunuyorsa, bu özellikler atlanýr ve temizlenmez. Bu sayede, belirli özelliklerin temizlenmeden kalmasý saðlanabilir.</summary>
-        public static void SanitizeHtmlStrings(this EntityEntry entry, IHtmlSanitizer sanitizer)
+        /// <summary>
+        /// <see cref="EntityEntry"/> içerisindeki string tipindeki property deðerlerini düzenler.
+        /// <para>Ýþlem adýmlarý:</para>
+        /// <list type="bullet">
+        /// <item><description>String deðerler varsa, tanýmlý maksimum uzunluða (<c>maxLength</c>) göre kýsaltýlýr.</description></item>
+        /// <item><description><paramref name="sanitizer"/> saðlanmýþsa ve property için sanitize atlanmamýþsa (<see cref="SkipSanitizeAttribute"/>), HTML/zararlý içerik temizliði uygulanýr.</description></item>
+        /// <item><description>Sonuç deðer normalize edilerek (örn: null/boþ kontrolü) tekrar property&#39;e atanýr.</description></item>
+        /// </list>
+        /// <para>Bu method, özellikle veritabanýna yazýlmadan önce string alanlarýn güvenli ve uzunluk kýsýtlarýna uygun hale getirilmesi amacýyla kullanýlýr.</para>
+        /// </summary>
+        /// <param name="entry">Ýþlem yapýlacak entity&#39;nin <see cref="EntityEntry"/> nesnesi.</param>
+        /// <param name="sanitizer">HTML içerik temizleme iþlemi için kullanýlacak <see cref="IHtmlSanitizer"/> instance&#39;ý. Null verilirse sanitize iþlemi uygulanmaz.</param>
+        public static void SanitizeAndTruncate(this EntityEntry entry, IHtmlSanitizer? sanitizer)
         {
             Guard.ThrowIfNull(entry, nameof(entry));
-            Guard.ThrowIfNull(sanitizer, nameof(sanitizer));
+            var isNotNullSanitizer = sanitizer != null;
             var accessor = _sanitizeTruncateCache.GetOrAdd(entry.Metadata.ClrType, _ => SanitizeCreateTruncateAccessor(entry.Metadata));
             foreach (var item in accessor)
             {
-                if (item.property.PropertyInfo.IsSkipSanitize()) { continue; }
                 var propEntry = entry.Property(item.property.Name);
-                if (propEntry.CurrentValue is String _s) { propEntry.CurrentValue = sanitizer.Sanitize(_s).ParseOrDefault<string>(); }
-            }
-        }
-        /// <summary><paramref name="entry"/> nesnesine ait string türündeki özelliklerin deðerlerini, ilgili özellikler için tanýmlanmýþ maksimum uzunluklara göre keser. Bu iþlem, veritabaný þemasýnda belirtilen maksimum uzunluk sýnýrlarýna uyum saðlamak ve olasý veri kaybýný önlemek amacýyla kullanýlabilir.</summary>
-        public static void TruncateStringsToMaxLength(this EntityEntry entry)
-        {
-            Guard.ThrowIfNull(entry, nameof(entry));
-            var accessor = _sanitizeTruncateCache.GetOrAdd(entry.Metadata.ClrType, _ => SanitizeCreateTruncateAccessor(entry.Metadata));
-            foreach (var item in accessor)
-            {
-                var propEntry = entry.Property(item.property.Name);
-                if (propEntry.CurrentValue is String _s) { propEntry.CurrentValue = (item.maxLength > 0 ? _s.SubstringUpToLength(item.maxLength) : _s).ParseOrDefault<string>(); }
+                if (propEntry.CurrentValue is String _s)
+                {
+                    if (item.maxLength > 0) { _s = _s.SubstringUpToLength(item.maxLength); }
+                    if (isNotNullSanitizer && !item.property.PropertyInfo.IsSkipSanitize()) { _s = sanitizer.Sanitize(_s); }
+                    propEntry.CurrentValue = _s.ParseOrDefault<string>();
+                }
             }
         }
         /// <summary><paramref name="entry"/> nesnesine ait nullable struct türündeki özelliklerin deðerlerini, eðer mevcut deðerleri ilgili struct türünün varsayýlan deðeriyle eþitse, null olarak günceller. Bu iþlem, veritabanýnda gereksiz yere varsayýlan deðerlerin saklanmasýný önlemek ve veri bütünlüðünü artýrmak amacýyla kullanýlabilir. Özellikle, nullable struct türlerinin kullanýldýðý durumlarda, bu tür özelliklerin null olarak kalmasý tercih edilebilir ve bu metot bu durumu saðlamak için tasarlanmýþtýr.</summary>

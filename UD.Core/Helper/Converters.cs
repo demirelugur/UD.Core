@@ -134,15 +134,15 @@
         /// <returns>Dönüştürülmüş değer</returns>
         public static object ChangeType(object value, Type type)
         {
-            var t = TryValidators.TryTypeIsNullable(type, out Type _genericBaseType);
+            var t = TryValidators.TryTypeIsNullable(type, out Type _baseType);
             if (value == null)
             {
                 if (t) { return null; }
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("Value cannot be null for a non-nullable type!"); }
                 throw new ArgumentException("Null değer alamayan bir tür için değer null olamaz!");
             }
-            if (_genericBaseType.IsEnum) { return Enum.ToObject(_genericBaseType, value); }
-            return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _genericBaseType);
+            if (_baseType.IsEnum) { return Enum.ToObject(_baseType, value); }
+            return Convert.ChangeType(value, t ? Nullable.GetUnderlyingType(type) : _baseType);
         }
         /// <summary><paramref name="value"/> değerini <typeparamref name="T"/> türüne dönüştürür.</summary>
         /// <typeparam name="T">Dönüştürülecek hedef tür</typeparam>

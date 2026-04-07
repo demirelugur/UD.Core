@@ -199,7 +199,7 @@
         /// <remarks>Bu metot, verilen hata mesajları listesindeki her bir öğeyi ModelState&#39;e tek tek ekler. Key olarak boş bir string (&quot;&quot;) kullanılır. Eğer <paramref name="errors"/> null ise işlem yapılmaz.</remarks>
         public static void AddModelErrorRange(this ModelStateDictionary modelstate, IEnumerable<string> errors)
         {
-            if (errors != null && errors.Any())
+            if (!errors.IsNullOrEmptyOrAllNull())
             {
                 Guard.ThrowIfNull(modelstate, nameof(modelstate));
                 foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("_", item); }
