@@ -37,7 +37,7 @@
         {
             objA ??= [];
             objB ??= [];
-            if (objA.Length == 0 && objA.Length == objB.Length) { return true; }
+            if (objA.Length == 0 && objB.Length == 0) { return true; }
             return objA.AsSpan().SequenceEqual(objB.AsSpan());
         }
     }

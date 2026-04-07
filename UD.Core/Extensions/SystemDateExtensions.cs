@@ -6,6 +6,7 @@
     using static UD.Core.Helper.GlobalConstants;
     public static class SystemDateExtensions
     {
+        #region DateTime
         /// <summary>Belirtilen <see cref="DateTime"/> nesnesini yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesine dönüştürür.</summary>
         /// <param name="dateTime">Dönüştürülecek <see cref="DateTime"/> nesnesi.</param>
         /// <returns>Yalnızca tarih bilgisini içeren bir <see cref="DateOnly"/> nesnesi.</returns>
@@ -70,9 +71,11 @@
         /// <returns>Belirtilen dile göre ay adı.</returns>
         public static string GetMonthName(this DateTime dateTime, bool isElongated = true)
         {
-            var dtf = CultureInfo.DefaultThreadCurrentUICulture.DateTimeFormat;
+            var dtf = CultureInfo.CurrentUICulture.DateTimeFormat;
             return isElongated ? dtf.GetMonthName(dateTime.Month) : dtf.GetAbbreviatedMonthName(dateTime.Month);
         }
+        #endregion
+        #region DayOfWeek
         /// <summary>Hafta içi günlerini (Pazartesi, Salı, Çarşamba, Perşembe, Cuma) kontrol eder. Eğer belirtilen <see cref="DayOfWeek"/> değeri bu günlerden biri ise <c>true</c>, aksi halde <c>false</c> döner.</summary>
         public static bool IsWeekDays(this DayOfWeek dayOfWeek) => dayOfWeek.Includes(DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday);
         /// <summary>Verilen <see cref="DayOfWeek"/> değerinin, belirtilen dile göre gün adını döndürür.</summary>
@@ -81,9 +84,11 @@
         /// <returns>Belirtilen dile göre gün adı.</returns>
         public static string GetDayName(this DayOfWeek dayOfWeek, bool isElongated = true)
         {
-            var dtf = CultureInfo.DefaultThreadCurrentUICulture.DateTimeFormat;
+            var dtf = CultureInfo.CurrentUICulture.DateTimeFormat;
             return isElongated ? dtf.GetDayName(dayOfWeek) : dtf.GetAbbreviatedDayName(dayOfWeek);
         }
+        #endregion
+        #region TimeSpan
         /// <summary><paramref name="timeSpan"/> değerini, gece yarısından (00:00:00) itibaren geçen toplam süre olarak temsil eden bir <see cref="TimeOnly"/> nesnesine dönüştürür. Dönüşüm sırasında, <paramref name="timeSpan"/> değerinin gün kısmı dikkate alınmaz ve yalnızca saat, dakika, saniye ve milisaniye bilgisi kullanılır. Bu sayede, <paramref name="timeSpan"/> değeri 24 saatten büyük olsa bile, sonuç her zaman 00:00:00 ile 23:59:59.999 arasında bir zaman dilimini temsil eder.</summary>
         public static TimeOnly ToTimeOnly(this TimeSpan timeSpan) => TimeOnly.FromTimeSpan(timeSpan - TimeSpan.FromDays((int)timeSpan.TotalDays));
         /// <summary>TimeSpan değerini gün, saat, dakika ve saniye (milisaniye dahil) bileşenlerine ayırarak okunabilir bir metne dönüştürür. Negatif süreleri destekler.</summary>
@@ -112,12 +117,13 @@
             }
             if (ts.Milliseconds > 0)
             {
-                var nf = CultureInfo.DefaultThreadCurrentUICulture.NumberFormat;
+                var nf = CultureInfo.CurrentUICulture.NumberFormat;
                 parts.Add($"{(ts.Seconds > 0 ? ts.Seconds.ToString().Replicate() : "0")}{nf.CurrencyDecimalSeparator}{ts.Milliseconds.ToString().Replicate(3)} {secondText}");
             }
             else if (ts.Seconds > 0) { parts.Add(String.Join(" ", ts.Seconds.ToString().Replicate(), secondText)); }
             var result = String.Join(" ", parts);
             return isNegative ? String.Concat("- ", result) : result;
         }
+        #endregion
     }
 }

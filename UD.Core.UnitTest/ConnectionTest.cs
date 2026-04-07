@@ -16,8 +16,8 @@ namespace UD.Core.UnitTest
         [SetUp]
         public void Setup()
         {
-            CultureInfo.CurrentCulture = new("en-US");
-            CultureInfo.CurrentUICulture = new("en-US");
+            CultureInfo.CurrentCulture = new("tr-TR");
+            CultureInfo.CurrentUICulture = new("tr-TR");
             this.connection = new("Data Source=:memory:");
             this.connection.Open();
             this.context = new(new DbContextOptionsBuilder<TestDbContext>().UseSqlite(this.connection).Options);
