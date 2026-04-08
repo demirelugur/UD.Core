@@ -10,7 +10,7 @@
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
     using UD.Core.Helper;
-    using static UD.Core.Helper.GlobalConstants;
+    using UD.Core.Helper.Resources;
     public sealed class FileSettingsHelper : IEquatable<FileSettingsHelper>
     {
         #region Equals
@@ -21,14 +21,14 @@
         private string[] _Accept;
         [UDRequired]
         [UDArrayMinLength]
-        [Display(Name = "Uzantı")]
+        [Display(Name = nameof(DisplayNames.FileSettingsHelperAccept), ResourceType = typeof(DisplayNames))]
         public string[] accept { get { return _Accept; } set { _Accept = (value ?? []); } }
-        [Range(1, Int64.MaxValue, ErrorMessage = ValidationErrorMessageConstants.Range)]
-        [Display(Name = "Limit Belge Boyutu")]
+        [Range(1, Int64.MaxValue, ErrorMessageResourceName = nameof(DisplayNames.RangeValidationError), ErrorMessageResourceType = typeof(DisplayNames))]
+        [Display(Name = nameof(DisplayNames.FileSettingsHelperSize), ResourceType = typeof(DisplayNames))]
         [DefaultValue(1048576)]
         public long size { get; set; }
-        [Range(1, Byte.MaxValue, ErrorMessage = ValidationErrorMessageConstants.Range)]
-        [Display(Name = "Limit Belge Sayısı")]
+        [Range(1, Byte.MaxValue, ErrorMessageResourceName = nameof(DisplayNames.RangeValidationError), ErrorMessageResourceType = typeof(DisplayNames))]
+        [Display(Name = nameof(DisplayNames.FileSettingsHelperFileCount), ResourceType = typeof(DisplayNames))]
         [DefaultValue(1)]
         public byte fileCount { get; set; }
         [JsonIgnore]

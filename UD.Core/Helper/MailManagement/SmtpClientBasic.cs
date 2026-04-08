@@ -7,6 +7,7 @@
     using System.Net.Mail;
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Resources;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class SmtpClientBasic : IEquatable<SmtpClientBasic>
     {
@@ -21,26 +22,26 @@
         [UDRequired]
         [UDStringLength(MaximumLengthConstants.EMail)]
         [UDEmail]
-        [Display(Name = "e-Posta")]
+        [Display(Name = nameof(DisplayNames.SmtpClientBasicEmail), ResourceType = typeof(DisplayNames))]
         public string Email { get; set; }
         [UDRequired]
         [UDStringLength(16, 8)]
-        [Display(Name = "Şifre")]
+        [Display(Name = nameof(DisplayNames.SmtpClientBasicPassword), ResourceType = typeof(DisplayNames))]
         public string Password { get { return _password; } set { _password = value.ToStringOrEmpty(); } }
         [UDRequired]
         [UDStringLength(30)]
-        [Display(Name = "Host")]
+        [Display(Name = nameof(DisplayNames.SmtpClientBasicHost), ResourceType = typeof(DisplayNames))]
         public string Host { get { return _host; } set { _host = value.ToStringOrEmpty(); } }
         [UDRequired]
         [UDRangePositiveInt32]
-        [Display(Name = "Port")]
+        [Display(Name = nameof(DisplayNames.SmtpClientBasicPort), ResourceType = typeof(DisplayNames))]
         [DefaultValue(25)]
         public int Port { get; set; }
         [UDRequired]
-        [Display(Name = "Enable SSL")]
+        [Display(Name = nameof(DisplayNames.SmtpClientBasicEnableSsl), ResourceType = typeof(DisplayNames))]
         public bool EnableSsl { get; set; }
         [UDRangePositiveInt32]
-        [Display(Name = "Timeout")]
+        [Display(Name = nameof(DisplayNames.SmtpClientBasicTimeout), ResourceType = typeof(DisplayNames))]
         public int? Timeout { get { return _timeout; } set { _timeout = value.NullOrDefault(); } }
         public SmtpClient toSmtpClient()
         {
