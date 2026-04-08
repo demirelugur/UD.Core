@@ -84,8 +84,7 @@
         public static decimal ToDecimal(this object value, decimal defaultValue = Decimal.Zero)
         {
             if (value == null) { return defaultValue; }
-            if (value is String) { value = value.ToStringOrEmpty(CultureInfo.InvariantCulture); }
-            return value.ParseOrDefault<decimal?>() ?? defaultValue;
+            return value.ToStringOrEmpty(CultureInfo.InvariantCulture).ParseOrDefault<decimal?>() ?? defaultValue;
         }
         /// <summary>Bir nesneyi dinamik bir nesneye (<see cref="ExpandoObject"/>) dönüştürür. Dönüştürülen nesne, içindeki tüm özellik adları ve değerleriyle birlikte dinamik bir yapı sunar.</summary>
         /// <param name="value">Dönüştürülecek nesne.</param>
@@ -93,9 +92,9 @@
         public static dynamic ToDynamic(this object value)
         {
             Guard.ThrowIfNull(value, nameof(value));
-            IDictionary<string, object> e = new ExpandoObject();
-            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType())) { e.Add(property.Name, property.GetValue(value)); }
-            return e as ExpandoObject;
+            IDictionary<string, object> eo = new ExpandoObject();
+            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType())) { eo.Add(property.Name, property.GetValue(value)); }
+            return eo as ExpandoObject;
         }
         /// <summary>Verilen <paramref name="value"/> değerini <typeparamref name="TEnum"/> türüne çevirmeyi dener ve başarısız olursa varsayılan değer döndürür. Sayısal tiplerde (<see cref="Byte"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>) ilgili enum değeri <see cref="Enum.ToObject(Type, object)"/> ile oluşturulmaya çalışılır. String değerlerde önce sayısal parse denenir (Int64), değilse enum adı olarak (büyük/küçük harf duyarsız) parse edilir.</summary>
         /// <typeparam name="TEnum">Hedef enum türü.</typeparam>

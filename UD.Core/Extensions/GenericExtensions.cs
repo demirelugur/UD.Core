@@ -42,9 +42,9 @@
         #region IEnumerable
         /// <summary>Verilen koleksiyondaki tüm nesneleri temizler ve dispose eder.</summary>
         /// <param name="source">Dispose edilecek nesneleri içeren koleksiyon.</param>
-        public static void DisposeAll<T>(this IEnumerable<T> source) where T : IDisposable
+        public static void DisposeRange<T>(this IEnumerable<T> source) where T : IDisposable
         {
-            if (source != null) { foreach (var value in source) { value.Dispose(); } }
+            if (!source.IsNullOrEmptyOrAllNull()) { foreach (var value in source) { value.Dispose(); } }
         }
         /// <summary>İki koleksiyon arasında bir sol dış birleşim (left join) gerçekleştiren bir yöntemdir. Her öğe için bir anahtar kullanır ve sağdaki koleksiyondan bir eşleşme olup olmadığını kontrol eder.</summary>
         /// <typeparam name="TLeft">Sol koleksiyon tipi.</typeparam>

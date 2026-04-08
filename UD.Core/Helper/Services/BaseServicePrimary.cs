@@ -6,6 +6,7 @@
     using UD.Core.Helper;
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
+    using UD.Core.Helper.Validation;
     public interface IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class, IBaseEntity
@@ -18,7 +19,9 @@
     {
         Task<TEntityDto?> GetById(TKey id, CancellationToken cancellationToken = default);
         Task<TKey> Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task<TKey[]> InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default);
         Task Update(TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task UpdateRange(IEnumerable<TUpdateDto> updateDtos, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteByIds(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default);
     }
     public abstract class BaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IBaseServicePrimary<TContext, TEntity, TKey, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
@@ -39,7 +42,7 @@
         }
         public virtual async Task<TKey> Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(insertDto, nameof(insertDto));
+            Guard.ThrowIfNull(insertDto, nameof(insertDto));
             var entity = this.Mapper.Map<TEntity>(insertDto);
             await this.DbSet.AddAsync(entity, cancellationToken);
             if (autoSave)
@@ -49,9 +52,21 @@
             }
             return default;
         }
+        public virtual async Task<TKey[]> InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            Guard.ThrowIfEmpty(insertDtos, nameof(insertDtos));
+            var entities = insertDtos.Select(dto => this.Mapper.Map<TEntity>(dto));
+            await this.DbSet.AddRangeAsync(entities, cancellationToken);
+            if (autoSave)
+            {
+                await this.Context.SaveChangesAsync(cancellationToken);
+                return entities.Select(this.GetKeyValue).ToArray();
+            }
+            return [];
+        }
         public virtual async Task Update(TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(updateDto, nameof(updateDto));
+            Guard.ThrowIfNull(updateDto, nameof(updateDto));
             var entity = await this.DbSet.FindAsync([updateDto.Id], cancellationToken);
             if (entity != null)
             {
@@ -59,9 +74,17 @@
                 if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
             }
         }
+        public virtual async Task UpdateRange(IEnumerable<TUpdateDto> updateDtos, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            Guard.ThrowIfEmpty(updateDtos, nameof(updateDtos));
+            var tasks = new List<Task>();
+            foreach (var updateDto in updateDtos) { tasks.Add(this.Update(updateDto, false, cancellationToken)); }
+            await Task.WhenAll(tasks);
+            if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
+        }
         public virtual async Task DeleteByIds(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            if (ids != null)
+            if (!ids.IsNullOrEmptyOrAllNull())
             {
                 foreach (var id in ids)
                 {

@@ -137,9 +137,9 @@ namespace UD.Core.Extensions
         /// <summary>Metin içerisindeki birden fazla ardýþýk boþluðu tek bir boþluða indirger ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null veya boþ metinlerde güvenli þekilde çalýþýr.</summary>
         public static string RemoveMultipleSpace(this string value) => Regex.Replace(value.ToStringOrEmpty(), " +", " ").Trim();
         /// <summary>Belirtilen karakter ile doldurarak bir string deðerini belirli bir uzunluða getirir.</summary>
-        /// <param name="value">Uzunluðu ayarlanacak string deðeri. </param>
-        /// <param name="totalValueLength">Hedef toplam uzunluk.  Varsayýlan deðer 2&#39;dir.</param>
-        /// <param name="c">Dolgu için kullanýlacak karakter.  Varsayýlan deðer 0&#39;dýr.</param>
+        /// <param name="value">Uzunluðu ayarlanacak string deðeri.</param>
+        /// <param name="totalValueLength">Hedef toplam uzunluk. Varsayýlan deðer 2&#39;dir.</param>
+        /// <param name="c">Dolgu için kullanýlacak karakter. Varsayýlan deðer 0&#39;dýr.</param>
         /// <param name="fillingDirectionIsLeft">Dolgu karakterinin eklenme yönü. <see langword="true"/> ise sol tarafa, <see langword="false"/> ise sað tarafa eklenir. Varsayýlan deðer <see langword="true"/> (sol tarafa doldurma)&#39;dýr.</param>
         /// <returns>Belirtilen uzunluða getirilmiþ string deðeri. Eðer deðer boþ ise veya mevcut uzunluk hedef uzunluktan büyük/eþitse orijinal deðeri döndürür. </returns>
         /// <exception cref="ArgumentException"><paramref name="totalValueLength"/> parametresi sýfýr veya negatif olduðunda fýrlatýlýr.</exception>
@@ -189,58 +189,67 @@ namespace UD.Core.Extensions
             }
             return sb.ToString();
         }
-        /// <summary>Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code></summary>
-        public static string LikeContains(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower)
+        /// <summary>
+        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir
+        /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code></para>
+        /// </summary>
+        public static string LikeContains(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower, bool invariant = false)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
             return caseHandling switch
             {
                 StringCaseHandling.@default => $"%{value}%",
-                StringCaseHandling.lower => $"%{value.ToLower()}%",
-                StringCaseHandling.upper => $"%{value.ToUpper()}%",
+                StringCaseHandling.lower => $"%{(invariant ? value.ToLowerInvariant() : value.ToLower())}%",
+                StringCaseHandling.upper => $"%{(invariant ? value.ToUpperInvariant() : value.ToUpper())}%",
                 _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
             };
         }
-        /// <summary>Verilen metni SQL LIKE sorgusu için &quot;<paramref name="value"/>%&quot; biçimine getirir <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeStartWith()))</code></summary>
-        public static string LikeStartWith(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower)
+        /// <summary>
+        /// Verilen metni SQL LIKE sorgusu için &quot;<paramref name="value"/>%&quot; biçimine getirir 
+        /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeStartWith()))</code></para>
+        /// </summary>
+        public static string LikeStartWith(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower, bool invariant = false)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
             return caseHandling switch
             {
                 StringCaseHandling.@default => String.Concat(value, "%"),
-                StringCaseHandling.lower => String.Concat(value.ToLower(), "%"),
-                StringCaseHandling.upper => String.Concat(value.ToUpper(), "%"),
+                StringCaseHandling.lower => String.Concat(invariant ? value.ToLowerInvariant() : value.ToLower(), "%"),
+                StringCaseHandling.upper => String.Concat(invariant ? value.ToUpperInvariant() : value.ToUpper(), "%"),
                 _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
             };
         }
-        /// <summary>Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>&quot; biçimine getirir. <code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeEndsWith()))</code></summary>
-        public static string LikeEndsWith(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower)
+        /// <summary>
+        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>&quot; biçimine getirir.
+        /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeEndsWith()))</code></para>
+        /// </summary>
+        public static string LikeEndsWith(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower, bool invariant = false)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
             return caseHandling switch
             {
                 StringCaseHandling.@default => String.Concat("%", value),
-                StringCaseHandling.lower => String.Concat("%", value.ToLower()),
-                StringCaseHandling.upper => String.Concat("%", value.ToUpper()),
+                StringCaseHandling.lower => String.Concat("%", invariant ? value.ToLowerInvariant() : value.ToLower()),
+                StringCaseHandling.upper => String.Concat("%", invariant ? value.ToUpperInvariant() : value.ToUpper()),
                 _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
             };
         }
         /// <summary>JSON string&#39;inden belirtilen anahtara (key) karþýlýk gelen deðeri tip güvenli þekilde çeker.</summary>
         /// <typeparam name="T">Döndürülecek deðerin tipi (string, int, bool, DateTime, Guid vb.)</typeparam>
-        /// <param name="jsonData">Ýçinden deðer okunacak JSON string&#39;i (JObject olmalýdýr)</param>
+        /// <param name="json">Ýçinden deðer okunacak JSON string&#39;i (JObject olmalýdýr)</param>
         /// <param name="key">Deðeri alýnacak property&#39;nin anahtarý (key)</param>
         /// <returns>Bulunan property deðeri belirtilen türe (T) dönüþtürülerek döndürülür. Property bulunamazsa, null ise veya JSON geçersizse varsayýlan deðer (default(T)) döndürülür.</returns>
-        public static T JObjectGetProperty<T>(this string jsonData, string key)
+        public static T GetPropertyValueFromJObject<T>(this string json, string key)
         {
             key = key.ToStringOrEmpty();
-            if (key != "" && TryValidators.TryJson(jsonData, JTokenType.Object, out JObject _jo) && _jo.HasValues)
+            if (key != "" && TryValidators.TryJson(json, JTokenType.Object, out JObject _jo) && _jo.HasValues)
             {
-                var k = _jo[key];
-                if (k.IsNullOrUndefined()) { return default; }
-                return k.ParseOrDefault<T>();
+                var jToken = _jo[key];
+                if (jToken.IsNoneOrNullOrUndefined()) { return default; }
+                return jToken.ParseOrDefault<T>();
             }
             return default;
         }

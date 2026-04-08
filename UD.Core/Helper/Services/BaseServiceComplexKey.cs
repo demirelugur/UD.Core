@@ -17,6 +17,7 @@
     {
         Task<TEntityDto?> GetById(object[] keyValues, CancellationToken cancellationToken = default);
         Task Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default);
         Task Update(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteById(object[] keyValues, bool autoSave = false, CancellationToken cancellationToken = default);
     }
@@ -41,6 +42,13 @@
             Guard.ThrowIfNull(insertDto, nameof(insertDto));
             var entity = this.Mapper.Map<TEntity>(insertDto);
             await this.DbSet.AddAsync(entity, cancellationToken);
+            if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
+        }
+        public virtual async Task InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            Guard.ThrowIfEmpty(insertDtos, nameof(insertDtos));
+            var entities = insertDtos.Select(dto => this.Mapper.Map<TEntity>(dto));
+            await this.DbSet.AddRangeAsync(entities, cancellationToken);
             if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
         }
         public virtual async Task Update(object[] keyValues, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)

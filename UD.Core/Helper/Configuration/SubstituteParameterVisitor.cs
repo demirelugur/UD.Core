@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Helper.Configuration
 {
     using System.Linq.Expressions;
-    internal class SubstituteParameterVisitor : ExpressionVisitor
+    internal sealed class SubstituteParameterVisitor : ExpressionVisitor
     {
         private readonly Dictionary<Expression, Expression> sub;
         public SubstituteParameterVisitor(ParameterExpression leftParameter, ParameterExpression rightParameter)

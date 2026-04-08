@@ -124,30 +124,6 @@
         /// <param name="value">Türkçe karakterlerin değiştirileceği metin.</param>
         /// <returns>Değiştirilmiş metni döner.</returns>
         public static string ReplaceTurkishChars(string value) => value.ToStringOrEmpty().Replace('Ç', 'C').Replace('ç', 'c').Replace('Ğ', 'G').Replace('ğ', 'g').Replace('İ', 'I').Replace('ı', 'i').Replace('Ö', 'O').Replace('ö', 'o').Replace('Ş', 'S').Replace('ş', 's').Replace('Ü', 'U').Replace('ü', 'u');
-        /// <summary><paramref name="basDate"/> ile <paramref name="bitDate"/> arasındaki farkı yıl, ay, gün ve saat:dakika:saniye biçiminde hesaplar. Başlangıç tarihi bitiş tarihinden sonra ise hata fırlatır.</summary>
-        public static DateIntervalResult GetDateInterval(DateTime basDate, DateTime bitDate)
-        {
-            if (basDate > bitDate)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
-                throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!");
-            }
-            var ts = (bitDate - basDate).ToTimeOnly();
-            var yil = bitDate.Year - basDate.Year;
-            var ay = bitDate.Month - basDate.Month;
-            var gun = bitDate.Day - basDate.Day;
-            if (gun < 0)
-            {
-                ay--;
-                gun += DateTime.DaysInMonth(bitDate.Year, bitDate.Month == 1 ? 12 : bitDate.Month - 1);
-            }
-            if (ay < 0)
-            {
-                yil--;
-                ay += 12;
-            }
-            return new(yil, ay, gun, ts);
-        }
         /// <summary>Asenkron işlemler için TransactionScope oluşturur. TransactionScope, işlem bütünlüğünü sağlamak için kullanılır. Bu metod, asenkron işlemlerin TransactionScope ile birlikte kullanılabilmesi için ayarlanmıştır. <code>new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);</code></summary>
         public static TransactionScope TransactionScopeAsync => new(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
         /// <summary>Default HttpContext nesnesi oluşturur. Bu nesne, ASP.NET Core uygulamalarında HTTP isteklerini ve yanıtlarını temsil eder. Bu özellik, testler veya diğer durumlarda gerçek bir HTTP bağlamına ihtiyaç duyulduğunda kullanılabilir. Oluşturulan HttpContext nesnesi, MVC Core ve Server-Side Blazor hizmetlerini içeren bir servis sağlayıcıya sahiptir, böylece bu hizmetlere erişim sağlanabilir.</summary>

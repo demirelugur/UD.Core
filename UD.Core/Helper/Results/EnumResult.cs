@@ -13,7 +13,6 @@
         public long value { get; }
         public string text { get; }
         public string description { get; }
-        public string descSeo => this.description.ToSeoFriendly();
         public EnumResult() : this(default, "", "") { }
         public EnumResult(long value, string text, string description)
         {

@@ -84,9 +84,9 @@
             PagingInfo? p = null;
             if (loadInfo)
             {
-                var totalcount = await source.CountAsync(cancellationToken);
-                var totalpage = Convert.ToInt32(Math.Ceiling(totalcount / Convert.ToDouble(size)));
-                p = new(totalcount, totalpage, pageNumber);
+                var totalCount = await source.CountAsync(cancellationToken);
+                var totalPage = Convert.ToInt32(Math.Ceiling(totalCount / Convert.ToDouble(size)));
+                p = new(totalCount, totalPage, pageNumber);
             }
             IOrderedQueryable<T> orderedSource;
             if (sorting.IsNullOrEmpty())
