@@ -2,6 +2,7 @@
 {
     using Microsoft.Data.SqlClient;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -57,7 +58,7 @@
                 Value = x.Value ?? DBNull.Value
             }).ToArray();
         }
-        /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı)</para></summary>
+        /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı), JToken(DateTime türüne uygun biçimde olmalı)</para></summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>
         /// <param name="timeonly">Zaman bilgisi (isteğe bağlı). <paramref name="obj"/> değeri türü DateOnly iken girilecek değer anlamlıdır</param>
         /// <returns>DateTime değeri.</returns>
@@ -67,6 +68,7 @@
             if (obj is DateTimeOffset _dto) { return _dto.DateTime; }
             if (obj is DateOnly _do) { return _do.ToDateTime(timeonly ?? default); }
             if (obj is (Byte or Int16 or Int32 or Int64)) { return new(obj.ToLong()); }
+            if (obj is JToken _jt && _jt.Type == JTokenType.Date) { return _jt.ToObject<DateTime>(); }
             if (obj is String _s)
             {
                 if (DateTime.TryParse(_s, out _dt)) { return _dt; }
