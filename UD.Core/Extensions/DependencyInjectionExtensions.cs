@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
+    using AutoMapper;
     using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Reflection;
@@ -31,6 +32,27 @@
         public static IServiceCollection AddScopedRangeBaseInfrastructureService(this IServiceCollection services, Assembly assembly)
         {
             services.AddScopedRange(assembly, typeof(IBaseInfrastructureService<,>), typeof(BaseInfrastructureService<,>));
+            return services;
+        }
+        /// <summary>AutoMapper ve MediatR kütüphanelerini aynı anda yapılandırır ve servis koleksiyonuna ekler.</summary>
+        /// <typeparam name="TProfile">Kullanılacak AutoMapper Profile sınıfı (<see cref="Profile"/>&#39;dan kalıtım almalıdır)</typeparam>
+        /// <typeparam name="TProgram">MediatR handler&#39;larının taranacağı assembly&#39;yi belirlemek için kullanılan herhangi bir sınıf (genellikle Program sınıfı)</typeparam>
+        /// <param name="services">Servis koleksiyonu</param>
+        /// <param name="licenseKey">AutoMapper ve MediatR için lisans anahtarı (opsiyonel)</param>
+        /// <returns>IServiceCollection (fluent kullanım için)</returns>
+        public static IServiceCollection AddAutoMapperAndMediatR<TProfile, TProgram>(this IServiceCollection services, string? licenseKey = null) where TProfile : Profile, new() where TProgram : class
+        {
+            licenseKey = licenseKey.ToStringOrEmpty();
+            services.AddAutoMapper(options =>
+            {
+                if (licenseKey != "") { options.LicenseKey = licenseKey; }
+                options.AddProfile<TProfile>();
+            });
+            services.AddMediatR(options =>
+            {
+                if (licenseKey != "") { options.LicenseKey = licenseKey; }
+                options.RegisterServicesFromAssemblyContaining<TProgram>();
+            });
             return services;
         }
     }
