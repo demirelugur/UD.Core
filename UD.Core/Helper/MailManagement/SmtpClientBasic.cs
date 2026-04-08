@@ -70,7 +70,7 @@
         public static SmtpClientBasic ToEntityFromObject(object value)
         {
             if (value == null) { return new(); }
-            if (value is SmtpClientBasic _ssh) { return _ssh; }
+            if (value is SmtpClientBasic _scb) { return _scb; }
             if (value is IFormCollection _form)
             {
                 var (hasError, model, errors) = _form.TryBindFromFormAsync<SmtpClientBasic>().GetAwaiter().GetResult();

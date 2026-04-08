@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -9,6 +10,10 @@
     using UD.Core.Helper.Validation;
     public static class SystemObjectExtensions
     {
+        /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None biçiminde ve bazı özel ayarlarla döner.</summary>
+        /// <param name="value">JSON&#39;a dönüştürülecek nesne.</param>
+        /// <returns>Nesnenin JSON string biçiminde temsili.</returns>
+        public static string ToJSON(this object value) => JsonConvert.SerializeObject(value, Formatting.None, GlobalConstants.JsonSerializerSettings);
         /// <summary>Verilen bir dizeyi, belirtilen türde bir değere dönüştürür. Dönüşüm başarısız olursa, varsayılan değeri döner.</summary>
         /// <typeparam name="TKey">Dönüşüm yapılacak hedef tür.</typeparam>
         /// <param name="value">Dönüştürülecek dize değeri.</param>
@@ -31,7 +36,7 @@
         /// <param name="value">Dönüştürülecek nesne.</param>
         /// <param name="defaultValue">Dönüşüm başarısız olursa dönecek varsayılan byte değeri.</param>
         /// <returns>Dönüştürülmüş byte değeri.</returns>
-        public static byte ToByte(this object value, byte defaultValue = 0)
+        public static byte ToByte(this object value, byte defaultValue = Byte.MinValue)
         {
             if (value == null) { return defaultValue; }
             try { return Convert.ToByte(value); }

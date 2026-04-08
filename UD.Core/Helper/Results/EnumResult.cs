@@ -31,13 +31,13 @@
                 if (hasError) { throw errors.ToNestedException(); }
                 return model;
             }
-            var t = value.GetType();
-            if (t.IsEnum)
+            var valueType = value.GetType();
+            if (valueType.IsEnum)
             {
                 try
                 {
-                    var text = Enum.GetName(t, value);
-                    return new(Convert.ToInt64(value), text, t.GetField(text).GetDescription());
+                    var text = Enum.GetName(valueType, value);
+                    return new(Convert.ToInt64(value), text, valueType.GetField(text).GetDescription());
                 }
                 catch { return new(); }
             }

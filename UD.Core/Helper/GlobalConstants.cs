@@ -21,7 +21,9 @@
         };
         public sealed class ArrayConstants
         {
+            /// <summary><code>[&quot;bytes&quot;, &quot;KB&quot;, &quot;MB&quot;, &quot;GB&quot;, &quot;TB&quot;, &quot;PB&quot;, &quot;EB&quot;, &quot;ZB&quot;, &quot;YB&quot;]</code></summary>
             public static readonly string[] FileSizeUnits = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+            /// <summary><code>[&#39;Ç&#39;, &#39;ç&#39;, &#39;Ğ&#39;, &#39;ğ&#39;, &#39;İ&#39;, &#39;ı&#39;, &#39;Ö&#39;, &#39;ö&#39;, &#39;Ş&#39;, &#39;ş&#39;, &#39;Ü&#39;, &#39;ü&#39;]</code></summary>
             public static readonly char[] TurkishSpecialCharacters = ['Ç', 'ç', 'Ğ', 'ğ', 'İ', 'ı', 'Ö', 'ö', 'Ş', 'ş', 'Ü', 'ü'];
         }
         public sealed class DateConstants

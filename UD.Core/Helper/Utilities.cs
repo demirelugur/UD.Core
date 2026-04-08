@@ -9,10 +9,8 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq.Expressions;
-    using System.Security.Cryptography;
     using System.Transactions;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
     public sealed class Utilities
     {
@@ -96,19 +94,6 @@
                 if (new FileExtensionContentTypeProvider().Mappings.TryGetValue(extension, out string _v)) { return _v; }
             }
             return "application/octet-stream";
-        }
-        /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
-        /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
-        /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
-        public static byte[] GenerateRandomKey(int length)
-        {
-            Guard.ThrowIfZeroOrNegative(length, nameof(length));
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                var byteArray = new byte[length];
-                rng.GetBytes(byteArray);
-                return byteArray;
-            }
         }
         /// <summary>Metni belirtilen maksimum uzunluğa kadar kısaltır. Metin belirtilen uzunluğu aşıyorsa sonuna üç nokta (...) ekler. Metin boş veya null ise boş string döner. </summary>
         /// <param name="value">İşlem yapılacak metin</param>

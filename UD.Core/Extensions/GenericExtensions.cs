@@ -8,7 +8,7 @@
     public static class GenericExtensions
     {
         #region IDictionary
-        /// <summary>Belirtilen anahtar ve değeri bir sözlüğe ekler. Eğer anahtar zaten mevcutsa, değeri günceller; mevcut değilse, yeni bir anahtar-değer çifti olarak ekler.</summary>
+        /// <summary>Belirtilen anahtar ve değeri bir sözlüğe ekler. Eğer anahtar zaten mevcutsa, değeri günceller; mevcut değilse, yeni bir anahtar - değer çifti olarak ekler.</summary>
         /// <typeparam name="K">Sözlükteki anahtar türü.</typeparam>
         /// <typeparam name="V">Sözlükteki değer türü.</typeparam>
         /// <param name="dictionary">Üzerinde işlem yapılacak sözlük.</param>
@@ -21,7 +21,7 @@
         /// <summary>Verilen koşula uyan tüm anahtar - değer çiftlerini sözlükten kaldırır.</summary>
         /// <typeparam name="K">Anahtar tipi.</typeparam>
         /// <typeparam name="V">Değer tipi.</typeparam>
-        /// <param name="dictionary">Anahtar-değer çiftlerinin bulunduğu sözlük.</param>
+        /// <param name="dictionary">Anahtar - değer çiftlerinin bulunduğu sözlük.</param>
         /// <param name="predicate">Kaldırılacak öğeleri belirleyen bir koşul.</param>
         public static void RemoveWhere<K, V>(this IDictionary<K, V> dictionary, Func<KeyValuePair<K, V>, bool> predicate)
         {

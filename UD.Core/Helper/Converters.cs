@@ -1,7 +1,6 @@
 ﻿namespace UD.Core.Helper
 {
     using Microsoft.Data.SqlClient;
-    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
@@ -14,10 +13,6 @@
     using UD.Core.Extensions;
     public sealed class Converters
     {
-        /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None formatında ve bazı özel ayarlarla döner.</summary>
-        /// <param name="value">JSON&#39;a dönüştürülecek nesne.</param>
-        /// <returns>Nesnenin JSON string formatındaki temsili.</returns>
-        public static string ToJSON(object value) => JsonConvert.SerializeObject(value, Formatting.None, GlobalConstants.JsonSerializerSettings);
         /// <summary>Verilen string ifadeyi tersine çevirir. Bu metot, Türkçe karakterler (ğ, ü, ş, ç, ö, ı, İ vb.) dahil olmak üzere tüm Unicode metin öğelerini dikkate alarak çalışır. Standart char tabanlı ters çevirme yöntemlerinden farklı olarak <see cref="StringInfo"/> sınıfını kullanır ve her bir metin öğesini (text element) ayrı değerlendirir.</summary>
         /// <param name="value">Tersine çevrilecek string ifade.</param>
         /// <returns>Ters çevrilmiş string ifade.</returns>
@@ -62,7 +57,7 @@
         /// <param name="obj">Dönüştürülecek nesne.</param>
         /// <param name="timeonly">Zaman bilgisi (isteğe bağlı). <paramref name="obj"/> değeri türü DateOnly iken girilecek değer anlamlıdır</param>
         /// <returns>DateTime değeri.</returns>
-        public static DateTime ToDateTimeFromObject(object obj, TimeOnly? timeonly)
+        public static DateTime ToDateTimeFromObject(object obj, TimeOnly? timeonly = null)
         {
             if (obj is DateTime _dt) { return _dt; }
             if (obj is DateTimeOffset _dto) { return _dto.DateTime; }
@@ -77,45 +72,6 @@
                 if (Int64.TryParse(_s, out long _ticks)) { return new(_ticks); }
             }
             return default;
-        }
-        /// <summary>SQL Server&#39;ın sistem tür kimliğini <c>([system_type_id])</c> <see cref="SqlDbType"/> enum değerine dönüştürür.</summary>
-        /// <param name="systemTypeId">SQL Server [sys].[types] tablosundaki [system_type_id] değeri.</param>
-        /// <returns>Eşleşen <see cref="SqlDbType"/> enum değeri.</returns>
-        /// <exception cref="NotSupportedException">Geçersiz veya desteklenmeyen bir sistem tür kimliği verildiğinde fırlatılır.</exception>
-        public static SqlDbType ToSqlDbType(int systemTypeId)
-        {
-            return systemTypeId switch
-            {
-                34 => SqlDbType.Image,
-                35 => SqlDbType.Text,
-                36 => SqlDbType.UniqueIdentifier,
-                40 => SqlDbType.Date,
-                41 => SqlDbType.Time,
-                42 => SqlDbType.DateTime2,
-                43 => SqlDbType.DateTimeOffset,
-                48 => SqlDbType.TinyInt,
-                52 => SqlDbType.SmallInt,
-                56 => SqlDbType.Int,
-                58 => SqlDbType.SmallDateTime,
-                59 => SqlDbType.Real,
-                60 => SqlDbType.Money,
-                61 => SqlDbType.DateTime,
-                62 => SqlDbType.Float,
-                99 => SqlDbType.NText,
-                104 => SqlDbType.Bit,
-                106 => SqlDbType.Decimal,
-                122 => SqlDbType.SmallMoney,
-                127 => SqlDbType.BigInt,
-                165 => SqlDbType.VarBinary,
-                167 => SqlDbType.VarChar,
-                173 => SqlDbType.Binary,
-                175 => SqlDbType.Char,
-                189 => SqlDbType.Timestamp,
-                231 => SqlDbType.NVarChar,
-                239 => SqlDbType.NChar,
-                241 => SqlDbType.Xml,
-                _ => throw new NotSupportedException(Checks.IsEnglishCurrentUICulture ? $"Invalid or unsupported {nameof(systemTypeId)}: {systemTypeId}" : $"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
-            };
         }
         /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="SystemArrayExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>
         /// <param name="dataUri">Dönüştürülecek data URI string&#39;i. Biçim: &quot;data:[MIME-type];base64,[base64-encoded-data]&quot;</param>

@@ -22,7 +22,7 @@
         [UDRequired]
         [UDArrayMinLength]
         [Display(Name = "Uzantı")]
-        public string[] accept { get { return _Accept; } set { _Accept = value ?? []; } }
+        public string[] accept { get { return _Accept; } set { _Accept = (value ?? []); } }
         [Range(1, Int64.MaxValue, ErrorMessage = ValidationErrorMessageConstants.Range)]
         [Display(Name = "Limit Belge Boyutu")]
         [DefaultValue(1048576)]
@@ -33,29 +33,14 @@
         public byte fileCount { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]
-        public string getformatsize => FormatSize(Convert.ToDouble(this.size));
-        public bool gettryfileisexception(ICollection<IFormFile> files, out string[] errors) => TryFileisException(files, this, out errors);
+        public string getFileSizeString => Convert.ToDouble(this.size).ToFileSizeString();
+        public bool getTryFileIsException(ICollection<IFormFile> files, out string[] errors) => TryFileisException(files, this, out errors);
         public FileSettingsHelper() : this(default, default, default) { }
         public FileSettingsHelper(string[] accept, long size, byte fileCount)
         {
             this.accept = accept;
             this.size = size;
             this.fileCount = fileCount;
-        }
-        public static string FormatSize(double value)
-        {
-            if (value < 0 || Double.IsNaN(value)) { value = 0; }
-            var j = 0;
-            var sz = ArrayConstants.FileSizeUnits.Length - 1;
-            while (value > 1024 && j < sz) { value /= 1024; j++; }
-            return String.Join(" ", (Math.Ceiling(value * 100) / 100).ToString(), ArrayConstants.FileSizeUnits[j]);
-        }
-        public static string FormatSizeDetail(double value)
-        {
-            if (value < 0 || Double.IsNaN(value)) { return ""; }
-            var fs = FormatSize(value);
-            if (value < 1024 || value % 1024 == 0) { return fs; }
-            return $"{value} {ArrayConstants.FileSizeUnits[0]} (~ {fs})";
         }
         public static bool TryFileisException(ICollection<IFormFile> files, FileSettingsHelper fileSettingsHelper, out string[] errors)
         {
@@ -116,15 +101,15 @@
                 {
                     errors = [
                        "Tek bir dosya için izin verilen yükleme miktarını aştınız!",
-                       $"Kapasite miktarı aşan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(", ", x.fileName, FormatSize(x.size))).ToArray())}",
-                       $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileSettingsHelper.getformatsize}"
+                       $"Kapasite miktarı aşan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(": ", x.fileName, Convert.ToDouble(x.size).ToFileSizeString())).ToArray())}",
+                       $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileSettingsHelper.getFileSizeString}"
                     ];
                     if (Checks.IsEnglishCurrentUICulture)
                     {
                         errors = [
                             "You have exceeded the allowed upload size for a single file!",
-                            $"Files exceeding the size limit: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(", ", x.fileName, FormatSize(x.size))).ToArray())}",
-                            $"Maximum allowed size for a single file: {fileSettingsHelper.getformatsize}"
+                            $"Files exceeding the size limit: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(": ", x.fileName, Convert.ToDouble(x.size).ToFileSizeString())).ToArray())}",
+                            $"Maximum allowed size for a single file: {fileSettingsHelper.getFileSizeString}"
                         ];
                     }
                     return true;
