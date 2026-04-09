@@ -33,12 +33,14 @@
             yield return value;
         }
         /// <summary><paramref name="objA"/> ve <paramref name="objB"/> dizilerinin elemanlarının sırasına ve değerlerine göre eşit olup olmadığını kontrol eder. Her iki dizi de null veya boş ise eşit kabul edilir.</summary>
-        public static bool IsAbsoluteEqual<T>(this T[] objA, T[] objB)
+        public static bool IsSequenceEqual<T>(this T[] objA, T[] objB)
         {
             objA ??= [];
             objB ??= [];
             if (objA.Length == 0 && objB.Length == 0) { return true; }
             return objA.AsSpan().SequenceEqual(objB.AsSpan());
         }
+        /// <summary><paramref name="objA"/> ve <paramref name="objB"/> dizilerinin elemanlarının sırasına ve değerlerine göre eşit olup olmadığını kontrol eder. Her iki dizi de null veya boş ise eşit kabul edilir.</summary>
+        public static bool IsAbsoluteEqual<T>(this T[] objA, T[] objB) => objA.IsSequenceEqual(objB);
     }
 }

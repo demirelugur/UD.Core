@@ -19,5 +19,16 @@
             if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
             throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
         }
+        /// <summary><paramref name="token"/> üzerinde güvenli bir şekilde JSONPath ile seçim yapar. Normal SelectToken metodunun aksine, null token, boş path veya geçersiz JSONPath durumunda exception fırlatmak yerine null döner.</summary>
+        /// <param name="token">Üzerinde işlem yapılacak JToken nesnesi.</param>
+        /// <param name="path">Seçilecek JSONPath ifadesi.</param>
+        /// <returns>Belirtilen path&#39;e karşılık gelen JToken veya bulunamazsa / hata oluşursa null.</returns>
+        public static JToken? SafeSelectToken(this JToken token, string path)
+        {
+            path = path.ToStringOrEmpty();
+            if (path != "" && token.IsNoneOrNullOrUndefined()) { return null; }
+            try { return token.SelectToken(path); }
+            catch { return null; }
+        }
     }
 }
