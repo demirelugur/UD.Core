@@ -142,7 +142,6 @@
         /// <param name="systemTypeId">SQL Server [sys].[types] tablosundaki [system_type_id] değeri.</param>
         /// <returns>Eşleşen <see cref="SqlDbType"/> enum değeri.</returns>
         /// <exception cref="NotSupportedException">Geçersiz veya desteklenmeyen bir sistem tür kimliği verildiğinde fırlatılır.</exception>
-
         public static SqlDbType ToSqlDbType(this byte systemTypeId)
         {
             return systemTypeId switch
