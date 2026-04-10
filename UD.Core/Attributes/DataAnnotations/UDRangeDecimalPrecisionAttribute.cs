@@ -15,7 +15,7 @@
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(precision);
             ArgumentOutOfRangeException.ThrowIfNegative(scale);
-            if (scale > precision) { throw new ArgumentException($"{nameof(this.Scale)}, {nameof(this.Precision)}'dan büyük olamaz."); }
+            if (scale > precision) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? $"{nameof(this.Scale)} cannot be greater than {nameof(this.Precision)}." : $"{nameof(this.Scale)}, {nameof(this.Precision)}'dan büyük olamaz."); }
             this.Precision = precision;
             this.Scale = scale;
         }

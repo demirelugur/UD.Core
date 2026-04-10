@@ -13,8 +13,8 @@
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty();
-            var r = validationContext.IsRequiredAttribute();
-            if (valueString == "" && !r)
+            var isRequired = validationContext.IsRequiredAttribute();
+            if (valueString == "" && !isRequired)
             {
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
@@ -26,7 +26,7 @@
                     validationContext.SetValidatePropertyValue(_jToken.ToString(Formatting.None));
                     return ValidationResult.Success;
                 }
-                if (!r)
+                if (!isRequired)
                 {
                     validationContext.SetValidatePropertyValue(null);
                     return ValidationResult.Success;

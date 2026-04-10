@@ -7,11 +7,11 @@
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDIncludesAttribute : ValidationAttribute
     {
-        public bool isequal { get; }
+        public bool isEqual { get; }
         public object[] values { get; }
-        public UDIncludesAttribute(bool isequal, params object[] values)
+        public UDIncludesAttribute(bool isEqual, params object[] values)
         {
-            this.isequal = isequal;
+            this.isEqual = isEqual;
             this.values = values ?? [];
         }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -43,13 +43,13 @@
                 contains = this.values.Any(v => Convert.ToInt64(v) == valueLong);
             }
             else { contains = this.values.Any(v => v.ToString() == value.ToString()); }
-            return (contains == this.isequal ? ValidationResult.Success : this.tovalidationresult(validationContext));
+            return (contains == this.isEqual ? ValidationResult.Success : this.tovalidationresult(validationContext));
         }
         private ValidationResult tovalidationresult(ValidationContext validationContext)
         {
             if (this.ErrorMessage.IsNullOrEmpty())
             {
-                if (this.isequal)
+                if (this.isEqual)
                 {
                     this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.values)}] değerlerinden biri olmalıdır!";
                     if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be one of the values [{String.Join(", ", this.values)}]!"; }

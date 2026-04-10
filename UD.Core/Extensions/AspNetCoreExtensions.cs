@@ -21,8 +21,8 @@
         public static bool IsMobileDevice(this HttpContext context)
         {
             Guard.ThrowIfNull(context, nameof(context));
-            var useragent = context.Request.Headers.UserAgent.ToStringOrEmpty().ToLower();
-            if (useragent != "") { foreach (var item in new string[] { "android", "iphone", "ipad", "mobile" }) { if (useragent.Contains(item)) { return true; } } }
+            var userAgent = context.Request.Headers.UserAgent.ToStringOrEmpty().ToLower();
+            if (userAgent != "") { foreach (var item in new string[] { "android", "iphone", "ipad", "mobile" }) { if (userAgent.Contains(item)) { return true; } } }
             return false;
         }
         /// <summary>Mevcut HTTP isteğinin şema (http/https) ve host bilgisini kullanarak uygulamanın temel (base) adresini Uri olarak döner. </summary>
