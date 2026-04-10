@@ -9,14 +9,14 @@
         public int minimumLength { get; }
         public int? maximumLength { get; }
         public bool isConsecutive { get; }
-        public bool isEmpty { get; }
+        public bool isEmptyCharacter { get; }
         public bool isTurkishSpecialCharacter { get; }
-        public StrongPasswordValid(int minimumLength, int? maximumLength, bool isConsecutive, bool isEmpty, bool isTurkishSpecialCharacter)
+        public StrongPasswordValid(int minimumLength, int? maximumLength, bool isConsecutive, bool isEmptyCharacter, bool isTurkishSpecialCharacter)
         {
             this.minimumLength = minimumLength;
             this.maximumLength = maximumLength.NullOrDefault();
             this.isConsecutive = isConsecutive;
-            this.isEmpty = isEmpty;
+            this.isEmptyCharacter = isEmptyCharacter;
             this.isTurkishSpecialCharacter = isTurkishSpecialCharacter;
         }
         public bool TryIsWarning(string value, string name, string surname, out string[] errors)
@@ -39,7 +39,7 @@
                 if (Checks.IsEnglishCurrentUICulture) { r.Add("The password must not contain 3 consecutive numbers! (123, 987 etc...)"); }
                 else { r.Add("Şifre içerisinde 3 ardışık sayı (123, 987 vb...) bulunmamalıdır!"); }
             }
-            if (this.isEmpty && value.Contains(' '))
+            if (this.isEmptyCharacter && value.Contains(' '))
             {
                 if (Checks.IsEnglishCurrentUICulture) { r.Add("There should be no empty characters in the password!"); }
                 else { r.Add("Şifre içerisinde boş karakter bulunmamalıdır!"); }

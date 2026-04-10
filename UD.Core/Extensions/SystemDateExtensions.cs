@@ -68,7 +68,7 @@
         }
         /// <summary>Verilen <see cref="DateTime"/> değerinin ay adını, belirtilen dile göre döndürür.</summary>
         /// <param name="dateTime">Tarih bilgisi.</param>
-        /// <param name="isElongated">><see langword="true"/> ise tam ay adı, ><see langword="false"/> ise kısaltılmış ay adı döndürülür.</param>
+        /// <param name="isElongated"><see langword="true"/> ise tam ay adı, <see langword="false"/> ise kısaltılmış ay adı döndürülür.</param>
         /// <returns>Belirtilen dile göre ay adı.</returns>
         public static string GetMonthName(this DateTime dateTime, bool isElongated = true)
         {
@@ -105,7 +105,7 @@
         public static bool IsWeekDays(this DayOfWeek dayOfWeek) => dayOfWeek.Includes(DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday);
         /// <summary>Verilen <see cref="DayOfWeek"/> değerinin, belirtilen dile göre gün adını döndürür.</summary>
         /// <param name="dayOfWeek">Gün bilgisi.</param>
-        /// <param name="isElongated">><see langword="true"/> ise tam gün adı, ><see langword="false"/> ise kısaltılmış gün adı döndürülür.</param>
+        /// <param name="isElongated"><see langword="true"/> ise tam gün adı, <see langword="false"/> ise kısaltılmış gün adı döndürülür.</param>
         /// <returns>Belirtilen dile göre gün adı.</returns>
         public static string GetDayName(this DayOfWeek dayOfWeek, bool isElongated = true)
         {

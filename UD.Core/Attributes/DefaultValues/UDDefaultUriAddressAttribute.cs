@@ -5,6 +5,6 @@
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDDefaultUriAddressAttribute : DefaultValueAttribute
     {
-        public UDDefaultUriAddressAttribute() : base(typeof(string), GlobalConstants.Example) { }
+        public UDDefaultUriAddressAttribute() : base(typeof(string), GlobalConstants.DefaultUrl) { }
     }
 }

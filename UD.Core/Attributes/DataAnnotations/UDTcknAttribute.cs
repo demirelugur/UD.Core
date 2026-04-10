@@ -12,7 +12,7 @@
         {
             if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             var valueLong = value.ToLong();
-            if (valueLong.IsTCKimlikNo())
+            if (valueLong.IsTRIdentityNumber())
             {
                 validationContext.SetValidatePropertyValue(valueLong);
                 return ValidationResult.Success;

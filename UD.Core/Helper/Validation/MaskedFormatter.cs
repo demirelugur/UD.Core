@@ -6,31 +6,31 @@
     public sealed class MaskedFormatter
     {
         /// <summary>Kimlik kartı veya nüfus cüzdanı seri numarasını maskeleme işlemi yapar. İsteğe bağlı olarak kimlik türü ve dil bilgisi ile birlikte açıklama ekler.</summary>
-        /// <param name="cuzdanSeriNo">Maske uygulanacak cüzdan seri numarası.</param>
-        /// <param name="kimlikTipi">Kimlik türü (yeni kimlik kartı veya eski nüfus cüzdanı).</param>
+        /// <param name="serialNumber">Maske uygulanacak cüzdan seri numarası.</param>
+        /// <param name="nVIIdentityCardTypes">Kimlik türü (yeni kimlik kartı veya eski nüfus cüzdanı).</param>
         /// <param name="showFull"><see langword="true"/> ise seri numarasının tamamı döner; <see langword="false"/> ise ilk 3 hane açık, kalan kısım * ile gizlenmiş döner.</param>
         /// <returns>Maske uygulanmış cüzdan seri numarası, opsiyonel olarak kimlik türü bilgisiyle birlikte. Geçersizse boş string döner.</returns>
-        public static string CuzdanSeriNo(string cuzdanSeriNo, NVIKimlikTypes? kimlikTipi, bool showFull)
+        public static string SerialNumber(string serialNumber, EnumNVIIdentityCard? nVIIdentityCardTypes, bool showFull)
         {
-            var cs = cuzdanSeriNo.ToStringOrEmpty();
+            var cs = serialNumber.ToStringOrEmpty();
             if (cs == "") { return ""; }
             if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
-            if (!kimlikTipi.HasValue) { return cs; }
-            var t = kimlikTipi.Value switch
+            if (!nVIIdentityCardTypes.HasValue) { return cs; }
+            var t = nVIIdentityCardTypes.Value switch
             {
-                NVIKimlikTypes.yeni => (Checks.IsEnglishCurrentUICulture ? "New ID Card" : "Yeni Kimlik Kartı"),
-                NVIKimlikTypes.eski => (Checks.IsEnglishCurrentUICulture ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
-                _ => throw Utilities.ThrowNotSupportedForEnum<NVIKimlikTypes>(),
+                EnumNVIIdentityCard.New => (Checks.IsEnglishCurrentUICulture ? "New ID Card" : "Yeni Kimlik Kartı"),
+                EnumNVIIdentityCard.Old => (Checks.IsEnglishCurrentUICulture ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
+                _ => throw Utilities.ThrowNotSupportedForEnum<EnumNVIIdentityCard>(),
             };
             return $"{cs} ({t})";
         }
         /// <summary>Doğum tarihini maskeler veya tam tarih olarak döndürür.</summary>
-        /// <param name="dogumTarih">Maskelenecek veya gösterilecek doğum tarihi.</param>
+        /// <param name="date">Maskelenecek veya gösterilecek doğum tarihi.</param>
         /// <param name="showFull">Eğer <see langword="true"/> ise doğum tarihi tam olarak (dd.MM.yyyy) döner. Eğer <see langword="false"/> ise tarih maskelenir: gün olduğu gibi, ay &#39;**&#39; ile gizlenir, yılın ilk iki hanesi gösterilir ve son iki hanesi &#39;**&#39; ile gizlenir</param>
         /// <returns>Maskelenmiş veya tam doğum tarihi stringi.</returns>
-        public static string DogumTarih(DateOnly dogumTarih, bool showFull)
+        public static string BirthDate(DateOnly date, bool showFull)
         {
-            var d = dogumTarih.ToString(DateConstants.ddMMyyyy);
+            var d = date.ToString(DateConstants.ddMMyyyy);
             if (showFull) { return d; }
             return $"{d.Substring(0, 2)}.**.{d.Substring(6, 2)}**";
         }
@@ -44,16 +44,16 @@
             return (TryValidators.TryPhoneNumberTR(phoneNumberTR, out string _t) ? $"(**{_t.Substring(2, 1)}) {_t.Substring(3, 1)}**-*{_t.Substring(8, 2)}" : "");
         }
         /// <summary>Verilen sayısal kimlik numarasını (TCKN veya VKN) maskeler. TCKN olarak doğrulanırsa orta kısım 6 adet &#39;*&#39;, VKN olarak doğrulanırsa 5 adet &#39;*&#39; ile gizlenir. Eğer <paramref name="showFull"/> true ise numara olduğu gibi döndürülür. Geçerli bir TCKN veya VKN değilse boş string döndürülür.</summary>
-        /// <param name="value">Maskelenecek kimlik numarası.</param>
+        /// <param name="identityNumber">Maskelenecek kimlik numarası.</param>
         /// <param name="showFull">true ise maskesiz tam numara döndürülür; false ise ilgili kısım maskelenir.</param>
         /// <returns>Maskelenmiş veya tam kimlik numarası. Geçerli bir TCKN/VKN değilse boş string döner.</returns>
-        public static string TCKNorVKN(long value, bool showFull)
+        public static string TRTaxIdentityNumber(long identityNumber, bool showFull)
         {
             var count = 0;
-            if (value.IsTCKimlikNo()) { count = 6; }
-            else if (value.IsVergiKimlikNo()) { count = 5; }
+            if (identityNumber.IsTRIdentityNumber()) { count = 6; }
+            else if (identityNumber.IsTRTaxIdentityNumber()) { count = 5; }
             if (count == 0) { return ""; }
-            var t = value.ToString();
+            var t = identityNumber.ToString();
             if (showFull) { return t; }
             return String.Concat(t.Substring(0, 3), new('*', count), t.Substring(9, 2));
         }

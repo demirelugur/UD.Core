@@ -1,23 +1,25 @@
 ﻿namespace UD.Core.Helper.Configuration
 {
+    using System.Globalization;
     using System.Text.RegularExpressions;
     using UD.Core.Extensions;
     public sealed class TitleCaseConfiguration
     {
-        public enum ConjunctionDilTypes : byte
+        public enum EnumConjunctionLanguage : byte
         {
             /// <summary>Küçük harfe çevirilecek bağlaçlar: <c>Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya</c></summary>
             tr = 1,
             /// <summary>Küçük harfe çevirilecek bağlaçlar: <c>A,An,And,As,By,For,In,İn,Of,On,Or,The,To,With</c></summary>
             en
         }
-        private ConjunctionDilTypes[] dils = [ConjunctionDilTypes.tr];
+        private EnumConjunctionLanguage[] languages = [EnumConjunctionLanguage.tr];
         private char[] punctuations = ['(', '-', '/', ':', '.'];
-        private string[] upperkeys = [];
+        private string[] upperKeys = [];
+        private CultureInfo culture = new("tr-TR");
         public TitleCaseConfiguration() { }
-        public TitleCaseConfiguration WithDils(params ConjunctionDilTypes[] dils)
+        public TitleCaseConfiguration WithDils(params EnumConjunctionLanguage[] dils)
         {
-            this.dils = (dils ?? []).Distinct().ToArray();
+            this.languages = (dils ?? []).Distinct().ToArray();
             return this;
         }
         public TitleCaseConfiguration WithPunctuations(params char[] punctuations)
@@ -27,23 +29,28 @@
         }
         public TitleCaseConfiguration WithUpperKeys(params string[] upperkeys)
         {
-            this.upperkeys = (upperkeys ?? []).Distinct().ToArray();
+            this.upperKeys = (upperkeys ?? []).Distinct().ToArray();
+            return this;
+        }
+        public TitleCaseConfiguration WithCulture(CultureInfo culture)
+        {
+            this.culture = culture ?? throw new ArgumentNullException(nameof(culture));
             return this;
         }
         public string Execute(string value)
         {
-            value = value.ReplaceTRNSpace().RemoveMultipleSpace();
-            if (value == "") { return ""; }
-            value = value.ToTitleCase(true, this.punctuations);
-            if (this.dils.Length > 0)
+            if (value.IsNullOrWhiteSpace()) { return ""; }
+            var lower = this.culture.TextInfo.ToLower(value.Trim());
+            var title = lower.ToTitleCase(true, this.punctuations, this.culture);
+            if (this.languages.Length > 0)
             {
-                var l = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                if (this.dils.Contains(ConjunctionDilTypes.tr)) { l.UnionWith("Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya".Split(',')); }
-                if (this.dils.Contains(ConjunctionDilTypes.en)) { l.UnionWith("A,An,And,As,By,For,In,İn,Of,On,Or,The,To,With".Split(',')); }
-                value = Regex.Replace(value, $@"\b({String.Join("|", l)})\b", x => x.Value.ToLower(), RegexOptions.IgnoreCase);
+                var hashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                if (this.languages.Contains(EnumConjunctionLanguage.tr)) { hashSet.UnionWith("Ancak,Ama,Da,De,Fakat,Gibi,İle,İse,Ki,Lakin,Ve,Veya".Split(',')); }
+                if (this.languages.Contains(EnumConjunctionLanguage.en)) { hashSet.UnionWith("A,An,And,As,By,For,In,İn,Of,On,Or,The,To,With".Split(',')); }
+                title = Regex.Replace(title, $@"\b({String.Join("|", hashSet)})\b", m => m.Value.ToLower(this.culture), RegexOptions.IgnoreCase);
             }
-            foreach (var item in this.upperkeys) { value = value.Replace(item, item.ToUpper()); }
-            return value;
+            foreach (var item in this.upperKeys) { title = title.Replace(item, item.ToUpper(this.culture)); }
+            return title;
         }
     }
 }

@@ -12,7 +12,7 @@
         {
             if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             var valueLong = value.ToLong();
-            if (valueLong.IsVergiKimlikNo())
+            if (valueLong.IsTRTaxIdentityNumber())
             {
                 validationContext.SetValidatePropertyValue(valueLong);
                 return ValidationResult.Success;

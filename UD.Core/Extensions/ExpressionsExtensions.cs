@@ -5,7 +5,7 @@
     using UD.Core.Helper;
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Validation;
-    public static class ExpressionExtensions
+    public static class ExpressionsExtensions
     {
         /// <summary>Verilen ifadenin adını alır.</summary>
         /// <param name="expression">İfade.</param>

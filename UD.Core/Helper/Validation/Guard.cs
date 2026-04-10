@@ -55,17 +55,17 @@
                 throw new ArgumentException($"\"{argName}\" argümanının değeri telefon numarası \"(5xx) (xxx-xxxx)\" biçimine uygun olmalıdır!", argName);
             }
         }
-        public static void ThrowIfNotValidTCKN(long tckn, string argName)
+        public static void ThrowIfNotValidTRIdentityNumber(long trIdentityNumber, string argName)
         {
-            if (!tckn.IsTCKimlikNo())
+            if (!trIdentityNumber.IsTRIdentityNumber())
             {
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Identification Number!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, T.C. Kimlik Numarası biçimine uygun olmalıdır!", argName);
             }
         }
-        public static void ThrowIfNotValidVKN(long vkn, string argName)
+        public static void ThrowIfNotValidTRTaxIdentityNumber(long trTaxIdentityNumber, string argName)
         {
-            if (!vkn.IsVergiKimlikNo())
+            if (!trTaxIdentityNumber.IsTRTaxIdentityNumber())
             {
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Tax Identity Number!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, T.C. Vergi Kimlik Numarası biçimine uygun olmalıdır!", argName);

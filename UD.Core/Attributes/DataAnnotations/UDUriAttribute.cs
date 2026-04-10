@@ -4,9 +4,9 @@
     using UD.Core.Extensions;
     using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class UDUrlAttribute : ValidationAttribute
+    public sealed class UDUriAttribute : ValidationAttribute
     {
-        public UDUrlAttribute() { }
+        public UDUriAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty();

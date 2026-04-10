@@ -36,15 +36,15 @@
         /// </list>
         /// </para>
         /// </summary>
-        /// <param name="tckn">Geçerliliği kontrol edilecek T.C. Kimlik Numarası.</param>
+        /// <param name="identityNumber">Geçerliliği kontrol edilecek T.C. Kimlik Numarası.</param>
         /// <returns>Geçerli bir T.C. Kimlik Numarası ise <see langword="true"/>, aksi durumda <see langword="false"/> döner.</returns>
-        public static bool IsTCKimlikNo(this long tckn)
+        public static bool IsTRIdentityNumber(this long identityNumber)
         {
             var r = false;
-            var tcknString = (tckn > 0 ? tckn.ToString() : "");
-            if (tcknString.Length == MaximumLengthConstants.Tckn)
+            var identityNumberString = (identityNumber > 0 ? identityNumber.ToString() : "");
+            if (identityNumberString.Length == MaximumLengthConstants.TRIdentityNumber)
             {
-                var t = tcknString.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
+                var t = identityNumberString.ToCharArray().Select(x => Convert.ToInt32(Convert.ToString(x))).ToArray();
                 r = ((((t[0] + t[2] + t[4] + t[6] + t[8]) * 7) - (t[1] + t[3] + t[5] + t[7])) % 10) == t[9] && (t.Take(10).Sum() % 10) == t[10];
             }
             return r;
@@ -60,32 +60,32 @@
         /// </list>
         /// </para>
         /// </summary>
-        /// <param name="vkn">Doğrulanacak T.C. Vergi Kimlik Numarası</param>
+        /// <param name="identityNumber">Doğrulanacak T.C. Vergi Kimlik Numarası</param>
         /// <returns>VKN geçerliyse <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsVergiKimlikNo(this long vkn)
+        public static bool IsTRTaxIdentityNumber(this long identityNumber)
         {
             var r = false;
-            if (vkn > 0)
+            if (identityNumber > 0)
             {
-                var vknString = vkn.ToString();
-                if (vknString.Length < MaximumLengthConstants.Vkn) { vknString = vknString.Replicate(MaximumLengthConstants.Vkn, '0', true); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
-                if (vknString.Length == MaximumLengthConstants.Vkn)
+                var identityNumberString = identityNumber.ToString();
+                if (identityNumberString.Length < MaximumLengthConstants.TRTaxIdentityNumber) { identityNumberString = identityNumberString.Replicate(MaximumLengthConstants.TRTaxIdentityNumber, '0', true); } // 33583636 (8 Rakam) -> 0033583636, 602883151 (9 Rakam) -> 0602883151
+                if (identityNumberString.Length == MaximumLengthConstants.TRTaxIdentityNumber)
                 {
                     int i, t;
                     var numbers = new int[9];
                     for (i = 0; i < 9; i++)
                     {
-                        t = (Convert.ToInt32(vknString[i].ToString()) + (9 - i)) % 10;
+                        t = (Convert.ToInt32(identityNumberString[i].ToString()) + (9 - i)) % 10;
                         numbers[i] = (t * Convert.ToInt32(Math.Pow(2, (9 - i)))) % 9;
                         if (t != 0 && numbers[i] == 0) { numbers[i] = 9; }
                     }
-                    r = (((10 - ((numbers.Sum() % 10) % 10)) % 10) == Convert.ToInt32(vknString[9].ToString()));
+                    r = (((10 - ((numbers.Sum() % 10) % 10)) % 10) == Convert.ToInt32(identityNumberString[9].ToString()));
                 }
             }
             return r;
         }
-        /// <summary><paramref name="value"/> değeri T.C. Kimlik Numarası (TCK) veya Vergi Kimlik Numarası (VKN) ise <see langword="true"/> döner.</summary>
-        public static bool IsTCKNorVKN(this long value) => (value.IsTCKimlikNo() || value.IsVergiKimlikNo());
+        /// <summary><paramref name="identityNumber"/> değeri T.C. Kimlik Numarası (TCKN) veya Vergi Kimlik Numarası (VKN) ise <see langword="true"/> döner.</summary>
+        public static bool IsValidTRIdentityOrTaxNumber(this long identityNumber) => (identityNumber.IsTRIdentityNumber() || identityNumber.IsTRTaxIdentityNumber());
         /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
         /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
         /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>

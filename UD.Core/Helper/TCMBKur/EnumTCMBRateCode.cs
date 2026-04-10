@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Helper.TCMBKur
 {
     using System.ComponentModel;
-    public enum TCMBKurCodeTypes : byte
+    public enum EnumTCMBRateCode : byte
     {
         /// <summary>
         /// ABD DOLARI

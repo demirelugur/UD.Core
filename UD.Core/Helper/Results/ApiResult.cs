@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using UD.Core.Extensions;
-    using static UD.Core.Enums.CRetMesaj;
+    using static UD.Core.Enums.BaseEnumResponseMessage;
     public class ApiResult
     {
         public static readonly ApiResult setSuccess = new(true, default);
@@ -13,7 +13,7 @@
         public ApiResult(bool status, string[] errors)
         {
             this.status = status;
-            this.errors = (status ? [] : (errors.IsNullOrEmptyOrAllNull() ? [GetDescriptionLocalizationValue(RetMesaj.hata)] : errors));
+            this.errors = (status ? [] : (errors.IsNullOrEmptyOrAllNull() ? [GetDescriptionLocalizationValue(EnumResponseMessage.Error)] : errors));
         }
         public static ApiResult setFailed(params string[] errors) => new(false, errors);
     }

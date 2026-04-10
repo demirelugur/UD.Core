@@ -55,34 +55,34 @@
         }
         /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı), JToken(DateTime türüne uygun biçimde olmalı)</para></summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>
-        /// <param name="timeonly">Zaman bilgisi (isteğe bağlı). <paramref name="obj"/> değeri türü DateOnly iken girilecek değer anlamlıdır</param>
+        /// <param name="timeOnly">Zaman bilgisi (isteğe bağlı). <paramref name="obj"/> değeri türü DateOnly iken girilecek değer anlamlıdır</param>
         /// <returns>DateTime değeri.</returns>
-        public static DateTime ToDateTimeFromObject(object obj, TimeOnly? timeonly = null)
+        public static DateTime ToDateTimeFromObject(object obj, TimeOnly? timeOnly = null)
         {
             if (obj is DateTime _dt) { return _dt; }
             if (obj is DateTimeOffset _dto) { return _dto.DateTime; }
-            if (obj is DateOnly _do) { return _do.ToDateTime(timeonly ?? default); }
+            if (obj is DateOnly _do) { return _do.ToDateTime(timeOnly ?? default); }
             if (obj is (Byte or Int16 or Int32 or Int64)) { return new(obj.ToLong()); }
             if (obj is JToken _jt && _jt.Type == JTokenType.Date) { return _jt.ToObject<DateTime>(); }
             if (obj is String _s)
             {
                 if (DateTime.TryParse(_s, out _dt)) { return _dt; }
                 if (DateTimeOffset.TryParse(_s, out _dto)) { return _dto.DateTime; }
-                if (DateOnly.TryParse(_s, out _do)) { return _do.ToDateTime(timeonly ?? default); }
+                if (DateOnly.TryParse(_s, out _do)) { return _do.ToDateTime(timeOnly ?? default); }
                 if (Int64.TryParse(_s, out long _ticks)) { return new(_ticks); }
             }
             return default;
         }
         /// <summary>Verilen bir data URI string&#39;ini binary veriye ve MIME tipine dönüştürür. <see cref="SystemArrayExtensions.ToBase64StringFromBinary(byte[], string)"/> işleminin tersi </summary>
-        /// <param name="dataUri">Dönüştürülecek data URI string&#39;i. Biçim: &quot;data:[MIME-type];base64,[base64-encoded-data]&quot;</param>
+        /// <param name="base64String">Dönüştürülecek data URI string&#39;i. Biçim: &quot;data:[MIME-type];base64,[base64-encoded-data]&quot;</param>
         /// <returns>Binary veri (byte[]) ve MIME tipini içeren bir tuple döner.</returns>
         /// <exception cref="ArgumentException">Geçersiz data URI biçimi veya eksik MIME tipi/base64 verisi durumunda fırlatılır.</exception>
         /// <exception cref="ArgumentException">Desteklenmeyen dil belirtildiğinde fırlatılır.</exception>
-        public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string dataUri)
+        public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string base64String)
         {
-            dataUri = dataUri.ToStringOrEmpty();
-            if (dataUri == "" || !dataUri.StartsWith("data:")) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
-            var parts = dataUri.Substring(5).Split([";base64,"], StringSplitOptions.None);
+            base64String = base64String.ToStringOrEmpty();
+            if (base64String == "" || !base64String.StartsWith("data:")) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
+            var parts = base64String.Substring(5).Split([";base64,"], StringSplitOptions.None);
             if (parts.Length != 2) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
             return (Convert.FromBase64String(parts[1]), parts[0]);
         }

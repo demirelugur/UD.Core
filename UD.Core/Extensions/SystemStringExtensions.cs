@@ -164,28 +164,29 @@ namespace UD.Core.Extensions
         /// <param name="value">Dönüþtürülecek string.</param>
         /// <param name="isWhiteSpace">Boþluk karakterlerinin yeni kelimeleri ayýrmak için dikkate alýnýp alýnmayacaðýný belirtir.</param>
         /// <param name="punctuations">Kelime ayýran noktalama karakterleri.</param>
+        /// <param name="cultureInfo">Kültür bilgisi. Eðer null ise varsayýlan olarak new CultureInfo(&quot;tr-TR&quot;) kullanýlýr.</param>
         /// <returns>Baþlýk durumuna dönüþtürülmüþ string.</returns>
-        public static string ToTitleCase(this string value, bool isWhiteSpace, char[] punctuations)
+        public static string ToTitleCase(this string? value, bool isWhiteSpace, char[] punctuations, CultureInfo? cultureInfo = null)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
-            if (value.Length == 1) { return value.ToUpper(); }
-            punctuations = (punctuations ?? []).Where(Char.IsPunctuation).ToArray();
-            bool hasPunctuation = punctuations.Length > 0, newword = true;
-            var sb = new StringBuilder();
-            foreach (var item in value.ToCharArray())
+            var punctSet = (punctuations ?? []).Where(Char.IsPunctuation).ToHashSet() ?? [];
+            bool newWord = true, hasPunctuation = punctSet.Count > 0;
+            cultureInfo ??= CultureInfo.GetCultureInfo("tr-TR");
+            var sb = new StringBuilder(value.Length);
+            foreach (char item in value)
             {
-                if ((isWhiteSpace && Char.IsWhiteSpace(item)) || (hasPunctuation && punctuations.Contains(item)))
+                if ((isWhiteSpace && Char.IsWhiteSpace(item)) || (hasPunctuation && punctSet.Contains(item)))
                 {
                     sb.Append(item);
-                    newword = true;
+                    newWord = true;
                 }
-                else if (newword)
+                else if (newWord)
                 {
-                    sb.Append(Convert.ToString(item).ToUpper());
-                    newword = false;
+                    sb.Append(Char.ToUpper(item, cultureInfo));
+                    newWord = false;
                 }
-                else { sb.Append(Convert.ToString(item).ToLower()); }
+                else { sb.Append(Char.ToLower(item, cultureInfo)); }
             }
             return sb.ToString();
         }
@@ -193,48 +194,48 @@ namespace UD.Core.Extensions
         /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir
         /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code></para>
         /// </summary>
-        public static string LikeContains(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower, bool invariant = false)
+        public static string LikeContains(this string value, EnumStringCaseHandling caseHandling = EnumStringCaseHandling.Lower, bool invariant = false)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
             return caseHandling switch
             {
-                StringCaseHandling.@default => $"%{value}%",
-                StringCaseHandling.lower => $"%{(invariant ? value.ToLowerInvariant() : value.ToLower())}%",
-                StringCaseHandling.upper => $"%{(invariant ? value.ToUpperInvariant() : value.ToUpper())}%",
-                _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
+                EnumStringCaseHandling.Default => $"%{value}%",
+                EnumStringCaseHandling.Lower => $"%{(invariant ? value.ToLowerInvariant() : value.ToLower())}%",
+                EnumStringCaseHandling.Upper => $"%{(invariant ? value.ToUpperInvariant() : value.ToUpper())}%",
+                _ => throw Utilities.ThrowNotSupportedForEnum<EnumStringCaseHandling>()
             };
         }
         /// <summary>
         /// Verilen metni SQL LIKE sorgusu için &quot;<paramref name="value"/>%&quot; biçimine getirir 
         /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeStartWith()))</code></para>
         /// </summary>
-        public static string LikeStartWith(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower, bool invariant = false)
+        public static string LikeStartWith(this string value, EnumStringCaseHandling caseHandling = EnumStringCaseHandling.Lower, bool invariant = false)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
             return caseHandling switch
             {
-                StringCaseHandling.@default => String.Concat(value, "%"),
-                StringCaseHandling.lower => String.Concat(invariant ? value.ToLowerInvariant() : value.ToLower(), "%"),
-                StringCaseHandling.upper => String.Concat(invariant ? value.ToUpperInvariant() : value.ToUpper(), "%"),
-                _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
+                EnumStringCaseHandling.Default => String.Concat(value, "%"),
+                EnumStringCaseHandling.Lower => String.Concat(invariant ? value.ToLowerInvariant() : value.ToLower(), "%"),
+                EnumStringCaseHandling.Upper => String.Concat(invariant ? value.ToUpperInvariant() : value.ToUpper(), "%"),
+                _ => throw Utilities.ThrowNotSupportedForEnum<EnumStringCaseHandling>()
             };
         }
         /// <summary>
         /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>&quot; biçimine getirir.
         /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeEndsWith()))</code></para>
         /// </summary>
-        public static string LikeEndsWith(this string value, StringCaseHandling caseHandling = StringCaseHandling.lower, bool invariant = false)
+        public static string LikeEndsWith(this string value, EnumStringCaseHandling caseHandling = EnumStringCaseHandling.Lower, bool invariant = false)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
             return caseHandling switch
             {
-                StringCaseHandling.@default => String.Concat("%", value),
-                StringCaseHandling.lower => String.Concat("%", invariant ? value.ToLowerInvariant() : value.ToLower()),
-                StringCaseHandling.upper => String.Concat("%", invariant ? value.ToUpperInvariant() : value.ToUpper()),
-                _ => throw Utilities.ThrowNotSupportedForEnum<StringCaseHandling>()
+                EnumStringCaseHandling.Default => String.Concat("%", value),
+                EnumStringCaseHandling.Lower => String.Concat("%", invariant ? value.ToLowerInvariant() : value.ToLower()),
+                EnumStringCaseHandling.Upper => String.Concat("%", invariant ? value.ToUpperInvariant() : value.ToUpper()),
+                _ => throw Utilities.ThrowNotSupportedForEnum<EnumStringCaseHandling>()
             };
         }
         /// <summary>JSON string&#39;inden belirtilen anahtara (key) karþýlýk gelen deðeri tip güvenli þekilde çeker.</summary>

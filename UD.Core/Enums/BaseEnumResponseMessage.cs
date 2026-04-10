@@ -3,52 +3,52 @@
     using System.ComponentModel;
     using UD.Core.Extensions;
     using UD.Core.Helper;
-    public sealed class CRetMesaj
+    public sealed class BaseEnumResponseMessage
     {
-        public enum RetMesaj : byte
+        public enum EnumResponseMessage : byte
         {
             /// <summary>İsteğiniz başarılı bir şekilde sonuçlandı.</summary>
             [Description("İsteğiniz başarılı bir şekilde sonuçlandı.")]
-            basari = 1,
+            Success = 1,
             /// <summary>İşlem sırasında beklenmeyen bir sonuç meydana geldi! Yönetici ile iletişime geçiniz.</summary>
             [Description("İşlem sırasında beklenmeyen bir sonuç meydana geldi! Yönetici ile iletişime geçiniz.")]
-            hata,
+            Error,
             /// <summary>Parametrelere uyumlu kayıt bulunamadı!</summary>
             [Description("Parametrelere uyumlu kayıt bulunamadı!")]
-            kayityok,
+            NotFound,
             /// <summary>Girilen değer tarih biçimine uygun değildir! Kontrol ediniz.</summary>
             [Description("Girilen değer tarih biçimine uygun değildir! Kontrol ediniz.")]
-            tarih,
+            InvalidDate,
             /// <summary>Metin içinde \"yasaklı\" kelimeler geçmektedir! Yönetici ile iletişime geçiniz.</summary>
             [Description("Metin içinde \"yasaklı\" kelimeler geçmektedir! Yönetici ile iletişime geçiniz.")]
-            unethical,
+            UnethicalContent,
             /// <summary>İşlem için yetkiniz bulunmamaktadır! Yönetici ile iletişime geçiniz.</summary>
             [Description("İşlem için yetkiniz bulunmamaktadır! Yönetici ile iletişime geçiniz.")]
-            unauthority,
+            Unauthorized,
             /// <summary>Sunucu bilgisayar ile iletişim kurulamıyor! Yönetici ile iletişime geçiniz.</summary>
             [Description("Sunucu bilgisayar ile iletişim kurulamıyor! Yönetici ile iletişime geçiniz.")]
-            unconnection,
+            ConnectionError,
             /// <summary>Girilebilecek maksimum karakter sınırı aşıldı! Yönetici ile iletişime geçiniz.</summary>
             [Description("Girilebilecek maksimum karakter sınırı aşıldı! Yönetici ile iletişime geçiniz.")]
-            maxlength
+            MaxLengthExceeded
         }
         public static string GetDescriptionLocalizationValue(object data)
         {
-            var enumValue = data.TryToEnum<RetMesaj>();
-            if (!enumValue.HasValue) { throw Utilities.ThrowNotSupportedForEnum<RetMesaj>(); }
+            var enumValue = data.TryToEnum<EnumResponseMessage>();
+            if (!enumValue.HasValue) { throw Utilities.ThrowNotSupportedForEnum<EnumResponseMessage>(); }
             if (Checks.IsEnglishCurrentUICulture)
             {
                 return enumValue.Value switch
                 {
-                    RetMesaj.basari => "Your request has been completed successfully.",
-                    RetMesaj.hata => "An unexpected result occurred during the process! Contact the administrator.",
-                    RetMesaj.kayityok => "No records matching the parameters were found.",
-                    RetMesaj.tarih => "The entered value does not comply with the date format! Please check.",
-                    RetMesaj.unethical => "\"Prohibited\" words appear in the text! Contact the administrator.",
-                    RetMesaj.unauthority => "You are not authorized for the transaction! Contact the administrator.",
-                    RetMesaj.unconnection => "Cannot communicate with the server computer! Contact the administrator.",
-                    RetMesaj.maxlength => "The maximum character limit that can be entered has been exceeded! Contact the administrator.",
-                    _ => throw Utilities.ThrowNotSupportedForEnum<RetMesaj>()
+                    EnumResponseMessage.Success => "Your request has been completed successfully.",
+                    EnumResponseMessage.Error => "An unexpected result occurred during the process! Contact the administrator.",
+                    EnumResponseMessage.NotFound => "No records matching the parameters were found.",
+                    EnumResponseMessage.InvalidDate => "The entered value does not comply with the date format! Please check.",
+                    EnumResponseMessage.UnethicalContent => "\"Prohibited\" words appear in the text! Contact the administrator.",
+                    EnumResponseMessage.Unauthorized => "You are not authorized for the transaction! Contact the administrator.",
+                    EnumResponseMessage.ConnectionError => "Cannot communicate with the server computer! Contact the administrator.",
+                    EnumResponseMessage.MaxLengthExceeded => "The maximum character limit that can be entered has been exceeded! Contact the administrator.",
+                    _ => throw Utilities.ThrowNotSupportedForEnum<EnumResponseMessage>()
                 };
             }
             return enumValue.Value.GetDescriptionFromEnum();

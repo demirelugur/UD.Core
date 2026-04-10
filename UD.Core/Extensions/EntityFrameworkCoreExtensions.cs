@@ -115,9 +115,9 @@ namespace UD.Core.Extensions
             if (sb.Length == 0) { return Task.FromResult(0); }
             return context.Database.ExecuteSqlRawAsync(sb.ToString(), [], cancellationToken);
         }
-        private static (string columnName, string sqlDbTypeName) getPrimaryKeyInfo(Type mappedtabletype)
+        private static (string columnName, string sqlDbTypeName) getPrimaryKeyInfo(Type tableType)
         {
-            if (TryValidators.TryTableisKeyAttribute(mappedtabletype, out PropertyInfo[] _properties) && _properties.Length == 1 && _properties[0].IsPK() && _properties[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
+            if (TryValidators.TryTableisKeyAttribute(tableType, out PropertyInfo[] _properties) && _properties.Length == 1 && _properties[0].IsPK() && _properties[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
             {
                 var propertytype = _properties[0].PropertyType;
                 if (propertytype.IsEnum) { propertytype = Enum.GetUnderlyingType(propertytype); }
