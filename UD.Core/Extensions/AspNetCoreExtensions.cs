@@ -64,7 +64,7 @@
         /// <param name="form">Form koleksiyonu.</param>
         /// <param name="key">Anahtar adı.</param>
         /// <returns>Belirtilen türdeki değeri döndürür; anahtar bulunamazsa varsayılan değer döner.</returns>
-        public static TKey ParseOrDefault<TKey>(this IFormCollection form, string key)
+        public static TKey ParseOrDefaultFromFormCollection<TKey>(this IFormCollection form, string key)
         {
             if (form.TryGetStringValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
             return default;
@@ -186,7 +186,7 @@
         /// <param name="queryString">İçinde sorgu parametrelerini barındıran <see cref="QueryString"/> nesnesi.</param>
         /// <param name="key">Alınacak sorgu parametresinin adı (anahtar).</param>
         /// <returns>Başarılıysa sorgu parametresi uygun türe dönüştürülür, aksi halde varsayılan değer döner.</returns>
-        public static TKey ParseOrDefault<TKey>(this QueryString queryString, string key)
+        public static TKey ParseOrDefaultFromQueryString<TKey>(this QueryString queryString, string key)
         {
             var querydic = (queryString.HasValue ? HttpUtility.ParseQueryString(queryString.Value) : []);
             key = key.ToStringOrEmpty();

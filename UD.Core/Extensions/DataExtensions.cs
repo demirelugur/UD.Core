@@ -115,7 +115,7 @@
         /// <param name="reader">Veri kaynağından okuma yapan <see cref="IDataReader"/> nesnesi.</param>
         /// <param name="key">Okunacak sütunun adı.</param>
         /// <returns>Sütun değeri başarıyla dönüştürülebilirse <typeparamref name="TKey"/> tipinde değer, aksi durumda varsayılan değer döner.</returns>
-        public static TKey ParseOrDefault<TKey>(this IDataReader reader, string key)
+        public static TKey ParseOrDefaultFromDataReader<TKey>(this IDataReader reader, string key)
         {
             Guard.ThrowIfNull(reader, nameof(reader));
             try

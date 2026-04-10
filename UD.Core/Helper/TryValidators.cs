@@ -260,7 +260,7 @@
         {
             try
             {
-                var q = (TryUri(value, out Uri _u) && _u.Host.Contains("maps.google.com")) ? (new QueryString(_u.Query).ParseOrDefault<string>("q") ?? "").Split(',') : value.ToStringOrEmpty().Split(',').Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
+                var q = (TryUri(value, out Uri _u) && _u.Host.Contains("maps.google.com")) ? (new QueryString(_u.Query).ParseOrDefaultFromQueryString<string>("q") ?? "").Split(',') : value.ToStringOrEmpty().Split(',').Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
                 if (q.Length == 2 && q.All(isGoogleMapsCoordinateCheck))
                 {
                     outvalue = new($"https://maps.google.com/?q={String.Join(",", q)}");
