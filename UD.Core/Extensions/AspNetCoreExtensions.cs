@@ -9,9 +9,9 @@
     using System.Linq;
     using System.Net;
     using System.Web;
+    using UD.Core.Enums;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
-    using static UD.Core.Enums.BaseEnumResponseMessage;
     public static class AspNetCoreExtensions
     {
         #region HttpContext
@@ -147,7 +147,7 @@
                 if (TryValidators.TryValidateObject(_t, out errors)) { return (true, default, errors); }
                 return (false, _t, default);
             }
-            return (true, default, [GetDescriptionLocalizationValue(EnumResponseMessage.Error)]);
+            return (true, default, [EnumResponseMessage.Error.GetLocalizedDescription()]);
         }
         #endregion
         #region IFormFile
