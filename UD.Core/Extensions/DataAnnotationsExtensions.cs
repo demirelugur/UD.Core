@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
-    public static class DataAnnotationExtensions
+    public static class DataAnnotationsExtensions
     {
         /// <summary>Verilen validation bağlamında bir özelliğin gerekli olup olmadığını kontrol eder.</summary>
         /// <param name="validationContext">ValidationContext nesnesi.</param>
