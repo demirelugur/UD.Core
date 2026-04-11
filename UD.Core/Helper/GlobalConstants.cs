@@ -6,7 +6,7 @@
     using System.Security.Cryptography;
     public sealed class GlobalConstants
     {
-        public const string DefaultUrl = "https://example.com";
+        public const string DefaultUri = "https://example.com";
         /// <summary><code>new(){MetadataPropertyHandling=MetadataPropertyHandling.Ignore,DateParseHandling=DateParseHandling.None,NullValueHandling=NullValueHandling.Include,Converters={new IsoDateTimeConverter{DateTimeStyles=DateTimeStyles.AssumeUniversal},new StringEnumConverter()}};</code></summary>
         public static readonly JsonSerializerSettings JsonSerializerSettings = new()
         {

@@ -89,7 +89,7 @@ namespace UD.Core.Extensions
         /// </summary>
         /// <param name="context"> SQL komutunun çalýþtýrýlacaðý <see cref="DbContext"/> örneði.</param>
         /// <param name="isDebug"> Debug modunu belirtir. <see langword="true"/> ise reseed iþlemi yapýlmaz.</param>
-        /// <param name="mappedTables"> Reseed iþlemi uygulanacak entity türleri. </param>
+        /// <param name="mappedTables"> Reseed iþlemi uygulanacak entity türleri. <see cref="TableAttribute"/> özelliðine sahip olmalýdýr.</param>
         /// <param name="cancellationToken"> Ýþlemi iptal etmek için kullanýlabilecek isteðe baðlý <see cref="CancellationToken"/>.</param>
         /// <returns>Çalýþtýrýlan SQL komutundan etkilenen satýr sayýsýný temsil eden <see cref="Task{Int32}"/>. </returns>
         public static Task<int> TableReseed(this DbContext context, bool isDebug, Type[] mappedTables, CancellationToken cancellationToken = default)
@@ -99,8 +99,12 @@ namespace UD.Core.Extensions
             Guard.ThrowIfEmpty(mappedTables, nameof(mappedTables));
             var sb = new StringBuilder();
             var index = 0;
-            var types = mappedTables.Where(x => x.IsMappedTable()).ToArray();
-            foreach (var type in types)
+            if (!mappedTables.All(x => x.IsMappedTable()))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"All provided types must be mapped to database tables. Ensure that each type is decorated with the \"{nameof(TableAttribute)}\"."); }
+                throw new Exception($"Tüm türler veritabaný tablolarýna eþlenmiþ olmalýdýr. Her bir türün \"{nameof(TableAttribute)}\" ile iþaretlendiðinden emin olun.");
+            }
+            foreach (var type in mappedTables)
             {
                 var (columnName, sqlDbTypeName) = getPrimaryKeyInfo(type);
                 if (columnName == "" || sqlDbTypeName == "") { continue; }

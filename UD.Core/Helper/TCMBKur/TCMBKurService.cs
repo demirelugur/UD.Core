@@ -9,7 +9,7 @@ namespace UD.Core.Helper.TCMBKur
     using UD.Core.Helper.Validation;
     public interface ITCMBKurService // AddSingleton
     {
-        Task<TCMBKurResponse> Get(EnumTCMBRateCode type, DateOnly? date = null, CancellationToken cancellationToken = default);
+        Task<TCMBKurResponse> Get(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default);
         Task<TCMBKurResponse> GetUSD(DateOnly? date = null, CancellationToken cancellationToken = default);
         Task<TCMBKurResponse> GetEUR(DateOnly? date = null, CancellationToken cancellationToken = default);
     }
@@ -37,10 +37,10 @@ namespace UD.Core.Helper.TCMBKur
             if (Decimal.TryParse(node.Element(nameof(data.BanknoteSelling))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _valueDecimal)) { data.BanknoteSelling = _valueDecimal; }
             return data;
         }
-        public async Task<TCMBKurResponse> Get(EnumTCMBRateCode type, DateOnly? date = null, CancellationToken cancellationToken = default)
+        public async Task<TCMBKurResponse> Get(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default)
         {
             var dateTime = (date.HasValue ? date.Value.ToDateTime(default) : DateTime.Today);
-            if (dateTime.DayOfWeek.IsWeekDays()) { return this.GetRate(await this.GetXml(dateTime, cancellationToken), type.ToString("g")); }
+            if (dateTime.DayOfWeek.IsWeekDays()) { return this.GetRate(await this.GetXml(dateTime, cancellationToken), rateCode.ToString("g")); }
             return new();
         }
         public Task<TCMBKurResponse> GetUSD(DateOnly? date = null, CancellationToken cancellationToken = default) => this.Get(EnumTCMBRateCode.USD, date, cancellationToken);

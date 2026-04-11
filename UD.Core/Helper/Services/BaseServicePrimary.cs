@@ -55,7 +55,7 @@
         public virtual async Task<TKey[]> InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             Guard.ThrowIfEmpty(insertDtos, nameof(insertDtos));
-            var entities = insertDtos.Select(dto => this.Mapper.Map<TEntity>(dto));
+            var entities = insertDtos.Select(x => this.Mapper.Map<TEntity>(x));
             await this.DbSet.AddRangeAsync(entities, cancellationToken);
             if (autoSave)
             {
@@ -77,9 +77,7 @@
         public virtual async Task UpdateRange(IEnumerable<TUpdateDto> updateDtos, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             Guard.ThrowIfEmpty(updateDtos, nameof(updateDtos));
-            var tasks = new List<Task>();
-            foreach (var updateDto in updateDtos) { tasks.Add(this.Update(updateDto, false, cancellationToken)); }
-            await Task.WhenAll(tasks);
+            foreach (var updateDto in updateDtos) { await this.Update(updateDto, false, cancellationToken); }
             if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
         }
         public virtual async Task DeleteByIds(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)

@@ -47,7 +47,7 @@
         public virtual async Task InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             Guard.ThrowIfEmpty(insertDtos, nameof(insertDtos));
-            var entities = insertDtos.Select(dto => this.Mapper.Map<TEntity>(dto));
+            var entities = insertDtos.Select(x => this.Mapper.Map<TEntity>(x));
             await this.DbSet.AddRangeAsync(entities, cancellationToken);
             if (autoSave) { await this.Context.SaveChangesAsync(cancellationToken); }
         }
