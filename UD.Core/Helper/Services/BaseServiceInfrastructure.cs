@@ -5,7 +5,7 @@
     using System.Data.Common;
     using UD.Core.Helper;
     using UD.Core.Helper.Configuration;
-    public interface IBaseInfrastructureService<TContext, TEntity>
+    public interface IBaseServiceInfrastructure<TContext, TEntity>
         where TContext : DbContext
         where TEntity : class, IBaseEntity
     {
@@ -16,12 +16,12 @@
         Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default);
         Task<int> SaveChanges(CancellationToken cancellationToken = default);
     }
-    public abstract class BaseInfrastructureService<TContext, TEntity> : IBaseInfrastructureService<TContext, TEntity>, IDisposable
+    public abstract class BaseServiceInfrastructure<TContext, TEntity> : IBaseServiceInfrastructure<TContext, TEntity>, IDisposable
         where TContext : DbContext
         where TEntity : class, IBaseEntity
     {
         protected readonly IMapper Mapper;
-        protected BaseInfrastructureService(TContext Context, IMapper Mapper)
+        protected BaseServiceInfrastructure(TContext Context, IMapper Mapper)
         {
             this.Context = Context ?? throw new ArgumentNullException(nameof(Context));
             this.Mapper = Mapper ?? throw new ArgumentNullException(nameof(Mapper));

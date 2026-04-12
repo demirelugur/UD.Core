@@ -28,10 +28,10 @@
             }
             return services;
         }
-        /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseInfrastructureService{TContext, TEntity}"/> arayüzünü uygulayan veya <see cref="BaseInfrastructureService{TContext, TEntity}"/> sınıfından türeyen tüm servis sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
-        public static IServiceCollection AddScopedRangeBaseInfrastructureService(this IServiceCollection services, Assembly assembly)
+        /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseServiceInfrastructure{TContext, TEntity}"/> arayüzünü uygulayan veya <see cref="BaseServiceInfrastructure{TContext, TEntity}"/> sınıfından türeyen tüm servis sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
+        public static IServiceCollection AddScopedRangeBaseServiceInfrastructure(this IServiceCollection services, Assembly assembly)
         {
-            services.AddScopedRange(assembly, typeof(IBaseInfrastructureService<,>), typeof(BaseInfrastructureService<,>));
+            services.AddScopedRange(assembly, typeof(IBaseServiceInfrastructure<,>), typeof(BaseServiceInfrastructure<,>));
             return services;
         }
         /// <summary>AutoMapper ve MediatR kütüphanelerini aynı anda yapılandırır ve servis koleksiyonuna ekler.</summary>

@@ -9,7 +9,7 @@
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
     using UD.Core.Helper.Validation;
-    public interface IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto> : IBaseInfrastructureService<TContext, TEntity>
+    public interface IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto> : IBaseServiceInfrastructure<TContext, TEntity>
     where TContext : DbContext
     where TEntity : class, IBaseEntity
     where TEntityDto : IEntityDto
@@ -23,7 +23,7 @@
         Task DeleteByPredicate(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
         Task DeleteRange(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
     }
-    public abstract class BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto> : BaseInfrastructureService<TContext, TEntity>, IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
+    public abstract class BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto> : BaseServiceInfrastructure<TContext, TEntity>, IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class, IBaseEntity
     where TEntityDto : IEntityDto
