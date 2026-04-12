@@ -90,7 +90,7 @@
             if (autoSave)
             {
                 await base.Context.SaveChangesAsync(cancellationToken);
-                return this.GetKeyValue<TKey>(entity);
+                return (TKey)this.GetKeyValue(entity);
             }
             return default;
         }
@@ -102,7 +102,7 @@
             if (autoSave)
             {
                 await base.Context.SaveChangesAsync(cancellationToken);
-                return entities.Select(this.GetKeyValue<TKey>).ToArray();
+                return entities.Select(x => (TKey)this.GetKeyValue(x)).ToArray();
             }
             return [];
         }
@@ -119,10 +119,10 @@
                 }
             }
         }
-        protected virtual TKey GetKeyValue<TKey>(TEntity entity)
+        protected virtual object GetKeyValue(TEntity entity)
         {
             var type = typeof(TEntity);
-            var properties = base.Context.Model.FindEntityType(type)?.FindPrimaryKey()?.Properties;
+            var properties = this.Context.Model.FindEntityType(type)?.FindPrimaryKey()?.Properties;
             var keyName = (properties.IsNullOrEmptyOrAllNull() ? "" : properties[0].Name);
             if (keyName.IsNullOrEmpty())
             {
@@ -136,9 +136,12 @@
                 throw new InvalidOperationException($"\"{keyName}\" özelliği \"{type.Name}\" üzerinde bulunamadı!");
             }
             var value = property.GetValue(entity);
-            if (value is TKey _tKeyValue) { return _tKeyValue; }
-            if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"The value of the primary key property \"{keyName}\" on entity \"{type.Name}\". Cannot be converted to type \"{typeof(TKey).FullName}\"."); }
-            throw new InvalidOperationException($"Birincil Anahtar(PK) özelliği \"{keyName}\" değeri, varlık \"{type.Name}\" üzerinde istenen türe (\"{typeof(TKey).FullName}\") dönüştürülemiyor.");
+            if (value == null)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Key value is null"); }
+                throw new InvalidOperationException($"Anahtar(Key) değeri boş.");
+            }
+            return value;
         }
     }
 }
