@@ -6,7 +6,7 @@ GO
 CREATE TABLE [dbo].[Country](
 	[CountryId] [char](3) NOT NULL,
 	[SovereignCountryId] [char](3) NULL,
-	[Cca2] [char](2) NULL,
+	[Cca2] [char](2) NOT NULL,
 	[Ccn3] [smallint] NULL,
 	[NameCommonTR] [varchar](50) NOT NULL,
 	[NameOfficialTR] [varchar](75) NOT NULL,
@@ -16,10 +16,10 @@ CREATE TABLE [dbo].[Country](
 	[IsUNMember] [bit] NOT NULL,
 	[IsLandLocked] [bit] NOT NULL,
 	[Area] [decimal](18, 2) NOT NULL,
-	[Borders] [varchar](200) NULL,
-	[Region] [varchar](100) NULL,
-	[SubRegion] [varchar](100) NULL,
-	[Continent] [varchar](200) NULL,
+	[Borders] [varchar](100) NULL,
+	[Region] [varchar](10) NOT NULL,
+	[SubRegion] [varchar](30) NULL,
+	[Continent] [varchar](20) NOT NULL,
  CONSTRAINT [PK_Country] PRIMARY KEY CLUSTERED 
 (
 	[CountryId] ASC

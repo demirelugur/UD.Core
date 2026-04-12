@@ -1,12 +1,14 @@
-namespace UD.Core.UnitTest
+﻿namespace UD.Core.UnitTest
 {
     using Microsoft.Data.Sqlite;
     using Microsoft.EntityFrameworkCore;
+    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Globalization;
     using System.IO;
+    using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
     [TestFixture]
     public class ConnectionTest
@@ -22,7 +24,7 @@ namespace UD.Core.UnitTest
             this.connection.Open();
             this.context = new(new DbContextOptionsBuilder<TestDbContext>().UseSqlite(this.connection).Options);
             this.context.Database.EnsureCreated();
-            this.SeedIlAndIlceData();
+            this.SeedData();
         }
         [Test]
         public void Test1()
@@ -32,7 +34,7 @@ namespace UD.Core.UnitTest
         [Test]
         public async Task Test2()
         {
-            var f = this.context.Database.GenerateCreateScript();
+            //var f = await this.context.Countries.Where(x=>x.CountriesDependent.Count > 0).ToArrayAsync();
             await Task.CompletedTask;
         }
         [TearDown]
@@ -42,93 +44,205 @@ namespace UD.Core.UnitTest
             this.context.Dispose();
             this.connection.Dispose();
         }
-        private void SeedIlAndIlceData()
+        private void SeedData()
         {
-            var json = File.ReadAllText(ResolveJsonFilePath);
-            var ils = JArray.Parse(json).Select(x => new
+            var cityJsonPath = File.ReadAllText(ResolveJsonFilePath("turkiye-il.json"));
+            var districtJsonPath = File.ReadAllText(ResolveJsonFilePath("turkiye-ilce.json"));
+            var countryJson = File.ReadAllText(ResolveJsonFilePath("ulke.json"));
+            var cityJsonData = JArray.Parse(cityJsonPath).Select(x => new
             {
-                plaka = x["plaka"].ToByte(),
-                adi = x["adi"].ToStringOrEmpty(),
-                buyuksehir = Convert.ToBoolean(x["buyuksehir"]),
-                ilceler = x["ilceler"].Select((ilce, i) => new
-                {
-                    i = (i + 1),
-                    adi = ilce["adi"].ToStringOrEmpty(),
-                    telefonkodu = ilce["telefonkodu"].ToShort()
-                }).ToArray()
+                id = x["Id"].ToByte(),
+                name = x["Name"].ToStringOrEmpty(),
+                isMetropolitanMunicipality = Convert.ToBoolean(x["IsMetropolitanMunicipality"])
             }).ToArray();
-            foreach (var il in ils)
+            var cities = new List<City>();
+            foreach (var city in cityJsonData)
             {
-                this.context.Ils.Add(new Il
+                cities.Add(new City
                 {
-                    Id = il.plaka,
-                    Name = il.adi,
-                    BuyukSehir = il.buyuksehir,
+                    Id = city.id,
+                    Name = city.name,
+                    IsMetropolitanMunicipality = city.isMetropolitanMunicipality,
                 });
-                foreach (var ilce in il.ilceler)
-                {
-                    this.context.Ilces.Add(new Ilce
-                    {
-                        Id = ((il.plaka * 100) + ilce.i).ToShort(),
-                        IlId = il.plaka,
-                        Name = ilce.adi,
-                        TelefonKodu = ilce.telefonkodu
-                    });
-                }
             }
+            this.context.Cities.AddRange(cities);
+            var countryJsonData = JArray.Parse(countryJson).Select(x => new
+            {
+                id = x["CountryId"].ToStringOrEmpty(),
+                sovereignCountryId = x["SovereignCountryId"].ParseOrDefault<string>(),
+                cca2 = x["Cca2"].ToStringOrEmpty(),
+                ccn3 = x["Ccn3"].ParseOrDefault<short?>(),
+                nameCommonTR = x["NameCommonTR"].ToStringOrEmpty(),
+                nameOfficialTR = x["NameOfficialTR"].ToStringOrEmpty(),
+                nameCommonEN = x["NameCommonEN"].ToStringOrEmpty(),
+                nameOfficialEN = x["NameOfficialEN"].ToStringOrEmpty(),
+                isIndependent = Convert.ToBoolean(x["IsIndependent"]),
+                isUNMember = Convert.ToBoolean(x["IsUNMember"]),
+                isLandLocked = Convert.ToBoolean(x["IsLandLocked"]),
+                area = x["Area"].ToDecimal(),
+                borders = (x["Borders"].IsNoneOrNullOrUndefined() ? null : x["Borders"].ToString(Formatting.None)),
+                region = x["Region"].ToStringOrEmpty(),
+                subRegion = x["SubRegion"].ParseOrDefault<string>(),
+                continent = (x["Continent"].IsNoneOrNullOrUndefined() ? null : x["Continent"].ToString(Formatting.None))
+            }).ToArray();
+            var countries = new List<Country>();
+            foreach (var country in countryJsonData)
+            {
+                countries.Add(new Country
+                {
+                    CountryId = country.id,
+                    SovereignCountryId = country.sovereignCountryId,
+                    Cca2 = country.cca2,
+                    Ccn3 = country.ccn3,
+                    NameCommonTR = country.nameCommonTR,
+                    NameOfficialTR = country.nameOfficialTR,
+                    NameCommonEN = country.nameCommonEN,
+                    NameOfficialEN = country.nameOfficialEN,
+                    IsIndependent = country.isIndependent,
+                    IsUNMember = country.isUNMember,
+                    IsLandLocked = country.isLandLocked,
+                    Area = country.area,
+                    Borders = country.borders,
+                    Region = country.region,
+                    SubRegion = country.subRegion,
+                    Continent = country.continent
+                });
+            }
+            this.context.Countries.AddRange(countries);
+            var districtJsonData = JArray.Parse(districtJsonPath).Select(x => new
+            {
+                id = x["Id"].ToShort(),
+                cityId = x["CityId"].ToByte(),
+                name = x["Name"].ToStringOrEmpty(),
+                telephoneCode = x["TelephoneCode"].ToShort()
+            }).ToArray();
+            var districts = new List<District>();
+            foreach (var district in districtJsonData)
+            {
+                districts.Add(new District
+                {
+                    Id = district.id,
+                    CityId = district.cityId,
+                    Name = district.name,
+                    TelephoneCode = district.telephoneCode
+                });
+            }
+            this.context.Districts.AddRange(districts);
             this.context.SaveChanges();
         }
-        private static string ResolveJsonFilePath
+        private static string ResolveJsonFilePath(string fileName)
         {
-            get
+            var directory = new DirectoryInfo(AppContext.BaseDirectory);
+            while (directory != null)
             {
-                var directory = new DirectoryInfo(AppContext.BaseDirectory);
-                while (directory != null)
-                {
-                    var candidate = Path.Combine(directory.FullName, "Archive", "Json", "turkiye-il-ilce.json");
-                    if (File.Exists(candidate)) { return candidate; }
-                    directory = directory.Parent;
-                }
-                throw new FileNotFoundException("turkiye-il-ilce.json dosyası bulunamadı.");
+                var candidate = Path.Combine(directory.FullName, "Archive", "Json", fileName);
+                if (File.Exists(candidate)) { return candidate; }
+                directory = directory.Parent;
             }
+            throw new FileNotFoundException($"{fileName} dosyası bulunamadı.");
         }
         private sealed class TestDbContext : DbContext
         {
             public TestDbContext(DbContextOptions<TestDbContext> options) : base(options) { }
-            public DbSet<Il> Ils { get; set; }
-            public DbSet<Ilce> Ilces { get; set; }
+            public DbSet<City> Cities { get; set; }
+            public DbSet<Country> Countries { get; set; }
+            public DbSet<District> Districts { get; set; }
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
-                modelBuilder.Entity<Ilce>(entity =>
+                modelBuilder.Entity<Country>(entity =>
                 {
-                    entity.HasOne(x => x.Il).WithMany(x => x.Ilces).HasForeignKey(x => x.IlId).OnDelete(DeleteBehavior.NoAction);
+                    entity.HasOne(x => x.CountrySovereign).WithMany(x => x.CountriesDependent).HasForeignKey(x => x.SovereignCountryId).OnDelete(DeleteBehavior.NoAction);
+                });
+                modelBuilder.Entity<District>(entity =>
+                {
+                    entity.HasOne(x => x.City).WithMany(x => x.Districts).HasForeignKey(x => x.CityId).OnDelete(DeleteBehavior.NoAction);
                 });
             }
         }
-        [Table("Il")]
-        private class Il
+        [Table("City")]
+        private partial class City
         {
             [Key]
             [DatabaseGenerated(DatabaseGeneratedOption.None)]
             public byte Id { get; set; }
-            [Required]
-            [MaxLength(20)]
+            [UDRequired]
+            [UDStringLength(20)]
+            [Column(TypeName = "varchar(20)")]
             public string Name { get; set; }
-            public bool BuyukSehir { get; set; }
-            public virtual ICollection<Ilce> Ilces { get; set; } = [];
+            public bool IsMetropolitanMunicipality { get; set; }
+            public virtual ICollection<District> Districts { get; set; } = [];
         }
-        [Table("Ilce")]
-        private class Ilce
+        [Table("Country")]
+        private partial class Country
+        {
+            [Key]
+            [DatabaseGenerated(DatabaseGeneratedOption.None)]
+            [UDRequired]
+            [UDStringLength(3, 3)]
+            [Column(TypeName = "char(3)")]
+            public string CountryId { get; set; }
+            [UDStringLength(3, 3)]
+            [Column(TypeName = "char(3)")]
+            public string? SovereignCountryId { get; set; }
+            [UDRequired]
+            [UDStringLength(2, 2)]
+            [Column(TypeName = "char(2)")]
+            public string Cca2 { get; set; }
+            public short? Ccn3 { get; set; }
+            [UDRequired]
+            [UDStringLength(50)]
+            [Column(TypeName = "varchar(50)")]
+            public string NameCommonTR { get; set; }
+            [UDRequired]
+            [UDStringLength(75)]
+            [Column(TypeName = "varchar(75)")]
+            public string NameOfficialTR { get; set; }
+            [UDRequired]
+            [UDStringLength(50)]
+            [Column(TypeName = "varchar(50)")]
+            public string NameCommonEN { get; set; }
+            [UDRequired]
+            [UDStringLength(75)]
+            [Column(TypeName = "varchar(75)")]
+            public string NameOfficialEN { get; set; }
+            public bool IsIndependent { get; set; }
+            public bool IsUNMember { get; set; }
+            public bool IsLandLocked { get; set; }
+            [Precision(18, 2)]
+            [Column(TypeName = "decimal(18, 2)")]
+            public decimal Area { get; set; }
+            [UDStringLength(100)]
+            [UDJson(JTokenType.Array)]
+            [Column(TypeName = "varchar(100)")]
+            public string? Borders { get; set; }
+            [UDRequired]
+            [UDStringLength(10)]
+            [Column(TypeName = "varchar(10)")]
+            public string Region { get; set; }
+            [UDStringLength(30)]
+            [Column(TypeName = "varchar(30)")]
+            public string? SubRegion { get; set; }
+            [UDRequired]
+            [UDStringLength(20)]
+            [UDJson(JTokenType.Array)]
+            [Column(TypeName = "varchar(20)")]
+            public string Continent { get; set; }
+            public virtual Country? CountrySovereign { get; set; } = null;
+            public virtual ICollection<Country> CountriesDependent { get; set; } = [];
+        }
+        [Table("District")]
+        private partial class District
         {
             [Key]
             [DatabaseGenerated(DatabaseGeneratedOption.None)]
             public short Id { get; set; }
-            public byte IlId { get; set; }
-            [Required]
-            [MaxLength(20)]
+            public byte CityId { get; set; }
+            [UDRequired]
+            [UDStringLength(20)]
+            [Column(TypeName = "varchar(20)")]
             public string Name { get; set; }
-            public short TelefonKodu { get; set; }
-            public virtual Il Il { get; set; } = null!;
+            public short TelephoneCode { get; set; }
+            public virtual City City { get; set; } = null!;
         }
     }
 }

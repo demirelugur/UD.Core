@@ -111,16 +111,17 @@
         public static object ParseOrDefault(object value, Type type)
         {
             var pd = parseOrDefault(value, type);
-            if (pd.value == null) { return null; }
+            if (pd.value == null) { return type.GetDefaultValue(); }
             try { return Convert.ChangeType(pd.value, pd.baseType); }
-            catch { return null; }
+            catch { return type.GetDefaultValue(); }
         }
         private static (object value, Type baseType) parseOrDefault(object value, Type propertyType)
         {
             if (value == null) { return (default, default); }
-            _ = TryValidators.TryTypeIsNullable(propertyType, out Type _baseType);
+            if (value is JToken _jTokenValue && _jTokenValue.IsNoneOrNullOrUndefined()) { return (default, default); }
             var valueString = value.ToStringOrEmpty();
             if (valueString == "") { return (default, default); }
+            _ = TryValidators.TryTypeIsNullable(propertyType, out Type _baseType);
             if (_baseType.IsEnum)
             {
                 if (value.GetType() == _baseType) { return (value, _baseType); }

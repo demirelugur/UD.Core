@@ -50,6 +50,8 @@
             if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"The type \"{type.FullName}\" does not have the \"{typeof(TableAttribute).FullName}\" attribute. ", new Exception("To get the table name, the relevant class must be decorated with the [Table(\"TableName\")] attribute.")); }
             throw new NotSupportedException($"\"{type.FullName}\" tipi üzerinde \"{typeof(TableAttribute).FullName}\" özniteliği bulunmamaktadır. ", new Exception("Tablo adını alabilmek için ilgili sınıfa [Table(\"TabloAdi\")] özniteliği eklenmelidir."));
         }
+        /// <summary> <paramref name="type"/> türünün varsayılan değerini döndürür. Eğer tür nullable değilse ve bir değer türüyse, <see cref="Activator.CreateInstance(Type)"/> kullanılarak varsayılan değeri oluşturulur. Aksi takdirde, null döndürülür. Bu yöntem, özellikle nullable olmayan değer türleri için varsayılan değerleri almak için kullanışlıdır.</summary>
+        public static object GetDefaultValue(this Type type) => ((type.IsValueType && !type.IsNullable()) ? Activator.CreateInstance(type) : null); // Not: Alternatif RuntimeHelpers.GetUninitializedObject(type)
         /// <summary>Belirtilen türü enum dizisine dönüştürür.</summary>
         /// <param name="type">Enum türü.</param>
         /// <returns>Enum sonuçları dizisi.</returns>
