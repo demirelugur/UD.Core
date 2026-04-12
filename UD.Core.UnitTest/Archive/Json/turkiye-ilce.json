@@ -1,0 +1,5840 @@
+[
+  {
+    "Id": 101,
+    "CityId": 1,
+    "Name": "ALADAĞ",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 102,
+    "CityId": 1,
+    "Name": "CEYHAN",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 103,
+    "CityId": 1,
+    "Name": "ÇUKUROVA",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 104,
+    "CityId": 1,
+    "Name": "FEKE",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 105,
+    "CityId": 1,
+    "Name": "İMAMOĞLU",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 106,
+    "CityId": 1,
+    "Name": "KARAİSALI",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 107,
+    "CityId": 1,
+    "Name": "KARATAŞ",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 108,
+    "CityId": 1,
+    "Name": "KOZAN",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 109,
+    "CityId": 1,
+    "Name": "POZANTI",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 110,
+    "CityId": 1,
+    "Name": "SAİMBEYLİ",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 111,
+    "CityId": 1,
+    "Name": "SARIÇAM",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 112,
+    "CityId": 1,
+    "Name": "SEYHAN",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 113,
+    "CityId": 1,
+    "Name": "TUFANBEYLİ",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 114,
+    "CityId": 1,
+    "Name": "YUMURTALIK",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 115,
+    "CityId": 1,
+    "Name": "YÜREĞİR",
+    "TelephoneCode": 322
+  },
+  {
+    "Id": 201,
+    "CityId": 2,
+    "Name": "MERKEZ",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 202,
+    "CityId": 2,
+    "Name": "BESNİ",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 203,
+    "CityId": 2,
+    "Name": "ÇELİKHAN",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 204,
+    "CityId": 2,
+    "Name": "GERGER",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 205,
+    "CityId": 2,
+    "Name": "GÖLBAŞI",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 206,
+    "CityId": 2,
+    "Name": "KAHTA",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 207,
+    "CityId": 2,
+    "Name": "SAMSAT",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 208,
+    "CityId": 2,
+    "Name": "SİNCİK",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 209,
+    "CityId": 2,
+    "Name": "TUT",
+    "TelephoneCode": 416
+  },
+  {
+    "Id": 301,
+    "CityId": 3,
+    "Name": "MERKEZ",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 302,
+    "CityId": 3,
+    "Name": "BAŞMAKÇI",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 303,
+    "CityId": 3,
+    "Name": "BAYAT",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 304,
+    "CityId": 3,
+    "Name": "BOLVADİN",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 305,
+    "CityId": 3,
+    "Name": "ÇAY",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 306,
+    "CityId": 3,
+    "Name": "ÇOBANLAR",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 307,
+    "CityId": 3,
+    "Name": "DAZKIRI",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 308,
+    "CityId": 3,
+    "Name": "DİNAR",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 309,
+    "CityId": 3,
+    "Name": "EMİRDAĞ",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 310,
+    "CityId": 3,
+    "Name": "EVCİLER",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 311,
+    "CityId": 3,
+    "Name": "HOCALAR",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 312,
+    "CityId": 3,
+    "Name": "İHSANİYE",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 313,
+    "CityId": 3,
+    "Name": "İSCEHİSAR",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 314,
+    "CityId": 3,
+    "Name": "KIZILÖREN",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 315,
+    "CityId": 3,
+    "Name": "SANDIKLI",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 316,
+    "CityId": 3,
+    "Name": "SİNANPAŞA",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 317,
+    "CityId": 3,
+    "Name": "SULTANDAĞI",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 318,
+    "CityId": 3,
+    "Name": "ŞUHUT",
+    "TelephoneCode": 272
+  },
+  {
+    "Id": 401,
+    "CityId": 4,
+    "Name": "MERKEZ",
+    "TelephoneCode": 472
+  },
+  {
+    "Id": 402,
+    "CityId": 4,
+    "Name": "DİYADİN",
+    "TelephoneCode": 472
+  },
+  {
+    "Id": 403,
+    "CityId": 4,
+    "Name": "DOĞUBAYAZIT",
+    "TelephoneCode": 472
+  },
+  {
+    "Id": 404,
+    "CityId": 4,
+    "Name": "ELEŞKİRT",
+    "TelephoneCode": 472
+  },
+  {
+    "Id": 405,
+    "CityId": 4,
+    "Name": "HAMUR",
+    "TelephoneCode": 472
+  },
+  {
+    "Id": 406,
+    "CityId": 4,
+    "Name": "PATNOS",
+    "TelephoneCode": 472
+  },
+  {
+    "Id": 407,
+    "CityId": 4,
+    "Name": "TAŞLIÇAY",
+    "TelephoneCode": 472
+  },
+  {
+    "Id": 408,
+    "CityId": 4,
+    "Name": "TUTAK",
+    "TelephoneCode": 472
+  },
+  {
+    "Id": 501,
+    "CityId": 5,
+    "Name": "MERKEZ",
+    "TelephoneCode": 358
+  },
+  {
+    "Id": 502,
+    "CityId": 5,
+    "Name": "GÖYNÜCEK",
+    "TelephoneCode": 358
+  },
+  {
+    "Id": 503,
+    "CityId": 5,
+    "Name": "GÜMÜŞHACIKÖY",
+    "TelephoneCode": 358
+  },
+  {
+    "Id": 504,
+    "CityId": 5,
+    "Name": "HAMAMÖZÜ",
+    "TelephoneCode": 358
+  },
+  {
+    "Id": 505,
+    "CityId": 5,
+    "Name": "MERZİFON",
+    "TelephoneCode": 358
+  },
+  {
+    "Id": 506,
+    "CityId": 5,
+    "Name": "SULUOVA",
+    "TelephoneCode": 358
+  },
+  {
+    "Id": 507,
+    "CityId": 5,
+    "Name": "TAŞOVA",
+    "TelephoneCode": 358
+  },
+  {
+    "Id": 601,
+    "CityId": 6,
+    "Name": "AKYURT",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 602,
+    "CityId": 6,
+    "Name": "ALTINDAĞ",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 603,
+    "CityId": 6,
+    "Name": "AYAŞ",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 604,
+    "CityId": 6,
+    "Name": "BALA",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 605,
+    "CityId": 6,
+    "Name": "BEYPAZARI",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 606,
+    "CityId": 6,
+    "Name": "ÇAMLIDERE",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 607,
+    "CityId": 6,
+    "Name": "ÇANKAYA",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 608,
+    "CityId": 6,
+    "Name": "ÇUBUK",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 609,
+    "CityId": 6,
+    "Name": "ELMADAĞ",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 610,
+    "CityId": 6,
+    "Name": "ETİMESGUT",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 611,
+    "CityId": 6,
+    "Name": "EVREN",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 612,
+    "CityId": 6,
+    "Name": "GÖLBAŞI",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 613,
+    "CityId": 6,
+    "Name": "GÜDÜL",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 614,
+    "CityId": 6,
+    "Name": "HAYMANA",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 615,
+    "CityId": 6,
+    "Name": "KAHRAMANKAZAN",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 616,
+    "CityId": 6,
+    "Name": "KALECİK",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 617,
+    "CityId": 6,
+    "Name": "KEÇİÖREN",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 618,
+    "CityId": 6,
+    "Name": "KIZILCAHAMAM",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 619,
+    "CityId": 6,
+    "Name": "MAMAK",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 620,
+    "CityId": 6,
+    "Name": "NALLIHAN",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 621,
+    "CityId": 6,
+    "Name": "POLATLI",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 622,
+    "CityId": 6,
+    "Name": "PURSAKLAR",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 623,
+    "CityId": 6,
+    "Name": "SİNCAN",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 624,
+    "CityId": 6,
+    "Name": "ŞEREFLİKOÇHİSAR",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 625,
+    "CityId": 6,
+    "Name": "YENİMAHALLE",
+    "TelephoneCode": 312
+  },
+  {
+    "Id": 701,
+    "CityId": 7,
+    "Name": "AKSEKİ",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 702,
+    "CityId": 7,
+    "Name": "AKSU",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 703,
+    "CityId": 7,
+    "Name": "ALANYA",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 704,
+    "CityId": 7,
+    "Name": "DEMRE",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 705,
+    "CityId": 7,
+    "Name": "DÖŞEMEALTI",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 706,
+    "CityId": 7,
+    "Name": "ELMALI",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 707,
+    "CityId": 7,
+    "Name": "FİNİKE",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 708,
+    "CityId": 7,
+    "Name": "GAZİPAŞA",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 709,
+    "CityId": 7,
+    "Name": "GÜNDOĞMUŞ",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 710,
+    "CityId": 7,
+    "Name": "İBRADI",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 711,
+    "CityId": 7,
+    "Name": "KAŞ",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 712,
+    "CityId": 7,
+    "Name": "KEMER",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 713,
+    "CityId": 7,
+    "Name": "KEPEZ",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 714,
+    "CityId": 7,
+    "Name": "KONYAALTI",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 715,
+    "CityId": 7,
+    "Name": "KORKUTELİ",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 716,
+    "CityId": 7,
+    "Name": "KUMLUCA",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 717,
+    "CityId": 7,
+    "Name": "MANAVGAT",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 718,
+    "CityId": 7,
+    "Name": "MURATPAŞA",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 719,
+    "CityId": 7,
+    "Name": "SERİK",
+    "TelephoneCode": 242
+  },
+  {
+    "Id": 801,
+    "CityId": 8,
+    "Name": "MERKEZ",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 802,
+    "CityId": 8,
+    "Name": "ARDANUÇ",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 803,
+    "CityId": 8,
+    "Name": "ARHAVİ",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 804,
+    "CityId": 8,
+    "Name": "BORÇKA",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 805,
+    "CityId": 8,
+    "Name": "HOPA",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 806,
+    "CityId": 8,
+    "Name": "KEMALPAŞA",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 807,
+    "CityId": 8,
+    "Name": "MURGUL",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 808,
+    "CityId": 8,
+    "Name": "ŞAVŞAT",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 809,
+    "CityId": 8,
+    "Name": "YUSUFELİ",
+    "TelephoneCode": 466
+  },
+  {
+    "Id": 901,
+    "CityId": 9,
+    "Name": "BOZDOĞAN",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 902,
+    "CityId": 9,
+    "Name": "BUHARKENT",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 903,
+    "CityId": 9,
+    "Name": "ÇİNE",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 904,
+    "CityId": 9,
+    "Name": "DİDİM",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 905,
+    "CityId": 9,
+    "Name": "EFELER",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 906,
+    "CityId": 9,
+    "Name": "GERMENCİK",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 907,
+    "CityId": 9,
+    "Name": "İNCİRLİOVA",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 908,
+    "CityId": 9,
+    "Name": "KARACASU",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 909,
+    "CityId": 9,
+    "Name": "KARPUZLU",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 910,
+    "CityId": 9,
+    "Name": "KOÇARLI",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 911,
+    "CityId": 9,
+    "Name": "KÖŞK",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 912,
+    "CityId": 9,
+    "Name": "KUŞADASI",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 913,
+    "CityId": 9,
+    "Name": "KUYUCAK",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 914,
+    "CityId": 9,
+    "Name": "NAZİLLİ",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 915,
+    "CityId": 9,
+    "Name": "SÖKE",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 916,
+    "CityId": 9,
+    "Name": "SULTANHİSAR",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 917,
+    "CityId": 9,
+    "Name": "YENİPAZAR",
+    "TelephoneCode": 256
+  },
+  {
+    "Id": 1001,
+    "CityId": 10,
+    "Name": "ALTIEYLÜL",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1002,
+    "CityId": 10,
+    "Name": "AYVALIK",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1003,
+    "CityId": 10,
+    "Name": "BALYA",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1004,
+    "CityId": 10,
+    "Name": "BANDIRMA",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1005,
+    "CityId": 10,
+    "Name": "BİGADİÇ",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1006,
+    "CityId": 10,
+    "Name": "BURHANİYE",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1007,
+    "CityId": 10,
+    "Name": "DURSUNBEY",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1008,
+    "CityId": 10,
+    "Name": "EDREMİT",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1009,
+    "CityId": 10,
+    "Name": "ERDEK",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1010,
+    "CityId": 10,
+    "Name": "GÖMEÇ",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1011,
+    "CityId": 10,
+    "Name": "GÖNEN",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1012,
+    "CityId": 10,
+    "Name": "HAVRAN",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1013,
+    "CityId": 10,
+    "Name": "İVRİNDİ",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1014,
+    "CityId": 10,
+    "Name": "KARESİ",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1015,
+    "CityId": 10,
+    "Name": "KEPSUT",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1016,
+    "CityId": 10,
+    "Name": "MANYAS",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1017,
+    "CityId": 10,
+    "Name": "MARMARA",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1018,
+    "CityId": 10,
+    "Name": "SAVAŞTEPE",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1019,
+    "CityId": 10,
+    "Name": "SINDIRGI",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1020,
+    "CityId": 10,
+    "Name": "SUSURLUK",
+    "TelephoneCode": 266
+  },
+  {
+    "Id": 1101,
+    "CityId": 11,
+    "Name": "MERKEZ",
+    "TelephoneCode": 228
+  },
+  {
+    "Id": 1102,
+    "CityId": 11,
+    "Name": "BOZÜYÜK",
+    "TelephoneCode": 228
+  },
+  {
+    "Id": 1103,
+    "CityId": 11,
+    "Name": "GÖLPAZARI",
+    "TelephoneCode": 228
+  },
+  {
+    "Id": 1104,
+    "CityId": 11,
+    "Name": "İNHİSAR",
+    "TelephoneCode": 228
+  },
+  {
+    "Id": 1105,
+    "CityId": 11,
+    "Name": "OSMANELİ",
+    "TelephoneCode": 228
+  },
+  {
+    "Id": 1106,
+    "CityId": 11,
+    "Name": "PAZARYERİ",
+    "TelephoneCode": 228
+  },
+  {
+    "Id": 1107,
+    "CityId": 11,
+    "Name": "SÖĞÜT",
+    "TelephoneCode": 228
+  },
+  {
+    "Id": 1108,
+    "CityId": 11,
+    "Name": "YENİPAZAR",
+    "TelephoneCode": 228
+  },
+  {
+    "Id": 1201,
+    "CityId": 12,
+    "Name": "MERKEZ",
+    "TelephoneCode": 426
+  },
+  {
+    "Id": 1202,
+    "CityId": 12,
+    "Name": "ADAKLI",
+    "TelephoneCode": 426
+  },
+  {
+    "Id": 1203,
+    "CityId": 12,
+    "Name": "GENÇ",
+    "TelephoneCode": 426
+  },
+  {
+    "Id": 1204,
+    "CityId": 12,
+    "Name": "KARLIOVA",
+    "TelephoneCode": 426
+  },
+  {
+    "Id": 1205,
+    "CityId": 12,
+    "Name": "KİĞI",
+    "TelephoneCode": 426
+  },
+  {
+    "Id": 1206,
+    "CityId": 12,
+    "Name": "SOLHAN",
+    "TelephoneCode": 426
+  },
+  {
+    "Id": 1207,
+    "CityId": 12,
+    "Name": "YAYLADERE",
+    "TelephoneCode": 426
+  },
+  {
+    "Id": 1208,
+    "CityId": 12,
+    "Name": "YEDİSU",
+    "TelephoneCode": 426
+  },
+  {
+    "Id": 1301,
+    "CityId": 13,
+    "Name": "MERKEZ",
+    "TelephoneCode": 434
+  },
+  {
+    "Id": 1302,
+    "CityId": 13,
+    "Name": "ADİLCEVAZ",
+    "TelephoneCode": 434
+  },
+  {
+    "Id": 1303,
+    "CityId": 13,
+    "Name": "AHLAT",
+    "TelephoneCode": 434
+  },
+  {
+    "Id": 1304,
+    "CityId": 13,
+    "Name": "GÜROYMAK",
+    "TelephoneCode": 434
+  },
+  {
+    "Id": 1305,
+    "CityId": 13,
+    "Name": "HİZAN",
+    "TelephoneCode": 434
+  },
+  {
+    "Id": 1306,
+    "CityId": 13,
+    "Name": "MUTKİ",
+    "TelephoneCode": 434
+  },
+  {
+    "Id": 1307,
+    "CityId": 13,
+    "Name": "TATVAN",
+    "TelephoneCode": 434
+  },
+  {
+    "Id": 1401,
+    "CityId": 14,
+    "Name": "MERKEZ",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1402,
+    "CityId": 14,
+    "Name": "DÖRTDİVAN",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1403,
+    "CityId": 14,
+    "Name": "GEREDE",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1404,
+    "CityId": 14,
+    "Name": "GÖYNÜK",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1405,
+    "CityId": 14,
+    "Name": "KIBRISCIK",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1406,
+    "CityId": 14,
+    "Name": "MENGEN",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1407,
+    "CityId": 14,
+    "Name": "MUDURNU",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1408,
+    "CityId": 14,
+    "Name": "SEBEN",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1409,
+    "CityId": 14,
+    "Name": "YENİÇAĞA",
+    "TelephoneCode": 374
+  },
+  {
+    "Id": 1501,
+    "CityId": 15,
+    "Name": "MERKEZ",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1502,
+    "CityId": 15,
+    "Name": "AĞLASUN",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1503,
+    "CityId": 15,
+    "Name": "ALTINYAYLA",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1504,
+    "CityId": 15,
+    "Name": "BUCAK",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1505,
+    "CityId": 15,
+    "Name": "ÇAVDIR",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1506,
+    "CityId": 15,
+    "Name": "ÇELTİKÇİ",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1507,
+    "CityId": 15,
+    "Name": "GÖLHİSAR",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1508,
+    "CityId": 15,
+    "Name": "KARAMANLI",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1509,
+    "CityId": 15,
+    "Name": "KEMER",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1510,
+    "CityId": 15,
+    "Name": "TEFENNİ",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1511,
+    "CityId": 15,
+    "Name": "YEŞİLOVA",
+    "TelephoneCode": 248
+  },
+  {
+    "Id": 1601,
+    "CityId": 16,
+    "Name": "BÜYÜKORHAN",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1602,
+    "CityId": 16,
+    "Name": "GEMLİK",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1603,
+    "CityId": 16,
+    "Name": "GÜRSU",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1604,
+    "CityId": 16,
+    "Name": "HARMANCIK",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1605,
+    "CityId": 16,
+    "Name": "İNEGÖL",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1606,
+    "CityId": 16,
+    "Name": "İZNİK",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1607,
+    "CityId": 16,
+    "Name": "KARACABEY",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1608,
+    "CityId": 16,
+    "Name": "KELES",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1609,
+    "CityId": 16,
+    "Name": "KESTEL",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1610,
+    "CityId": 16,
+    "Name": "MUDANYA",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1611,
+    "CityId": 16,
+    "Name": "MUSTAFAKEMALPAŞA",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1612,
+    "CityId": 16,
+    "Name": "NİLÜFER",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1613,
+    "CityId": 16,
+    "Name": "ORHANELİ",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1614,
+    "CityId": 16,
+    "Name": "ORHANGAZİ",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1615,
+    "CityId": 16,
+    "Name": "OSMANGAZİ",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1616,
+    "CityId": 16,
+    "Name": "YENİŞEHİR",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1617,
+    "CityId": 16,
+    "Name": "YILDIRIM",
+    "TelephoneCode": 224
+  },
+  {
+    "Id": 1701,
+    "CityId": 17,
+    "Name": "MERKEZ",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1702,
+    "CityId": 17,
+    "Name": "AYVACIK",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1703,
+    "CityId": 17,
+    "Name": "BAYRAMİÇ",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1704,
+    "CityId": 17,
+    "Name": "BİGA",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1705,
+    "CityId": 17,
+    "Name": "BOZCAADA",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1706,
+    "CityId": 17,
+    "Name": "ÇAN",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1707,
+    "CityId": 17,
+    "Name": "ECEABAT",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1708,
+    "CityId": 17,
+    "Name": "EZİNE",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1709,
+    "CityId": 17,
+    "Name": "GELİBOLU",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1710,
+    "CityId": 17,
+    "Name": "GÖKÇEADA",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1711,
+    "CityId": 17,
+    "Name": "LAPSEKİ",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1712,
+    "CityId": 17,
+    "Name": "YENİCE",
+    "TelephoneCode": 286
+  },
+  {
+    "Id": 1801,
+    "CityId": 18,
+    "Name": "MERKEZ",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1802,
+    "CityId": 18,
+    "Name": "ATKARACALAR",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1803,
+    "CityId": 18,
+    "Name": "BAYRAMÖREN",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1804,
+    "CityId": 18,
+    "Name": "ÇERKEŞ",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1805,
+    "CityId": 18,
+    "Name": "ELDİVAN",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1806,
+    "CityId": 18,
+    "Name": "ILGAZ",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1807,
+    "CityId": 18,
+    "Name": "KIZILIRMAK",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1808,
+    "CityId": 18,
+    "Name": "KORGUN",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1809,
+    "CityId": 18,
+    "Name": "KURŞUNLU",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1810,
+    "CityId": 18,
+    "Name": "ORTA",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1811,
+    "CityId": 18,
+    "Name": "ŞABANÖZÜ",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1812,
+    "CityId": 18,
+    "Name": "YAPRAKLI",
+    "TelephoneCode": 376
+  },
+  {
+    "Id": 1901,
+    "CityId": 19,
+    "Name": "MERKEZ",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1902,
+    "CityId": 19,
+    "Name": "ALACA",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1903,
+    "CityId": 19,
+    "Name": "BAYAT",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1904,
+    "CityId": 19,
+    "Name": "BOĞAZKALE",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1905,
+    "CityId": 19,
+    "Name": "DODURGA",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1906,
+    "CityId": 19,
+    "Name": "İSKİLİP",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1907,
+    "CityId": 19,
+    "Name": "KARGI",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1908,
+    "CityId": 19,
+    "Name": "LAÇİN",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1909,
+    "CityId": 19,
+    "Name": "MECİTÖZÜ",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1910,
+    "CityId": 19,
+    "Name": "OĞUZLAR",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1911,
+    "CityId": 19,
+    "Name": "ORTAKÖY",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1912,
+    "CityId": 19,
+    "Name": "OSMANCIK",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1913,
+    "CityId": 19,
+    "Name": "SUNGURLU",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 1914,
+    "CityId": 19,
+    "Name": "UĞURLUDAĞ",
+    "TelephoneCode": 364
+  },
+  {
+    "Id": 2001,
+    "CityId": 20,
+    "Name": "ACIPAYAM",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2002,
+    "CityId": 20,
+    "Name": "BABADAĞ",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2003,
+    "CityId": 20,
+    "Name": "BAKLAN",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2004,
+    "CityId": 20,
+    "Name": "BEKİLLİ",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2005,
+    "CityId": 20,
+    "Name": "BEYAĞAÇ",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2006,
+    "CityId": 20,
+    "Name": "BOZKURT",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2007,
+    "CityId": 20,
+    "Name": "BULDAN",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2008,
+    "CityId": 20,
+    "Name": "ÇAL",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2009,
+    "CityId": 20,
+    "Name": "ÇAMELİ",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2010,
+    "CityId": 20,
+    "Name": "ÇARDAK",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2011,
+    "CityId": 20,
+    "Name": "ÇİVRİL",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2012,
+    "CityId": 20,
+    "Name": "GÜNEY",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2013,
+    "CityId": 20,
+    "Name": "HONAZ",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2014,
+    "CityId": 20,
+    "Name": "KALE",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2015,
+    "CityId": 20,
+    "Name": "MERKEZEFENDİ",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2016,
+    "CityId": 20,
+    "Name": "PAMUKKALE",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2017,
+    "CityId": 20,
+    "Name": "SARAYKÖY",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2018,
+    "CityId": 20,
+    "Name": "SERİNHİSAR",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2019,
+    "CityId": 20,
+    "Name": "TAVAS",
+    "TelephoneCode": 258
+  },
+  {
+    "Id": 2101,
+    "CityId": 21,
+    "Name": "BAĞLAR",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2102,
+    "CityId": 21,
+    "Name": "BİSMİL",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2103,
+    "CityId": 21,
+    "Name": "ÇERMİK",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2104,
+    "CityId": 21,
+    "Name": "ÇINAR",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2105,
+    "CityId": 21,
+    "Name": "ÇÜNGÜŞ",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2106,
+    "CityId": 21,
+    "Name": "DİCLE",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2107,
+    "CityId": 21,
+    "Name": "EĞİL",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2108,
+    "CityId": 21,
+    "Name": "ERGANİ",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2109,
+    "CityId": 21,
+    "Name": "HANİ",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2110,
+    "CityId": 21,
+    "Name": "HAZRO",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2111,
+    "CityId": 21,
+    "Name": "KAYAPINAR",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2112,
+    "CityId": 21,
+    "Name": "KOCAKÖY",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2113,
+    "CityId": 21,
+    "Name": "KULP",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2114,
+    "CityId": 21,
+    "Name": "LİCE",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2115,
+    "CityId": 21,
+    "Name": "SİLVAN",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2116,
+    "CityId": 21,
+    "Name": "SUR",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2117,
+    "CityId": 21,
+    "Name": "YENİŞEHİR",
+    "TelephoneCode": 412
+  },
+  {
+    "Id": 2201,
+    "CityId": 22,
+    "Name": "MERKEZ",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2202,
+    "CityId": 22,
+    "Name": "ENEZ",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2203,
+    "CityId": 22,
+    "Name": "HAVSA",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2204,
+    "CityId": 22,
+    "Name": "İPSALA",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2205,
+    "CityId": 22,
+    "Name": "KEŞAN",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2206,
+    "CityId": 22,
+    "Name": "LALAPAŞA",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2207,
+    "CityId": 22,
+    "Name": "MERİÇ",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2208,
+    "CityId": 22,
+    "Name": "SÜLOĞLU",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2209,
+    "CityId": 22,
+    "Name": "UZUNKÖPRÜ",
+    "TelephoneCode": 284
+  },
+  {
+    "Id": 2301,
+    "CityId": 23,
+    "Name": "MERKEZ",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2302,
+    "CityId": 23,
+    "Name": "AĞIN",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2303,
+    "CityId": 23,
+    "Name": "ALACAKAYA",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2304,
+    "CityId": 23,
+    "Name": "ARICAK",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2305,
+    "CityId": 23,
+    "Name": "BASKİL",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2306,
+    "CityId": 23,
+    "Name": "KARAKOÇAN",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2307,
+    "CityId": 23,
+    "Name": "KEBAN",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2308,
+    "CityId": 23,
+    "Name": "KOVANCILAR",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2309,
+    "CityId": 23,
+    "Name": "MADEN",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2310,
+    "CityId": 23,
+    "Name": "PALU",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2311,
+    "CityId": 23,
+    "Name": "SİVRİCE",
+    "TelephoneCode": 424
+  },
+  {
+    "Id": 2401,
+    "CityId": 24,
+    "Name": "MERKEZ",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2402,
+    "CityId": 24,
+    "Name": "ÇAYIRLI",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2403,
+    "CityId": 24,
+    "Name": "İLİÇ",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2404,
+    "CityId": 24,
+    "Name": "KEMAH",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2405,
+    "CityId": 24,
+    "Name": "KEMALİYE",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2406,
+    "CityId": 24,
+    "Name": "OTLUKBELİ",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2407,
+    "CityId": 24,
+    "Name": "REFAHİYE",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2408,
+    "CityId": 24,
+    "Name": "TERCAN",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2409,
+    "CityId": 24,
+    "Name": "ÜZÜMLÜ",
+    "TelephoneCode": 446
+  },
+  {
+    "Id": 2501,
+    "CityId": 25,
+    "Name": "AŞKALE",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2502,
+    "CityId": 25,
+    "Name": "AZİZİYE",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2503,
+    "CityId": 25,
+    "Name": "ÇAT",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2504,
+    "CityId": 25,
+    "Name": "HINIS",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2505,
+    "CityId": 25,
+    "Name": "HORASAN",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2506,
+    "CityId": 25,
+    "Name": "İSPİR",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2507,
+    "CityId": 25,
+    "Name": "KARAÇOBAN",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2508,
+    "CityId": 25,
+    "Name": "KARAYAZI",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2509,
+    "CityId": 25,
+    "Name": "KÖPRÜKÖY",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2510,
+    "CityId": 25,
+    "Name": "NARMAN",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2511,
+    "CityId": 25,
+    "Name": "OLTU",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2512,
+    "CityId": 25,
+    "Name": "OLUR",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2513,
+    "CityId": 25,
+    "Name": "PALANDÖKEN",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2514,
+    "CityId": 25,
+    "Name": "PASİNLER",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2515,
+    "CityId": 25,
+    "Name": "PAZARYOLU",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2516,
+    "CityId": 25,
+    "Name": "ŞENKAYA",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2517,
+    "CityId": 25,
+    "Name": "TEKMAN",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2518,
+    "CityId": 25,
+    "Name": "TORTUM",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2519,
+    "CityId": 25,
+    "Name": "UZUNDERE",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2520,
+    "CityId": 25,
+    "Name": "YAKUTİYE",
+    "TelephoneCode": 42
+  },
+  {
+    "Id": 2601,
+    "CityId": 26,
+    "Name": "ALPU",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2602,
+    "CityId": 26,
+    "Name": "BEYLİKOVA",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2603,
+    "CityId": 26,
+    "Name": "ÇİFTELER",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2604,
+    "CityId": 26,
+    "Name": "GÜNYÜZÜ",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2605,
+    "CityId": 26,
+    "Name": "HAN",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2606,
+    "CityId": 26,
+    "Name": "İNÖNÜ",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2607,
+    "CityId": 26,
+    "Name": "MAHMUDİYE",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2608,
+    "CityId": 26,
+    "Name": "MİHALGAZİ",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2609,
+    "CityId": 26,
+    "Name": "MİHALIÇÇIK",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2610,
+    "CityId": 26,
+    "Name": "ODUNPAZARI",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2611,
+    "CityId": 26,
+    "Name": "SARICAKAYA",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2612,
+    "CityId": 26,
+    "Name": "SEYİTGAZİ",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2613,
+    "CityId": 26,
+    "Name": "SİVRİHİSAR",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2614,
+    "CityId": 26,
+    "Name": "TEPEBAŞI",
+    "TelephoneCode": 222
+  },
+  {
+    "Id": 2701,
+    "CityId": 27,
+    "Name": "ARABAN",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2702,
+    "CityId": 27,
+    "Name": "İSLAHİYE",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2703,
+    "CityId": 27,
+    "Name": "KARKAMIŞ",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2704,
+    "CityId": 27,
+    "Name": "NİZİP",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2705,
+    "CityId": 27,
+    "Name": "NURDAĞI",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2706,
+    "CityId": 27,
+    "Name": "OĞUZELİ",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2707,
+    "CityId": 27,
+    "Name": "ŞAHİNBEY",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2708,
+    "CityId": 27,
+    "Name": "ŞEHİTKAMİL",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2709,
+    "CityId": 27,
+    "Name": "YAVUZELİ",
+    "TelephoneCode": 342
+  },
+  {
+    "Id": 2801,
+    "CityId": 28,
+    "Name": "MERKEZ",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2802,
+    "CityId": 28,
+    "Name": "ALUCRA",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2803,
+    "CityId": 28,
+    "Name": "BULANCAK",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2804,
+    "CityId": 28,
+    "Name": "ÇAMOLUK",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2805,
+    "CityId": 28,
+    "Name": "ÇANAKÇI",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2806,
+    "CityId": 28,
+    "Name": "DERELİ",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2807,
+    "CityId": 28,
+    "Name": "DOĞANKENT",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2808,
+    "CityId": 28,
+    "Name": "ESPİYE",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2809,
+    "CityId": 28,
+    "Name": "EYNESİL",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2810,
+    "CityId": 28,
+    "Name": "GÖRELE",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2811,
+    "CityId": 28,
+    "Name": "GÜCE",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2812,
+    "CityId": 28,
+    "Name": "KEŞAP",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2813,
+    "CityId": 28,
+    "Name": "PİRAZİZ",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2814,
+    "CityId": 28,
+    "Name": "ŞEBİNKARAHİSAR",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2815,
+    "CityId": 28,
+    "Name": "TİREBOLU",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2816,
+    "CityId": 28,
+    "Name": "YAĞLIDERE",
+    "TelephoneCode": 454
+  },
+  {
+    "Id": 2901,
+    "CityId": 29,
+    "Name": "MERKEZ",
+    "TelephoneCode": 456
+  },
+  {
+    "Id": 2902,
+    "CityId": 29,
+    "Name": "KELKİT",
+    "TelephoneCode": 456
+  },
+  {
+    "Id": 2903,
+    "CityId": 29,
+    "Name": "KÖSE",
+    "TelephoneCode": 456
+  },
+  {
+    "Id": 2904,
+    "CityId": 29,
+    "Name": "KÜRTÜN",
+    "TelephoneCode": 456
+  },
+  {
+    "Id": 2905,
+    "CityId": 29,
+    "Name": "ŞİRAN",
+    "TelephoneCode": 456
+  },
+  {
+    "Id": 2906,
+    "CityId": 29,
+    "Name": "TORUL",
+    "TelephoneCode": 456
+  },
+  {
+    "Id": 3001,
+    "CityId": 30,
+    "Name": "MERKEZ",
+    "TelephoneCode": 438
+  },
+  {
+    "Id": 3002,
+    "CityId": 30,
+    "Name": "ÇUKURCA",
+    "TelephoneCode": 438
+  },
+  {
+    "Id": 3003,
+    "CityId": 30,
+    "Name": "DERECİK",
+    "TelephoneCode": 438
+  },
+  {
+    "Id": 3004,
+    "CityId": 30,
+    "Name": "ŞEMDİNLİ",
+    "TelephoneCode": 438
+  },
+  {
+    "Id": 3005,
+    "CityId": 30,
+    "Name": "YÜKSEKOVA",
+    "TelephoneCode": 438
+  },
+  {
+    "Id": 3101,
+    "CityId": 31,
+    "Name": "ALTINÖZÜ",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3102,
+    "CityId": 31,
+    "Name": "ANTAKYA",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3103,
+    "CityId": 31,
+    "Name": "ARSUZ",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3104,
+    "CityId": 31,
+    "Name": "BELEN",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3105,
+    "CityId": 31,
+    "Name": "DEFNE",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3106,
+    "CityId": 31,
+    "Name": "DÖRTYOL",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3107,
+    "CityId": 31,
+    "Name": "ERZİN",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3108,
+    "CityId": 31,
+    "Name": "HASSA",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3109,
+    "CityId": 31,
+    "Name": "İSKENDERUN",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3110,
+    "CityId": 31,
+    "Name": "KIRIKHAN",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3111,
+    "CityId": 31,
+    "Name": "KUMLU",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3112,
+    "CityId": 31,
+    "Name": "PAYAS",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3113,
+    "CityId": 31,
+    "Name": "REYHANLI",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3114,
+    "CityId": 31,
+    "Name": "SAMANDAĞ",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3115,
+    "CityId": 31,
+    "Name": "YAYLADAĞI",
+    "TelephoneCode": 326
+  },
+  {
+    "Id": 3201,
+    "CityId": 32,
+    "Name": "MERKEZ",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3202,
+    "CityId": 32,
+    "Name": "AKSU",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3203,
+    "CityId": 32,
+    "Name": "ATABEY",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3204,
+    "CityId": 32,
+    "Name": "EĞİRDİR",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3205,
+    "CityId": 32,
+    "Name": "GELENDOST",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3206,
+    "CityId": 32,
+    "Name": "GÖNEN",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3207,
+    "CityId": 32,
+    "Name": "KEÇİBORLU",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3208,
+    "CityId": 32,
+    "Name": "SENİRKENT",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3209,
+    "CityId": 32,
+    "Name": "SÜTÇÜLER",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3210,
+    "CityId": 32,
+    "Name": "ŞARKİKARAAĞAÇ",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3211,
+    "CityId": 32,
+    "Name": "ULUBORLU",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3212,
+    "CityId": 32,
+    "Name": "YALVAÇ",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3213,
+    "CityId": 32,
+    "Name": "YENİŞARBADEMLİ",
+    "TelephoneCode": 246
+  },
+  {
+    "Id": 3301,
+    "CityId": 33,
+    "Name": "AKDENİZ",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3302,
+    "CityId": 33,
+    "Name": "ANAMUR",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3303,
+    "CityId": 33,
+    "Name": "AYDINCIK",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3304,
+    "CityId": 33,
+    "Name": "BOZYAZI",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3305,
+    "CityId": 33,
+    "Name": "ÇAMLIYAYLA",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3306,
+    "CityId": 33,
+    "Name": "ERDEMLİ",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3307,
+    "CityId": 33,
+    "Name": "GÜLNAR",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3308,
+    "CityId": 33,
+    "Name": "MEZİTLİ",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3309,
+    "CityId": 33,
+    "Name": "MUT",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3310,
+    "CityId": 33,
+    "Name": "SİLİFKE",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3311,
+    "CityId": 33,
+    "Name": "TARSUS",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3312,
+    "CityId": 33,
+    "Name": "TOROSLAR",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3313,
+    "CityId": 33,
+    "Name": "YENİŞEHİR",
+    "TelephoneCode": 324
+  },
+  {
+    "Id": 3401,
+    "CityId": 34,
+    "Name": "ADALAR",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3402,
+    "CityId": 34,
+    "Name": "ARNAVUTKÖY",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3403,
+    "CityId": 34,
+    "Name": "ATAŞEHİR",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3404,
+    "CityId": 34,
+    "Name": "AVCILAR",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3405,
+    "CityId": 34,
+    "Name": "BAĞCILAR",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3406,
+    "CityId": 34,
+    "Name": "BAHÇELİEVLER",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3407,
+    "CityId": 34,
+    "Name": "BAKIRKÖY",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3408,
+    "CityId": 34,
+    "Name": "BAŞAKŞEHİR",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3409,
+    "CityId": 34,
+    "Name": "BAYRAMPAŞA",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3410,
+    "CityId": 34,
+    "Name": "BEŞİKTAŞ",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3411,
+    "CityId": 34,
+    "Name": "BEYKOZ",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3412,
+    "CityId": 34,
+    "Name": "BEYLİKDÜZÜ",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3413,
+    "CityId": 34,
+    "Name": "BEYOĞLU",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3414,
+    "CityId": 34,
+    "Name": "BÜYÜKÇEKMECE",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3415,
+    "CityId": 34,
+    "Name": "ÇATALCA",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3416,
+    "CityId": 34,
+    "Name": "ÇEKMEKÖY",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3417,
+    "CityId": 34,
+    "Name": "ESENLER",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3418,
+    "CityId": 34,
+    "Name": "ESENYURT",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3419,
+    "CityId": 34,
+    "Name": "EYÜPSULTAN",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3420,
+    "CityId": 34,
+    "Name": "FATİH",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3421,
+    "CityId": 34,
+    "Name": "GAZİOSMANPAŞA",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3422,
+    "CityId": 34,
+    "Name": "GÜNGÖREN",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3423,
+    "CityId": 34,
+    "Name": "KADIKÖY",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3424,
+    "CityId": 34,
+    "Name": "KAĞITHANE",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3425,
+    "CityId": 34,
+    "Name": "KARTAL",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3426,
+    "CityId": 34,
+    "Name": "KÜÇÜKÇEKMECE",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3427,
+    "CityId": 34,
+    "Name": "MALTEPE",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3428,
+    "CityId": 34,
+    "Name": "PENDİK",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3429,
+    "CityId": 34,
+    "Name": "SANCAKTEPE",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3430,
+    "CityId": 34,
+    "Name": "SARIYER",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3431,
+    "CityId": 34,
+    "Name": "SİLİVRİ",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3432,
+    "CityId": 34,
+    "Name": "SULTANBEYLİ",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3433,
+    "CityId": 34,
+    "Name": "SULTANGAZİ",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3434,
+    "CityId": 34,
+    "Name": "ŞİLE",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3435,
+    "CityId": 34,
+    "Name": "ŞİŞLİ",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3436,
+    "CityId": 34,
+    "Name": "TUZLA",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3437,
+    "CityId": 34,
+    "Name": "ÜMRANİYE",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3438,
+    "CityId": 34,
+    "Name": "ÜSKÜDAR",
+    "TelephoneCode": 216
+  },
+  {
+    "Id": 3439,
+    "CityId": 34,
+    "Name": "ZEYTİNBURNU",
+    "TelephoneCode": 212
+  },
+  {
+    "Id": 3501,
+    "CityId": 35,
+    "Name": "ALİAĞA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3502,
+    "CityId": 35,
+    "Name": "BALÇOVA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3503,
+    "CityId": 35,
+    "Name": "BAYINDIR",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3504,
+    "CityId": 35,
+    "Name": "BAYRAKLI",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3505,
+    "CityId": 35,
+    "Name": "BERGAMA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3506,
+    "CityId": 35,
+    "Name": "BEYDAĞ",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3507,
+    "CityId": 35,
+    "Name": "BORNOVA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3508,
+    "CityId": 35,
+    "Name": "BUCA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3509,
+    "CityId": 35,
+    "Name": "ÇEŞME",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3510,
+    "CityId": 35,
+    "Name": "ÇİĞLİ",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3511,
+    "CityId": 35,
+    "Name": "DİKİLİ",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3512,
+    "CityId": 35,
+    "Name": "FOÇA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3513,
+    "CityId": 35,
+    "Name": "GAZİEMİR",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3514,
+    "CityId": 35,
+    "Name": "GÜZELBAHÇE",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3515,
+    "CityId": 35,
+    "Name": "KARABAĞLAR",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3516,
+    "CityId": 35,
+    "Name": "KARABURUN",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3517,
+    "CityId": 35,
+    "Name": "KARŞIYAKA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3518,
+    "CityId": 35,
+    "Name": "KEMALPAŞA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3519,
+    "CityId": 35,
+    "Name": "KINIK",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3520,
+    "CityId": 35,
+    "Name": "KİRAZ",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3521,
+    "CityId": 35,
+    "Name": "KONAK",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3522,
+    "CityId": 35,
+    "Name": "MENDERES",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3523,
+    "CityId": 35,
+    "Name": "MENEMEN",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3524,
+    "CityId": 35,
+    "Name": "NARLIDERE",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3525,
+    "CityId": 35,
+    "Name": "ÖDEMİŞ",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3526,
+    "CityId": 35,
+    "Name": "SEFERİHİSAR",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3527,
+    "CityId": 35,
+    "Name": "SELÇUK",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3528,
+    "CityId": 35,
+    "Name": "TİRE",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3529,
+    "CityId": 35,
+    "Name": "TORBALI",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3530,
+    "CityId": 35,
+    "Name": "URLA",
+    "TelephoneCode": 232
+  },
+  {
+    "Id": 3601,
+    "CityId": 36,
+    "Name": "MERKEZ",
+    "TelephoneCode": 474
+  },
+  {
+    "Id": 3602,
+    "CityId": 36,
+    "Name": "AKYAKA",
+    "TelephoneCode": 474
+  },
+  {
+    "Id": 3603,
+    "CityId": 36,
+    "Name": "ARPAÇAY",
+    "TelephoneCode": 474
+  },
+  {
+    "Id": 3604,
+    "CityId": 36,
+    "Name": "DİGOR",
+    "TelephoneCode": 474
+  },
+  {
+    "Id": 3605,
+    "CityId": 36,
+    "Name": "KAĞIZMAN",
+    "TelephoneCode": 474
+  },
+  {
+    "Id": 3606,
+    "CityId": 36,
+    "Name": "SARIKAMIŞ",
+    "TelephoneCode": 474
+  },
+  {
+    "Id": 3607,
+    "CityId": 36,
+    "Name": "SELİM",
+    "TelephoneCode": 474
+  },
+  {
+    "Id": 3608,
+    "CityId": 36,
+    "Name": "SUSUZ",
+    "TelephoneCode": 474
+  },
+  {
+    "Id": 3701,
+    "CityId": 37,
+    "Name": "MERKEZ",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3702,
+    "CityId": 37,
+    "Name": "ABANA",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3703,
+    "CityId": 37,
+    "Name": "AĞLI",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3704,
+    "CityId": 37,
+    "Name": "ARAÇ",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3705,
+    "CityId": 37,
+    "Name": "AZDAVAY",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3706,
+    "CityId": 37,
+    "Name": "BOZKURT",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3707,
+    "CityId": 37,
+    "Name": "CİDE",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3708,
+    "CityId": 37,
+    "Name": "ÇATALZEYTİN",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3709,
+    "CityId": 37,
+    "Name": "DADAY",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3710,
+    "CityId": 37,
+    "Name": "DEVREKANİ",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3711,
+    "CityId": 37,
+    "Name": "DOĞANYURT",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3712,
+    "CityId": 37,
+    "Name": "HANÖNÜ",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3713,
+    "CityId": 37,
+    "Name": "İHSANGAZİ",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3714,
+    "CityId": 37,
+    "Name": "İNEBOLU",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3715,
+    "CityId": 37,
+    "Name": "KÜRE",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3716,
+    "CityId": 37,
+    "Name": "PINARBAŞI",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3717,
+    "CityId": 37,
+    "Name": "SEYDİLER",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3718,
+    "CityId": 37,
+    "Name": "ŞENPAZAR",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3719,
+    "CityId": 37,
+    "Name": "TAŞKÖPRÜ",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3720,
+    "CityId": 37,
+    "Name": "TOSYA",
+    "TelephoneCode": 366
+  },
+  {
+    "Id": 3801,
+    "CityId": 38,
+    "Name": "AKKIŞLA",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3802,
+    "CityId": 38,
+    "Name": "BÜNYAN",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3803,
+    "CityId": 38,
+    "Name": "DEVELİ",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3804,
+    "CityId": 38,
+    "Name": "FELAHİYE",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3805,
+    "CityId": 38,
+    "Name": "HACILAR",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3806,
+    "CityId": 38,
+    "Name": "İNCESU",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3807,
+    "CityId": 38,
+    "Name": "KOCASİNAN",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3808,
+    "CityId": 38,
+    "Name": "MELİKGAZİ",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3809,
+    "CityId": 38,
+    "Name": "ÖZVATAN",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3810,
+    "CityId": 38,
+    "Name": "PINARBAŞI",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3811,
+    "CityId": 38,
+    "Name": "SARIOĞLAN",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3812,
+    "CityId": 38,
+    "Name": "SARIZ",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3813,
+    "CityId": 38,
+    "Name": "TALAS",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3814,
+    "CityId": 38,
+    "Name": "TOMARZA",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3815,
+    "CityId": 38,
+    "Name": "YAHYALI",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3816,
+    "CityId": 38,
+    "Name": "YEŞİLHİSAR",
+    "TelephoneCode": 352
+  },
+  {
+    "Id": 3901,
+    "CityId": 39,
+    "Name": "MERKEZ",
+    "TelephoneCode": 0
+  },
+  {
+    "Id": 3902,
+    "CityId": 39,
+    "Name": "BABAESKİ",
+    "TelephoneCode": 0
+  },
+  {
+    "Id": 3903,
+    "CityId": 39,
+    "Name": "DEMİRKÖY",
+    "TelephoneCode": 0
+  },
+  {
+    "Id": 3904,
+    "CityId": 39,
+    "Name": "KOFÇAZ",
+    "TelephoneCode": 0
+  },
+  {
+    "Id": 3905,
+    "CityId": 39,
+    "Name": "LÜLEBURGAZ",
+    "TelephoneCode": 0
+  },
+  {
+    "Id": 3906,
+    "CityId": 39,
+    "Name": "PEHLİVANKÖY",
+    "TelephoneCode": 0
+  },
+  {
+    "Id": 3907,
+    "CityId": 39,
+    "Name": "PINARHİSAR",
+    "TelephoneCode": 0
+  },
+  {
+    "Id": 3908,
+    "CityId": 39,
+    "Name": "VİZE",
+    "TelephoneCode": 0
+  },
+  {
+    "Id": 4001,
+    "CityId": 40,
+    "Name": "MERKEZ",
+    "TelephoneCode": 386
+  },
+  {
+    "Id": 4002,
+    "CityId": 40,
+    "Name": "AKÇAKENT",
+    "TelephoneCode": 386
+  },
+  {
+    "Id": 4003,
+    "CityId": 40,
+    "Name": "AKPINAR",
+    "TelephoneCode": 386
+  },
+  {
+    "Id": 4004,
+    "CityId": 40,
+    "Name": "BOZTEPE",
+    "TelephoneCode": 386
+  },
+  {
+    "Id": 4005,
+    "CityId": 40,
+    "Name": "ÇİÇEKDAĞI",
+    "TelephoneCode": 386
+  },
+  {
+    "Id": 4006,
+    "CityId": 40,
+    "Name": "KAMAN",
+    "TelephoneCode": 386
+  },
+  {
+    "Id": 4007,
+    "CityId": 40,
+    "Name": "MUCUR",
+    "TelephoneCode": 386
+  },
+  {
+    "Id": 4101,
+    "CityId": 41,
+    "Name": "BAŞİSKELE",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4102,
+    "CityId": 41,
+    "Name": "ÇAYIROVA",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4103,
+    "CityId": 41,
+    "Name": "DARICA",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4104,
+    "CityId": 41,
+    "Name": "DERİNCE",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4105,
+    "CityId": 41,
+    "Name": "DİLOVASI",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4106,
+    "CityId": 41,
+    "Name": "GEBZE",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4107,
+    "CityId": 41,
+    "Name": "GÖLCÜK",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4108,
+    "CityId": 41,
+    "Name": "İZMİT",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4109,
+    "CityId": 41,
+    "Name": "KANDIRA",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4110,
+    "CityId": 41,
+    "Name": "KARAMÜRSEL",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4111,
+    "CityId": 41,
+    "Name": "KARTEPE",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4112,
+    "CityId": 41,
+    "Name": "KÖRFEZ",
+    "TelephoneCode": 262
+  },
+  {
+    "Id": 4201,
+    "CityId": 42,
+    "Name": "AHIRLI",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4202,
+    "CityId": 42,
+    "Name": "AKÖREN",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4203,
+    "CityId": 42,
+    "Name": "AKŞEHİR",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4204,
+    "CityId": 42,
+    "Name": "ALTINEKİN",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4205,
+    "CityId": 42,
+    "Name": "BEYŞEHİR",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4206,
+    "CityId": 42,
+    "Name": "BOZKIR",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4207,
+    "CityId": 42,
+    "Name": "CİHANBEYLİ",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4208,
+    "CityId": 42,
+    "Name": "ÇELTİK",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4209,
+    "CityId": 42,
+    "Name": "ÇUMRA",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4210,
+    "CityId": 42,
+    "Name": "DERBENT",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4211,
+    "CityId": 42,
+    "Name": "DEREBUCAK",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4212,
+    "CityId": 42,
+    "Name": "DOĞANHİSAR",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4213,
+    "CityId": 42,
+    "Name": "EMİRGAZİ",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4214,
+    "CityId": 42,
+    "Name": "EREĞLİ",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4215,
+    "CityId": 42,
+    "Name": "GÜNEYSINIR",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4216,
+    "CityId": 42,
+    "Name": "HADİM",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4217,
+    "CityId": 42,
+    "Name": "HALKAPINAR",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4218,
+    "CityId": 42,
+    "Name": "HÜYÜK",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4219,
+    "CityId": 42,
+    "Name": "ILGIN",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4220,
+    "CityId": 42,
+    "Name": "KADINHANI",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4221,
+    "CityId": 42,
+    "Name": "KARAPINAR",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4222,
+    "CityId": 42,
+    "Name": "KARATAY",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4223,
+    "CityId": 42,
+    "Name": "KULU",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4224,
+    "CityId": 42,
+    "Name": "MERAM",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4225,
+    "CityId": 42,
+    "Name": "SARAYÖNÜ",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4226,
+    "CityId": 42,
+    "Name": "SELÇUKLU",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4227,
+    "CityId": 42,
+    "Name": "SEYDİŞEHİR",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4228,
+    "CityId": 42,
+    "Name": "TAŞKENT",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4229,
+    "CityId": 42,
+    "Name": "TUZLUKÇU",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4230,
+    "CityId": 42,
+    "Name": "YALIHÜYÜK",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4231,
+    "CityId": 42,
+    "Name": "YUNAK",
+    "TelephoneCode": 332
+  },
+  {
+    "Id": 4301,
+    "CityId": 43,
+    "Name": "MERKEZ",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4302,
+    "CityId": 43,
+    "Name": "ALTINTAŞ",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4303,
+    "CityId": 43,
+    "Name": "ASLANAPA",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4304,
+    "CityId": 43,
+    "Name": "ÇAVDARHİSAR",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4305,
+    "CityId": 43,
+    "Name": "DOMANİÇ",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4306,
+    "CityId": 43,
+    "Name": "DUMLUPINAR",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4307,
+    "CityId": 43,
+    "Name": "EMET",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4308,
+    "CityId": 43,
+    "Name": "GEDİZ",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4309,
+    "CityId": 43,
+    "Name": "HİSARCIK",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4310,
+    "CityId": 43,
+    "Name": "PAZARLAR",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4311,
+    "CityId": 43,
+    "Name": "SİMAV",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4312,
+    "CityId": 43,
+    "Name": "ŞAPHANE",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4313,
+    "CityId": 43,
+    "Name": "TAVŞANLI",
+    "TelephoneCode": 274
+  },
+  {
+    "Id": 4401,
+    "CityId": 44,
+    "Name": "AKÇADAĞ",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4402,
+    "CityId": 44,
+    "Name": "ARAPGİR",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4403,
+    "CityId": 44,
+    "Name": "ARGUVAN",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4404,
+    "CityId": 44,
+    "Name": "BATTALGAZİ",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4405,
+    "CityId": 44,
+    "Name": "DARENDE",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4406,
+    "CityId": 44,
+    "Name": "DOĞANŞEHİR",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4407,
+    "CityId": 44,
+    "Name": "DOĞANYOL",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4408,
+    "CityId": 44,
+    "Name": "HEKİMHAN",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4409,
+    "CityId": 44,
+    "Name": "KALE",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4410,
+    "CityId": 44,
+    "Name": "KULUNCAK",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4411,
+    "CityId": 44,
+    "Name": "PÜTÜRGE",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4412,
+    "CityId": 44,
+    "Name": "YAZIHAN",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4413,
+    "CityId": 44,
+    "Name": "YEŞİLYURT",
+    "TelephoneCode": 422
+  },
+  {
+    "Id": 4501,
+    "CityId": 45,
+    "Name": "AHMETLİ",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4502,
+    "CityId": 45,
+    "Name": "AKHİSAR",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4503,
+    "CityId": 45,
+    "Name": "ALAŞEHİR",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4504,
+    "CityId": 45,
+    "Name": "DEMİRCİ",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4505,
+    "CityId": 45,
+    "Name": "GÖLMARMARA",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4506,
+    "CityId": 45,
+    "Name": "GÖRDES",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4507,
+    "CityId": 45,
+    "Name": "KIRKAĞAÇ",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4508,
+    "CityId": 45,
+    "Name": "KÖPRÜBAŞI",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4509,
+    "CityId": 45,
+    "Name": "KULA",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4510,
+    "CityId": 45,
+    "Name": "SALİHLİ",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4511,
+    "CityId": 45,
+    "Name": "SARIGÖL",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4512,
+    "CityId": 45,
+    "Name": "SARUHANLI",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4513,
+    "CityId": 45,
+    "Name": "SELENDİ",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4514,
+    "CityId": 45,
+    "Name": "SOMA",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4515,
+    "CityId": 45,
+    "Name": "ŞEHZADELER",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4516,
+    "CityId": 45,
+    "Name": "TURGUTLU",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4517,
+    "CityId": 45,
+    "Name": "YUNUSEMRE",
+    "TelephoneCode": 236
+  },
+  {
+    "Id": 4601,
+    "CityId": 46,
+    "Name": "AFŞİN",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4602,
+    "CityId": 46,
+    "Name": "ANDIRIN",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4603,
+    "CityId": 46,
+    "Name": "ÇAĞLAYANCERİT",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4604,
+    "CityId": 46,
+    "Name": "DULKADİROĞLU",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4605,
+    "CityId": 46,
+    "Name": "EKİNÖZÜ",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4606,
+    "CityId": 46,
+    "Name": "ELBİSTAN",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4607,
+    "CityId": 46,
+    "Name": "GÖKSUN",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4608,
+    "CityId": 46,
+    "Name": "NURHAK",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4609,
+    "CityId": 46,
+    "Name": "ONİKİŞUBAT",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4610,
+    "CityId": 46,
+    "Name": "PAZARCIK",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4611,
+    "CityId": 46,
+    "Name": "TÜRKOĞLU",
+    "TelephoneCode": 344
+  },
+  {
+    "Id": 4701,
+    "CityId": 47,
+    "Name": "ARTUKLU",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4702,
+    "CityId": 47,
+    "Name": "DARGEÇİT",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4703,
+    "CityId": 47,
+    "Name": "DERİK",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4704,
+    "CityId": 47,
+    "Name": "KIZILTEPE",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4705,
+    "CityId": 47,
+    "Name": "MAZIDAĞI",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4706,
+    "CityId": 47,
+    "Name": "MİDYAT",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4707,
+    "CityId": 47,
+    "Name": "NUSAYBİN",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4708,
+    "CityId": 47,
+    "Name": "ÖMERLİ",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4709,
+    "CityId": 47,
+    "Name": "SAVUR",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4710,
+    "CityId": 47,
+    "Name": "YEŞİLLİ",
+    "TelephoneCode": 482
+  },
+  {
+    "Id": 4801,
+    "CityId": 48,
+    "Name": "BODRUM",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4802,
+    "CityId": 48,
+    "Name": "DALAMAN",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4803,
+    "CityId": 48,
+    "Name": "DATÇA",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4804,
+    "CityId": 48,
+    "Name": "FETHİYE",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4805,
+    "CityId": 48,
+    "Name": "KAVAKLIDERE",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4806,
+    "CityId": 48,
+    "Name": "KÖYCEĞİZ",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4807,
+    "CityId": 48,
+    "Name": "MARMARİS",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4808,
+    "CityId": 48,
+    "Name": "MENTEŞE",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4809,
+    "CityId": 48,
+    "Name": "MİLAS",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4810,
+    "CityId": 48,
+    "Name": "ORTACA",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4811,
+    "CityId": 48,
+    "Name": "SEYDİKEMER",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4812,
+    "CityId": 48,
+    "Name": "ULA",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4813,
+    "CityId": 48,
+    "Name": "YATAĞAN",
+    "TelephoneCode": 252
+  },
+  {
+    "Id": 4901,
+    "CityId": 49,
+    "Name": "MERKEZ",
+    "TelephoneCode": 436
+  },
+  {
+    "Id": 4902,
+    "CityId": 49,
+    "Name": "BULANIK",
+    "TelephoneCode": 436
+  },
+  {
+    "Id": 4903,
+    "CityId": 49,
+    "Name": "HASKÖY",
+    "TelephoneCode": 436
+  },
+  {
+    "Id": 4904,
+    "CityId": 49,
+    "Name": "KORKUT",
+    "TelephoneCode": 436
+  },
+  {
+    "Id": 4905,
+    "CityId": 49,
+    "Name": "MALAZGİRT",
+    "TelephoneCode": 436
+  },
+  {
+    "Id": 4906,
+    "CityId": 49,
+    "Name": "VARTO",
+    "TelephoneCode": 436
+  },
+  {
+    "Id": 5001,
+    "CityId": 50,
+    "Name": "MERKEZ",
+    "TelephoneCode": 384
+  },
+  {
+    "Id": 5002,
+    "CityId": 50,
+    "Name": "ACIGÖL",
+    "TelephoneCode": 384
+  },
+  {
+    "Id": 5003,
+    "CityId": 50,
+    "Name": "AVANOS",
+    "TelephoneCode": 384
+  },
+  {
+    "Id": 5004,
+    "CityId": 50,
+    "Name": "DERİNKUYU",
+    "TelephoneCode": 384
+  },
+  {
+    "Id": 5005,
+    "CityId": 50,
+    "Name": "GÜLŞEHİR",
+    "TelephoneCode": 384
+  },
+  {
+    "Id": 5006,
+    "CityId": 50,
+    "Name": "HACIBEKTAŞ",
+    "TelephoneCode": 384
+  },
+  {
+    "Id": 5007,
+    "CityId": 50,
+    "Name": "KOZAKLI",
+    "TelephoneCode": 384
+  },
+  {
+    "Id": 5008,
+    "CityId": 50,
+    "Name": "ÜRGÜP",
+    "TelephoneCode": 384
+  },
+  {
+    "Id": 5101,
+    "CityId": 51,
+    "Name": "MERKEZ",
+    "TelephoneCode": 388
+  },
+  {
+    "Id": 5102,
+    "CityId": 51,
+    "Name": "ALTUNHİSAR",
+    "TelephoneCode": 388
+  },
+  {
+    "Id": 5103,
+    "CityId": 51,
+    "Name": "BOR",
+    "TelephoneCode": 388
+  },
+  {
+    "Id": 5104,
+    "CityId": 51,
+    "Name": "ÇAMARDI",
+    "TelephoneCode": 388
+  },
+  {
+    "Id": 5105,
+    "CityId": 51,
+    "Name": "ÇİFTLİK",
+    "TelephoneCode": 388
+  },
+  {
+    "Id": 5106,
+    "CityId": 51,
+    "Name": "ULUKIŞLA",
+    "TelephoneCode": 388
+  },
+  {
+    "Id": 5201,
+    "CityId": 52,
+    "Name": "AKKUŞ",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5202,
+    "CityId": 52,
+    "Name": "ALTINORDU",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5203,
+    "CityId": 52,
+    "Name": "AYBASTI",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5204,
+    "CityId": 52,
+    "Name": "ÇAMAŞ",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5205,
+    "CityId": 52,
+    "Name": "ÇATALPINAR",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5206,
+    "CityId": 52,
+    "Name": "ÇAYBAŞI",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5207,
+    "CityId": 52,
+    "Name": "FATSA",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5208,
+    "CityId": 52,
+    "Name": "GÖLKÖY",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5209,
+    "CityId": 52,
+    "Name": "GÜLYALI",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5210,
+    "CityId": 52,
+    "Name": "GÜRGENTEPE",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5211,
+    "CityId": 52,
+    "Name": "İKİZCE",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5212,
+    "CityId": 52,
+    "Name": "KABADÜZ",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5213,
+    "CityId": 52,
+    "Name": "KABATAŞ",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5214,
+    "CityId": 52,
+    "Name": "KORGAN",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5215,
+    "CityId": 52,
+    "Name": "KUMRU",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5216,
+    "CityId": 52,
+    "Name": "MESUDİYE",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5217,
+    "CityId": 52,
+    "Name": "PERŞEMBE",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5218,
+    "CityId": 52,
+    "Name": "ULUBEY",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5219,
+    "CityId": 52,
+    "Name": "ÜNYE",
+    "TelephoneCode": 452
+  },
+  {
+    "Id": 5301,
+    "CityId": 53,
+    "Name": "MERKEZ",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5302,
+    "CityId": 53,
+    "Name": "ARDEŞEN",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5303,
+    "CityId": 53,
+    "Name": "ÇAMLIHEMŞİN",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5304,
+    "CityId": 53,
+    "Name": "ÇAYELİ",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5305,
+    "CityId": 53,
+    "Name": "DEREPAZARI",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5306,
+    "CityId": 53,
+    "Name": "FINDIKLI",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5307,
+    "CityId": 53,
+    "Name": "GÜNEYSU",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5308,
+    "CityId": 53,
+    "Name": "HEMŞİN",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5309,
+    "CityId": 53,
+    "Name": "İKİZDERE",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5310,
+    "CityId": 53,
+    "Name": "İYİDERE",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5311,
+    "CityId": 53,
+    "Name": "KALKANDERE",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5312,
+    "CityId": 53,
+    "Name": "PAZAR",
+    "TelephoneCode": 464
+  },
+  {
+    "Id": 5401,
+    "CityId": 54,
+    "Name": "ADAPAZARI",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5402,
+    "CityId": 54,
+    "Name": "AKYAZI",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5403,
+    "CityId": 54,
+    "Name": "ARİFİYE",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5404,
+    "CityId": 54,
+    "Name": "ERENLER",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5405,
+    "CityId": 54,
+    "Name": "FERİZLİ",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5406,
+    "CityId": 54,
+    "Name": "GEYVE",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5407,
+    "CityId": 54,
+    "Name": "HENDEK",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5408,
+    "CityId": 54,
+    "Name": "KARAPÜRÇEK",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5409,
+    "CityId": 54,
+    "Name": "KARASU",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5410,
+    "CityId": 54,
+    "Name": "KAYNARCA",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5411,
+    "CityId": 54,
+    "Name": "KOCAALİ",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5412,
+    "CityId": 54,
+    "Name": "PAMUKOVA",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5413,
+    "CityId": 54,
+    "Name": "SAPANCA",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5414,
+    "CityId": 54,
+    "Name": "SERDİVAN",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5415,
+    "CityId": 54,
+    "Name": "SÖĞÜTLÜ",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5416,
+    "CityId": 54,
+    "Name": "TARAKLI",
+    "TelephoneCode": 264
+  },
+  {
+    "Id": 5501,
+    "CityId": 55,
+    "Name": "ALAÇAM",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5502,
+    "CityId": 55,
+    "Name": "ASARCIK",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5503,
+    "CityId": 55,
+    "Name": "ATAKUM",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5504,
+    "CityId": 55,
+    "Name": "AYVACIK",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5505,
+    "CityId": 55,
+    "Name": "BAFRA",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5506,
+    "CityId": 55,
+    "Name": "CANİK",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5507,
+    "CityId": 55,
+    "Name": "ÇARŞAMBA",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5508,
+    "CityId": 55,
+    "Name": "HAVZA",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5509,
+    "CityId": 55,
+    "Name": "İLKADIM",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5510,
+    "CityId": 55,
+    "Name": "KAVAK",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5511,
+    "CityId": 55,
+    "Name": "LADİK",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5512,
+    "CityId": 55,
+    "Name": "19 MAYIS",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5513,
+    "CityId": 55,
+    "Name": "SALIPAZARI",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5514,
+    "CityId": 55,
+    "Name": "TEKKEKÖY",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5515,
+    "CityId": 55,
+    "Name": "TERME",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5516,
+    "CityId": 55,
+    "Name": "VEZİRKÖPRÜ",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5517,
+    "CityId": 55,
+    "Name": "YAKAKENT",
+    "TelephoneCode": 362
+  },
+  {
+    "Id": 5601,
+    "CityId": 56,
+    "Name": "MERKEZ",
+    "TelephoneCode": 484
+  },
+  {
+    "Id": 5602,
+    "CityId": 56,
+    "Name": "BAYKAN",
+    "TelephoneCode": 484
+  },
+  {
+    "Id": 5603,
+    "CityId": 56,
+    "Name": "ERUH",
+    "TelephoneCode": 484
+  },
+  {
+    "Id": 5604,
+    "CityId": 56,
+    "Name": "KURTALAN",
+    "TelephoneCode": 484
+  },
+  {
+    "Id": 5605,
+    "CityId": 56,
+    "Name": "PERVARİ",
+    "TelephoneCode": 484
+  },
+  {
+    "Id": 5606,
+    "CityId": 56,
+    "Name": "ŞİRVAN",
+    "TelephoneCode": 484
+  },
+  {
+    "Id": 5607,
+    "CityId": 56,
+    "Name": "TİLLO",
+    "TelephoneCode": 484
+  },
+  {
+    "Id": 5701,
+    "CityId": 57,
+    "Name": "MERKEZ",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5702,
+    "CityId": 57,
+    "Name": "AYANCIK",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5703,
+    "CityId": 57,
+    "Name": "BOYABAT",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5704,
+    "CityId": 57,
+    "Name": "DİKMEN",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5705,
+    "CityId": 57,
+    "Name": "DURAĞAN",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5706,
+    "CityId": 57,
+    "Name": "ERFELEK",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5707,
+    "CityId": 57,
+    "Name": "GERZE",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5708,
+    "CityId": 57,
+    "Name": "SARAYDÜZÜ",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5709,
+    "CityId": 57,
+    "Name": "TÜRKELİ",
+    "TelephoneCode": 368
+  },
+  {
+    "Id": 5801,
+    "CityId": 58,
+    "Name": "MERKEZ",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5802,
+    "CityId": 58,
+    "Name": "AKINCILAR",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5803,
+    "CityId": 58,
+    "Name": "ALTINYAYLA",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5804,
+    "CityId": 58,
+    "Name": "DİVRİĞİ",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5805,
+    "CityId": 58,
+    "Name": "DOĞANŞAR",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5806,
+    "CityId": 58,
+    "Name": "GEMEREK",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5807,
+    "CityId": 58,
+    "Name": "GÖLOVA",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5808,
+    "CityId": 58,
+    "Name": "GÜRÜN",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5809,
+    "CityId": 58,
+    "Name": "HAFİK",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5810,
+    "CityId": 58,
+    "Name": "İMRANLI",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5811,
+    "CityId": 58,
+    "Name": "KANGAL",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5812,
+    "CityId": 58,
+    "Name": "KOYULHİSAR",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5813,
+    "CityId": 58,
+    "Name": "SUŞEHRİ",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5814,
+    "CityId": 58,
+    "Name": "ŞARKIŞLA",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5815,
+    "CityId": 58,
+    "Name": "ULAŞ",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5816,
+    "CityId": 58,
+    "Name": "YILDIZELİ",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5817,
+    "CityId": 58,
+    "Name": "ZARA",
+    "TelephoneCode": 346
+  },
+  {
+    "Id": 5901,
+    "CityId": 59,
+    "Name": "ÇERKEZKÖY",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5902,
+    "CityId": 59,
+    "Name": "ÇORLU",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5903,
+    "CityId": 59,
+    "Name": "ERGENE",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5904,
+    "CityId": 59,
+    "Name": "HAYRABOLU",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5905,
+    "CityId": 59,
+    "Name": "KAPAKLI",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5906,
+    "CityId": 59,
+    "Name": "MALKARA",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5907,
+    "CityId": 59,
+    "Name": "MARMARAEREĞLİSİ",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5908,
+    "CityId": 59,
+    "Name": "MURATLI",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5909,
+    "CityId": 59,
+    "Name": "SARAY",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5910,
+    "CityId": 59,
+    "Name": "SÜLEYMANPAŞA",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 5911,
+    "CityId": 59,
+    "Name": "ŞARKÖY",
+    "TelephoneCode": 282
+  },
+  {
+    "Id": 6001,
+    "CityId": 60,
+    "Name": "MERKEZ",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6002,
+    "CityId": 60,
+    "Name": "ALMUS",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6003,
+    "CityId": 60,
+    "Name": "ARTOVA",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6004,
+    "CityId": 60,
+    "Name": "BAŞÇİFTLİK",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6005,
+    "CityId": 60,
+    "Name": "ERBAA",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6006,
+    "CityId": 60,
+    "Name": "NİKSAR",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6007,
+    "CityId": 60,
+    "Name": "PAZAR",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6008,
+    "CityId": 60,
+    "Name": "REŞADİYE",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6009,
+    "CityId": 60,
+    "Name": "SULUSARAY",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6010,
+    "CityId": 60,
+    "Name": "TURHAL",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6011,
+    "CityId": 60,
+    "Name": "YEŞİLYURT",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6012,
+    "CityId": 60,
+    "Name": "ZİLE",
+    "TelephoneCode": 356
+  },
+  {
+    "Id": 6101,
+    "CityId": 61,
+    "Name": "AKÇAABAT",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6102,
+    "CityId": 61,
+    "Name": "ARAKLI",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6103,
+    "CityId": 61,
+    "Name": "ARSİN",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6104,
+    "CityId": 61,
+    "Name": "BEŞİKDÜZÜ",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6105,
+    "CityId": 61,
+    "Name": "ÇARŞIBAŞI",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6106,
+    "CityId": 61,
+    "Name": "ÇAYKARA",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6107,
+    "CityId": 61,
+    "Name": "DERNEKPAZARI",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6108,
+    "CityId": 61,
+    "Name": "DÜZKÖY",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6109,
+    "CityId": 61,
+    "Name": "HAYRAT",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6110,
+    "CityId": 61,
+    "Name": "KÖPRÜBAŞI",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6111,
+    "CityId": 61,
+    "Name": "MAÇKA",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6112,
+    "CityId": 61,
+    "Name": "OF",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6113,
+    "CityId": 61,
+    "Name": "ORTAHİSAR",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6114,
+    "CityId": 61,
+    "Name": "SÜRMENE",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6115,
+    "CityId": 61,
+    "Name": "ŞALPAZARI",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6116,
+    "CityId": 61,
+    "Name": "TONYA",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6117,
+    "CityId": 61,
+    "Name": "VAKFIKEBİR",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6118,
+    "CityId": 61,
+    "Name": "YOMRA",
+    "TelephoneCode": 462
+  },
+  {
+    "Id": 6201,
+    "CityId": 62,
+    "Name": "MERKEZ",
+    "TelephoneCode": 428
+  },
+  {
+    "Id": 6202,
+    "CityId": 62,
+    "Name": "ÇEMİŞGEZEK",
+    "TelephoneCode": 428
+  },
+  {
+    "Id": 6203,
+    "CityId": 62,
+    "Name": "HOZAT",
+    "TelephoneCode": 428
+  },
+  {
+    "Id": 6204,
+    "CityId": 62,
+    "Name": "MAZGİRT",
+    "TelephoneCode": 428
+  },
+  {
+    "Id": 6205,
+    "CityId": 62,
+    "Name": "NAZIMİYE",
+    "TelephoneCode": 428
+  },
+  {
+    "Id": 6206,
+    "CityId": 62,
+    "Name": "OVACIK",
+    "TelephoneCode": 428
+  },
+  {
+    "Id": 6207,
+    "CityId": 62,
+    "Name": "PERTEK",
+    "TelephoneCode": 428
+  },
+  {
+    "Id": 6208,
+    "CityId": 62,
+    "Name": "PÜLÜMÜR",
+    "TelephoneCode": 428
+  },
+  {
+    "Id": 6301,
+    "CityId": 63,
+    "Name": "AKÇAKALE",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6302,
+    "CityId": 63,
+    "Name": "BİRECİK",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6303,
+    "CityId": 63,
+    "Name": "BOZOVA",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6304,
+    "CityId": 63,
+    "Name": "CEYLANPINAR",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6305,
+    "CityId": 63,
+    "Name": "EYYÜBİYE",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6306,
+    "CityId": 63,
+    "Name": "HALFETİ",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6307,
+    "CityId": 63,
+    "Name": "HALİLİYE",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6308,
+    "CityId": 63,
+    "Name": "HARRAN",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6309,
+    "CityId": 63,
+    "Name": "HİLVAN",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6310,
+    "CityId": 63,
+    "Name": "KARAKÖPRÜ",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6311,
+    "CityId": 63,
+    "Name": "SİVEREK",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6312,
+    "CityId": 63,
+    "Name": "SURUÇ",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6313,
+    "CityId": 63,
+    "Name": "VİRANŞEHİR",
+    "TelephoneCode": 414
+  },
+  {
+    "Id": 6401,
+    "CityId": 64,
+    "Name": "MERKEZ",
+    "TelephoneCode": 276
+  },
+  {
+    "Id": 6402,
+    "CityId": 64,
+    "Name": "BANAZ",
+    "TelephoneCode": 276
+  },
+  {
+    "Id": 6403,
+    "CityId": 64,
+    "Name": "EŞME",
+    "TelephoneCode": 276
+  },
+  {
+    "Id": 6404,
+    "CityId": 64,
+    "Name": "KARAHALLI",
+    "TelephoneCode": 276
+  },
+  {
+    "Id": 6405,
+    "CityId": 64,
+    "Name": "SİVASLI",
+    "TelephoneCode": 276
+  },
+  {
+    "Id": 6406,
+    "CityId": 64,
+    "Name": "ULUBEY",
+    "TelephoneCode": 276
+  },
+  {
+    "Id": 6501,
+    "CityId": 65,
+    "Name": "BAHÇESARAY",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6502,
+    "CityId": 65,
+    "Name": "BAŞKALE",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6503,
+    "CityId": 65,
+    "Name": "ÇALDIRAN",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6504,
+    "CityId": 65,
+    "Name": "ÇATAK",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6505,
+    "CityId": 65,
+    "Name": "EDREMİT",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6506,
+    "CityId": 65,
+    "Name": "ERCİŞ",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6507,
+    "CityId": 65,
+    "Name": "GEVAŞ",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6508,
+    "CityId": 65,
+    "Name": "GÜRPINAR",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6509,
+    "CityId": 65,
+    "Name": "İPEKYOLU",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6510,
+    "CityId": 65,
+    "Name": "MURADİYE",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6511,
+    "CityId": 65,
+    "Name": "ÖZALP",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6512,
+    "CityId": 65,
+    "Name": "SARAY",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6513,
+    "CityId": 65,
+    "Name": "TUŞBA",
+    "TelephoneCode": 432
+  },
+  {
+    "Id": 6601,
+    "CityId": 66,
+    "Name": "MERKEZ",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6602,
+    "CityId": 66,
+    "Name": "AKDAĞMADENİ",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6603,
+    "CityId": 66,
+    "Name": "AYDINCIK",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6604,
+    "CityId": 66,
+    "Name": "BOĞAZLIYAN",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6605,
+    "CityId": 66,
+    "Name": "ÇANDIR",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6606,
+    "CityId": 66,
+    "Name": "ÇAYIRALAN",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6607,
+    "CityId": 66,
+    "Name": "ÇEKEREK",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6608,
+    "CityId": 66,
+    "Name": "KADIŞEHRİ",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6609,
+    "CityId": 66,
+    "Name": "SARAYKENT",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6610,
+    "CityId": 66,
+    "Name": "SARIKAYA",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6611,
+    "CityId": 66,
+    "Name": "SORGUN",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6612,
+    "CityId": 66,
+    "Name": "ŞEFAATLİ",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6613,
+    "CityId": 66,
+    "Name": "YENİFAKILI",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6614,
+    "CityId": 66,
+    "Name": "YERKÖY",
+    "TelephoneCode": 354
+  },
+  {
+    "Id": 6701,
+    "CityId": 67,
+    "Name": "MERKEZ",
+    "TelephoneCode": 372
+  },
+  {
+    "Id": 6702,
+    "CityId": 67,
+    "Name": "ALAPLI",
+    "TelephoneCode": 372
+  },
+  {
+    "Id": 6703,
+    "CityId": 67,
+    "Name": "ÇAYCUMA",
+    "TelephoneCode": 372
+  },
+  {
+    "Id": 6704,
+    "CityId": 67,
+    "Name": "DEVREK",
+    "TelephoneCode": 372
+  },
+  {
+    "Id": 6705,
+    "CityId": 67,
+    "Name": "EREĞLİ",
+    "TelephoneCode": 372
+  },
+  {
+    "Id": 6706,
+    "CityId": 67,
+    "Name": "GÖKÇEBEY",
+    "TelephoneCode": 372
+  },
+  {
+    "Id": 6707,
+    "CityId": 67,
+    "Name": "KİLİMLİ",
+    "TelephoneCode": 372
+  },
+  {
+    "Id": 6708,
+    "CityId": 67,
+    "Name": "KOZLU",
+    "TelephoneCode": 372
+  },
+  {
+    "Id": 6801,
+    "CityId": 68,
+    "Name": "MERKEZ",
+    "TelephoneCode": 382
+  },
+  {
+    "Id": 6802,
+    "CityId": 68,
+    "Name": "AĞAÇÖREN",
+    "TelephoneCode": 382
+  },
+  {
+    "Id": 6803,
+    "CityId": 68,
+    "Name": "ESKİL",
+    "TelephoneCode": 382
+  },
+  {
+    "Id": 6804,
+    "CityId": 68,
+    "Name": "GÜLAĞAÇ",
+    "TelephoneCode": 382
+  },
+  {
+    "Id": 6805,
+    "CityId": 68,
+    "Name": "GÜZELYURT",
+    "TelephoneCode": 382
+  },
+  {
+    "Id": 6806,
+    "CityId": 68,
+    "Name": "ORTAKÖY",
+    "TelephoneCode": 382
+  },
+  {
+    "Id": 6807,
+    "CityId": 68,
+    "Name": "SARIYAHŞİ",
+    "TelephoneCode": 382
+  },
+  {
+    "Id": 6808,
+    "CityId": 68,
+    "Name": "SULTANHANI",
+    "TelephoneCode": 382
+  },
+  {
+    "Id": 6901,
+    "CityId": 69,
+    "Name": "MERKEZ",
+    "TelephoneCode": 458
+  },
+  {
+    "Id": 6902,
+    "CityId": 69,
+    "Name": "AYDINTEPE",
+    "TelephoneCode": 458
+  },
+  {
+    "Id": 6903,
+    "CityId": 69,
+    "Name": "DEMİRÖZÜ",
+    "TelephoneCode": 458
+  },
+  {
+    "Id": 7001,
+    "CityId": 70,
+    "Name": "MERKEZ",
+    "TelephoneCode": 338
+  },
+  {
+    "Id": 7002,
+    "CityId": 70,
+    "Name": "AYRANCI",
+    "TelephoneCode": 338
+  },
+  {
+    "Id": 7003,
+    "CityId": 70,
+    "Name": "BAŞYAYLA",
+    "TelephoneCode": 338
+  },
+  {
+    "Id": 7004,
+    "CityId": 70,
+    "Name": "ERMENEK",
+    "TelephoneCode": 338
+  },
+  {
+    "Id": 7005,
+    "CityId": 70,
+    "Name": "KAZIMKARABEKİR",
+    "TelephoneCode": 338
+  },
+  {
+    "Id": 7006,
+    "CityId": 70,
+    "Name": "SARIVELİLER",
+    "TelephoneCode": 338
+  },
+  {
+    "Id": 7101,
+    "CityId": 71,
+    "Name": "MERKEZ",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7102,
+    "CityId": 71,
+    "Name": "BAHŞILI",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7103,
+    "CityId": 71,
+    "Name": "BALIŞEYH",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7104,
+    "CityId": 71,
+    "Name": "ÇELEBİ",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7105,
+    "CityId": 71,
+    "Name": "DELİCE",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7106,
+    "CityId": 71,
+    "Name": "KARAKEÇİLİ",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7107,
+    "CityId": 71,
+    "Name": "KESKİN",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7108,
+    "CityId": 71,
+    "Name": "SULAKYURT",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7109,
+    "CityId": 71,
+    "Name": "YAHŞİHAN",
+    "TelephoneCode": 318
+  },
+  {
+    "Id": 7201,
+    "CityId": 72,
+    "Name": "MERKEZ",
+    "TelephoneCode": 488
+  },
+  {
+    "Id": 7202,
+    "CityId": 72,
+    "Name": "BEŞİRİ",
+    "TelephoneCode": 488
+  },
+  {
+    "Id": 7203,
+    "CityId": 72,
+    "Name": "GERCÜŞ",
+    "TelephoneCode": 488
+  },
+  {
+    "Id": 7204,
+    "CityId": 72,
+    "Name": "HASANKEYF",
+    "TelephoneCode": 488
+  },
+  {
+    "Id": 7205,
+    "CityId": 72,
+    "Name": "KOZLUK",
+    "TelephoneCode": 488
+  },
+  {
+    "Id": 7206,
+    "CityId": 72,
+    "Name": "SASON",
+    "TelephoneCode": 488
+  },
+  {
+    "Id": 7301,
+    "CityId": 73,
+    "Name": "MERKEZ",
+    "TelephoneCode": 486
+  },
+  {
+    "Id": 7302,
+    "CityId": 73,
+    "Name": "BEYTÜŞŞEBAP",
+    "TelephoneCode": 486
+  },
+  {
+    "Id": 7303,
+    "CityId": 73,
+    "Name": "CİZRE",
+    "TelephoneCode": 486
+  },
+  {
+    "Id": 7304,
+    "CityId": 73,
+    "Name": "GÜÇLÜKONAK",
+    "TelephoneCode": 486
+  },
+  {
+    "Id": 7305,
+    "CityId": 73,
+    "Name": "İDİL",
+    "TelephoneCode": 486
+  },
+  {
+    "Id": 7306,
+    "CityId": 73,
+    "Name": "SİLOPİ",
+    "TelephoneCode": 486
+  },
+  {
+    "Id": 7307,
+    "CityId": 73,
+    "Name": "ULUDERE",
+    "TelephoneCode": 486
+  },
+  {
+    "Id": 7401,
+    "CityId": 74,
+    "Name": "MERKEZ",
+    "TelephoneCode": 378
+  },
+  {
+    "Id": 7402,
+    "CityId": 74,
+    "Name": "AMASRA",
+    "TelephoneCode": 378
+  },
+  {
+    "Id": 7403,
+    "CityId": 74,
+    "Name": "KURUCAŞİLE",
+    "TelephoneCode": 378
+  },
+  {
+    "Id": 7404,
+    "CityId": 74,
+    "Name": "ULUS",
+    "TelephoneCode": 378
+  },
+  {
+    "Id": 7501,
+    "CityId": 75,
+    "Name": "MERKEZ",
+    "TelephoneCode": 478
+  },
+  {
+    "Id": 7502,
+    "CityId": 75,
+    "Name": "ÇILDIR",
+    "TelephoneCode": 478
+  },
+  {
+    "Id": 7503,
+    "CityId": 75,
+    "Name": "DAMAL",
+    "TelephoneCode": 478
+  },
+  {
+    "Id": 7504,
+    "CityId": 75,
+    "Name": "GÖLE",
+    "TelephoneCode": 478
+  },
+  {
+    "Id": 7505,
+    "CityId": 75,
+    "Name": "HANAK",
+    "TelephoneCode": 478
+  },
+  {
+    "Id": 7506,
+    "CityId": 75,
+    "Name": "POSOF",
+    "TelephoneCode": 478
+  },
+  {
+    "Id": 7601,
+    "CityId": 76,
+    "Name": "MERKEZ",
+    "TelephoneCode": 476
+  },
+  {
+    "Id": 7602,
+    "CityId": 76,
+    "Name": "ARALIK",
+    "TelephoneCode": 476
+  },
+  {
+    "Id": 7603,
+    "CityId": 76,
+    "Name": "KARAKOYUNLU",
+    "TelephoneCode": 476
+  },
+  {
+    "Id": 7604,
+    "CityId": 76,
+    "Name": "TUZLUCA",
+    "TelephoneCode": 476
+  },
+  {
+    "Id": 7701,
+    "CityId": 77,
+    "Name": "MERKEZ",
+    "TelephoneCode": 226
+  },
+  {
+    "Id": 7702,
+    "CityId": 77,
+    "Name": "ALTINOVA",
+    "TelephoneCode": 226
+  },
+  {
+    "Id": 7703,
+    "CityId": 77,
+    "Name": "ARMUTLU",
+    "TelephoneCode": 226
+  },
+  {
+    "Id": 7704,
+    "CityId": 77,
+    "Name": "ÇINARCIK",
+    "TelephoneCode": 226
+  },
+  {
+    "Id": 7705,
+    "CityId": 77,
+    "Name": "ÇİFTLİKKÖY",
+    "TelephoneCode": 226
+  },
+  {
+    "Id": 7706,
+    "CityId": 77,
+    "Name": "TERMAL",
+    "TelephoneCode": 226
+  },
+  {
+    "Id": 7801,
+    "CityId": 78,
+    "Name": "MERKEZ",
+    "TelephoneCode": 370
+  },
+  {
+    "Id": 7802,
+    "CityId": 78,
+    "Name": "EFLANİ",
+    "TelephoneCode": 370
+  },
+  {
+    "Id": 7803,
+    "CityId": 78,
+    "Name": "ESKİPAZAR",
+    "TelephoneCode": 370
+  },
+  {
+    "Id": 7804,
+    "CityId": 78,
+    "Name": "OVACIK",
+    "TelephoneCode": 370
+  },
+  {
+    "Id": 7805,
+    "CityId": 78,
+    "Name": "SAFRANBOLU",
+    "TelephoneCode": 370
+  },
+  {
+    "Id": 7806,
+    "CityId": 78,
+    "Name": "YENİCE",
+    "TelephoneCode": 370
+  },
+  {
+    "Id": 7901,
+    "CityId": 79,
+    "Name": "MERKEZ",
+    "TelephoneCode": 348
+  },
+  {
+    "Id": 7902,
+    "CityId": 79,
+    "Name": "ELBEYLİ",
+    "TelephoneCode": 348
+  },
+  {
+    "Id": 7903,
+    "CityId": 79,
+    "Name": "MUSABEYLİ",
+    "TelephoneCode": 348
+  },
+  {
+    "Id": 7904,
+    "CityId": 79,
+    "Name": "POLATELİ",
+    "TelephoneCode": 348
+  },
+  {
+    "Id": 8001,
+    "CityId": 80,
+    "Name": "MERKEZ",
+    "TelephoneCode": 328
+  },
+  {
+    "Id": 8002,
+    "CityId": 80,
+    "Name": "BAHÇE",
+    "TelephoneCode": 328
+  },
+  {
+    "Id": 8003,
+    "CityId": 80,
+    "Name": "DÜZİÇİ",
+    "TelephoneCode": 328
+  },
+  {
+    "Id": 8004,
+    "CityId": 80,
+    "Name": "HASANBEYLİ",
+    "TelephoneCode": 328
+  },
+  {
+    "Id": 8005,
+    "CityId": 80,
+    "Name": "KADİRLİ",
+    "TelephoneCode": 328
+  },
+  {
+    "Id": 8006,
+    "CityId": 80,
+    "Name": "SUMBAS",
+    "TelephoneCode": 328
+  },
+  {
+    "Id": 8007,
+    "CityId": 80,
+    "Name": "TOPRAKKALE",
+    "TelephoneCode": 328
+  },
+  {
+    "Id": 8101,
+    "CityId": 81,
+    "Name": "MERKEZ",
+    "TelephoneCode": 380
+  },
+  {
+    "Id": 8102,
+    "CityId": 81,
+    "Name": "AKÇAKOCA",
+    "TelephoneCode": 380
+  },
+  {
+    "Id": 8103,
+    "CityId": 81,
+    "Name": "CUMAYERİ",
+    "TelephoneCode": 380
+  },
+  {
+    "Id": 8104,
+    "CityId": 81,
+    "Name": "ÇİLİMLİ",
+    "TelephoneCode": 380
+  },
+  {
+    "Id": 8105,
+    "CityId": 81,
+    "Name": "GÖLYAKA",
+    "TelephoneCode": 380
+  },
+  {
+    "Id": 8106,
+    "CityId": 81,
+    "Name": "GÜMÜŞOVA",
+    "TelephoneCode": 380
+  },
+  {
+    "Id": 8107,
+    "CityId": 81,
+    "Name": "KAYNAŞLI",
+    "TelephoneCode": 380
+  },
+  {
+    "Id": 8108,
+    "CityId": 81,
+    "Name": "YIĞILCA",
+    "TelephoneCode": 380
+  }
+]

@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper.TCMBKur
+﻿namespace UD.Core.Helper.TCMB
 {
     using System.ComponentModel;
     public enum EnumTCMBRateCode : byte

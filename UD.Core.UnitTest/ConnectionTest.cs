@@ -32,6 +32,7 @@ namespace UD.Core.UnitTest
         [Test]
         public async Task Test2()
         {
+            var f = this.context.Database.GenerateCreateScript();
             await Task.CompletedTask;
         }
         [TearDown]

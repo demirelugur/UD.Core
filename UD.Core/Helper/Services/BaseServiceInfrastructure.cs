@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Helper.Services
 {
-    using AutoMapper;
     using Microsoft.EntityFrameworkCore;
     using System.Data.Common;
     using UD.Core.Helper;
@@ -20,11 +19,9 @@
         where TContext : DbContext
         where TEntity : class, IBaseEntity
     {
-        protected readonly IMapper Mapper;
-        protected BaseServiceInfrastructure(TContext Context, IMapper Mapper)
+        protected BaseServiceInfrastructure(TContext Context)
         {
             this.Context = Context ?? throw new ArgumentNullException(nameof(Context));
-            this.Mapper = Mapper ?? throw new ArgumentNullException(nameof(Mapper));
         }
         public TContext Context { get; }
         public DbSet<TEntity> DbSet => this.Context.Set<TEntity>();
