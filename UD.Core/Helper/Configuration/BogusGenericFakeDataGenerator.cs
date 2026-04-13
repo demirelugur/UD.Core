@@ -152,19 +152,30 @@
                 for (i = 0; i < count; i++) { array.SetValue(this.createFakeInstance(parametername, elemtype, faker), i); }
                 return array;
             }
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            if (type.IsGenericType)
             {
-                var keytype = type.GetGenericArguments()[0];
-                var valuetype = type.GetGenericArguments()[1];
-                int i, count = (this.arrayMaxLength > 0 ? faker.Random.Int(this.arrayMinLength, this.arrayMaxLength) : 0);
-                var dict = (IDictionary)Activator.CreateInstance(type);
-                for (i = 0; i < count; i++)
+                if (type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                 {
-                    var key = this.createFakeInstance(parametername, keytype, faker);
-                    if (dict.Contains(key)) { continue; }
-                    dict.Add(key, this.createFakeInstance(parametername, valuetype, faker));
+                    var keytype = type.GetGenericArguments()[0];
+                    var valuetype = type.GetGenericArguments()[1];
+                    int i, count = (this.arrayMaxLength > 0 ? faker.Random.Int(this.arrayMinLength, this.arrayMaxLength) : 0);
+                    var dict = (IDictionary)Activator.CreateInstance(type);
+                    for (i = 0; i < count; i++)
+                    {
+                        var key = this.createFakeInstance(parametername, keytype, faker);
+                        if (dict.Contains(key)) { continue; }
+                        dict.Add(key, this.createFakeInstance(parametername, valuetype, faker));
+                    }
+                    return dict;
                 }
-                return dict;
+                if (type.GetGenericTypeDefinition() == typeof(List<>))
+                {
+                    var elemtype = type.GetGenericArguments()[0];
+                    int i, count = (this.arrayMaxLength > 0 ? faker.Random.Int(this.arrayMinLength, this.arrayMaxLength) : 0);
+                    var list = (IList)Activator.CreateInstance(type);
+                    for (i = 0; i < count; i++) { list.Add(this.createFakeInstance(parametername, elemtype, faker)); }
+                    return list;
+                }
             }
             if (type.IsClass)
             {

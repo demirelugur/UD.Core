@@ -4,6 +4,7 @@
     using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections;
     using UD.Core.Extensions;
     using UD.Core.Helper.Configuration;
     using UD.Core.Helper.Paging;
@@ -35,7 +36,9 @@
         internal bool TryGetKeyValues(object id, out object[] keyValues)
         {
             if (id == null) { keyValues = []; }
+            else if (id is object[] _array) { keyValues = _array; }
             else if (id.GetType().IsArray) { keyValues = (object[])id; }
+            else if (id is IEnumerable _enumerable) { keyValues = _enumerable.Cast<object>().ToArray(); }
             else { keyValues = [id]; }
             return !keyValues.IsNullOrEmptyOrAllNull();
         }

@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Helper.Results
 {
+    using Bogus;
     using System;
     using System.Collections.Generic;
     using UD.Core.Enums;
@@ -30,7 +31,11 @@
             var t = typeof(T);
             if (t == typeof(string)) { return (T)(object)String.Empty; }
             if (t.IsArray) { return (T)(object)Array.CreateInstance(t.GetElementType(), 0); }
-            if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Dictionary<,>)) { return (T)Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(t.GetGenericArguments())); }
+            if (t.IsGenericType)
+            {
+                if (t.GetGenericTypeDefinition() == typeof(Dictionary<,>)) { return (T)Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(t.GetGenericArguments())); }
+                if (t.GetGenericTypeDefinition() == typeof(List<>)) { return (T)Activator.CreateInstance(typeof(List<>).MakeGenericType(t.GetGenericArguments())); }
+            }
             return default;
         }
     }
