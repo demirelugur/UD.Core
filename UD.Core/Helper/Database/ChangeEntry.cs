@@ -8,12 +8,14 @@
     public sealed class ChangeEntry
     {
         public string entityName { get; set; }
+        public object entityPKValue { get; set; }
         public Dictionary<string, object> entity { get; set; }
         public Dictionary<string, ChangePropertyInfo> changeProperties { get; set; }
-        public ChangeEntry() : this(default, default, default) { }
-        public ChangeEntry(string entityName, Dictionary<string, object> entity, Dictionary<string, ChangePropertyInfo> changeProperties)
+        public ChangeEntry() : this(default, default, default, default) { }
+        public ChangeEntry(string entityName, object entityPKValue, Dictionary<string, object> entity, Dictionary<string, ChangePropertyInfo> changeProperties)
         {
             this.entityName = entityName ?? "";
+            this.entityPKValue = entityPKValue;
             this.entity = entity ?? [];
             this.changeProperties = changeProperties ?? [];
         }
@@ -32,11 +34,13 @@
             if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"{nameof(toSHA512Hexadecimal)} method only supports null, string and byte[] values"); }
             throw new NotSupportedException($"{nameof(toSHA512Hexadecimal)} metodu sadece null, string ve byte[] değerlerini destekler.");
         }
-        private static Dictionary<string, object> extractScalarProperties(object entity, Type entityType)
+        private static object getPKValue(object entity, Type entityType)
         {
-            if (entity == null) { return []; }
-            return entityType.GetProperties().Where(isMapped).ToDictionary(x => x.GetColumnName(), x => (isTypeByteArrayOrHtmlContent(x) ? toSHA512Hexadecimal(x.GetValue(entity)) : x.GetValue(entity)));
+            var pks = entityType.GetProperties().Where(x => x.IsPK()).Select(x => x.Name).ToArray();
+            if (pks.Length == 1) { return entityType.GetProperty(pks[0]).GetValue(entity); }
+            return null;
         }
+        private static Dictionary<string, object> extractScalarProperties(object entity, Type entityType) => entityType.GetProperties().Where(isMapped).ToDictionary(x => x.GetColumnName(), x => (isTypeByteArrayOrHtmlContent(x) ? toSHA512Hexadecimal(x.GetValue(entity)) : x.GetValue(entity)));
         /// <summary><paramref name="value"/> için tanımlanan nesneler: ChangeEntry, EntityEntry, AnonymousObjectClass</summary>
         public static ChangeEntry ToEntityFromObject(object value)
         {
@@ -44,6 +48,7 @@
             if (value is ChangeEntry _ce) { return _ce; }
             if (value is EntityEntry _ee)
             {
+                if (_ee.Entity == null) { return new(); }
                 Dictionary<string, ChangePropertyInfo> changes = null;
                 if (_ee.State == EntityState.Modified)
                 {
@@ -61,7 +66,7 @@
                         x => (isTypeByteArrayOrHtmlContent(x.PropertyInfo) ? new ChangePropertyInfo(toSHA512Hexadecimal(x.Original), toSHA512Hexadecimal(x.Current)) : new ChangePropertyInfo(x.Original, x.Current))
                     );
                 }
-                return new(_ee.Metadata.ClrType.GetTableName(true), extractScalarProperties(_ee.Entity, _ee.Metadata.ClrType), changes);
+                return new(_ee.Metadata.ClrType.GetTableName(true), getPKValue(_ee.Entity, _ee.Metadata.ClrType), extractScalarProperties(_ee.Entity, _ee.Metadata.ClrType), changes);
             }
             /*
             if (value is IFormCollection _form)
@@ -71,7 +76,7 @@
                 return model;
             }
             */
-            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ChangeEntry((string)x.entityName, (Dictionary<string, object>)x.entity, (Dictionary<string, ChangePropertyInfo>)x.changeProperties)).FirstOrDefault();
+            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ChangeEntry((string)x.entityName, (object)x.entityPKValue, (Dictionary<string, object>)x.entity, (Dictionary<string, ChangePropertyInfo>)x.changeProperties)).FirstOrDefault();
         }
     }
 }
