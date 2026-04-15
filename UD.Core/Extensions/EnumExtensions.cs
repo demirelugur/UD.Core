@@ -25,5 +25,19 @@
             }
             return value.GetDescriptionFromEnum();
         }
+        /// <summary>Verilen <see cref="EnumNVIIdentityCard"/> değeri için, mevcut UI kültürüne göre açıklama (description) metnini döner. İngilizce kültür aktif ise karşılık gelen sabit İngilizce mesaj döndürülür. Varsayılan (Türkçe) durumda ise enum üzerinde tanımlı <see cref="DescriptionAttribute"/> değeri kullanılır.</summary>
+        public static string GetLocalizedDescription(this EnumNVIIdentityCard value)
+        {
+            if (Checks.IsEnglishCurrentUICulture)
+            {
+                return value switch
+                {
+                    EnumNVIIdentityCard.New => "New ID Card",
+                    EnumNVIIdentityCard.Old => "Old Identity Card",
+                    _ => throw Utilities.ThrowNotSupportedForEnum<EnumNVIIdentityCard>()
+                };
+            }
+            return value.GetDescriptionFromEnum();
+        }
     }
 }

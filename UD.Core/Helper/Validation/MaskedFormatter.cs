@@ -15,14 +15,7 @@
             var cs = serialNumber.ToStringOrEmpty();
             if (cs == "") { return ""; }
             if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
-            if (!nVIIdentityCardTypes.HasValue) { return cs; }
-            var t = nVIIdentityCardTypes.Value switch
-            {
-                EnumNVIIdentityCard.New => (Checks.IsEnglishCurrentUICulture ? "New ID Card" : "Yeni Kimlik Kartı"),
-                EnumNVIIdentityCard.Old => (Checks.IsEnglishCurrentUICulture ? "Old Identity Card" : "Eski Nüfus Cüzdanı"),
-                _ => throw Utilities.ThrowNotSupportedForEnum<EnumNVIIdentityCard>(),
-            };
-            return $"{cs} ({t})";
+            return (nVIIdentityCardTypes.HasValue ? $"{cs} ({nVIIdentityCardTypes.Value.GetLocalizedDescription()})" : cs);
         }
         /// <summary>Doğum tarihini maskeler veya tam tarih olarak döndürür.</summary>
         /// <param name="date">Maskelenecek veya gösterilecek doğum tarihi.</param>
