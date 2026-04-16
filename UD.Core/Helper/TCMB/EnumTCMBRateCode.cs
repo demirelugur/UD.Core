@@ -19,9 +19,9 @@
         [Description("DANİMARKA KRONU")]
         DKK,
         /// <summary>
-        /// EURO
+        /// AVRO
         /// </summary>
-        [Description("EURO")]
+        [Description("AVRO")]
         EUR,
         /// <summary>
         /// İNGİLİZ STERLİNİ

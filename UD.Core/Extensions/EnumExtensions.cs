@@ -3,6 +3,7 @@
     using System.ComponentModel;
     using UD.Core.Enums;
     using UD.Core.Helper;
+    using UD.Core.Helper.TCMB;
     public static class EnumExtensions
     {
         /// <summary>Verilen <see cref="EnumResponseMessage"/> değeri için, mevcut UI kültürüne göre açıklama (description) metnini döner. İngilizce kültür aktif ise karşılık gelen sabit İngilizce mesaj döndürülür. Varsayılan (Türkçe) durumda ise enum üzerinde tanımlı <see cref="DescriptionAttribute"/> değeri kullanılır.</summary>
@@ -35,6 +36,39 @@
                     EnumNVIIdentityCard.New => "New ID Card",
                     EnumNVIIdentityCard.Old => "Old Identity Card",
                     _ => throw Utilities.ThrowNotSupportedForEnum<EnumNVIIdentityCard>()
+                };
+            }
+            return value.GetDescriptionFromEnum();
+        }
+        /// <summary>Verilen <see cref="EnumTCMBRateCode"/> değeri için, mevcut UI kültürüne göre açıklama (description) metnini döner. İngilizce kültür aktif ise karşılık gelen sabit İngilizce mesaj döndürülür. Varsayılan (Türkçe) durumda ise enum üzerinde tanımlı <see cref="DescriptionAttribute"/> değeri kullanılır.</summary>
+        public static string GetLocalizedDescription(this EnumTCMBRateCode value)
+        {
+            if (Checks.IsEnglishCurrentUICulture)
+            {
+                return value switch
+                {
+                    EnumTCMBRateCode.USD => "US DOLLAR",
+                    EnumTCMBRateCode.AUD => "AUSTRALIAN DOLLAR",
+                    EnumTCMBRateCode.DKK => "DANISH KRONE",
+                    EnumTCMBRateCode.EUR => "EURO",
+                    EnumTCMBRateCode.GBP => "BRITISH POUND",
+                    EnumTCMBRateCode.CHF => "SWISS FRANC",
+                    EnumTCMBRateCode.SEK => "SWEDISH KRONA",
+                    EnumTCMBRateCode.CAD => "CANADIAN DOLLAR",
+                    EnumTCMBRateCode.KWD => "KUWAITI DINAR",
+                    EnumTCMBRateCode.NOK => "NORWEGIAN KRONE",
+                    EnumTCMBRateCode.SAR => "SAUDI RIYAL",
+                    EnumTCMBRateCode.JPY => "JAPANESE YEN",
+                    EnumTCMBRateCode.RON => "ROMANIAN LEU",
+                    EnumTCMBRateCode.RUB => "RUSSIAN RUBLE",
+                    EnumTCMBRateCode.CNY => "CHINESE YUAN",
+                    EnumTCMBRateCode.PKR => "PAKISTANI RUPEE",
+                    EnumTCMBRateCode.QAR => "QATARI RIYAL",
+                    EnumTCMBRateCode.KRW => "SOUTH KOREAN WON",
+                    EnumTCMBRateCode.AZN => "AZERBAIJANI MANAT",
+                    EnumTCMBRateCode.AED => "UNITED ARAB EMIRATES DIRHAM",
+                    EnumTCMBRateCode.KZT => "KAZAKHSTANI TENGE",
+                    _ => throw Utilities.ThrowNotSupportedForEnum<EnumTCMBRateCode>()
                 };
             }
             return value.GetDescriptionFromEnum();
