@@ -1,6 +1,10 @@
 ﻿namespace UD.Core.Extensions
 {
     using System;
+    using UD.Core.Enums;
+    using UD.Core.Helper.Resources;
+    using UD.Core.Helper.TCMB;
+    using UD.Core.Helper.Validation;
     public static class GenericTypeExtensions
     {
         /// <summary>Verilen değeri varsayılan (default) değerine eşit ise null döner; aksi halde değeri döner.</summary>
@@ -19,6 +23,15 @@
             var t = typeof(TEnum);
             try { return t.GetField(Enum.GetName(t, value)).GetDescription(); }
             catch { return ""; }
+        }
+        /// <summary><paramref name="value"/> parametresinin türüne göre ilgili enumun lokalize edilmiş açıklamasını döner. Genellikle kullanıcı arayüzünde gösterilmek üzere kullanılır. Desteklenen enum türleri: <see cref="EnumResponseMessage"/>, <see cref="EnumNVIIdentityCard"/>, <see cref="EnumTCMBRateCode"/>.</summary>
+        public static string GetLocalizedDescriptionFromEnum<TEnum>(this TEnum value) where TEnum : struct, Enum
+        {
+            var t = typeof(TEnum);
+            Guard.ThrowIfNotValidIncludes(t.Name, t, typeof(EnumResponseMessage), typeof(EnumNVIIdentityCard), typeof(EnumTCMBRateCode));
+            if (t == typeof(EnumResponseMessage)) { return EnumLocalizedDescriptionHelper.GetLocalizedDescriptionFromEnumResponseMessage((EnumResponseMessage)(object)value); }
+            if (t == typeof(EnumNVIIdentityCard)) { return EnumLocalizedDescriptionHelper.GetLocalizedDescriptionFromEnumNVIIdentityCard((EnumNVIIdentityCard)(object)value); }
+            return EnumLocalizedDescriptionHelper.GetLocalizedDescriptionFromEnumTCMBRateCode((EnumTCMBRateCode)(object)value);
         }
         /// <summary>Verilen enum değerinin görüntülenebilir adını döner. Genellikle kullanıcı arayüzünde gösterilmek üzere kullanılır.</summary>
         public static string GetDisplayNameFromEnum<TEnum>(this TEnum value) where TEnum : struct, Enum

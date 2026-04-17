@@ -1,13 +1,11 @@
-﻿namespace UD.Core.Extensions
+﻿namespace UD.Core.Helper.Resources
 {
-    using System.ComponentModel;
     using UD.Core.Enums;
-    using UD.Core.Helper;
+    using UD.Core.Extensions;
     using UD.Core.Helper.TCMB;
-    public static class EnumExtensions
+    internal class EnumLocalizedDescriptionHelper
     {
-        /// <summary>Verilen <see cref="EnumResponseMessage"/> değeri için, mevcut UI kültürüne göre açıklama (description) metnini döner. İngilizce kültür aktif ise karşılık gelen sabit İngilizce mesaj döndürülür. Varsayılan (Türkçe) durumda ise enum üzerinde tanımlı <see cref="DescriptionAttribute"/> değeri kullanılır.</summary>
-        public static string GetLocalizedDescription(this EnumResponseMessage value)
+        public static string GetLocalizedDescriptionFromEnumResponseMessage(EnumResponseMessage value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
@@ -26,8 +24,7 @@
             }
             return value.GetDescriptionFromEnum();
         }
-        /// <summary>Verilen <see cref="EnumNVIIdentityCard"/> değeri için, mevcut UI kültürüne göre açıklama (description) metnini döner. İngilizce kültür aktif ise karşılık gelen sabit İngilizce mesaj döndürülür. Varsayılan (Türkçe) durumda ise enum üzerinde tanımlı <see cref="DescriptionAttribute"/> değeri kullanılır.</summary>
-        public static string GetLocalizedDescription(this EnumNVIIdentityCard value)
+        public static string GetLocalizedDescriptionFromEnumNVIIdentityCard(EnumNVIIdentityCard value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
@@ -40,8 +37,7 @@
             }
             return value.GetDescriptionFromEnum();
         }
-        /// <summary>Verilen <see cref="EnumTCMBRateCode"/> değeri için, mevcut UI kültürüne göre açıklama (description) metnini döner. İngilizce kültür aktif ise karşılık gelen sabit İngilizce mesaj döndürülür. Varsayılan (Türkçe) durumda ise enum üzerinde tanımlı <see cref="DescriptionAttribute"/> değeri kullanılır.</summary>
-        public static string GetLocalizedDescription(this EnumTCMBRateCode value)
+        public static string GetLocalizedDescriptionFromEnumTCMBRateCode(EnumTCMBRateCode value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {

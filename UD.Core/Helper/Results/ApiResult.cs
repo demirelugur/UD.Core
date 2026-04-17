@@ -14,7 +14,7 @@
         public ApiResult(bool status, string[] errors)
         {
             this.status = status;
-            this.errors = (status ? [] : (errors.IsNullOrEmptyOrAllNull() ? [EnumResponseMessage.Error.GetLocalizedDescription()] : errors));
+            this.errors = (status ? [] : (errors.IsNullOrEmptyOrAllNull() ? [EnumResponseMessage.Error.GetLocalizedDescriptionFromEnum()] : errors));
         }
         public static ApiResult setFailed(params string[] errors) => new(false, errors);
     }

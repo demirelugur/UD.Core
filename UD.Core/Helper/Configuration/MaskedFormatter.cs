@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper.Validation
+﻿namespace UD.Core.Helper.Configuration
 {
     using UD.Core.Enums;
     using UD.Core.Extensions;
@@ -15,7 +15,7 @@
             var cs = serialNumber.ToStringOrEmpty();
             if (cs == "") { return ""; }
             if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
-            return (nVIIdentityCardTypes.HasValue ? $"{cs} ({nVIIdentityCardTypes.Value.GetLocalizedDescription()})" : cs);
+            return (nVIIdentityCardTypes.HasValue ? $"{cs} ({nVIIdentityCardTypes.Value.GetLocalizedDescriptionFromEnum()})" : cs);
         }
         /// <summary>Doğum tarihini maskeler veya tam tarih olarak döndürür.</summary>
         /// <param name="date">Maskelenecek veya gösterilecek doğum tarihi.</param>
