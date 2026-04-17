@@ -7,7 +7,7 @@
     using System.Data;
     using System.Data.Common;
     using static Dapper.SqlMapper;
-    public interface IDapperHelper : IDisposable, IAsyncDisposable
+    public interface IDapperHelper
     {
         DbConnection connection { get; }
         IDbTransaction? dbTransaction { get; set; }
@@ -20,7 +20,7 @@
         Task<DbDataReader> ExecuteReader(string commandText, object parameters, int? commandTimeout, CommandType commandType, CommandBehavior commandBehavior, CancellationToken cancellationToken = default);
         Task<T> ExecuteScalar<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default);
     }
-    public sealed class DapperHelper : IDapperHelper
+    public sealed class DapperHelper : IDapperHelper, IDisposable, IAsyncDisposable
     {
         private bool disposed = false;
         public void Dispose()
@@ -49,19 +49,15 @@
         }
         public DbConnection connection { get; }
         public IDbTransaction? dbTransaction { get; set; }
-        public async Task EnsureConnectionOpen(CancellationToken cancellationToken = default)
+        public Task EnsureConnectionOpen(CancellationToken cancellationToken = default)
         {
-            if (this.connection.State != ConnectionState.Open)
-            {
-                await this.connection.OpenAsync(cancellationToken);
-            }
+            if (this.connection.State != ConnectionState.Open) { return this.connection.OpenAsync(cancellationToken); }
+            return Task.CompletedTask;
         }
-        public async Task EnsureConnectionClose()
+        public Task EnsureConnectionClose()
         {
-            if (this.connection.State != ConnectionState.Closed)
-            {
-                await this.connection.CloseAsync();
-            }
+            if (this.connection.State != ConnectionState.Closed) { return this.connection.CloseAsync(); }
+            return Task.CompletedTask;
         }
         public async Task<IEnumerable<T>> Query<T>(string commandText, object parameters, int? commandTimeout, CommandType commandType, CancellationToken cancellationToken = default)
         {
