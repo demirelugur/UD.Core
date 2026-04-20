@@ -1,30 +1,32 @@
 ﻿namespace UD.Core.Helper.Results
 {
-    using Bogus;
     using System;
     using System.Collections.Generic;
     using UD.Core.Enums;
     using UD.Core.Extensions;
     public class ApiResult
     {
-        public static readonly ApiResult setSuccess = new(true, default);
-        public bool status { get; set; }
-        public string[] errors { get; set; }
+        public static readonly ApiResult setSuccess = new(EnumAlertState.Success, default);
+        public static readonly ApiResult setInfo = new(EnumAlertState.Info, default);
+        public EnumAlertState state { get; set; }
+        public string[] messages { get; set; }
+        internal bool isSuccess => this.state.Includes(EnumAlertState.Success, EnumAlertState.Info);
         public ApiResult() : this(default, default) { }
-        public ApiResult(bool status, string[] errors)
+        public ApiResult(EnumAlertState state, string[] messages)
         {
-            this.status = status;
-            this.errors = (status ? [] : (errors.IsNullOrEmptyOrAllNull() ? [EnumResponseMessage.Error.GetLocalizedDescriptionFromEnum()] : errors));
+            this.state = state;
+            this.messages = (messages.IsNullOrEmptyOrAllNull() ? (this.isSuccess ? [] : [EnumResponseMessage.Error.GetLocalizedDescriptionFromEnum()]) : messages);
         }
-        public static ApiResult setFailed(params string[] errors) => new(false, errors);
+        public static ApiResult setError(params string[] messages) => new(EnumAlertState.Error, messages);
+        public static ApiResult setWarning(params string[] messages) => new(EnumAlertState.Warning, messages);
     }
     public class ApiResult<T> : ApiResult
     {
         public T response { get; set; }
         public ApiResult() : this(default, default, default) { }
-        public ApiResult(T response, bool status, string[] errors) : base(status, errors)
+        public ApiResult(T response, EnumAlertState state, string[] messages) : base(state, messages)
         {
-            this.response = (status ? response : this.getCustomDefaultValue());
+            this.response = (base.isSuccess ? response : this.getCustomDefaultValue());
         }
         private T getCustomDefaultValue()
         {

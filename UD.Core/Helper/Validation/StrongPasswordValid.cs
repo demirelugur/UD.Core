@@ -68,15 +68,15 @@
         {
             if (password.Length > 2)
             {
-                int i, _sayi1, _sayi2, _sayi3, _l = password.Length - 2;
+                int i, _no1, _no2, _no3, _l = password.Length - 2;
                 for (i = 0; i < _l; i++)
                 {
                     if (Char.IsDigit(password[i]) && Char.IsDigit(password[i + 1]) && Char.IsDigit(password[i + 2]))
                     {
-                        _sayi1 = (password[i] - '0');
-                        _sayi2 = (password[i + 1] - '0');
-                        _sayi3 = (password[i + 2] - '0');
-                        if ((_sayi2 == (_sayi1 + 1) && _sayi3 == (_sayi2 + 1)) || (_sayi2 == (_sayi1 - 1) && _sayi3 == (_sayi2 - 1))) { return true; }
+                        _no1 = (password[i] - '0');
+                        _no2 = (password[i + 1] - '0');
+                        _no3 = (password[i + 2] - '0');
+                        if ((_no2 == (_no1 + 1) && _no3 == (_no2 + 1)) || (_no2 == (_no1 - 1) && _no3 == (_no2 - 1))) { return true; }
                     }
                 }
             }
