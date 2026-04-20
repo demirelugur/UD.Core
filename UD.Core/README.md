@@ -46,8 +46,8 @@ using UD.Core.Attributes.DataAnnotations;
 
 public class UserModel
 {
-    [UDTckn]
-    public long? Tckn { get; set; }
+    [UDTRIdentityNumber]
+    public long? TRIdentityNumber { get; set; }
 
     [UDRequired]
     [UDEmail]
