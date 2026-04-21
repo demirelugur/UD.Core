@@ -1,8 +1,8 @@
 ﻿namespace UD.Core.Middlewares
 {
     using Microsoft.AspNetCore.Http;
-    using System.Security.Cryptography;
     using System.Text;
+    using UD.Core.Extensions;
     public sealed class SecurityHeadersMiddleware
     {
         private readonly RequestDelegate next;
@@ -12,7 +12,7 @@
         }
         public Task InvokeAsync(HttpContext context)
         {
-            var nonce = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+            var nonce = Convert.ToBase64String(Convert.ToInt64(32).GenerateRandomKey());
             var sb = new StringBuilder();
             sb.Append("default-src 'self'; ");
             sb.Append("img-src 'self' data:; ");
