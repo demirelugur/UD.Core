@@ -377,3 +377,14 @@ public static ICollection<T> Shuffle<T>(this IEnumerable<T> source)
     return r;
 }
 ***************************************
+/// <summary>Doğum tarihini maskeler veya tam tarih olarak döndürür.</summary>
+/// <param name="date">Maskelenecek veya gösterilecek doğum tarihi.</param>
+/// <param name="showFull">Eğer <see langword="true"/> ise doğum tarihi tam olarak (dd.MM.yyyy) döner. Eğer <see langword="false"/> ise tarih maskelenir: gün olduğu gibi, ay &#39;**&#39; ile gizlenir, yılın ilk iki hanesi gösterilir ve son iki hanesi &#39;**&#39; ile gizlenir</param>
+/// <returns>Maskelenmiş veya tam doğum tarihi stringi.</returns>
+public static string BirthDate(DateOnly date, bool showFull)
+{
+    var d = date.ToString(DateConstants.ddMMyyyy);
+    if (showFull) { return d; }
+    return $"{d.Substring(0, 2)}.**.{d.Substring(6, 2)}**";
+}
+***************************************

@@ -1,4 +1,4 @@
-# UD.Core
+﻿# UD.Core
 
 Kurumsal .NET 10 projeleri için tekrar kullanılabilir bileşenler içeren kapsamlı bir kütüphanedir. Local NuGet paketi olarak dağıtılır.
 
@@ -63,7 +63,7 @@ public class UserModel
 using UD.Core.Extensions;
 
 // String SEO URL
-string url = "C# Programlama!".ToSeoFriendly(); // "c-programlama"
+var seo = "C# Programlama!".ToSeoFriendly(); // "c-programlama"
 
 // TCKN Validation
 bool isValid = 12345678901L.IsTRIdentityNumber();
@@ -88,7 +88,7 @@ string encrypted = AESHelper.Encrypt("data", "key", "iv");
 ```csharp
 using UD.Core.Auditing;
 
-public class Product : FullAuditedEntity
+public class Product : FullAuditedEntity<Guid, int>
 {
     public string Name { get; set; }
     // CreatedAt, CreatedBy, UpdatedAt, UpdatedBy, DeletedAt, DeletedBy otomatik
@@ -111,3 +111,4 @@ app.UseMiddleware<TokenBlacklistMiddleware>();
 ---
 
 **Not:** .NET 10 hedeflenmiştir. Minimum gereksinim: .NET 10 SDK
+**Ek Bilgi:** Bu README dokumani, yapay zeka destegiyle hazirlanmistir.

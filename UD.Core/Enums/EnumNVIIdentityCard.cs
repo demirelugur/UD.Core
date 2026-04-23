@@ -5,9 +5,9 @@
     {
         /// <summary>Yeni Kimlik Kartı</summary>
         [Description("Yeni Kimlik Kartı")]
-        New = 1,
+        @new = 1,
         /// <summary>Eski Nüfus Cüzdanı</summary>
         [Description("Eski Nüfus Cüzdanı")]
-        Old
+        old
     }
 }

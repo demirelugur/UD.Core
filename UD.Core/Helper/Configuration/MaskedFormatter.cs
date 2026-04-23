@@ -2,7 +2,6 @@
 {
     using UD.Core.Enums;
     using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class MaskedFormatter
     {
         /// <summary>Kimlik kartı veya nüfus cüzdanı seri numarasını maskeleme işlemi yapar. İsteğe bağlı olarak kimlik türü ve dil bilgisi ile birlikte açıklama ekler.</summary>
@@ -16,16 +15,6 @@
             if (cs == "") { return ""; }
             if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
             return (nVIIdentityCardTypes.HasValue ? $"{cs} ({nVIIdentityCardTypes.Value.GetLocalizedDescriptionFromEnum()})" : cs);
-        }
-        /// <summary>Doğum tarihini maskeler veya tam tarih olarak döndürür.</summary>
-        /// <param name="date">Maskelenecek veya gösterilecek doğum tarihi.</param>
-        /// <param name="showFull">Eğer <see langword="true"/> ise doğum tarihi tam olarak (dd.MM.yyyy) döner. Eğer <see langword="false"/> ise tarih maskelenir: gün olduğu gibi, ay &#39;**&#39; ile gizlenir, yılın ilk iki hanesi gösterilir ve son iki hanesi &#39;**&#39; ile gizlenir</param>
-        /// <returns>Maskelenmiş veya tam doğum tarihi stringi.</returns>
-        public static string BirthDate(DateOnly date, bool showFull)
-        {
-            var d = date.ToString(DateConstants.ddMMyyyy);
-            if (showFull) { return d; }
-            return $"{d.Substring(0, 2)}.**.{d.Substring(6, 2)}**";
         }
         /// <summary>Türkiye biçimine uygun telefon numarasını maskeleme işlemi yapar.</summary>
         /// <param name="phoneNumberTR">Maske uygulanacak telefon numarası (ülke kodu dahil).</param>

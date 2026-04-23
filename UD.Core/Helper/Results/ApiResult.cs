@@ -6,19 +6,19 @@
     using UD.Core.Extensions;
     public class ApiResult
     {
-        public static readonly ApiResult setSuccess = new(EnumAlertState.Success, default);
-        public static readonly ApiResult setInfo = new(EnumAlertState.Info, default);
+        public static readonly ApiResult setSuccess = new(EnumAlertState.success, default);
+        public static readonly ApiResult setInfo = new(EnumAlertState.info, default);
         public EnumAlertState state { get; set; }
         public string[] messages { get; set; }
-        internal bool isSuccess => this.state.Includes(EnumAlertState.Success, EnumAlertState.Info);
+        internal bool isSuccess => this.state.Includes(EnumAlertState.success, EnumAlertState.info);
         public ApiResult() : this(default, default) { }
         public ApiResult(EnumAlertState state, string[] messages)
         {
             this.state = state;
-            this.messages = (messages.IsNullOrEmptyOrAllNull() ? (this.isSuccess ? [] : [EnumResponseMessage.Error.GetLocalizedDescriptionFromEnum()]) : messages);
+            this.messages = (messages.IsNullOrEmptyOrAllNull() ? (this.isSuccess ? [] : [EnumResponseMessage.error.GetLocalizedDescriptionFromEnum()]) : messages);
         }
-        public static ApiResult setError(params string[] messages) => new(EnumAlertState.Error, messages);
-        public static ApiResult setWarning(params string[] messages) => new(EnumAlertState.Warning, messages);
+        public static ApiResult setError(params string[] messages) => new(EnumAlertState.error, messages);
+        public static ApiResult setWarning(params string[] messages) => new(EnumAlertState.warning, messages);
     }
     public class ApiResult<T> : ApiResult
     {

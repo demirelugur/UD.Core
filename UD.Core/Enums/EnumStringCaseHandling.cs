@@ -2,8 +2,8 @@
 {
     public enum EnumStringCaseHandling : byte
     {
-        Default = 1,
-        Lower,
-        Upper
+        @default = 1,
+        lower,
+        upper
     }
 }

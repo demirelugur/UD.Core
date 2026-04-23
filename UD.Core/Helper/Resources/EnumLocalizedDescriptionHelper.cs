@@ -11,14 +11,14 @@
             {
                 return value switch
                 {
-                    EnumResponseMessage.Success => "Your request has been completed successfully.",
-                    EnumResponseMessage.Error => "An unexpected result occurred during the process! Contact the administrator.",
-                    EnumResponseMessage.NotFound => "No records matching the parameters were found.",
-                    EnumResponseMessage.InvalidDate => "The entered value does not comply with the date format! Please check.",
-                    EnumResponseMessage.UnethicalContent => "\"Prohibited\" words appear in the text! Contact the administrator.",
-                    EnumResponseMessage.Unauthorized => "You are not authorized for the transaction! Contact the administrator.",
-                    EnumResponseMessage.ConnectionError => "Cannot communicate with the server computer! Contact the administrator.",
-                    EnumResponseMessage.MaxLengthExceeded => "The maximum character limit that can be entered has been exceeded! Contact the administrator.",
+                    EnumResponseMessage.success => "Your request has been completed successfully.",
+                    EnumResponseMessage.error => "An unexpected result occurred during the process! Contact the administrator.",
+                    EnumResponseMessage.notFound => "No records matching the parameters were found.",
+                    EnumResponseMessage.invalidDate => "The entered value does not comply with the date format! Please check.",
+                    EnumResponseMessage.unethicalContent => "\"Prohibited\" words appear in the text! Contact the administrator.",
+                    EnumResponseMessage.unauthorized => "You are not authorized for the transaction! Contact the administrator.",
+                    EnumResponseMessage.connectionError => "Cannot communicate with the server computer! Contact the administrator.",
+                    EnumResponseMessage.maxLengthExceeded => "The maximum character limit that can be entered has been exceeded! Contact the administrator.",
                     _ => throw Utilities.ThrowNotSupportedForEnum<EnumResponseMessage>()
                 };
             }
@@ -30,8 +30,8 @@
             {
                 return value switch
                 {
-                    EnumNVIIdentityCard.New => "New ID Card",
-                    EnumNVIIdentityCard.Old => "Old Identity Card",
+                    EnumNVIIdentityCard.@new => "New ID Card",
+                    EnumNVIIdentityCard.old => "Old Identity Card",
                     _ => throw Utilities.ThrowNotSupportedForEnum<EnumNVIIdentityCard>()
                 };
             }

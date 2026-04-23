@@ -2,7 +2,7 @@
 {
     public enum EnumExecuteNonQuery : byte
     {
-        Insert = 1,
-        Update
+        insert = 1,
+        update
     }
 }

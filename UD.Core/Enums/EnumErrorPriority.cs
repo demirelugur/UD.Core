@@ -2,9 +2,9 @@
 {
     public enum EnumErrorPriority : byte
     {
-        Low = 1,
-        Normal,
-        High,
-        CatastrophicFailure = 255
+        low = 1,
+        normal,
+        high,
+        catastrophicFailure = 255
     }
 }

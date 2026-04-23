@@ -2,9 +2,9 @@
 {
     public enum EnumAlertState : byte
     {
-        Success = 1,
-        Info,
-        Warning,
-        Error
+        success = 1,
+        info,
+        warning,
+        error
     }
 }
