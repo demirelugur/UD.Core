@@ -110,5 +110,5 @@ app.UseMiddleware<TokenBlacklistMiddleware>();
 
 ---
 
-**Not:** .NET 10 hedeflenmiştir. Minimum gereksinim: .NET 10 SDK
-**Ek Bilgi:** Bu README dokumani, yapay zeka destegiyle hazirlanmistir.
+- **Not:** .NET 10 hedeflenmiştir. Minimum gereksinim: .NET 10 SDK
+- **Ek Bilgi:** Bu README dokümanı, yapay zeka desteğiyle hazırlanmıştır.
