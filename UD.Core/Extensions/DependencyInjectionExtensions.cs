@@ -8,11 +8,11 @@
     using UD.Core.Helper.Validation;
     public static class DependencyInjectionExtensions
     {
-        /// <summary>Verilen assembly içerisinde bulunan ve <paramref name="typeInterface"/> arayüzünü uygulayan veya <paramref name="typeBaseclass"/> sınıfından türeyen tüm repository sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her repository için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
+        /// <summary><paramref name="services"/> içerisinde, <paramref name="assembly"/> içinde bulunan ve <paramref name="typeInterface"/> arayüzünü uygulayan veya <paramref name="typeBaseclass"/> sınıfından türeyen tüm sınıfları tarar ve bunları bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu yöntem, belirli bir assembly içinde yer alan servis sınıflarını otomatik olarak tespit edip kaydetmek için kullanışlıdır, böylece her bir servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
         /// <param name="services">Bağımlılık enjeksiyon konteyneri</param>
-        /// <param name="assembly">Repository sınıflarının bulunduğu assembly</param>
-        /// <param name="typeInterface">Repository arayüzünün tipi (örneğin, typeof(IRepository&lt;&gt;))</param>
-        /// <param name="typeBaseclass">Repository> sınıflarının türediği temel sınıfın tipi (örneğin, typeof(BaseRepository&lt;&gt;))</param>
+        /// <param name="assembly">Tarama yapılacak assembly</param>
+        /// <param name="typeInterface">Uygulanacak arayüz tipi</param>
+        /// <param name="typeBaseclass">Türeyecek temel sınıf tipi</param>
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddScopedRange(this IServiceCollection services, Assembly assembly, Type typeInterface, Type typeBaseclass)
         {
@@ -20,10 +20,12 @@
             Guard.ThrowIfNull(assembly, nameof(assembly));
             Guard.ThrowIfNull(typeInterface, nameof(typeInterface));
             Guard.ThrowIfNull(typeBaseclass, nameof(typeBaseclass));
-            var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeBaseclass)).ToArray();
+            Type[] interfaces, types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeBaseclass)).ToArray();
+            var isOpenGeneric = typeInterface.IsGenericTypeDefinition;
             foreach (var implementation in types)
             {
-                var interfaces = implementation.GetInterfaces().Where(x => x.IsImplementsOpenGenericInterface(typeInterface)).ToArray();
+                if (isOpenGeneric) { interfaces = implementation.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeInterface).ToArray(); }
+                else { interfaces = implementation.GetInterfaces().Where(x => x != typeInterface && typeInterface.IsAssignableFrom(x)).ToArray(); }
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
             return services;

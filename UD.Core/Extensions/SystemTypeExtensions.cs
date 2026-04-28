@@ -66,15 +66,6 @@
             var values = Enum.GetValues(type);
             return Enum.GetNames(type).Select((enumName, i) => new EnumResult(Convert.ToInt64(values.GetValue(i)), enumName, type.GetField(enumName).GetDescription())).ToArray();
         }
-        /// <summary> Belirtilen tipin, verilen açık generic interface&#39;i (open generic interface) implement edip etmediğini kontrol eder.</summary>
-        /// <param name="type">Kontrol edilecek tip (class, struct, record vs.)</param>
-        /// <param name="openGenericInterface">Açık generic interface tanımı</param>
-        public static bool IsImplementsOpenGenericInterface(this Type type, Type openGenericInterface)
-        {
-            Guard.ThrowIfNull(type, nameof(type));
-            Guard.ThrowIfNull(openGenericInterface, nameof(openGenericInterface));
-            return (type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == openGenericInterface));
-        }
         /// <summary>Belirtilen <paramref name="type"/> türünün, verilen açık generic (<paramref name="openGeneric"/>) türünden türeyip türemediğini kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
         /// <param name="openGeneric">Açık generic taban türü.</param>
