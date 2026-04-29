@@ -73,7 +73,7 @@
         {
             Guard.ThrowIfNull(type, nameof(type));
             Guard.ThrowIfNull(openGeneric, nameof(openGeneric));
-            while (type != typeof(object))
+            while (type != null && type != typeof(object))
             {
                 var cur = (type.IsGenericType ? type.GetGenericTypeDefinition() : type);
                 if (cur == openGeneric) { return true; }

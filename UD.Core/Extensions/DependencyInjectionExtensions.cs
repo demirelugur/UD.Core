@@ -20,15 +20,18 @@
             Guard.ThrowIfNull(assembly, nameof(assembly));
             Guard.ThrowIfNull(typeInterface, nameof(typeInterface));
             Guard.ThrowIfNull(typeBaseclass, nameof(typeBaseclass));
-            Type[] interfaces, types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeBaseclass)).ToArray();
-            var isOpenGeneric = typeInterface.IsGenericTypeDefinition;
+            var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeBaseclass)).ToArray();
             foreach (var implementation in types)
             {
-                if (isOpenGeneric) { interfaces = implementation.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeInterface).ToArray(); }
-                else { interfaces = implementation.GetInterfaces().Where(x => x != typeInterface && typeInterface.IsAssignableFrom(x)).ToArray(); }
+                var interfaces = implementation.GetInterfaces().Where(x => x != typeInterface && hasInterface(x, typeInterface)).ToArray();
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
             return services;
+        }
+        private static bool hasInterface(Type type, Type typeInterface)
+        {
+            if (typeInterface.IsGenericTypeDefinition) { return type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeInterface); }
+            return typeInterface.IsAssignableFrom(type);
         }
         /// <summary>Verilen assembly içerisinde bulunan ve <see cref="IBaseServiceInfrastructure{TContext, TEntity}"/> arayüzünü uygulayan veya <see cref="BaseServiceInfrastructure{TContext, TEntity}"/> sınıfından türeyen tüm servis sınıflarını otomatik olarak tarar ve bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu sayede her servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
         public static IServiceCollection AddScopedRangeBaseServiceInfrastructure(this IServiceCollection services, Assembly assembly)
