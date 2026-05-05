@@ -58,6 +58,7 @@
             public const string Isbn = "ISBN(Uluslararası Standart Kitap Numarası)";
             public const string Mac = "MAC(Media Access Control)";
             public const string Xss = "XSS(Cross - Site Scripting)";
+            public const string Iban = "IBAN(Uluslararası Banka Hesap Numarası)";
         }
         public sealed class ValidationErrorMessageConstants
         {

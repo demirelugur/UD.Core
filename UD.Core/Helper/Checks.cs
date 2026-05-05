@@ -3,9 +3,11 @@
     using Microsoft.AspNetCore.StaticFiles;
     using System;
     using System.Globalization;
+    using System.Numerics;
     using System.Text.RegularExpressions;
     using UD.Core.Extensions;
     using UD.Core.Helper.Validation;
+    using static UD.Core.Helper.GlobalConstants;
     public sealed class Checks
     {
         /// <summary><see cref="CultureInfo.CurrentUICulture"/>&#39;un iki harfli ISO dil kodunun &quot;en&quot; içerip içermediğini kontrol eder. Bu özellik, uygulamanın geçerli kullanıcı arayüzü kültürünün İngilizce olup olmadığını belirlemek için kullanılabilir. Eğer geçerli UI kültürü İngilizce ise <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</summary>
@@ -18,6 +20,21 @@
             Guard.ThrowIfEmpty(path, nameof(path));
             var uzn = Path.GetExtension(path).ToLower();
             return (uzn == ".pdf" || (new FileExtensionContentTypeProvider().Mappings.TryGetValue(uzn, out string _value) && _value.StartsWith("image/")));
+        }
+        /// <summary><paramref name="iban"/> değerinin geçerli bir <see cref="TitleConstants.Iban"/> biçimine sahip olup olmadığını kontrol eder. Bu metod, IBAN numarasının uzunluğunu, karakterlerini ve doğrulama algoritmasını kullanarak geçerliliğini değerlendirir. IBAN numarası, ülke kodu, kontrol basamakları ve banka hesap numarası gibi bileşenlerden oluşur. Eğer verilen IBAN numarası geçerli ise <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu kontrol, finansal işlemlerde doğru ve geçerli IBAN numaralarının kullanılmasını sağlamak için önemlidir.</summary>
+        public static bool IsIbanValid(string iban)
+        {
+            iban = iban.ToStringOrEmpty().ToUpperInvariant();
+            if (iban.Length < 15 || iban.Length > 34) { return false; }
+            var rearranged = String.Concat(iban[4..], iban[..4]);
+            var numericIban = String.Concat(rearranged.Select(x =>
+            {
+                if (Char.IsDigit(x)) { return x.ToString(); }
+                if (Char.IsLetter(x)) { return (x - 'A' + 10).ToString(); }
+                return "";
+            }).ToArray());
+            if (!BigInteger.TryParse(numericIban, out BigInteger _bi)) { return false; }
+            return _bi % 97 == 1;
         }
     }
 }
