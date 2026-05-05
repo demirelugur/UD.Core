@@ -1,16 +1,21 @@
 ﻿namespace UD.Core.Helper
 {
     using Microsoft.Data.SqlClient;
+    using Microsoft.IdentityModel.Tokens;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Data;
     using System.Globalization;
+    using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using System.Net;
     using System.Net.Mail;
+    using System.Security.Claims;
+    using System.Text;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Validation;
     public sealed class Converters
     {
         /// <summary>Verilen string ifadeyi tersine çevirir. Bu metot, Türkçe karakterler (ğ, ü, ş, ç, ö, ı, İ vb.) dahil olmak üzere tüm Unicode metin öğelerini dikkate alarak çalışır. Standart char tabanlı ters çevirme yöntemlerinden farklı olarak <see cref="StringInfo"/> sınıfını kullanır ve her bir metin öğesini (text element) ayrı değerlendirir.</summary>
@@ -179,6 +184,16 @@
             if (valueString.IndexOf('.') > -1 && _baseType.Includes(typeof(float), typeof(double), typeof(decimal))) { valueString = valueString.Replace(".", ",", StringComparison.InvariantCulture); }
             try { return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(valueString), _baseType); }
             catch { return (default, default); }
+        }
+        /// <summary><paramref name="claims"/> koleksiyonunu kullanarak bir JWT (JSON Web Token) oluşturur. JWT, güvenli bir şekilde bilgi alışverişi yapmak için kullanılan kompakt ve URL - safe bir token biçimidir. Bu metot, verilen claim&#39;leri, imzalama anahtarını, token&#39;ın geçerlilik süresini ve diğer parametreleri kullanarak bir JWT oluşturur ve string olarak döner.</summary>
+        public static string GenerateJwtToken(IEnumerable<Claim> claims, string key, string issuer, string audience, TimeSpan expiresIn, DateTime? notBefore = null)
+        {
+            Guard.ThrowIfEmpty(claims, nameof(claims));
+            Guard.ThrowIfEmpty(key, nameof(key));
+            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var creds = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(issuer.ParseOrDefault<string>(), audience.ParseOrDefault<string>(), claims, notBefore, DateTime.UtcNow.Add(expiresIn), creds);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

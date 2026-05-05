@@ -1,6 +1,7 @@
 ﻿namespace UD.Core.Helper
 {
     using Microsoft.AspNetCore.Http;
+    using Microsoft.IdentityModel.Tokens;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
@@ -8,9 +9,12 @@
     using System.Data;
     using System.Drawing;
     using System.Globalization;
+    using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using System.Net.Mail;
     using System.Reflection;
+    using System.Security.Claims;
+    using System.Text;
     using System.Text.Json;
     using System.Text.RegularExpressions;
     using System.Web;
@@ -306,6 +310,37 @@
                 }
             }
             catch (Exception ex) { return (true, "", ex); }
+        }
+        /// <summary><paramref name="token"/> değişkeninde verilen JWT (JSON Web Token) değerinin geçerli olup olmadığını kontrol eder. Doğrulama işlemi sırasında, token&#39;ın imzası, geçerlilik süresi, issuer (yayıncı) ve audience (hedef kitle) gibi kriterler göz önünde bulundurulur. Eğer token geçerliyse, token içindeki claim&#39;ler <paramref name="claims"/> parametresine atanır ve metot <see langword="true"/> döner. Geçersiz bir token durumunda, <paramref name="claims"/> boş bir dizi olarak atanır ve metot <see langword="false"/> döner.</summary>
+        public static bool TryValidateJWTToken(string token, string key, string issuer, string audience, out Claim[] claims)
+        {
+            if (token.IsNullOrEmpty() || key.IsNullOrEmpty())
+            {
+                claims = [];
+                return false;
+            }
+            try
+            {
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                    ValidateIssuer = !issuer.IsNullOrEmpty(),
+                    ValidIssuer = issuer.ParseOrDefault<string>(),
+                    ValidateAudience = !audience.IsNullOrEmpty(),
+                    ValidAudience = audience.ParseOrDefault<string>(),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+                var principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out _);
+                claims = (principal.Identity.IsAuthenticated ? principal.Claims.ToArray() : []);
+                return claims.Length > 0;
+            }
+            catch
+            {
+                claims = [];
+                return false;
+            }
         }
     }
 }
