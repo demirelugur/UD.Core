@@ -185,14 +185,28 @@
             try { return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(valueString), _baseType); }
             catch { return (default, default); }
         }
-        /// <summary><paramref name="claims"/> koleksiyonunu kullanarak bir JWT (JSON Web Token) oluşturur. JWT, güvenli bir şekilde bilgi alışverişi yapmak için kullanılan kompakt ve URL - safe bir token biçimidir. Bu metot, verilen claim&#39;leri, imzalama anahtarını, token&#39;ın geçerlilik süresini ve diğer parametreleri kullanarak bir JWT oluşturur ve string olarak döner.</summary>
-        public static string GenerateJwtToken(IEnumerable<Claim> claims, string key, string issuer, string audience, TimeSpan expiresIn, DateTime? notBefore = null)
+        /// <summary><paramref name="claims"/> değerlerine göre bir JWT token oluşturur. Token, verilen <paramref name="key"/> ile imzalanır ve belirtilen süre boyunca geçerli olur. İsteğe bağlı olarak, token&#39;ın <paramref name="issuer"/> tarafından verildiği ve <paramref name="audience"/> tarafından hedeflendiği bilgileri de eklenebilir. Ayrıca, token&#39;ın geçerlilik başlangıç zamanı olarak <paramref name="notBefore"/> değeri de belirtilebilir.</summary>
+        /// <param name="claims">JWT token&#39;ında yer alacak claim&#39;ler.</param>
+        /// <param name="key">Token&#39;ı imzalamak için kullanılacak anahtar.</param>
+        /// <param name="expiresIn">Token&#39;ın geçerlilik süresi.</param>
+        /// <param name="issuer">Token&#39;ı oluşturan tarafın kimliği. Zorunlu alan değildir.</param>
+        /// <param name="audience">Token&#39;ın hedef kitlesi. Zorunlu alan değildir.</param>
+        /// <param name="notBefore">Token&#39;ın geçerli olmaya başlayacağı zaman.</param>
+        /// <returns>Oluşturulan JWT token&#39;ı.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Geçersiz bir süre değeri verildiğinde fırlatılır.</exception>
+        public static string GenerateJWTToken(IEnumerable<Claim> claims, string key, TimeSpan expiresIn, string? issuer = null, string? audience = null, DateTime? notBefore = null)
         {
             Guard.ThrowIfEmpty(claims, nameof(claims));
             Guard.ThrowIfEmpty(key, nameof(key));
+            if (expiresIn <= TimeSpan.Zero)
+            {
+                var s = nameof(expiresIn);
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(s, $"{s} must be greater than zero."); }
+                throw new ArgumentOutOfRangeException(s, $"{s} süresi sıfırdan büyük bir değer olmalıdır!");
+            }
             var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var creds = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(issuer.ParseOrDefault<string>(), audience.ParseOrDefault<string>(), claims, notBefore, DateTime.UtcNow.Add(expiresIn), creds);
+            var token = new JwtSecurityToken(issuer.ParseOrDefault<string>(), audience.ParseOrDefault<string>(), claims, notBefore.NullOrDefault(), DateTime.UtcNow.Add(expiresIn), creds);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
