@@ -165,20 +165,16 @@
             Guard.ThrowIfNull(file, nameof(file));
             Guard.ThrowIfEmpty(physicallyPath, nameof(physicallyPath));
             Files.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
-            using (var fs = new FileStream(physicallyPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
-            {
-                await file.CopyToAsync(fs, cancellationToken);
-            }
+            using var fs = new FileStream(physicallyPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
+            await file.CopyToAsync(fs, cancellationToken);
         }
         /// <summary>Bir IFormFile nesnesini byte dizisine dönüştürür.</summary>
         public static async Task<byte[]> ToByteArray(this IFormFile file, CancellationToken cancellationToken = default)
         {
             Guard.ThrowIfNull(file, nameof(file));
-            using (var ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms, cancellationToken);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            await file.CopyToAsync(ms, cancellationToken);
+            return ms.ToArray();
         }
         #endregion
         /// <summary><see cref="QueryString"/> içindeki belirtilen anahtarı alır ve uygun türde bir değere dönüştürür. Eğer anahtar bulunamazsa veya dönüştürme başarısız olursa, varsayılan değeri döner.</summary>

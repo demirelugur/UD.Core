@@ -16,11 +16,9 @@
         {
             Guard.ThrowIfNull(image, nameof(image));
             Guard.ThrowIfNull(imageFormat, nameof(imageFormat));
-            using (var ms = new MemoryStream())
-            {
-                image.Save(ms, imageFormat);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            image.Save(ms, imageFormat);
+            return ms.ToArray();
         }
         /// <summary>Görüntüyü belirtilen boyuta yeniden boyutlandırır.</summary>
         /// <param name="image">Yeniden boyutlandırılacak görüntü.</param>
@@ -37,14 +35,12 @@
                 throw new ArgumentException($"{nameof(size)} parametresi geçerli olmalıdır!", nameof(size));
             }
             var bm = new Bitmap(size.Width, size.Height); // Not: using kullanılırsa bitmap değerleri iletilmemekte
-            using (var g = Graphics.FromImage(bm))
-            {
-                g.CompositingQuality = CompositingQuality.HighQuality;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.DrawImage(image, 0, 0, size.Width, size.Height);
-                return bm;
-            }
+            using var g = Graphics.FromImage(bm);
+            g.CompositingQuality = CompositingQuality.HighQuality;
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.SmoothingMode = SmoothingMode.HighQuality;
+            g.DrawImage(image, 0, 0, size.Width, size.Height);
+            return bm;
         }
         /// <summary>Verilen yeni genişlik(width) değerine göre resmin yüksekliğini(height), en boy oranını koruyarak hesaplar.</summary>
         /// <param name="image">Orijinal resim nesnesi.</param>

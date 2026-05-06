@@ -34,24 +34,22 @@
             var strategy = dbContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async (cancellationToken) =>
             {
-                using (var tran = await dbContext.Database.BeginTransactionAsync(cancellationToken))
+                using var tran = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+                try
                 {
-                    try
+                    await this.next(httpContext);
+                    var status = httpContext.Response.StatusCode;
+                    if (status >= StatusCodes.Status200OK && status < StatusCodes.Status400BadRequest)
                     {
-                        await this.next(httpContext);
-                        var status = httpContext.Response.StatusCode;
-                        if (status >= StatusCodes.Status200OK && status < StatusCodes.Status400BadRequest)
-                        {
-                            if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
-                            await tran.CommitAsync(cancellationToken);
-                        }
-                        else { await tran.RollbackAsync(cancellationToken); }
+                        if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
+                        await tran.CommitAsync(cancellationToken);
                     }
-                    catch
-                    {
-                        try { await tran.RollbackAsync(CancellationToken.None); } catch { }
-                        throw;
-                    }
+                    else { await tran.RollbackAsync(cancellationToken); }
+                }
+                catch
+                {
+                    try { await tran.RollbackAsync(CancellationToken.None); } catch { }
+                    throw;
                 }
             }, httpContext.RequestAborted);
         }

@@ -27,37 +27,33 @@
         public static async Task<(bool hasError, Uri requestUri)> IsConnectionStatus(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
             Guard.ThrowIfNull(uri, nameof(uri));
-            using (var client = new HttpClient
+            using var client = new HttpClient
             {
                 Timeout = timeSpan
-            })
+            };
+            try
             {
-                try
-                {
-                    var response = await client.GetAsync(uri, cancellationToken);
-                    if (response.IsSuccessStatusCode) { return (false, response.RequestMessage.RequestUri); }
-                    return (true, default);
-                }
-                catch { return (true, default); }
+                var response = await client.GetAsync(uri, cancellationToken);
+                if (response.IsSuccessStatusCode) { return (false, response.RequestMessage.RequestUri); }
+                return (true, default);
             }
+            catch { return (true, default); }
         }
         /// <summary>Belirtilen <see cref="Uri"/> adresinden byte[] veri almaya çalışır.</summary>
         public static async Task<(bool hasError, byte[] dataBinary, string mimeType, Exception ex)> GetBinaryData(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
             Guard.ThrowIfNull(uri, nameof(uri));
-            using (var client = new HttpClient
+            using var client = new HttpClient
             {
                 Timeout = timeSpan
-            })
+            };
+            try
             {
-                try
-                {
-                    var response = await client.GetAsync(uri, cancellationToken);
-                    response.EnsureSuccessStatusCode();
-                    return (false, await response.Content.ReadAsByteArrayAsync(cancellationToken), response.Content.Headers.ContentType?.MediaType.CoalesceOrDefault("application/octet-stream"), null);
-                }
-                catch (Exception ex) { return (true, default, "", ex); }
+                var response = await client.GetAsync(uri, cancellationToken);
+                response.EnsureSuccessStatusCode();
+                return (false, await response.Content.ReadAsByteArrayAsync(cancellationToken), response.Content.Headers.ContentType?.MediaType.CoalesceOrDefault("application/octet-stream"), null);
             }
+            catch (Exception ex) { return (true, default, "", ex); }
         }
         /// <summary>
         /// Verilen URI&#39;nin şemasını &#39;https&#39; olarak ayarlar ve &#39;www.&#39; önekini kaldırır.

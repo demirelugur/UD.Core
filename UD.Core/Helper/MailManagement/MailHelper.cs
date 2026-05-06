@@ -37,20 +37,18 @@
             {
                 smtpClientBasic ??= new();
                 if (TryValidators.TryValidateObject(smtpClientBasic, out string[] _errors)) { throw _errors.ToNestedException(); }
-                using (var mm = new MailMessage())
-                {
-                    mm.Subject = this.Subject;
-                    mm.Body = this.Body;
-                    mm.IsBodyHtml = this.IsBodyHtml;
-                    mm.Priority = this.Priority;
-                    mm.From = new(smtpClientBasic.Email);
-                    foreach (var item in this.Tos) { mm.To.Add(item); }
-                    foreach (var item in this.CCs) { mm.CC.Add(item); }
-                    foreach (var item in this.Bccs) { mm.Bcc.Add(item); }
-                    foreach (var item in this.Attachments) { mm.Attachments.Add(item); }
-                    await smtpClientBasic.toSmtpClient().SendMailAsync(mm, cancellationToken);
-                    return (false, default);
-                }
+                using var mm = new MailMessage();
+                mm.Subject = this.Subject;
+                mm.Body = this.Body;
+                mm.IsBodyHtml = this.IsBodyHtml;
+                mm.Priority = this.Priority;
+                mm.From = new(smtpClientBasic.Email);
+                foreach (var item in this.Tos) { mm.To.Add(item); }
+                foreach (var item in this.CCs) { mm.CC.Add(item); }
+                foreach (var item in this.Bccs) { mm.Bcc.Add(item); }
+                foreach (var item in this.Attachments) { mm.Attachments.Add(item); }
+                await smtpClientBasic.toSmtpClient().SendMailAsync(mm, cancellationToken);
+                return (false, default);
             }
             catch (Exception ex) { return (true, ex); }
         }

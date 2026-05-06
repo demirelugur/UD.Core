@@ -69,12 +69,10 @@
         public static bool IsNullOrEmptyOrAllNull<T>(this IEnumerable<T> source)
         {
             if (source == null) { return true; } // Alternatif: (source == null || !source.Any() || source.All(x => x == null))
-            using (var enumerator = source.GetEnumerator())
-            {
-                if (!enumerator.MoveNext()) { return true; }
-                do { if (enumerator.Current != null) { return false; } }
-                while (enumerator.MoveNext());
-            }
+            using var enumerator = source.GetEnumerator();
+            if (!enumerator.MoveNext()) { return true; }
+            do { if (enumerator.Current != null) { return false; } }
+            while (enumerator.MoveNext());
             return true;
         }
         /// <summary><paramref name="objA"/> ve <paramref name="objB"/> koleksiyonlarının sırasız olarak eşit olup olmadığını kontrol eder. İki koleksiyonun aynı öğeleri içerip içermediğini, ancak sıralarının önemli olmadığı durumlarda kullanılır. Her iki koleksiyonun da aynı öğeleri içerdiği, ancak farklı sıralarda olabilirlerse <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>

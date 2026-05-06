@@ -203,11 +203,9 @@
         {
             try
             {
-                using (var ms = new MemoryStream(bytes))
-                {
-                    outvalue = Image.FromStream(ms);
-                    return true;
-                }
+                using var ms = new MemoryStream(bytes);
+                outvalue = Image.FromStream(ms);
+                return true;
             }
             catch
             {
@@ -296,18 +294,14 @@
             }
             try
             {
-                using (var client = new HttpClient
+                using var client = new HttpClient
                 {
                     Timeout = timeout,
                     DefaultRequestHeaders = { UserAgent = { new("Mozilla", "4.0") } }
-                })
-                {
-                    var response = await client.GetStringAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl={from}&tl={to}&dt=t&q={Uri.EscapeDataString(HttpUtility.HtmlEncode(value))}", cancellationToken);
-                    using (var doc = JsonDocument.Parse(response))
-                    {
-                        return (false, doc.RootElement[0][0][0].GetString().ToStringOrEmpty(), null);
-                    }
-                }
+                };
+                var response = await client.GetStringAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl={from}&tl={to}&dt=t&q={Uri.EscapeDataString(HttpUtility.HtmlEncode(value))}", cancellationToken);
+                using var doc = JsonDocument.Parse(response);
+                return (false, doc.RootElement[0][0][0].GetString().ToStringOrEmpty(), null);
             }
             catch (Exception ex) { return (true, "", ex); }
         }

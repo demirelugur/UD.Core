@@ -92,12 +92,10 @@
         public static byte[] GenerateRandomKey(this long length)
         {
             Guard.ThrowIfZeroOrNegative(length, nameof(length));
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                var byteArray = new byte[length];
-                rng.GetBytes(byteArray);
-                return byteArray;
-            }
+            using var rng = RandomNumberGenerator.Create();
+            var byteArray = new byte[length];
+            rng.GetBytes(byteArray);
+            return byteArray;
         }
         /// <summary>Verilen sayının asal olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek pozitif tamsayı.</param>

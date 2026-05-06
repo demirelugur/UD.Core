@@ -53,12 +53,10 @@
             Guard.ThrowIfEmpty(bytes, nameof(bytes));
             Guard.ThrowIfEmpty(physicallyPath, nameof(physicallyPath));
             Files.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
-            using (var fs = new FileStream(physicallyPath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true))
-            {
-                await fs.WriteAsync(bytes.AsMemory(0, bytes.Length), cancellationToken);
-                await fs.FlushAsync(cancellationToken);
-                fs.Close();
-            }
+            using var fs = new FileStream(physicallyPath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true);
+            await fs.WriteAsync(bytes.AsMemory(0, bytes.Length), cancellationToken);
+            await fs.FlushAsync(cancellationToken);
+            fs.Close();
         }
         #endregion
     }
