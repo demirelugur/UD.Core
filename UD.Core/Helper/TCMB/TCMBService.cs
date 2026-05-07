@@ -22,7 +22,13 @@ namespace UD.Core.Helper.TCMB
             if (this.dicXmlCache.TryGetValue(date, out XDocument _cachedXml)) { return _cachedXml; }
             var (hasError, dataBinary, _, ex) = await this.GetUrl(date).GetBinaryData(TimeSpan.FromSeconds(5), cancellationToken);
             if (hasError) { throw ex; }
-            return this.dicXmlCache.GetOrAdd(date, XDocument.Parse(Encoding.UTF8.GetString(dataBinary)));
+            var doc = this.dicXmlCache.GetOrAdd(date, XDocument.Parse(Encoding.UTF8.GetString(dataBinary)));
+            if (this.dicXmlCache.Count > 15)
+            {
+                var oldestKey = this.dicXmlCache.Keys.OrderBy(k => k).FirstOrDefault();
+                this.dicXmlCache.TryRemove(oldestKey, out _);
+            }
+            return doc;
         }
         private Uri GetUrl(DateTime date) => new(date == DateTime.Today ? "https://www.tcmb.gov.tr/kurlar/today.xml" : $"https://www.tcmb.gov.tr/kurlar/{date:yyyyMM}/{date:ddMMyyyy}.xml");
         private TCMBResponse GetRate(XDocument xml, string code)

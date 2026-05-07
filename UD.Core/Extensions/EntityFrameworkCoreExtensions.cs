@@ -49,29 +49,29 @@ namespace UD.Core.Extensions
                 isSetCompositeKeyName = x.Name == compositeKeyName,
                 isCompositeKey = x.IsPK() && x.GetDatabaseGeneratedOption() == DatabaseGeneratedOption.None
             }).ToArray();
+            if (!properties.Any(x => x.isSetCompositeKeyName && x.isCompositeKey))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
+                throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" özelliðinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
+            }
             if (properties.Count(x => x.isCompositeKey) < 2)
             {
                 if (Checks.IsEnglishCurrentUICulture) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
                 throw new KeyNotFoundException($"Ýþleme devam edebilmek için \"{tableName}\" tablosunda en az 2 özelliðin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" içermesi gerekmektedir!");
             }
-            if (properties.Any(x => x.isSetCompositeKeyName && x.isCompositeKey))
+            var newEntity = new T();
+            var entry = context.Entry(oldEntity);
+            var dbSet = context.Set<T>();
+            dbSet.Attach(oldEntity);
+            foreach (var item in properties.Select(x => new
             {
-                var newEntity = new T();
-                var entry = context.Entry(oldEntity);
-                var dbSet = context.Set<T>();
-                dbSet.Attach(oldEntity);
-                foreach (var item in properties.Select(x => new
-                {
-                    x.name,
-                    x.isSetCompositeKeyName
-                }).ToArray()) { Utilities.SetPropertyValue(newEntity, item.name, (item.isSetCompositeKeyName ? compositeKeyNewValue : entry.Property(item.name).OriginalValue)); }
-                await dbSet.AddAsync(newEntity, cancellationToken);
-                dbSet.Remove(oldEntity);
-                if (autoSave) { await context.SaveChangesAsync(cancellationToken); }
-                return newEntity;
-            }
-            if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
-            throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" özelliðinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
+                x.name,
+                x.isSetCompositeKeyName
+            }).ToArray()) { Utilities.SetPropertyValue(newEntity, item.name, (item.isSetCompositeKeyName ? compositeKeyNewValue : entry.Property(item.name).OriginalValue)); }
+            await dbSet.AddAsync(newEntity, cancellationToken);
+            dbSet.Remove(oldEntity);
+            if (autoSave) { await context.SaveChangesAsync(cancellationToken); }
+            return newEntity;
         }
         /// <summary> Baðlý bulunulan <see cref="DbContext"/> üzerinden SQL Server sunucusuna ait sistem özelliklerini asenkron olarak sorgular ve <see cref="SqlServerProperties"/> nesnesi olarak döndürür. </summary>
         /// <param name="context"> Sorgunun çalýþtýrýlacaðý veritabaný baðlamý.</param>
@@ -184,7 +184,6 @@ namespace UD.Core.Extensions
         public static void SanitizeAndTruncate(this EntityEntry entry, IHtmlSanitizer? sanitizer)
         {
             Guard.ThrowIfNull(entry, nameof(entry));
-            var isNotNullSanitizer = sanitizer != null;
             var accessor = _sanitizeTruncateCache.GetOrAdd(entry.Metadata.ClrType, _ => SanitizeCreateTruncateAccessor(entry.Metadata));
             foreach (var item in accessor)
             {
@@ -192,7 +191,7 @@ namespace UD.Core.Extensions
                 if (propEntry.CurrentValue is String _s)
                 {
                     if (item.maxLength > 0) { _s = _s.SubstringUpToLength(item.maxLength); }
-                    if (isNotNullSanitizer && !item.property.PropertyInfo.IsSkipSanitize()) { _s = sanitizer.Sanitize(_s); }
+                    if (sanitizer != null && !item.property.PropertyInfo.IsSkipSanitize()) { _s = sanitizer.Sanitize(_s); }
                     propEntry.CurrentValue = _s.ParseOrDefault<string>();
                 }
             }
