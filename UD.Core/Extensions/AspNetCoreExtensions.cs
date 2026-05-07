@@ -112,6 +112,7 @@
         /// <typeparam name="T">Binding işlemi sonucu oluşturulacak model tipi.</typeparam>
         /// <param name="form">Binding işlemi için kullanılacak form verileri.</param>
         /// <param name="httpContext">Opsiyonel <see cref="HttpContext"/> örneği.</param>
+        /// <param name="cultureInfo">Opsiyonel <see cref="CultureInfo"/> örneği. Eğer verilmezse varsayılan kültür kullanılır.</param>
         /// <returns>
         /// Tuple olarak;
         /// <list type="bullet">
@@ -120,7 +121,7 @@
         /// <item><description><c>errors</c>: Oluşan hata mesajları.</description></item>
         /// </list>
         /// </returns>
-        public static async Task<(bool hasError, T model, string[] errors)> TryBindFromFormAsync<T>(this IFormCollection form, HttpContext? httpContext = null) where T : class, new()
+        public static async Task<(bool hasError, T model, string[] errors)> TryBindFromFormAsync<T>(this IFormCollection form, HttpContext? httpContext = null, CultureInfo? cultureInfo = null) where T : class, new()
         {
             Guard.ThrowIfNull(form, nameof(form));
             httpContext ??= Utilities.GetDefaultHttpContext;
@@ -128,7 +129,7 @@
             var bindingContext = new DefaultModelBindingContext
             {
                 ModelName = "",
-                ValueProvider = new FormValueProvider(BindingSource.Form, form, CultureInfo.InvariantCulture),
+                ValueProvider = new FormValueProvider(BindingSource.Form, form, cultureInfo ?? CultureInfo.InvariantCulture),
                 ModelState = modelState,
                 ModelMetadata = httpContext.RequestServices.GetRequiredService<IModelMetadataProvider>().GetMetadataForType(typeof(T)),
                 Model = new T(),
