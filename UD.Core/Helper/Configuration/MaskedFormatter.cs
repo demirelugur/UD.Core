@@ -2,6 +2,7 @@
 {
     using UD.Core.Enums;
     using UD.Core.Extensions;
+    using static UD.Core.Helper.GlobalConstants;
     public sealed class MaskedFormatter
     {
         /// <summary>Kimlik kartı veya nüfus cüzdanı seri numarasını maskeleme işlemi yapar. İsteğe bağlı olarak kimlik türü ve dil bilgisi ile birlikte açıklama ekler.</summary>
@@ -31,13 +32,17 @@
         /// <returns>Maskelenmiş veya tam kimlik numarası. Geçerli bir TCKN/VKN değilse boş string döner.</returns>
         public static string TRTaxIdentityNumber(long identityNumber, bool showFull)
         {
-            var count = 0;
-            if (identityNumber.IsTRIdentityNumber()) { count = 6; }
-            else if (identityNumber.IsTRTaxIdentityNumber()) { count = 5; }
-            if (count == 0) { return ""; }
-            var t = identityNumber.ToString();
-            if (showFull) { return t; }
-            return String.Concat(t.Substring(0, 3), new('*', count), t.Substring(9, 2));
+            if (identityNumber.IsTRIdentityNumber())
+            {
+                var t = identityNumber.ToString();
+                return (showFull ? t : String.Concat(t.Substring(0, 3), new('*', 6), t.Substring(9, 2)));
+            }
+            if (identityNumber.IsTRTaxIdentityNumber())
+            {
+                var t = identityNumber.ToString().Replicate(MaximumLengthConstants.TRTaxIdentityNumber);
+                return (showFull ? t : String.Concat(t.Substring(0, 3), new('*', 5), t.Substring(8, 2)));
+            }
+            return "";
         }
     }
 }
