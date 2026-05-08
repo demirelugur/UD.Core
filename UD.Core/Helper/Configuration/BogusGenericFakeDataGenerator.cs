@@ -147,33 +147,34 @@
             if (type.IsArray)
             {
                 int i, count = (this.arrayMaxLength > 0 ? faker.Random.Int(this.arrayMinLength, this.arrayMaxLength) : 0);
-                var elemtype = type.GetElementType();
-                var array = Array.CreateInstance(elemtype, count);
-                for (i = 0; i < count; i++) { array.SetValue(this.createFakeInstance(parametername, elemtype, faker), i); }
+                var elementType = type.GetElementType();
+                var array = Array.CreateInstance(elementType, count);
+                for (i = 0; i < count; i++) { array.SetValue(this.createFakeInstance(parametername, elementType, faker), i); }
                 return array;
             }
             if (type.IsGenericType)
             {
-                if (type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+                var definingType = type.GetGenericTypeDefinition();
+                if (definingType == typeof(Dictionary<,>))
                 {
-                    var keytype = type.GetGenericArguments()[0];
-                    var valuetype = type.GetGenericArguments()[1];
+                    var keyType = type.GetGenericArguments()[0];
+                    var valueType = type.GetGenericArguments()[1];
                     int i, count = (this.arrayMaxLength > 0 ? faker.Random.Int(this.arrayMinLength, this.arrayMaxLength) : 0);
                     var dict = (IDictionary)Activator.CreateInstance(type);
                     for (i = 0; i < count; i++)
                     {
-                        var key = this.createFakeInstance(parametername, keytype, faker);
+                        var key = this.createFakeInstance(parametername, keyType, faker);
                         if (dict.Contains(key)) { continue; }
-                        dict.Add(key, this.createFakeInstance(parametername, valuetype, faker));
+                        dict.Add(key, this.createFakeInstance(parametername, valueType, faker));
                     }
                     return dict;
                 }
-                if (type.GetGenericTypeDefinition() == typeof(List<>))
+                if (definingType == typeof(List<>))
                 {
-                    var elemtype = type.GetGenericArguments()[0];
+                    var elementType = type.GetGenericArguments()[0];
                     int i, count = (this.arrayMaxLength > 0 ? faker.Random.Int(this.arrayMinLength, this.arrayMaxLength) : 0);
                     var list = (IList)Activator.CreateInstance(type);
-                    for (i = 0; i < count; i++) { list.Add(this.createFakeInstance(parametername, elemtype, faker)); }
+                    for (i = 0; i < count; i++) { list.Add(this.createFakeInstance(parametername, elementType, faker)); }
                     return list;
                 }
             }

@@ -30,7 +30,7 @@
         /// <param name="identityNumber">Maskelenecek kimlik numarası.</param>
         /// <param name="showFull">true ise maskesiz tam numara döndürülür; false ise ilgili kısım maskelenir.</param>
         /// <returns>Maskelenmiş veya tam kimlik numarası. Geçerli bir TCKN/VKN değilse boş string döner.</returns>
-        public static string TRTaxIdentityNumber(long identityNumber, bool showFull)
+        public static string TRIdentityNumber(long identityNumber, bool showFull)
         {
             if (identityNumber.IsTRIdentityNumber())
             {
