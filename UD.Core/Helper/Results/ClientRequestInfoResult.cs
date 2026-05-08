@@ -7,7 +7,12 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Resources;
     using static UD.Core.Helper.GlobalConstants;
-    public class ClientRequestInfoResult : IEquatable<ClientRequestInfoResult>
+    public interface IClientRequestInfoResult
+    {
+        bool isMobil { get; set; }
+        string? ipAddress { get; set; }
+    }
+    public class ClientRequestInfoResult : IEquatable<ClientRequestInfoResult>, IClientRequestInfoResult
     {
         #region Equals
         public override bool Equals(object other) => this.Equals(other as ClientRequestInfoResult);
