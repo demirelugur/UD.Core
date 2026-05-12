@@ -5,7 +5,7 @@
     using System.Linq;
     using UD.Core.Helper.Results;
     using UD.Core.Helper.Validation;
-    public static class CollectionGenericExtensions
+    public static class CollectionsExtensions
     {
         #region IDictionary
         /// <summary>Belirtilen anahtar ve değeri bir sözlüğe ekler. Eğer anahtar zaten mevcutsa, değeri günceller; mevcut değilse, yeni bir anahtar - değer çifti olarak ekler.</summary>
