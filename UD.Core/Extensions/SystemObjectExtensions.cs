@@ -107,16 +107,20 @@
         /// <returns>Dönüştürülen enum değeri; dönüşüm başarısızsa <c>default</c>.</returns>
         public static TEnum? TryToEnum<TEnum>(this object value) where TEnum : struct, Enum
         {
-            if (value is TEnum _enum) { return _enum; }
-            if (value is (Byte or Int16 or Int32 or Int64))
+            if (value != null)
             {
-                try { return (TEnum)Enum.ToObject(typeof(TEnum), value); }
-                catch { }
-            }
-            if (value is String _s && !_s.IsNullOrEmpty())
-            {
-                if (Int64.TryParse(_s, out long _valueLong)) { return _valueLong.TryToEnum<TEnum>(); }
-                if (Enum.TryParse(_s, true, out _enum)) { return _enum; }
+                if (value is TEnum _enum) { return _enum; }
+                if (value.GetType().IsEnum) { value = value.ToInt64(); }
+                if (value is (Byte or Int16 or Int32 or Int64))
+                {
+                    try { return (TEnum)Enum.ToObject(typeof(TEnum), value); }
+                    catch { }
+                }
+                if (value is String _s && !_s.IsNullOrEmpty())
+                {
+                    if (Int64.TryParse(_s, out long _valueLong)) { return _valueLong.TryToEnum<TEnum>(); }
+                    if (Enum.TryParse(_s, true, out _enum)) { return _enum; }
+                }
             }
             return default;
         }

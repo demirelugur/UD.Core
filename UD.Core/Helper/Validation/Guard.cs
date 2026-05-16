@@ -11,10 +11,6 @@
     using static UD.Core.Helper.GlobalConstants;
     public sealed class Guard
     {
-        public static void ThrowIfNull(object value, string argName)
-        {
-            if (value == null || value == DBNull.Value) { throw new ArgumentNullException(argName); }
-        }
         public static void ThrowIfEmpty(string value, string argName)
         {
             if (value.IsNullOrEmpty())
@@ -39,126 +35,6 @@
                 throw new ArgumentNullException(argName, $"\"{argName}\" argümanı boş (null) olamaz ve en az bir öğe içermelidir!");
             }
         }
-        public static void ThrowIfNotValidJson(string json, JTokenType jTokenType, string argName)
-        {
-            if (!TryValidators.TryJson<JToken>(json, jTokenType, out _))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new JsonReaderException($"The argument \"{argName}\" must be in \"JSON\" format and of type \"{typeof(JTokenType).FullName}\"!"); }
-                throw new JsonReaderException($"\"{argName}\" argümanı, \"JSON\" biçimine uygun olmalı ve türü \"{typeof(JTokenType).FullName}\" olmalıdır!");
-            }
-        }
-        public static void ThrowIfNotValidPhoneNumberTR(string phoneNumberTR, string argName)
-        {
-            if (!TryValidators.TryPhoneNumberTR(phoneNumberTR, out _))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be a valid phone number in the format of (xxx) xxx-xxxx!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanının değeri telefon numarası \"(5xx) (xxx-xxxx)\" biçimine uygun olmalıdır!", argName);
-            }
-        }
-        public static void ThrowIfNotValidTRIdentityNumber(long trIdentityNumber, string argName)
-        {
-            if (!trIdentityNumber.IsTRIdentityNumber())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Identification Number!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, T.C. Kimlik Numarası biçimine uygun olmalıdır!", argName);
-            }
-        }
-        public static void ThrowIfNotValidTRTaxIdentityNumber(long trTaxIdentityNumber, string argName)
-        {
-            if (!trTaxIdentityNumber.IsTRTaxIdentityNumber())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Tax Identity Number!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, T.C. Vergi Kimlik Numarası biçimine uygun olmalıdır!", argName);
-            }
-        }
-        public static void ThrowIfNotValidISBN(string isbn, string argName)
-        {
-            if (!ISBNHelper.IsValid(isbn))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of {TitleConstants.Isbn}!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, {TitleConstants.Isbn} biçimine uygun olmalıdır!", argName);
-            }
-        }
-        public static void ThrowIfNotValidMAC(string mac, string argName)
-        {
-            if (!TryValidators.TryMACAddress(mac, out _))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of a valid MAC address!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, geçerli bir {TitleConstants.Mac} adresi biçimine uygun olmalıdır!", argName);
-            }
-        }
-        public static void ThrowIfNotValidMail(string mail, string argName)
-        {
-            if (!mail.IsMail())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of an e-Mail address!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, e-Posta yapısına uygun olmalıdır!", argName);
-            }
-        }
-        public static void ThrowIfNotValidUri(string uriString, string argName)
-        {
-            if (!uriString.IsUri())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid URL format!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, URL biçimine uygun olmalıdır!", argName);
-            }
-        }
-        public static void ThrowIfNotValidIPAddress(string ipString, string argName)
-        {
-            if (!IPAddress.TryParse(ipString, out _))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid IP address format!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, IP adresi biçiminde olmalıdır!", argName);
-            }
-        }
-        public static void ThrowIfNotValidOutOfLength(string value, int maxLength, string argName)
-        {
-            var l = value.ToStringOrEmpty().Length;
-            if (l > maxLength)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" cannot be longer than \"{maxLength}\" characters!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, karakter uzunluğu \"{maxLength}\" değerinden uzun olamaz!", argName);
-            }
-        }
-        public static void ThrowIfNotValidOutOfLength<T>(string value, Expression<Func<T, string>> expression) where T : class
-        {
-            var p = expression.GetMemberName();
-            var m = Utilities.GetStringOrMaxLength<T>(p);
-            ThrowIfZeroOrNegative(m, p);
-            ThrowIfNotValidOutOfLength(value, m, p);
-        }
-        public static void ThrowIfValidIncludes<T>(string argName, T value, params T[] values)
-        {
-            if (value.Includes(values))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" cannot be one of the following values: \"{String.Join(", ", values)}\"!"); }
-                throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, \"{String.Join(", ", values)}\" değerlerinden biri olmamalıdır!");
-            }
-        }
-        public static void ThrowIfNotValidIncludes<T>(string argName, T value, params T[] values)
-        {
-            if (!value.Includes(values))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" can only be one of the following values: \"{String.Join(", ", values)}\"!"); }
-                throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, \"{String.Join(", ", values)}\" değerlerinden biri olabilir!");
-            }
-        }
-        public static void ThrowIfNotValidRange<TKey>(TKey value, TKey min, TKey max, string argName) where TKey : struct, IComparable<TKey>
-        {
-            if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" must be between the values of [{min} - {max}]!"); }
-                throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, [{min} - {max}] değerleri arasında olmalıdır!");
-            }
-        }
-        public static void ThrowIfZero<TKey>(TKey value, string argName) where TKey : struct, IComparable<TKey>
-        {
-            if (value.CompareTo(default) == 0)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" cannot be \"0 (zero)\"!", argName); }
-                throw new ArgumentException($"\"{argName}\" argümanı, \"0 (sıfır)\" olamaz!", argName);
-            }
-        }
         public static void ThrowIfNegative<TKey>(TKey value, string argName) where TKey : struct, IComparable<TKey>
         {
             if (value.CompareTo(default) < 0)
@@ -166,11 +42,6 @@
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" cannot be negative!"); }
                 throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, negatif olamaz!");
             }
-        }
-        public static void ThrowIfZeroOrNegative<TKey>(TKey value, string argName) where TKey : struct, IComparable<TKey>
-        {
-            ThrowIfZero(value, argName);
-            ThrowIfNegative(value, argName);
         }
         public static void ThrowIfNotValidEnumDefined(Type enumType, object value, string argName)
         {
@@ -195,6 +66,135 @@
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid IBAN format!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, {TitleConstants.Iban} biçimine uygun olmalıdır!", argName);
             }
+        }
+        public static void ThrowIfNotValidIncludes<T>(string argName, T value, params T[] values)
+        {
+            if (!value.Includes(values))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" can only be one of the following values: \"{String.Join(", ", values)}\"!"); }
+                throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, \"{String.Join(", ", values)}\" değerlerinden biri olabilir!");
+            }
+        }
+        public static void ThrowIfNotValidIPAddress(string ipString, string argName)
+        {
+            if (!IPAddress.TryParse(ipString, out _))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid IP address format!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, IP adresi biçiminde olmalıdır!", argName);
+            }
+        }
+        public static void ThrowIfNotValidISBN(string isbn, string argName)
+        {
+            if (!ISBNHelper.IsValid(isbn))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of {TitleConstants.Isbn}!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, {TitleConstants.Isbn} biçimine uygun olmalıdır!", argName);
+            }
+        }
+        public static void ThrowIfNotValidJson(string json, JTokenType jTokenType, string argName)
+        {
+            if (!TryValidators.TryJson<JToken>(json, jTokenType, out _))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new JsonReaderException($"The argument \"{argName}\" must be in \"JSON\" format and of type \"{typeof(JTokenType).FullName}\"!"); }
+                throw new JsonReaderException($"\"{argName}\" argümanı, \"JSON\" biçimine uygun olmalı ve türü \"{typeof(JTokenType).FullName}\" olmalıdır!");
+            }
+        }
+        public static void ThrowIfNotValidMAC(string mac, string argName)
+        {
+            if (!TryValidators.TryMACAddress(mac, out _))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of a valid MAC address!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, geçerli bir {TitleConstants.Mac} adresi biçimine uygun olmalıdır!", argName);
+            }
+        }
+        public static void ThrowIfNotValidMail(string mail, string argName)
+        {
+            if (!mail.IsMail())
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of an e-Mail address!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, e-Posta yapısına uygun olmalıdır!", argName);
+            }
+        }
+        public static void ThrowIfNotValidOutOfLength(string value, int maxLength, string argName)
+        {
+            var l = value.ToStringOrEmpty().Length;
+            if (l > maxLength)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" cannot be longer than \"{maxLength}\" characters!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, karakter uzunluğu \"{maxLength}\" değerinden uzun olamaz!", argName);
+            }
+        }
+        public static void ThrowIfNotValidOutOfLength<T>(string value, Expression<Func<T, string>> expression) where T : class
+        {
+            var p = expression.GetMemberName();
+            var m = Utilities.GetStringOrMaxLength<T>(p);
+            ThrowIfZeroOrNegative(m, p);
+            ThrowIfNotValidOutOfLength(value, m, p);
+        }
+        public static void ThrowIfNotValidPhoneNumberTR(string phoneNumberTR, string argName)
+        {
+            if (!TryValidators.TryPhoneNumberTR(phoneNumberTR, out _))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be a valid phone number in the format of (xxx) xxx-xxxx!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanının değeri telefon numarası \"(5xx) (xxx-xxxx)\" biçimine uygun olmalıdır!", argName);
+            }
+        }
+        public static void ThrowIfNotValidRange<TKey>(TKey value, TKey min, TKey max, string argName) where TKey : struct, IComparable<TKey>
+        {
+            if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" must be between the values of [{min} - {max}]!"); }
+                throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, [{min} - {max}] değerleri arasında olmalıdır!");
+            }
+        }
+        public static void ThrowIfNotValidTRIdentityNumber(long trIdentityNumber, string argName)
+        {
+            if (!trIdentityNumber.IsTRIdentityNumber())
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Identification Number!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, T.C. Kimlik Numarası biçimine uygun olmalıdır!", argName);
+            }
+        }
+        public static void ThrowIfNotValidTRTaxIdentityNumber(long trTaxIdentityNumber, string argName)
+        {
+            if (!trTaxIdentityNumber.IsTRTaxIdentityNumber())
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in the format of Turkish Republic Tax Identity Number!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, T.C. Vergi Kimlik Numarası biçimine uygun olmalıdır!", argName);
+            }
+        }
+        public static void ThrowIfNotValidUri(string uriString, string argName)
+        {
+            if (!uriString.IsUri())
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid URL format!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, URL biçimine uygun olmalıdır!", argName);
+            }
+        }
+        public static void ThrowIfNull(object value, string argName)
+        {
+            if (value == null || value == DBNull.Value) { throw new ArgumentNullException(argName); }
+        }
+        public static void ThrowIfValidIncludes<T>(string argName, T value, params T[] values)
+        {
+            if (value.Includes(values))
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" cannot be one of the following values: \"{String.Join(", ", values)}\"!"); }
+                throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, \"{String.Join(", ", values)}\" değerlerinden biri olmamalıdır!");
+            }
+        }
+        public static void ThrowIfZero<TKey>(TKey value, string argName) where TKey : struct, IComparable<TKey>
+        {
+            if (value.CompareTo(default) == 0)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" cannot be \"0 (zero)\"!", argName); }
+                throw new ArgumentException($"\"{argName}\" argümanı, \"0 (sıfır)\" olamaz!", argName);
+            }
+        }
+        public static void ThrowIfZeroOrNegative<TKey>(TKey value, string argName) where TKey : struct, IComparable<TKey>
+        {
+            ThrowIfZero(value, argName);
+            ThrowIfNegative(value, argName);
         }
     }
 }
