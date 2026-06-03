@@ -1,8 +1,6 @@
 ﻿namespace UD.Core.UnitTest
 {
     using System.Globalization;
-    using UD.Core.Extensions;
-
     [TestFixture]
     public class UnitTest1
     {

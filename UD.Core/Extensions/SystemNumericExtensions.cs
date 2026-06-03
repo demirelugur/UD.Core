@@ -10,19 +10,17 @@
     using static UD.Core.Helper.GlobalConstants;
     public static class SystemNumericExtensions
     {
-        #region Long, Ulong
-        /// <summary>Unix zaman damgasını, yerel bir <see cref="DateTime"/> değerine dönüştürür.</summary>
-        /// <param name="getTime">Unix zaman damgası (milisaniye cinsinden).</param>
-        /// <returns>Dönüştürülen yerel <see cref="DateTime"/> değeri.</returns>
-        public static DateTime ToJsDate(this long getTime) => DateTime.UnixEpoch.AddMilliseconds(Convert.ToDouble(getTime)).ToLocalTime();
-        /// <summary>Active Directory&#39;de kullanılan FILETIME biçimindeki bir değeri (1 Ocak 1601&#39;den itibaren 100 nanosaniye cinsinden tick) UTC zaman diliminde bir DateTime nesnesine çevirir. <para>Eğer filetime değeri 0 veya <see cref="Int64.MaxValue"/> ise, hesap süresiz kabul edilir ve <see cref="DateTime.MaxValue"/> döndürülür. Geçersiz bir filetime değeri durumunda null döner.</para></summary>
-        /// <param name="fileTime">Çevrilecek 64 bitlik FILETIME değeri.</param>
-        /// <returns>Başarılı olursa DateTime nesnesi, süresiz hesaplar için DateTime.MaxValue, geçersiz değerler için null.</returns>
-        public static DateTime? ToFileTimeUTC(this long fileTime)
+        #region Long
+        /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
+        /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
+        /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
+        public static byte[] GenerateRandomKey(this long length)
         {
-            if (fileTime.Includes(0, Int64.MaxValue)) { return DateTime.MaxValue; }
-            try { return DateTime.FromFileTimeUtc(fileTime); }
-            catch { return null; }
+            Guard.ThrowIfZeroOrNegative(length, nameof(length));
+            using var rng = RandomNumberGenerator.Create();
+            var byteArray = new byte[length];
+            rng.GetBytes(byteArray);
+            return byteArray;
         }
         /// <summary>Verilen değerin geçerli bir T.C. Kimlik Numarası olup olmadığını kontrol eder.
         /// <para>
@@ -86,17 +84,21 @@
         }
         /// <summary><paramref name="identityNumber"/> değeri T.C. Kimlik Numarası (TCKN) veya Vergi Kimlik Numarası (VKN) ise <see langword="true"/> döner.</summary>
         public static bool IsValidTRIdentityOrTaxNumber(this long identityNumber) => (identityNumber.IsTRIdentityNumber() || identityNumber.IsTRTaxIdentityNumber());
-        /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
-        /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
-        /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
-        public static byte[] GenerateRandomKey(this long length)
+        /// <summary>Active Directory&#39;de kullanılan FILETIME biçimindeki bir değeri (1 Ocak 1601&#39;den itibaren 100 nanosaniye cinsinden tick) UTC zaman diliminde bir DateTime nesnesine çevirir. <para>Eğer filetime değeri 0 veya <see cref="Int64.MaxValue"/> ise, hesap süresiz kabul edilir ve <see cref="DateTime.MaxValue"/> döndürülür. Geçersiz bir filetime değeri durumunda null döner.</para></summary>
+        /// <param name="fileTime">Çevrilecek 64 bitlik FILETIME değeri.</param>
+        /// <returns>Başarılı olursa DateTime nesnesi, süresiz hesaplar için DateTime.MaxValue, geçersiz değerler için null.</returns>
+        public static DateTime? ToFileTimeUTC(this long fileTime)
         {
-            Guard.ThrowIfZeroOrNegative(length, nameof(length));
-            using var rng = RandomNumberGenerator.Create();
-            var byteArray = new byte[length];
-            rng.GetBytes(byteArray);
-            return byteArray;
+            if (fileTime.Includes(0, Int64.MaxValue)) { return DateTime.MaxValue; }
+            try { return DateTime.FromFileTimeUtc(fileTime); }
+            catch { return null; }
         }
+        /// <summary>Unix zaman damgasını, yerel bir <see cref="DateTime"/> değerine dönüştürür.</summary>
+        /// <param name="getTime">Unix zaman damgası (milisaniye cinsinden).</param>
+        /// <returns>Dönüştürülen yerel <see cref="DateTime"/> değeri.</returns>
+        public static DateTime ToJsDate(this long getTime) => DateTime.UnixEpoch.AddMilliseconds(Convert.ToDouble(getTime)).ToLocalTime();
+        #endregion
+        #region Ulong
         /// <summary>Verilen sayının asal olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek pozitif tamsayı.</param>
         /// <returns>Asal ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
@@ -111,19 +113,28 @@
             for (i = 3; i <= limit; i += 2) { if ((value % i) == 0) { return false; } }
             return true;
         }
+        /// <summary>Verilen <paramref name="value"/> değeri, belirli bir düzenle GUID biçimine dönüştürür. Dönüşüm, ulong değerinin yüksek 16 bitini GUID&#39;in belirli byte&#39;larına ve düşük 48 bitini diğer byte&#39;larına yerleştirerek gerçekleştirilir. Bu yöntem, ulong değerini benzersiz bir GUID&#39;e dönüştürmek için kullanılabilir.</summary>
+        /// <param name="value">Dönüştürülecek ulong değeri.</param>
+        /// <returns>ulong değerine karşılık gelen GUID.</returns>
+        public static Guid ToGuid(this ulong value)
+        {
+            var high = (ushort)(value >> 48);
+            var low = value & 0x0000FFFFFFFFFFFF;
+            return new(0, 0, 0, (byte)(high >> 8), (byte)high, (byte)(low >> 40), (byte)(low >> 32), (byte)(low >> 24), (byte)(low >> 16), (byte)(low >> 8), (byte)low);
+        }
         #endregion
         #region Decimal
-        /// <summary>Bir decimal değeri, InvariantCulture kullanarak string&#39;e dönüştürür.</summary>
-        /// <param name="value">Dönüştürülecek <see cref="Decimal"/> değer.</param>
-        /// <returns>Decimal değerin string temsilini döner.</returns>
-        /// <remarks>Bu metodun ters işlemi için <code>Convert.ToDecimal(value, CultureInfo.InvariantCulture);</code> kullanılabilir.</remarks>
-        public static string ToStringInvariantCulture(this decimal value) => value.ToString(CultureInfo.InvariantCulture);
         /// <summary>Verilen bir ondalık değeri belirtilen ondalık basamak sayısına yuvarlayarak string olarak döndürür. İsteğe bağlı olarak, yuvarlama yöntemi belirtilebilir.</summary>
         /// <param name="d">Yuvarlanacak <see cref="Decimal"/> değeri.</param>
         /// <param name="decimals">Yuvarlanacak ondalık basamak sayısı (varsayılan olarak 2).</param>
         /// <param name="midpointRounding">Yuvarlama yöntemi (varsayılan olarak <see cref="MidpointRounding.AwayFromZero"/>).</param>
         /// <returns>Yuvarlanmış değerin string temsili.</returns>
         public static string ToRound(this decimal d, int decimals = 2, MidpointRounding midpointRounding = MidpointRounding.AwayFromZero) => Decimal.Round(d, decimals, midpointRounding).ToString();
+        /// <summary>Bir decimal değeri, InvariantCulture kullanarak string&#39;e dönüştürür.</summary>
+        /// <param name="value">Dönüştürülecek <see cref="Decimal"/> değer.</param>
+        /// <returns>Decimal değerin string temsilini döner.</returns>
+        /// <remarks>Bu metodun ters işlemi için <code>Convert.ToDecimal(value, CultureInfo.InvariantCulture);</code> kullanılabilir.</remarks>
+        public static string ToStringInvariantCulture(this decimal value) => value.ToString(CultureInfo.InvariantCulture);
         #endregion
         #region Double
         /// <summary>Dosya boyutu gibi büyük sayıları insan tarafından okunabilir bir biçimde formatlar. Örneğin, 1536 değeri &quot;1.5 KB&quot; olarak dönecektir.</summary>
