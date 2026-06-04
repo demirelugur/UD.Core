@@ -1,23 +1,18 @@
 ﻿namespace UD.Core.Extensions
 {
     using System;
+    using System.Numerics;
     public static class SystemGuidExtensions
     {
-        /// <summary>Verilen <paramref name="guid"/> değerini 16 baytlık bir diziye dönüştürür ve bu dizinin belirli bölümlerini kullanarak bir ulong değeri oluşturur. Guid&#39;in son 8 baytını kullanarak yüksek 16 bitlik kısmı ve düşük 48 bitlik kısmı oluşturur, ardından bu iki kısmı birleştirerek tek bir ulong değeri döndürür.</summary>
+        /// <summary><paramref name="guid"/> değerini bir <see cref="BigInteger"/>&#39;a dönüştürür. Guid&#39;in byte dizisi alınır ve bu byte dizisi kullanılarak bir BigInteger oluşturulur. Bu yöntem, Guid&#39;in benzersizliğini koruyarak büyük sayılarla çalışmayı mümkün kılar.</summary>
         /// <param name="guid">Dönüştürülecek Guid değeri.</param>
-        /// <returns>Guid değerine karşılık gelen ulong değeri.</returns>
-        public static ulong ToULong(this Guid guid)
+        /// <returns>Guid değerine karşılık gelen BigInteger değeri.</returns>
+        public static BigInteger ToBigInteger(this Guid guid)
         {
             var bytes = guid.ToByteArray();
-            var high = (ushort)((bytes[8] << 8) | bytes[9]);
-            ulong low = 0;
-            low |= (ulong)bytes[10] << 40;
-            low |= (ulong)bytes[11] << 32;
-            low |= (ulong)bytes[12] << 24;
-            low |= (ulong)bytes[13] << 16;
-            low |= (ulong)bytes[14] << 8;
-            low |= bytes[15];
-            return ((ulong)high << 48) | low;
+            var unsignedBytes = new byte[bytes.Length + 1];
+            Array.Copy(bytes, unsignedBytes, bytes.Length);
+            return new(unsignedBytes);
         }
     }
 }

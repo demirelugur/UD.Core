@@ -4,12 +4,32 @@
     using System.Data;
     using System.Globalization;
     using System.Linq;
+    using System.Numerics;
     using System.Security.Cryptography;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     using static UD.Core.Helper.GlobalConstants;
     public static class SystemNumericExtensions
     {
+        #region BigInteger
+        /// <summary><paramref name="value"/> değerini bir <see cref="Guid"/>&#39;e dönüştürür. BigInteger&#39;in byte dizisi alınır ve bu byte dizisi kullanılarak bir Guid oluşturulur. Bu yöntem, BigInteger&#39;in benzersizliğini koruyarak Guid&#39;lerle çalışmayı mümkün kılar. Ancak, BigInteger değeri 16 byte&#39;dan büyükse veya negatifse, bir OverflowException fırlatılır.</summary>
+        /// <param name="value">Dönüştürülecek BigInteger değeri.</param>
+        /// <returns>BigInteger değerine karşılık gelen Guid değeri.</returns>
+        /// <exception cref="OverflowException">BigInteger değeri 16 byte'dan büyükse veya negatifse fırlatılır.</exception>
+        public static Guid ToGuid(this BigInteger value)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(value));
+            var bytes = value.ToByteArray();
+            if (bytes.Length > 17)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new OverflowException($"The value is too large for a {nameof(Guid)}."); }
+                throw new OverflowException($"Değer bir {nameof(Guid)} için çok büyük.");
+            }
+            if (bytes.Length == 17 && bytes[16] == 0) { Array.Resize(ref bytes, 16); }
+            Array.Resize(ref bytes, 16);
+            return new(bytes);
+        }
+        #endregion
         #region Long
         /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
         /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
@@ -112,15 +132,6 @@
             ulong i, limit = Convert.ToUInt64(Math.Sqrt(value));
             for (i = 3; i <= limit; i += 2) { if ((value % i) == 0) { return false; } }
             return true;
-        }
-        /// <summary>Verilen <paramref name="value"/> değeri, belirli bir düzenle GUID biçimine dönüştürür. Dönüşüm, ulong değerinin yüksek 16 bitini GUID&#39;in belirli byte&#39;larına ve düşük 48 bitini diğer byte&#39;larına yerleştirerek gerçekleştirilir. Bu yöntem, ulong değerini benzersiz bir GUID&#39;e dönüştürmek için kullanılabilir.</summary>
-        /// <param name="value">Dönüştürülecek ulong değeri.</param>
-        /// <returns>ulong değerine karşılık gelen GUID.</returns>
-        public static Guid ToGuid(this ulong value)
-        {
-            var high = (ushort)(value >> 48);
-            var low = value & 0x0000FFFFFFFFFFFF;
-            return new(0, 0, 0, (byte)(high >> 8), (byte)high, (byte)(low >> 40), (byte)(low >> 32), (byte)(low >> 24), (byte)(low >> 16), (byte)(low >> 8), (byte)low);
         }
         #endregion
         #region Decimal
