@@ -7,6 +7,7 @@
     public sealed class GlobalConstants
     {
         public const string DefaultUri = "https://example.com";
+        public const string GuidMaxValue = "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF";
         /// <summary><code>new(){MetadataPropertyHandling=MetadataPropertyHandling.Ignore,DateParseHandling=DateParseHandling.None,NullValueHandling=NullValueHandling.Include,Converters={new IsoDateTimeConverter{DateTimeStyles=DateTimeStyles.AssumeUniversal},new StringEnumConverter()}};</code></summary>
         public static readonly JsonSerializerSettings JsonSerializerSettings = new()
         {
