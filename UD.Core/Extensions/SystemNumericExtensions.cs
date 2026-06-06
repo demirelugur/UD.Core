@@ -15,10 +15,10 @@
         /// <summary><paramref name="value"/> değerini bir <see cref="Guid"/>&#39;e dönüştürür. BigInteger&#39;in byte dizisi alınır ve bu byte dizisi kullanılarak bir Guid oluşturulur. Bu yöntem, BigInteger&#39;in benzersizliğini koruyarak Guid&#39;lerle çalışmayı mümkün kılar. Ancak, BigInteger değeri 16 byte&#39;dan büyükse veya negatifse, bir OverflowException fırlatılır.</summary>
         /// <param name="value">Dönüştürülecek BigInteger değeri.</param>
         /// <returns>BigInteger değerine karşılık gelen Guid değeri.</returns>
-        /// <exception cref="OverflowException">BigInteger değeri 16 byte'dan büyükse veya negatifse fırlatılır.</exception>
+        /// <exception cref="OverflowException">BigInteger değeri 16 byte&#39;dan büyükse veya negatifse fırlatılır.</exception>
         public static Guid ToGuid(this BigInteger value)
         {
-            ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(value));
+            Guard.ThrowIfNegative(value, nameof(value));
             var bytes = value.ToByteArray();
             if (bytes.Length > 17)
             {
