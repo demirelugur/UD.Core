@@ -12,22 +12,18 @@
     public static class SystemNumericExtensions
     {
         #region BigInteger
-        /// <summary><paramref name="value"/> değerini bir <see cref="Guid"/>&#39;e dönüştürür. BigInteger&#39;in byte dizisi alınır ve bu byte dizisi kullanılarak bir Guid oluşturulur. Bu yöntem, BigInteger&#39;in benzersizliğini koruyarak Guid&#39;lerle çalışmayı mümkün kılar. Ancak, BigInteger değeri 16 byte&#39;dan büyükse veya negatifse, bir OverflowException fırlatılır.</summary>
-        /// <param name="value">Dönüştürülecek BigInteger değeri.</param>
-        /// <returns>BigInteger değerine karşılık gelen Guid değeri.</returns>
-        /// <exception cref="OverflowException">BigInteger değeri 16 byte&#39;dan büyükse veya negatifse fırlatılır.</exception>
+        /// <summary><paramref name="value"/> değerini bir <see cref="Guid"/> nesnesine dönüştürür. Dönüşüm sırasında, <paramref name="value"/> değeri negatif olmamalı ve 128 bitten büyük olmamalıdır. Eğer <paramref name="value"/> 16 byte&#39;tan küçükse, dönüşüm sırasında başına sıfır byte&#39;ları eklenerek 16 byte&#39;a tamamlanır. Bu yöntem, büyük tamsayıları benzersiz tanımlayıcılar olarak kullanmak isteyen senaryolarda faydalı olabilir.</summary>
+        /// <param name="value">Dönüştürülecek <see cref="BigInteger"/> değeri.</param>
+        /// <returns>Dönüştürülmüş <see cref="Guid"/> değeri.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> değeri negatif veya 128 bitten büyükse fırlatılır.</exception>
         public static Guid ToGuid(this BigInteger value)
         {
             Guard.ThrowIfNegative(value, nameof(value));
-            var bytes = value.ToByteArray();
-            if (bytes.Length > 17)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new OverflowException($"The value is too large for a {nameof(Guid)}."); }
-                throw new OverflowException($"Değer bir {nameof(Guid)} için çok büyük.");
-            }
-            if (bytes.Length == 17 && bytes[16] == 0) { Array.Resize(ref bytes, 16); }
-            Array.Resize(ref bytes, 16);
-            return new(bytes);
+            var maxValue = (BigInteger.One << 128) - BigInteger.One;
+            if (value > maxValue) { throw new ArgumentOutOfRangeException(nameof(value), Checks.IsEnglishCurrentUICulture ? $"The argument \"{nameof(value)}\" must be less than or equal to \"{maxValue}\"!" : $"\"{nameof(value)}\" argümanı, \"{maxValue}\" değerinden büyük olamaz!"); }
+            var bytes = value.ToByteArray(true, true);
+            if (bytes.Length < 16) { bytes = [.. Enumerable.Repeat(Byte.MinValue, 16 - bytes.Length), .. bytes]; }
+            return new(bytes, true);
         }
         #endregion
         #region Long

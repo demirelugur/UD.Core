@@ -4,15 +4,12 @@
     using System.Numerics;
     public static class SystemGuidExtensions
     {
-        /// <summary><paramref name="guid"/> değerini bir <see cref="BigInteger"/>&#39;a dönüştürür. Guid&#39;in byte dizisi alınır ve bu byte dizisi kullanılarak bir BigInteger oluşturulur. Bu yöntem, Guid&#39;in benzersizliğini koruyarak büyük sayılarla çalışmayı mümkün kılar.</summary>
-        /// <param name="guid">Dönüştürülecek Guid değeri.</param>
-        /// <returns>Guid değerine karşılık gelen BigInteger değeri.</returns>
-        public static BigInteger ToBigInteger(this Guid guid)
-        {
-            var bytes = guid.ToByteArray();
-            var unsignedBytes = new byte[bytes.Length + 1];
-            Array.Copy(bytes, unsignedBytes, bytes.Length);
-            return new(unsignedBytes);
-        }
+        /// <summary>
+        /// <paramref name="guid"/> değerini, büyük-endian (big-endian) bayt sıralaması kullanarak bir <see cref="BigInteger"/> nesnesine dönüştürür. Bu yöntem, GUID&#39;in bayt dizisini büyük-endian biçiminde okuyarak, GUID&#39;in benzersiz değerini temsil eden bir tamsayı oluşturur. Sonuç olarak, GUID&#39;in benzersizliğini koruyan ve matematiksel işlemlerde kullanılabilecek bir <see cref="BigInteger"/> değeri elde edilir.
+        /// <para>Değer aralığı: <b>[0 - 340282366920938463463374607431768211455]</b></para>
+        /// </summary>
+        /// <param name="guid">Dönüştürülecek GUID değeri.</param>
+        /// <returns>GUID&#39;in temsil ettiği <see cref="BigInteger"/> değeri.</returns>
+        public static BigInteger ToBigInteger(this Guid guid) => new(guid.ToByteArray(true), true, true);
     }
 }
