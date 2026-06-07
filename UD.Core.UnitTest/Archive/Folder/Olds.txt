@@ -426,7 +426,8 @@ public static Guid ToGuid(this ulong value)
 }
 ***************************************
 private static readonly byte[] randomNumbers = [4, 5, 6, 7, 8, 9, 10, 11, 12]; // ObfuscatorEncrypt işleminde oluşan şifreden bağımsız olarak belirli bir rastgele karakter kümesi oluşturur.
-public static string ObfuscatorEncrypt(string value)
+***************************************
+public static string ObfuscatorEncrypt(string plainText)
 {
     using var aes = Aes.Create();
     aes.GenerateKey();
@@ -434,23 +435,23 @@ public static string ObfuscatorEncrypt(string value)
     using var ms = new MemoryStream();
     var randomKeyLength = randomNumbers[Random.Shared.Next(randomNumbers.Length)];
     foreach (var item in new[] {
-                randomKeyLength.ToLong().GenerateRandomKey(), // randomKeyLength değeri kadar rastgele karakter üretiyor
-                aes.Key,
-                aes.IV,
-                encryptProcess(value, aes), // Veri
-                [randomKeyLength] // Baştan kaç karakterin rastgele olduğunu belirten değer
-            }) { ms.Write(item.AsSpan()); }
+        RandomNumberGenerator.GetBytes(randomKeyLength), // randomKeyLength değeri kadar rastgele karakter üretiyor
+        aes.Key,
+        aes.IV,
+        encryptProcess(plainText, aes), // Veri
+        [randomKeyLength] // Baştan kaç karakterin rastgele olduğunu belirten değer
+    }) { ms.Write(item.AsSpan()); }
     var r = Convert.ToBase64String(ms.ToArray());
     var firstChar = r[0]; // İlk değerin char değerine göre CaesarCipherOperation ile karıştırma
-    return Converters.ToReverse(String.Concat(firstChar.ToString(), Utilities.CaesarCipherOperation(r.Substring(1), Convert.ToInt32(firstChar))));
+    return Converters.ToReverse(String.Concat(firstChar.ToString(), CaesarHelper.Encrypt(r.Substring(1), Convert.ToInt32(firstChar))));
 }
 ***************************************
-public static string ObfuscatorDecrypt(string encryptedValue)
+public static string ObfuscatorDecrypt(string cipherText)
 {
-    Guard.ThrowIfEmpty(encryptedValue, nameof(encryptedValue));
-    encryptedValue = Converters.ToReverse(encryptedValue);
-    var firstChar = encryptedValue[0];
-    var combinedBytes = Convert.FromBase64String(String.Concat(firstChar.ToString(), Utilities.CaesarCipherOperation(encryptedValue.Substring(1), -1 * Convert.ToInt32(firstChar))));
+    Guard.ThrowIfEmpty(cipherText, nameof(cipherText));
+    cipherText = Converters.ToReverse(cipherText);
+    var firstChar = cipherText[0];
+    var combinedBytes = Convert.FromBase64String(String.Concat(firstChar.ToString(), CaesarHelper.Decrypt(cipherText.Substring(1), Convert.ToInt32(firstChar))));
     var startIndex = combinedBytes[combinedBytes.Length - 1];
     var sourceSpan = combinedBytes.AsSpan();
     var encryptedStartIndex = startIndex + keyRequiredLength + ivRequiredLength;

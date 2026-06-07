@@ -22,19 +22,13 @@
             return (uzn == ".pdf" || (new FileExtensionContentTypeProvider().Mappings.TryGetValue(uzn, out string _value) && _value.StartsWith("image/")));
         }
         /// <summary><paramref name="iban"/> değerinin geçerli bir <see cref="TitleConstants.Iban"/> biçimine sahip olup olmadığını kontrol eder. Bu metod, IBAN numarasının uzunluğunu, karakterlerini ve doğrulama algoritmasını kullanarak geçerliliğini değerlendirir. IBAN numarası, ülke kodu, kontrol basamakları ve banka hesap numarası gibi bileşenlerden oluşur. Eğer verilen IBAN numarası geçerli ise <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu kontrol, finansal işlemlerde doğru ve geçerli IBAN numaralarının kullanılmasını sağlamak için önemlidir.</summary>
-        public static bool IsIbanValid(string iban)
+        public static bool IsIBANValid(string iban)
         {
-            iban = iban.ToStringOrEmpty().ToUpperInvariant();
-            if (iban.Length < 15 || iban.Length > 34) { return false; }
+            iban = iban.ToStringOrEmpty().Replace(" ", "").ToUpperInvariant();
+            if (iban.Length < 15 || iban.Length > 34 || iban.Any(x => !Char.IsLetterOrDigit(x))) { return false; }
             var rearranged = String.Concat(iban[4..], iban[..4]);
-            var numericIban = String.Concat(rearranged.Select(x =>
-            {
-                if (Char.IsDigit(x)) { return x.ToString(); }
-                if (Char.IsLetter(x)) { return (x - 'A' + 10).ToString(); }
-                return "";
-            }).ToArray());
-            if (!BigInteger.TryParse(numericIban, out BigInteger _bi)) { return false; }
-            return _bi % 97 == 1;
+            var numericIban = String.Concat(rearranged.Select(x => Char.IsDigit(x) ? x.ToString() : (x - 'A' + 10).ToString()));
+            return BigInteger.TryParse(numericIban, out BigInteger _bi) && _bi % 97 == 1;
         }
     }
 }

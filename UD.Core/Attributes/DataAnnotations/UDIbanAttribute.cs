@@ -6,9 +6,9 @@ namespace UD.Core.Attributes.DataAnnotations
     using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class UDIbanAttribute : ValidationAttribute
+    public sealed class UDIBANAttribute : ValidationAttribute
     {
-        public UDIbanAttribute() { }
+        public UDIBANAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty().ToUpper();
@@ -17,7 +17,7 @@ namespace UD.Core.Attributes.DataAnnotations
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (Checks.IsIbanValid(valueString))
+            if (Checks.IsIBANValid(valueString))
             {
                 validationContext.SetValidatePropertyValue(valueString);
                 return ValidationResult.Success;

@@ -6,10 +6,10 @@
     using UD.Core.Extensions;
     using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class UDJsonAttribute : ValidationAttribute
+    public sealed class UDJSONAttribute : ValidationAttribute
     {
         public JTokenType jTokenType { get; }
-        public UDJsonAttribute(JTokenType jTokenType) { this.jTokenType = jTokenType; }
+        public UDJSONAttribute(JTokenType jTokenType) { this.jTokenType = jTokenType; }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty();

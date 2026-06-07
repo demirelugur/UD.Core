@@ -127,22 +127,6 @@
                 };
             }
         }
-        /// <summary>Verilen metni Sezar şifreleme algoritması ile şifreler. Belirtilen anahtar (key) değeri kadar harfler kaydırılarak şifreleme yapılır.</summary>
-        /// <param name="value">Şifrelenecek metin</param>
-        /// <param name="key">Harflerin kaydırılacağı değer</param>
-        /// <returns>Şifrelenmiş metin</returns>
-        public static string CaesarCipherOperation(string value, int key)
-        {
-            if (key < 0) { return CaesarCipherOperation(value, key + 26); }
-            var r = "";
-            foreach (var item in value.ToStringOrEmpty().ToCharArray())
-            {
-                if ((item >= 'A' && item <= 'Z')) { r = String.Concat(r, Convert.ToChar(((item - 'A' + key) % 26) + 'A').ToString()); }
-                else if ((item >= 'a' && item <= 'z')) { r = String.Concat(r, Convert.ToChar(((item - 'a' + key) % 26) + 'a').ToString()); }
-                else { r = String.Concat(r, item.ToString()); }
-            }
-            return r;
-        }
         /// <summary>Belirtilen nesnenin property adını kullanarak ilgili property&#39;sine değer atar.</summary>
         /// <param name="entity">Değeri atanac nesne.</param>
         /// <param name="propertyName">Değeri atanacak property&#39;sinin adı.</param>

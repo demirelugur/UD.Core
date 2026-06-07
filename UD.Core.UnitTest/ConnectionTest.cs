@@ -212,7 +212,7 @@
             [Column(TypeName = "decimal(18, 2)")]
             public decimal Area { get; set; }
             [UDStringLength(100)]
-            [UDJson(JTokenType.Array)]
+            [UDJSON(JTokenType.Array)]
             [Column(TypeName = "varchar(100)")]
             public string? Borders { get; set; }
             [UDRequired]
@@ -224,7 +224,7 @@
             public string? SubRegion { get; set; }
             [UDRequired]
             [UDStringLength(20)]
-            [UDJson(JTokenType.Array)]
+            [UDJSON(JTokenType.Array)]
             [Column(TypeName = "varchar(20)")]
             public string Continent { get; set; }
             public virtual Country? CountrySovereign { get; set; } = null;

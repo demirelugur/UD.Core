@@ -61,7 +61,7 @@
         public static void ThrowIfNotValidEnumDefined<TEnum>(object value, string argName) where TEnum : Enum => ThrowIfNotValidEnumDefined(typeof(TEnum), value, argName);
         public static void ThrowIfNotValidIban(string iban, string argName)
         {
-            if (!Checks.IsIbanValid(iban))
+            if (!Checks.IsIBANValid(iban))
             {
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The argument \"{argName}\" must be in a valid IBAN format!", argName); }
                 throw new ArgumentException($"\"{argName}\" argümanı, {TitleConstants.Iban} biçimine uygun olmalıdır!", argName);

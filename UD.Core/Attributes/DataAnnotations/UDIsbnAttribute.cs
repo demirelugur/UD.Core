@@ -6,9 +6,9 @@
     using UD.Core.Helper.Configuration;
     using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class UDIsbnAttribute : ValidationAttribute
+    public sealed class UDISBNAttribute : ValidationAttribute
     {
-        public UDIsbnAttribute() { }
+        public UDISBNAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var isbn = value.ToStringOrEmpty().ToUpper();
