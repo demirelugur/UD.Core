@@ -425,3 +425,47 @@ public static Guid ToGuid(this ulong value)
     return new(0, 0, 0, (high >> 8).ToByte(), high.ToByte(), (low >> 40).ToByte(), (low >> 32).ToByte(), (low >> 24).ToByte(), (low >> 16).ToByte(), (low >> 8).ToByte(), low.ToByte());
 }
 ***************************************
+private static readonly byte[] randomNumbers = [4, 5, 6, 7, 8, 9, 10, 11, 12]; // ObfuscatorEncrypt işleminde oluşan şifreden bağımsız olarak belirli bir rastgele karakter kümesi oluşturur.
+public static string ObfuscatorEncrypt(string value)
+{
+    using var aes = Aes.Create();
+    aes.GenerateKey();
+    aes.GenerateIV();
+    using var ms = new MemoryStream();
+    var randomKeyLength = randomNumbers[Random.Shared.Next(randomNumbers.Length)];
+    foreach (var item in new[] {
+                randomKeyLength.ToLong().GenerateRandomKey(), // randomKeyLength değeri kadar rastgele karakter üretiyor
+                aes.Key,
+                aes.IV,
+                encryptProcess(value, aes), // Veri
+                [randomKeyLength] // Baştan kaç karakterin rastgele olduğunu belirten değer
+            }) { ms.Write(item.AsSpan()); }
+    var r = Convert.ToBase64String(ms.ToArray());
+    var firstChar = r[0]; // İlk değerin char değerine göre CaesarCipherOperation ile karıştırma
+    return Converters.ToReverse(String.Concat(firstChar.ToString(), Utilities.CaesarCipherOperation(r.Substring(1), Convert.ToInt32(firstChar))));
+}
+***************************************
+public static string ObfuscatorDecrypt(string encryptedValue)
+{
+    Guard.ThrowIfEmpty(encryptedValue, nameof(encryptedValue));
+    encryptedValue = Converters.ToReverse(encryptedValue);
+    var firstChar = encryptedValue[0];
+    var combinedBytes = Convert.FromBase64String(String.Concat(firstChar.ToString(), Utilities.CaesarCipherOperation(encryptedValue.Substring(1), -1 * Convert.ToInt32(firstChar))));
+    var startIndex = combinedBytes[combinedBytes.Length - 1];
+    var sourceSpan = combinedBytes.AsSpan();
+    var encryptedStartIndex = startIndex + keyRequiredLength + ivRequiredLength;
+    return decryptProcess(sourceSpan.Slice(encryptedStartIndex, combinedBytes.Length - (1 + encryptedStartIndex)).ToArray(), sourceSpan.Slice(startIndex, keyRequiredLength).ToArray(), sourceSpan.Slice(startIndex + keyRequiredLength, ivRequiredLength).ToArray());
+}
+***************************************
+/// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
+/// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
+/// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
+public static byte[] GenerateRandomKey(this long length)
+{
+    Guard.ThrowIfZeroOrNegative(length, nameof(length));
+    using var rng = RandomNumberGenerator.Create();
+    var byteArray = new byte[length];
+    rng.GetBytes(byteArray);
+    return byteArray;
+}
+***************************************

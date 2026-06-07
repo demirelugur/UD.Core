@@ -27,17 +27,6 @@
         }
         #endregion
         #region Long
-        /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
-        /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
-        /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
-        public static byte[] GenerateRandomKey(this long length)
-        {
-            Guard.ThrowIfZeroOrNegative(length, nameof(length));
-            using var rng = RandomNumberGenerator.Create();
-            var byteArray = new byte[length];
-            rng.GetBytes(byteArray);
-            return byteArray;
-        }
         /// <summary>Verilen değerin geçerli bir T.C. Kimlik Numarası olup olmadığını kontrol eder.
         /// <para>
         /// Doğrulama adımları:
