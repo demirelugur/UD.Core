@@ -17,10 +17,8 @@
             using var ms = new MemoryStream();
             using var ce = aes.CreateEncryptor(aes.Key, aes.IV);
             using var cs = new CryptoStream(ms, ce, CryptoStreamMode.Write);
-            using (var sw = new StreamWriter(cs))
-            {
-                sw.Write(plainText);
-            }
+            using var sw = new StreamWriter(cs);
+            sw.Write(plainText);
             return ms.ToArray();
         }
         private static string decryptProcess(byte[] encryptedValue, byte[] key, byte[] iv)
@@ -85,12 +83,12 @@
             }
             var offset = 0;
             var keyBytes = (keyIsEmpty ? new byte[keyRequiredLength] : generateKey(key, keyRequiredLength));
-            var ivBytes = new byte[ivRequiredLength];
             if (keyIsEmpty)
             {
                 Buffer.BlockCopy(cipherBytes, offset, keyBytes, 0, keyRequiredLength);
                 offset += keyRequiredLength;
             }
+            var ivBytes = new byte[ivRequiredLength];
             Buffer.BlockCopy(cipherBytes, offset, ivBytes, 0, ivRequiredLength);
             offset += ivRequiredLength;
             var encryptedData = new byte[cipherBytes.Length - offset];
