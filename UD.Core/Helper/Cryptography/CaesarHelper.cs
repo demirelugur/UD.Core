@@ -12,8 +12,8 @@
             var textChars = text.ToStringOrEmpty().ToCharArray();
             foreach (var item in textChars)
             {
-                if ((item >= 'A' && item <= 'Z')) { r = String.Concat(r, Convert.ToChar(((item - 'A' + shift) % 26) + 'A').ToString()); }
-                else if ((item >= 'a' && item <= 'z')) { r = String.Concat(r, Convert.ToChar(((item - 'a' + shift) % 26) + 'a').ToString()); }
+                if (item >= 'A' && item <= 'Z') { r = String.Concat(r, Convert.ToChar(((item - 'A' + shift) % 26) + 'A').ToString()); }
+                else if (item >= 'a' && item <= 'z') { r = String.Concat(r, Convert.ToChar(((item - 'a' + shift) % 26) + 'a').ToString()); }
                 else { r = String.Concat(r, item.ToString()); }
             }
             return r;
