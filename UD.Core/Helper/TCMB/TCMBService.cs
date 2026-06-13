@@ -15,20 +15,23 @@ namespace UD.Core.Helper.TCMB
     }
     public sealed class TCMBService : ITCMBService
     {
-        private readonly ConcurrentDictionary<DateTime, XDocument> dicXmlCache = new();
+        private sealed record XmlCacheItem(ulong index, XDocument xml);
+        private readonly ConcurrentDictionary<DateTime, XmlCacheItem> dicXmlCache = new();
+        private ulong cacheIndex;
         public TCMBService() { }
         private async Task<XDocument> GetXml(DateTime date, CancellationToken cancellationToken)
         {
-            if (this.dicXmlCache.TryGetValue(date, out XDocument _cachedXml)) { return _cachedXml; }
+            if (this.dicXmlCache.TryGetValue(date, out XmlCacheItem _cachedXml)) { return _cachedXml.xml; }
             var (hasError, dataBinary, _, ex) = await this.GetUrl(date).GetBinaryData(TimeSpan.FromSeconds(5), cancellationToken);
             if (hasError) { throw ex; }
-            var doc = this.dicXmlCache.GetOrAdd(date, XDocument.Parse(Encoding.UTF8.GetString(dataBinary)));
+            var parsedXml = XDocument.Parse(Encoding.UTF8.GetString(dataBinary));
+            var doc = this.dicXmlCache.GetOrAdd(date, _ => new(Interlocked.Increment(ref this.cacheIndex), parsedXml));
             if (this.dicXmlCache.Count > 15)
             {
-                var oldestKey = this.dicXmlCache.Keys.OrderBy(k => k).FirstOrDefault();
-                this.dicXmlCache.TryRemove(oldestKey, out _);
+                var oldestIndexItemKey = this.dicXmlCache.OrderBy(k => k.Value.index).Select(x => x.Key).FirstOrDefault();
+                this.dicXmlCache.TryRemove(oldestIndexItemKey, out _);
             }
-            return doc;
+            return doc.xml;
         }
         private Uri GetUrl(DateTime date) => new(date == DateTime.Today ? "https://www.tcmb.gov.tr/kurlar/today.xml" : $"https://www.tcmb.gov.tr/kurlar/{date:yyyyMM}/{date:ddMMyyyy}.xml");
         private TCMBResponse GetRate(XDocument xml, string code)
