@@ -5,7 +5,6 @@
     using System.Globalization;
     using System.Linq;
     using System.Numerics;
-    using System.Security.Cryptography;
     using UD.Core.Helper;
     using UD.Core.Helper.Validation;
     using static UD.Core.Helper.GlobalConstants;
