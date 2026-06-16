@@ -170,7 +170,7 @@ namespace UD.Core.Extensions
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return ""; }
-            var punctSet = (punctuations ?? []).Where(Char.IsPunctuation).ToHashSet() ?? [];
+            var punctSet = (punctuations ?? []).Where(Char.IsPunctuation).ToHashSet();
             bool newWord = true, hasPunctuation = punctSet.Count > 0;
             cultureInfo ??= CultureInfo.GetCultureInfo("tr-TR");
             var sb = new StringBuilder(value.Length);
