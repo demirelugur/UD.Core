@@ -174,7 +174,7 @@ namespace UD.Core.Extensions
             bool newWord = true, hasPunctuation = punctSet.Count > 0;
             cultureInfo ??= CultureInfo.GetCultureInfo("tr-TR");
             var sb = new StringBuilder(value.Length);
-            foreach (char item in value)
+            foreach (var item in value)
             {
                 if ((isWhiteSpace && Char.IsWhiteSpace(item)) || (hasPunctuation && punctSet.Contains(item)))
                 {
