@@ -19,6 +19,8 @@
             using var cs = new CryptoStream(ms, ce, CryptoStreamMode.Write);
             using var sw = new StreamWriter(cs);
             sw.Write(plainText);
+            sw.Flush();
+            cs.FlushFinalBlock();
             return ms.ToArray();
         }
         private static string decryptProcess(byte[] encryptedValue, byte[] key, byte[] iv)

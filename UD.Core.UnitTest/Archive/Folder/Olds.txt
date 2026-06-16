@@ -398,66 +398,6 @@ public static bool IsImplementsOpenGenericInterface(this Type type, Type openGen
     return (type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == openGenericInterface));
 }
 ***************************************
-/// <summary>Verilen <paramref name="guid"/> değerini 16 baytlık bir diziye dönüştürür ve bu dizinin belirli bölümlerini kullanarak bir ulong değeri oluşturur. Guid&#39;in son 8 baytını kullanarak yüksek 16 bitlik kısmı ve düşük 48 bitlik kısmı oluşturur, ardından bu iki kısmı birleştirerek tek bir ulong değeri döndürür.</summary>
-/// <param name="guid">Dönüştürülecek Guid değeri.</param>
-/// <returns>Guid değerine karşılık gelen ulong değeri.</returns>
-public static ulong ToULong(this Guid guid)
-{
-    var bytes = guid.ToByteArray();
-    var high = (ushort)((bytes[8] << 8) | bytes[9]);
-    ulong low = 0;
-    low |= (ulong)bytes[10] << 40;
-    low |= (ulong)bytes[11] << 32;
-    low |= (ulong)bytes[12] << 24;
-    low |= (ulong)bytes[13] << 16;
-    low |= (ulong)bytes[14] << 8;
-    low |= bytes[15];
-    return ((ulong)high << 48) | low;
-}
-***************************************
-/// <summary>Verilen <paramref name="value"/> değeri, belirli bir düzenle GUID biçimine dönüştürür. Dönüşüm, ulong değerinin yüksek 16 bitini GUID&#39;in belirli byte&#39;larına ve düşük 48 bitini diğer byte&#39;larına yerleştirerek gerçekleştirilir. Bu yöntem, ulong değerini benzersiz bir GUID&#39;e dönüştürmek için kullanılabilir.</summary>
-/// <param name="value">Dönüştürülecek ulong değeri.</param>
-/// <returns>ulong değerine karşılık gelen GUID.</returns>
-public static Guid ToGuid(this ulong value)
-{
-    var high = (ushort)(value >> 48);
-    var low = value & 0x0000FFFFFFFFFFFF;
-    return new(0, 0, 0, (high >> 8).ToByte(), high.ToByte(), (low >> 40).ToByte(), (low >> 32).ToByte(), (low >> 24).ToByte(), (low >> 16).ToByte(), (low >> 8).ToByte(), low.ToByte());
-}
-***************************************
-private static readonly byte[] randomNumbers = [4, 5, 6, 7, 8, 9, 10, 11, 12]; // ObfuscatorEncrypt işleminde oluşan şifreden bağımsız olarak belirli bir rastgele karakter kümesi oluşturur.
-***************************************
-public static string ObfuscatorEncrypt(string plainText)
-{
-    using var aes = Aes.Create();
-    aes.GenerateKey();
-    aes.GenerateIV();
-    using var ms = new MemoryStream();
-    var randomKeyLength = randomNumbers[Random.Shared.Next(randomNumbers.Length)];
-    foreach (var item in new[] {
-        RandomNumberGenerator.GetBytes(randomKeyLength), // randomKeyLength değeri kadar rastgele karakter üretiyor
-        aes.Key,
-        aes.IV,
-        encryptProcess(plainText, aes), // Veri
-        [randomKeyLength] // Baştan kaç karakterin rastgele olduğunu belirten değer
-    }) { ms.Write(item.AsSpan()); }
-    var r = Convert.ToBase64String(ms.ToArray());
-    var firstChar = r[0]; // İlk değerin char değerine göre CaesarCipherOperation ile karıştırma
-    return Converters.ToReverse(String.Concat(firstChar.ToString(), CaesarHelper.Encrypt(r.Substring(1), Convert.ToInt32(firstChar))));
-}
-***************************************
-public static string ObfuscatorDecrypt(string cipherText)
-{
-    Guard.ThrowIfEmpty(cipherText, nameof(cipherText));
-    cipherText = Converters.ToReverse(cipherText);
-    var firstChar = cipherText[0];
-    var combinedBytes = Convert.FromBase64String(String.Concat(firstChar.ToString(), CaesarHelper.Decrypt(cipherText.Substring(1), Convert.ToInt32(firstChar))));
-    var startIndex = combinedBytes[combinedBytes.Length - 1];
-    var sourceSpan = combinedBytes.AsSpan();
-    var encryptedStartIndex = startIndex + keyRequiredLength + ivRequiredLength;
-    return decryptProcess(sourceSpan.Slice(encryptedStartIndex, combinedBytes.Length - (1 + encryptedStartIndex)).ToArray(), sourceSpan.Slice(startIndex, keyRequiredLength).ToArray(), sourceSpan.Slice(startIndex + keyRequiredLength, ivRequiredLength).ToArray());
-}
-***************************************
 /// <summary>Belirtilen uzunlukta, kriptografik olarak güvenli rastgele bayt dizisi (anahtar) üretir. </summary>
 /// <param name="length">Üretilecek anahtarın bayt cinsinden uzunluğu.</param>
 /// <returns>Rastgele üretilmiş baytlardan oluşan anahtar dizisi.</returns>
