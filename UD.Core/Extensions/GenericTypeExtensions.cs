@@ -13,7 +13,7 @@
         /// <param name="min">Minimum değer.</param>
         /// <param name="max">Maksimum değer.</param>
         /// <returns>Değer belirtilen aralıkta ise true, aksi halde false döner.</returns>
-        public static bool Between<T>(this T value, T min, T max) where T : IComparable<T> => (value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0);
+        public static bool Between<T>(this T value, T min, T max) where T : struct, IComparable<T> => (value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0);
         /// <summary>Verilen enum değerinin açıklamasını döner.</summary>
         public static string GetDescriptionFromEnum<TEnum>(this TEnum value) where TEnum : struct, Enum
         {

@@ -141,7 +141,7 @@
         }
         public static void ThrowIfNotValidRange<TKey>(TKey value, TKey min, TKey max, string argName) where TKey : struct, IComparable<TKey>
         {
-            if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
+            if (!value.Between(min, max))
             {
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(argName, $"The argument \"{argName}\" must be between the values of [{min} - {max}]!"); }
                 throw new ArgumentOutOfRangeException(argName, $"\"{argName}\" argümanı, [{min} - {max}] değerleri arasında olmalıdır!");
