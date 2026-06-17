@@ -1,10 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
     using System;
-    using UD.Core.Enums;
-    using UD.Core.Helper.Resources;
-    using UD.Core.Helper.TCMB;
-    using UD.Core.Helper.Validation;
     public static class GenericTypeExtensions
     {
         /// <summary><paramref name="value"/> değerinin <paramref name="min"/> ve <paramref name="max"/> değerleri arasında olup olmadığını kontrol eder. Karşılaştırma, <typeparamref name="T"/> türünün <see cref="IComparable{T}"/> arayüzünü uyguladığı varsayılarak yapılır. Değerler arasında eşitlik de dahil edilir, yani <paramref name="value"/> değeri <paramref name="min"/> veya <paramref name="max"/> değerine eşit olabilir.</summary>
@@ -27,15 +23,6 @@
             var t = typeof(TEnum);
             try { return t.GetField(Enum.GetName(t, value)).GetDisplayName(); }
             catch { return ""; }
-        }
-        /// <summary><paramref name="value"/> parametresinin türüne göre ilgili enumun lokalize edilmiş açıklamasını döner. Genellikle kullanıcı arayüzünde gösterilmek üzere kullanılır. Desteklenen enum türleri: <see cref="EnumResponseMessage"/>, <see cref="EnumNVIIdentityCard"/>, <see cref="EnumTCMBRateCode"/>.</summary>
-        public static string GetLocalizedDescriptionFromEnum<TEnum>(this TEnum value) where TEnum : struct, Enum
-        {
-            var t = typeof(TEnum);
-            Guard.ThrowIfNotValidIncludes(t.Name, t, typeof(EnumResponseMessage), typeof(EnumNVIIdentityCard), typeof(EnumTCMBRateCode));
-            if (t == typeof(EnumResponseMessage)) { return EnumLocalizedDescriptionHelper.GetLocalizedDescriptionFromEnumResponseMessage((EnumResponseMessage)(object)value); }
-            if (t == typeof(EnumNVIIdentityCard)) { return EnumLocalizedDescriptionHelper.GetLocalizedDescriptionFromEnumNVIIdentityCard((EnumNVIIdentityCard)(object)value); }
-            return EnumLocalizedDescriptionHelper.GetLocalizedDescriptionFromEnumTCMBRateCode((EnumTCMBRateCode)(object)value);
         }
         /// <summary><paramref name="value"/> değerinin <paramref name="values"/> dizisi içinde bulunup bulunmadığını kontrol eder. Eğer <paramref name="values"/> null ise, boş bir dizi olarak değerlendirilir ve sonuç her zaman false olur. Bu yöntem, belirli bir değerin bir dizi içinde olup olmadığını kolayca kontrol etmek için kullanılır.</summary>
         /// <typeparam name="T">Kontrol edilecek değerlerin türü.</typeparam>

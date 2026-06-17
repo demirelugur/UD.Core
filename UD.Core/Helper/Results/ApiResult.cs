@@ -15,7 +15,7 @@
         public ApiResult(EnumAlertState state, string[] messages)
         {
             this.state = state;
-            this.messages = (messages.IsNullOrEmptyOrAllNull() ? (this.isSuccess ? [] : [EnumResponseMessage.error.GetLocalizedDescriptionFromEnum()]) : messages);
+            this.messages = (messages.IsNullOrEmptyOrAllNull() ? (this.isSuccess ? [] : [EnumResponseMessage.error.GetDescriptionLocalized()]) : messages);
         }
         public static ApiResult setError(params string[] messages) => new(EnumAlertState.error, messages);
         public static ApiResult setWarning(params string[] messages) => new(EnumAlertState.warning, messages);

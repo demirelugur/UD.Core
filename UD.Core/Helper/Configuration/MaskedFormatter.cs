@@ -15,7 +15,7 @@
             var cs = serialNumber.ToStringOrEmpty();
             if (cs == "") { return ""; }
             if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
-            return (nVIIdentityCardTypes.HasValue ? $"{cs} ({nVIIdentityCardTypes.Value.GetLocalizedDescriptionFromEnum()})" : cs);
+            return (nVIIdentityCardTypes.HasValue ? $"{cs} ({nVIIdentityCardTypes.Value.GetDescriptionLocalized()})" : cs);
         }
         /// <summary>Türkiye biçimine uygun telefon numarasını maskeleme işlemi yapar.</summary>
         /// <param name="phoneNumberTR">Maske uygulanacak telefon numarası (ülke kodu dahil).</param>

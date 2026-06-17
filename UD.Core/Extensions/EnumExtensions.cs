@@ -1,11 +1,14 @@
-﻿namespace UD.Core.Helper.Resources
+﻿namespace UD.Core.Extensions
 {
     using UD.Core.Enums;
-    using UD.Core.Extensions;
+    using UD.Core.Helper;
     using UD.Core.Helper.TCMB;
-    internal class EnumLocalizedDescriptionHelper
+    public static class EnumExtensions
     {
-        public static string GetLocalizedDescriptionFromEnumResponseMessage(EnumResponseMessage value)
+        /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
+        /// <param name="value">Açıklaması alınacak Enum değeri.</param>
+        /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
+        public static string GetDescriptionLocalized(this EnumResponseMessage value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
@@ -24,7 +27,10 @@
             }
             return value.GetDescriptionFromEnum();
         }
-        public static string GetLocalizedDescriptionFromEnumNVIIdentityCard(EnumNVIIdentityCard value)
+        /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
+        /// <param name="value">Açıklaması alınacak Enum değeri.</param>
+        /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
+        public static string GetDescriptionLocalized(this EnumNVIIdentityCard value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
@@ -37,7 +43,10 @@
             }
             return value.GetDescriptionFromEnum();
         }
-        public static string GetLocalizedDescriptionFromEnumTCMBRateCode(EnumTCMBRateCode value)
+        /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
+        /// <param name="value">Açıklaması alınacak Enum değeri.</param>
+        /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
+        public static string GetDescriptionLocalized(this EnumTCMBRateCode value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
