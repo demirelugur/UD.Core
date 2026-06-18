@@ -160,13 +160,17 @@ namespace UD.Core.Extensions
             value = value.ToStringOrEmpty();
             return (value.Length > length ? value.Substring(0, length).Trim() : value);
         }
+        /// <summary><paramref name="value"/> deðerini baþlýk biçimine (Title Case) dönüþtürür. Her kelimenin ilk harfi büyük, geri kalan harfler küçük olur. Kelimeler arasýndaki ayracý belirlemek için boþluk karakteri ve noktalama iþaretleri dikkate alýnýr. Kültüre özgü büyük/küçük harf dönüþümü saðlanýr (varsayýlan olarak Türkçe kültürü kullanýlýr). </summary>
+        /// <param name="value">Dönüþtürülecek string.</param>
+        /// <returns>Baþlýk durumuna dönüþtürülmüþ string.</returns>
+        public static string ToTitleCase(this string value) => value.ToTitleCase(true, default);
         /// <summary><paramref name="value"/> deðerini baþlýk biçimine (Title Case) dönüþtürür. Her kelimenin ilk harfi büyük, geri kalan harfler küçük olur. Kelimeler arasýndaki ayracý belirlemek için <paramref name="isWhiteSpace"/> ve <paramref name="punctuations"/> parametreleri kullanýlýr. <paramref name="cultureInfo"/> parametresi ile kültüre özgü büyük/küçük harf dönüþümü saðlanabilir (varsayýlan olarak Türkçe kültürü kullanýlýr).</summary>
         /// <param name="value">Dönüþtürülecek string.</param>
         /// <param name="isWhiteSpace">Boþluk karakterlerinin yeni kelimeleri ayýrmak için dikkate alýnýp alýnmayacaðýný belirtir.</param>
         /// <param name="punctuations">Kelime ayýran noktalama karakterleri.</param>
         /// <param name="cultureInfo">Kültür bilgisi. Eðer null ise varsayýlan olarak new CultureInfo("tr-TR") kullanýlýr.</param>
         /// <returns>Baþlýk durumuna dönüþtürülmüþ string.</returns>
-        public static string ToTitleCase(this string value, bool isWhiteSpace, char[] punctuations, CultureInfo? cultureInfo = null)
+        public static string ToTitleCase(this string value, bool isWhiteSpace, char[] punctuations, CultureInfo cultureInfo = null)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return value; }
