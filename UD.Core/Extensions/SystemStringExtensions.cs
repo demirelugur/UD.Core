@@ -168,7 +168,7 @@ namespace UD.Core.Extensions
         /// <param name="value">Dönüþtürülecek string.</param>
         /// <param name="isWhiteSpace">Boþluk karakterlerinin yeni kelimeleri ayýrmak için dikkate alýnýp alýnmayacaðýný belirtir.</param>
         /// <param name="punctuations">Kelime ayýran noktalama karakterleri.</param>
-        /// <param name="cultureInfo">Kültür bilgisi. Eðer null ise varsayýlan olarak new CultureInfo("tr-TR") kullanýlýr.</param>
+        /// <param name="cultureInfo">Kültür bilgisi. Eðer null ise varsayýlan olarak new CultureInfo(&quot;tr-TR&quot;) kullanýlýr.</param>
         /// <returns>Baþlýk durumuna dönüþtürülmüþ string.</returns>
         public static string ToTitleCase(this string value, bool isWhiteSpace, char[] punctuations, CultureInfo cultureInfo = null)
         {

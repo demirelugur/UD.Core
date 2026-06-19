@@ -22,7 +22,6 @@
         public bool TryIsWarning(string value, string name, string surname, out string[] errors)
         {
             Guard.ThrowIfEmpty(value, nameof(value));
-            if (this.maximumLength.HasValue) { Guard.ThrowIfZeroOrNegative(this.maximumLength.Value, nameof(this.maximumLength)); }
             var r = new List<string>();
             var isEnglish = Checks.IsEnglishCurrentUICulture;
             if (!PasswordGenerator.IsStrongPassword(value, this.minimumLength))
@@ -30,10 +29,14 @@
                 if (isEnglish) { r.Add($"The password must have a minimum of {this.minimumLength} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
                 else { r.Add($"Şifre minimum {this.minimumLength} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }
             }
-            if (this.maximumLength.HasValue && value.Length > this.maximumLength.Value)
+            if (this.maximumLength.HasValue)
             {
-                if (isEnglish) { r.Add($"Password can be maximum {this.maximumLength.Value} characters!"); }
-                else { r.Add($"Şifre maksimum {this.maximumLength.Value} karakter olabilir!"); }
+                Guard.ThrowIfZeroOrNegative(this.maximumLength.Value, nameof(this.maximumLength));
+                if (value.Length > this.maximumLength.Value)
+                {
+                    if (isEnglish) { r.Add($"Password can be maximum {this.maximumLength.Value} characters!"); }
+                    else { r.Add($"Şifre maksimum {this.maximumLength.Value} karakter olabilir!"); }
+                }
             }
             if (this.isConsecutive && this.checkConsecutive(value))
             {
