@@ -11,7 +11,7 @@
     using System.Linq.Expressions;
     using System.Transactions;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public sealed class Utilities
     {
         /// <summary>

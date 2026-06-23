@@ -15,7 +15,7 @@
     using System.Security.Claims;
     using System.Text;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public sealed class Converters
     {
         /// <summary>Verilen string ifadeyi tersine çevirir. Bu metot, Türkçe karakterler (ğ, ü, ş, ç, ö, ı, İ vb.) dahil olmak üzere tüm Unicode metin öğelerini dikkate alarak çalışır. Standart char tabanlı ters çevirme yöntemlerinden farklı olarak <see cref="StringInfo"/> sınıfını kullanır ve her bir metin öğesini (text element) ayrı değerlendirir.</summary>

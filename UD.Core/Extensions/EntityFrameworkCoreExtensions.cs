@@ -13,10 +13,10 @@ namespace UD.Core.Extensions
     using System.Reflection;
     using System.Text;
     using UD.Core.Attributes;
-    using UD.Core.Auditing;
+    using UD.Core.Auditings;
     using UD.Core.Helper;
-    using UD.Core.Helper.Database;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Databases;
+    using UD.Core.Helper.Validations;
     public static class EntityFrameworkCoreExtensions
     {
         #region DbContext

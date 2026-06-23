@@ -5,7 +5,7 @@
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class DrawingExtensions
     {
         /// <summary>Görüntüyü belirtilen biçimde bayt dizisine dönüştürür.</summary>

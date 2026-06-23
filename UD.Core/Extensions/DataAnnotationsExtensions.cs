@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class DataAnnotationsExtensions
     {
         /// <summary>Verilen validation bağlamında bir özelliğin gerekli olup olmadığını kontrol eder.</summary>

@@ -3,7 +3,7 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class SystemUriExtensions
     {
         /// <summary>Verilen dizeye &quot;v&quot; parametresiyle bir sürüm numarası ekleyerek yeni bir URL oluşturur.</summary>

@@ -1,0 +1,33 @@
+﻿namespace UD.Core.Auditings
+{
+    using System;
+    using System.ComponentModel.DataAnnotations.Schema;
+    public interface IHasModificationTime
+    {
+        DateTime? LastModificationTime { get; set; }
+    }
+    public interface IModificationAuditedObject<AuditKey> : IHasModificationTime where AuditKey : struct
+    {
+        AuditKey? LastModifierId { get; set; }
+        void SetLastModifier(AuditKey lastModifierId);
+    }
+    public interface IAuditedObject<AuditKey> : ICreationAuditedObject<AuditKey>, IModificationAuditedObject<AuditKey> where AuditKey : struct { }
+    [Serializable]
+    public abstract class AuditedEntity<TKey, AuditKey> : CreationAuditedEntity<TKey, AuditKey>, IAuditedObject<AuditKey> where AuditKey : struct
+    {
+        [Column(TypeName = "datetime")]
+        public virtual DateTime? LastModificationTime { get; set; }
+        public virtual AuditKey? LastModifierId { get; set; }
+        public void SetLastModifier(AuditKey lastModifierId)
+        {
+            this.LastModificationTime = DateTime.UtcNow;
+            this.LastModifierId = lastModifierId;
+        }
+        protected AuditedEntity() : this(default, default, default, default, default) { }
+        protected AuditedEntity(DateTime? lastModificationTime, AuditKey? lastModifierId, DateTime creationTime, AuditKey creatorId, TKey id) : base(creationTime, creatorId, id)
+        {
+            this.LastModificationTime = lastModificationTime;
+            this.LastModifierId = lastModifierId;
+        }
+    }
+}

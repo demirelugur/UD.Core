@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using UD.Core.Helper.Results;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class CollectionsExtensions
     {
         #region IDictionary

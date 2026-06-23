@@ -7,10 +7,10 @@
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
     using UD.Core.Helper;
-    using UD.Core.Helper.Configuration;
-    using UD.Core.Helper.Paging;
+    using UD.Core.Helper.Configurations;
+    using UD.Core.Helper.Pages;
     using UD.Core.Helper.Results;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class LinqExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>

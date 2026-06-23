@@ -2,7 +2,7 @@
 {
     using System.IO;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class IOExtensions
     {
         /// <summary>Belirtilen kaynak dizinini hedef dizine kopyalar.</summary>

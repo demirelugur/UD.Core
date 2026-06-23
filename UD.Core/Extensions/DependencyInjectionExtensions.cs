@@ -5,7 +5,7 @@
     using System;
     using System.Reflection;
     using UD.Core.Helper.Services;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class DependencyInjectionExtensions
     {
         /// <summary><paramref name="services"/> içerisinde, <paramref name="assembly"/> içinde bulunan ve <paramref name="typeInterface"/> arayüzünü uygulayan veya <paramref name="typeBaseclass"/> sınıfından türeyen tüm sınıfları tarar ve bunları bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu yöntem, belirli bir assembly içinde yer alan servis sınıflarını otomatik olarak tespit edip kaydetmek için kullanışlıdır, böylece her bir servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>

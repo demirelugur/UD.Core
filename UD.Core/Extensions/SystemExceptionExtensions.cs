@@ -6,7 +6,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Net;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class SystemExceptionExtensions
     {
         /// <summary>Verilen istisnanın en içteki (inner) istisnasını döner.</summary>

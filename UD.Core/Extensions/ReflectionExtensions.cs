@@ -7,7 +7,7 @@
     using System.Reflection;
     using UD.Core.Attributes;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class ReflectionExtensions
     {
         #region PropertyInfo

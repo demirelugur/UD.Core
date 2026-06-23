@@ -11,7 +11,7 @@
     using System.Web;
     using UD.Core.Enums;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class AspNetCoreExtensions
     {
         #region HttpContext
@@ -196,11 +196,9 @@
         /// <remarks>Bu metot, verilen hata mesajları listesindeki her bir öğeyi ModelState&#39;e tek tek ekler. Key olarak boş bir string (&quot;&quot;) kullanılır. Eğer <paramref name="errors"/> null ise işlem yapılmaz.</remarks>
         public static void AddModelErrorRange(this ModelStateDictionary modelstate, IEnumerable<string> errors)
         {
-            if (!errors.IsNullOrEmptyOrAllNull())
-            {
-                Guard.ThrowIfNull(modelstate, nameof(modelstate));
-                foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("_", item); }
-            }
+            if (errors.IsNullOrEmptyOrAllNull()) { return; }
+            Guard.ThrowIfNull(modelstate, nameof(modelstate));
+            foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("", item); }
         }
     }
 }

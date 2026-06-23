@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class DiagnosticsExtensions
     {
         /// <summary>Stopwatch&#39;ı durdurur ve geçen süreyi döner.</summary>

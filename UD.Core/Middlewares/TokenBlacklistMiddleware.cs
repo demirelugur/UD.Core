@@ -3,7 +3,7 @@
     using Microsoft.AspNetCore.Http;
     using UD.Core.Extensions;
     using UD.Core.Helper;
-    using UD.Core.Helper.Results;
+    using UD.Core.Helper.Responses;
     using UD.Core.Helper.Services;
     public sealed class TokenBlacklistMiddleware
     {
@@ -21,7 +21,7 @@
             {
                 httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 httpContext.Response.ContentType = "application/json";
-                await httpContext.Response.WriteAsJsonAsync(ApiResult.setWarning(Checks.IsEnglishCurrentUICulture ? "Token invalid!" : "Token geçersiz!"), httpContext.RequestAborted);
+                await httpContext.Response.WriteAsJsonAsync(ApiResponse.setWarning(Checks.IsEnglishCurrentUICulture ? "Token invalid!" : "Token geçersiz!"), httpContext.RequestAborted);
                 return;
             }
             await this.next(httpContext);

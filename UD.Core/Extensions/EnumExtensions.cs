@@ -2,7 +2,6 @@
 {
     using UD.Core.Enums;
     using UD.Core.Helper;
-    using UD.Core.Helper.TCMB;
     public static class EnumExtensions
     {
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>

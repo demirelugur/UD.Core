@@ -3,7 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using System.Data.Common;
     using UD.Core.Helper;
-    using UD.Core.Helper.Configuration;
+    using UD.Core.Helper.Configurations;
     public interface IBaseServiceInfrastructure<TContext, TEntity>
         where TContext : DbContext
         where TEntity : class, IBaseEntity

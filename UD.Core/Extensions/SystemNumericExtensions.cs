@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Numerics;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     using static UD.Core.Helper.GlobalConstants;
     public static class SystemNumericExtensions
     {

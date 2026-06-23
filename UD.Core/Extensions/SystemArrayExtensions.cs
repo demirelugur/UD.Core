@@ -5,7 +5,7 @@
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class SystemArrayExtensions
     {
         /// <summary>Hata mesajları dizisini iç içe geçmiş istisnalara dönüştürür.</summary>

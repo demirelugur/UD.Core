@@ -6,9 +6,9 @@
     using System;
     using System.Collections;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Configuration;
-    using UD.Core.Helper.Paging;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Configurations;
+    using UD.Core.Helper.Pages;
+    using UD.Core.Helper.Validations;
     public interface IBaseServiceReadOnly<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto> : IBaseServiceInfrastructure<TContext, TEntity>
     where TContext : DbContext
     where TEntity : class, IBaseEntity

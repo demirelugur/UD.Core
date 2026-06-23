@@ -74,8 +74,8 @@ var firstDay = DateTime.Today.GetFirstDayOfMonth();
 
 ### Helper Classes
 ```csharp
-using UD.Core.Helper.Validation;
-using UD.Core.Helper.Cryptography;
+using UD.Core.Helper.Validations;
+using UD.Core.Helper.Cryptographers;
 
 // Şifre üretimi
 var password = PasswordGenerator.Default.Generate();
@@ -86,7 +86,7 @@ string encrypted = AESHelper.Encrypt("data", "key", "iv");
 
 ### Auditing
 ```csharp
-using UD.Core.Auditing;
+using UD.Core.Auditings;
 
 public class Product : FullAuditedEntity<Guid, int>
 {

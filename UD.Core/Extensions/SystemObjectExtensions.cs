@@ -7,7 +7,7 @@
     using System.Dynamic;
     using System.Globalization;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Validations;
     public static class SystemObjectExtensions
     {
         /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None biçiminde ve bazı özel ayarlarla döner.</summary>

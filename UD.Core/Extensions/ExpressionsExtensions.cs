@@ -3,8 +3,8 @@
     using System.Linq.Expressions;
     using System.Reflection;
     using UD.Core.Helper;
-    using UD.Core.Helper.Configuration;
-    using UD.Core.Helper.Validation;
+    using UD.Core.Helper.Configurations;
+    using UD.Core.Helper.Validations;
     public static class ExpressionsExtensions
     {
         /// <summary>Verilen ifadenin adını alır.</summary>
