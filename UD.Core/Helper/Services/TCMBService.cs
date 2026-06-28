@@ -17,9 +17,9 @@ namespace UD.Core.Helper.Services
     }
     public sealed class TCMBService : ITCMBService
     {
-        private sealed record XmlCacheItem(ulong index, XDocument xml);
+        private sealed record XmlCacheItem(int index, XDocument xml);
         private readonly ConcurrentDictionary<DateTime, XmlCacheItem> dicXmlCache = new();
-        private ulong cacheIndex;
+        private int cacheIndex;
         public TCMBService() { }
         private async Task<XDocument> GetXml(DateTime date, CancellationToken cancellationToken)
         {
@@ -36,16 +36,17 @@ namespace UD.Core.Helper.Services
             return doc.xml;
         }
         private Uri GetUrl(DateTime date) => new(date == DateTime.Today ? "https://www.tcmb.gov.tr/kurlar/today.xml" : $"https://www.tcmb.gov.tr/kurlar/{date:yyyyMM}/{date:ddMMyyyy}.xml");
+        private decimal ParseDecimalValue(XElement element) => (Decimal.TryParse(element?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal _result) ? _result : default);
         private TCMBResponse GetRate(XDocument xml, string code)
         {
             var node = xml.Descendants("Currency").FirstOrDefault(x => x.Attribute("CurrencyCode")?.Value == code);
             Guard.ThrowIfNull(node, nameof(node));
             var data = new TCMBResponse();
             if (Int32.TryParse(node.Element(nameof(data.Unit))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out int _valueInt)) { data.Unit = _valueInt; }
-            if (Decimal.TryParse(node.Element(nameof(data.ForexBuying))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal _valueDecimal)) { data.ForexBuying = _valueDecimal; }
-            if (Decimal.TryParse(node.Element(nameof(data.ForexSelling))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _valueDecimal)) { data.ForexSelling = _valueDecimal; }
-            if (Decimal.TryParse(node.Element(nameof(data.BanknoteBuying))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _valueDecimal)) { data.BanknoteBuying = _valueDecimal; }
-            if (Decimal.TryParse(node.Element(nameof(data.BanknoteSelling))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _valueDecimal)) { data.BanknoteSelling = _valueDecimal; }
+            data.ForexBuying = this.ParseDecimalValue(node.Element(nameof(data.ForexBuying)));
+            data.ForexSelling = this.ParseDecimalValue(node.Element(nameof(data.ForexSelling)));
+            data.BanknoteBuying = this.ParseDecimalValue(node.Element(nameof(data.BanknoteBuying)));
+            data.BanknoteSelling = this.ParseDecimalValue(node.Element(nameof(data.BanknoteSelling)));
             return data;
         }
         public async Task<TCMBResponse> Get(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default)

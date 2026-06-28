@@ -410,3 +410,42 @@ public static byte[] GenerateRandomKey(this long length)
     return byteArray;
 }
 ***************************************
+private static readonly byte[] randomNumbers = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]; // ObfuscatorEncrypt işleminde oluşan şifreden bağımsız olarak belirli bir rastgele karakter kümesi oluşturur.
+***************************************
+/// <summary><paramref name="plainText"/> metnini AES algoritması kullanarak şifreler ve şifreli metni rastgele bir ön ekle karıştırarak daha karmaşık hale getirir. Şifreli metin, rastgele ön ek, şifrelenmiş metin ve ön ek uzunluğunu içeren bir byte dizisi olarak oluşturulur ve Base64 biçimine döndürülür. Bu yöntem, şifreli metnin yapısını gizleyerek güvenliği artırır.</summary>
+/// <param name="plainText">Şifrelenecek düz metin.</param>
+/// <returns>Şifrelenmiş ve karıştırılmış metin, Base64 biçiminde.</returns>
+public static string ObfuscatorEncrypt(string plainText)
+{
+    Guard.ThrowIfEmpty(plainText, nameof(plainText));
+    var randomPrefixLength = randomNumbers[Random.Shared.Next(randomNumbers.Length)];
+    var randomPrefixBytes = RandomNumberGenerator.GetBytes(randomPrefixLength);
+    var encryptedTextBytes = Encoding.UTF8.GetBytes(Converters.ToReverse(Encrypt(plainText)));
+    var combinedBytes = new byte[randomPrefixLength + encryptedTextBytes.Length + 1];
+    Buffer.BlockCopy(randomPrefixBytes, 0, combinedBytes, 0, randomPrefixLength);
+    Buffer.BlockCopy(encryptedTextBytes, 0, combinedBytes, randomPrefixLength, encryptedTextBytes.Length);
+    combinedBytes[combinedBytes.Length - 1] = randomPrefixLength;
+    var base64 = Convert.ToBase64String(combinedBytes);
+    var firstChar = base64[0];
+    return String.Concat(firstChar.ToString(), CaesarHelper.Encrypt(base64.Substring(1), Convert.ToInt32(firstChar)));
+}
+***************************************
+/// <summary><paramref name="cipherText"/> parametresini AES algoritması kullanarak çözer. Şifreli metin, rastgele ön ek, şifrelenmiş metin ve ön ek uzunluğunu içeren bir byte dizisi olarak Base64 biçiminde sağlanır. Bu yöntem, şifreli metnin yapısını gizleyerek güvenliği artırır.</summary>
+/// <param name="cipherText">Çözülecek şifreli metin.</param>
+/// <returns>Çözülmüş düz metin.</returns>
+public static string ObfuscatorDecrypt(string cipherText)
+{
+    Guard.ThrowIfEmpty(cipherText, nameof(cipherText));
+    var firstChar = cipherText[0];
+    var decoded = Convert.FromBase64String(String.Concat(firstChar.ToString(), CaesarHelper.Decrypt(cipherText.Substring(1), Convert.ToInt32(firstChar))));
+    var randomPrefixLength = decoded[decoded.Length - 1];
+    if (decoded.Length <= (randomPrefixLength + 1))
+    {
+        if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("Invalid cipher text.", nameof(cipherText)); }
+        throw new ArgumentException("Geçersiz şifreli metin.", nameof(cipherText));
+    }
+    var encryptedBytesLength = decoded.Length - randomPrefixLength - 1;
+    var encryptedText = Encoding.UTF8.GetString(decoded, randomPrefixLength, encryptedBytesLength);
+    return Decrypt(Converters.ToReverse(encryptedText));
+}
+***************************************

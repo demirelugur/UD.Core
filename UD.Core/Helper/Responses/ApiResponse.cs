@@ -10,7 +10,7 @@
         public static readonly ApiResponse setInfo = new(EnumAlertState.info, default);
         public EnumAlertState state { get; set; }
         public string[] messages { get; set; }
-        internal bool isSuccess => this.state.Includes(EnumAlertState.success, EnumAlertState.info);
+        public bool isSuccess => this.state.Includes(EnumAlertState.success, EnumAlertState.info);
         public ApiResponse() : this(default, default) { }
         public ApiResponse(EnumAlertState state, string[] messages)
         {
