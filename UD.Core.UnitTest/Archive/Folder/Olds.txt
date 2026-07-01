@@ -449,3 +449,14 @@ public static string ObfuscatorDecrypt(string cipherText)
     return Decrypt(Converters.ToReverse(encryptedText));
 }
 ***************************************
+/// <summary>Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.</summary>
+/// <typeparam name="TEnum">Enum türü (generic).</typeparam>
+/// <param name="details">Hata mesajına eklenecek isteğe bağlı ek detaylar.</param>
+/// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
+public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : struct, Enum
+{
+    var r = new HashSet<string> { typeof(TEnum).FullName, (Checks.IsEnglishCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
+    if (!details.IsNullOrEmptyOrAllNull()) { r.AddRangeOptimized(details); }
+    return new(String.Join(" ", r));
+}
+***************************************

@@ -6,7 +6,6 @@
     using Microsoft.Data.SqlClient;
     using Microsoft.Extensions.DependencyInjection;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq.Expressions;
     using System.Transactions;
@@ -152,16 +151,6 @@
                 throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
             }
             pi.SetValue(entity, Converters.ChangeType(propertyNewValue, pi.PropertyType));
-        }
-        /// <summary>Enum türleri için desteklenmeyen değer hatası oluşturur. Belirtilen Enum türü ve ek detaylarla birlikte bir hata mesajı üretir.</summary>
-        /// <typeparam name="TEnum">Enum türü (generic).</typeparam>
-        /// <param name="details">Hata mesajına eklenecek isteğe bağlı ek detaylar.</param>
-        /// <returns>Desteklenmeyen Enum değerine ait NotSupportedException nesnesi döner.</returns>
-        public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params string[] details) where TEnum : struct, Enum
-        {
-            var r = new HashSet<string> { typeof(TEnum).FullName, (Checks.IsEnglishCurrentUICulture ? $"The {nameof(Enum)} value is incompatible!" : $"{nameof(Enum)} değeri uyumsuzdur!") };
-            if (!details.IsNullOrEmptyOrAllNull()) { r.AddRangeOptimized(details); }
-            return new(String.Join(" ", r));
         }
         /// <summary>Script etiketlerini varsayılan olarak temizleyen bir HtmlSanitizer nesnesi oluşturur. Bu metod, HTML içeriğini temizlemek ve güvenli hale getirmek için kullanılabilir. Oluşturulan HtmlSanitizer nesnesi, script etiketlerini temizleyerek potansiyel XSS saldırılarına karşı koruma sağlar. İsteğe bağlı olarak, farklı temizleme seçenekleri belirten bir HtmlSanitizerOptions nesnesi de sağlanabilir.</summary>
         public static HtmlSanitizer CreateSanitizer(HtmlSanitizerOptions? options = null)

@@ -11,13 +11,12 @@
         /// <typeparam name="TKey">Dönüştürülecek hedef veri türü.</typeparam>
         /// <param name="jToken">Dönüştürülecek <see cref="JToken"/> nesnesi.</param>
         /// <returns><typeparamref name="TKey"/> türünden bir dizi.</returns>
-        /// <exception cref="NotSupportedException"><see cref="JToken"/> türü null veya array değilse fırlatılır.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="JToken"/> türü null veya array değilse fırlatılır.</exception>
         public static TKey[] ToArrayFromJToken<TKey>(this JToken jToken)
         {
             if (jToken.IsNoneOrNullOrUndefined()) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
-            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"The type of \"{nameof(jToken)}\" is incompatible!"); }
-            throw new NotSupportedException($"\"{nameof(jToken)}\" türü uyumsuzdur!");
+            throw jToken.Type.ArgumentOutOfRange(nameof(jToken.Type));
         }
         /// <summary><paramref name="jToken"/> üzerinde güvenli bir şekilde JSONPath ile seçim yapar. Normal SelectToken metodunun aksine, null token, boş path veya geçersiz JSONPath durumunda exception fırlatmak yerine null döner.</summary>
         /// <param name="jToken">Üzerinde işlem yapılacak JToken nesnesi.</param>

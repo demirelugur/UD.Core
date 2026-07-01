@@ -145,7 +145,7 @@
         /// <summary>SQL Server&#39;ın sistem tür kimliğini <c>([system_type_id])</c> <see cref="SqlDbType"/> enum değerine dönüştürür.</summary>
         /// <param name="systemTypeId">SQL Server [sys].[types] tablosundaki [system_type_id] değeri.</param>
         /// <returns>Eşleşen <see cref="SqlDbType"/> enum değeri.</returns>
-        /// <exception cref="NotSupportedException">Geçersiz veya desteklenmeyen bir sistem tür kimliği verildiğinde fırlatılır.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Geçersiz veya desteklenmeyen bir sistem tür kimliği verildiğinde fırlatılır.</exception>
         public static SqlDbType ToSqlDbType(this byte systemTypeId)
         {
             return systemTypeId switch
@@ -178,7 +178,7 @@
                 231 => SqlDbType.NVarChar,
                 239 => SqlDbType.NChar,
                 241 => SqlDbType.Xml,
-                _ => throw new NotSupportedException(Checks.IsEnglishCurrentUICulture ? $"Invalid or unsupported {nameof(systemTypeId)}: {systemTypeId}" : $"Geçersiz veya desteklenmeyen {nameof(systemTypeId)}: {systemTypeId}"),
+                _ => throw systemTypeId.ArgumentOutOfRange(nameof(systemTypeId))
             };
         }
         #endregion

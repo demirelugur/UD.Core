@@ -208,7 +208,7 @@ namespace UD.Core.Extensions
                 EnumStringCaseHandling.@default => $"%{value}%",
                 EnumStringCaseHandling.lower => $"%{(invariant ? value.ToLowerInvariant() : value.ToLower())}%",
                 EnumStringCaseHandling.upper => $"%{(invariant ? value.ToUpperInvariant() : value.ToUpper())}%",
-                _ => throw Utilities.ThrowNotSupportedForEnum<EnumStringCaseHandling>()
+                _ => throw caseHandling.ArgumentOutOfRange(nameof(caseHandling))
             };
         }
         /// <summary>
@@ -224,7 +224,7 @@ namespace UD.Core.Extensions
                 EnumStringCaseHandling.@default => String.Concat(value, "%"),
                 EnumStringCaseHandling.lower => String.Concat(invariant ? value.ToLowerInvariant() : value.ToLower(), "%"),
                 EnumStringCaseHandling.upper => String.Concat(invariant ? value.ToUpperInvariant() : value.ToUpper(), "%"),
-                _ => throw Utilities.ThrowNotSupportedForEnum<EnumStringCaseHandling>()
+                _ => throw caseHandling.ArgumentOutOfRange(nameof(caseHandling))
             };
         }
         /// <summary>
@@ -240,7 +240,7 @@ namespace UD.Core.Extensions
                 EnumStringCaseHandling.@default => String.Concat("%", value),
                 EnumStringCaseHandling.lower => String.Concat("%", invariant ? value.ToLowerInvariant() : value.ToLower()),
                 EnumStringCaseHandling.upper => String.Concat("%", invariant ? value.ToUpperInvariant() : value.ToUpper()),
-                _ => throw Utilities.ThrowNotSupportedForEnum<EnumStringCaseHandling>()
+                _ => throw caseHandling.ArgumentOutOfRange(nameof(caseHandling))
             };
         }
         /// <summary>JSON string&#39;inden belirtilen anahtara (key) karþýlýk gelen deðeri tip güvenli þekilde çeker.</summary>

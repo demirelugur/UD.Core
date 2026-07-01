@@ -1,8 +1,15 @@
 ﻿namespace UD.Core.Extensions
 {
     using System;
+    using UD.Core.Helper;
     public static class GenericTypeExtensions
     {
+        /// <summary><paramref name="value"/> değeri için standart bir <see cref="ArgumentOutOfRangeException"/> oluşturur.</summary>
+        /// <typeparam name="T">Struct türü.</typeparam>
+        /// <param name="value">Geçersiz olduğu tespit edilen struct değeri.</param>
+        /// <param name="paramName">Parametre adı.</param>
+        /// <returns>Oluşturulan <see cref="ArgumentOutOfRangeException"/> örneği.</returns>
+        public static ArgumentOutOfRangeException ArgumentOutOfRange<T>(this T value, string paramName = "") where T : struct => new(paramName.ParseOrDefault<string>(), default, Checks.IsEnglishCurrentUICulture ? $"Invalid value: {value}." : $"Geçersiz değer: {value}.");
         /// <summary><paramref name="value"/> değerinin <paramref name="min"/> ve <paramref name="max"/> değerleri arasında olup olmadığını kontrol eder. Karşılaştırma, <typeparamref name="T"/> türünün <see cref="IComparable{T}"/> arayüzünü uyguladığı varsayılarak yapılır. Değerler arasında eşitlik de dahil edilir, yani <paramref name="value"/> değeri <paramref name="min"/> veya <paramref name="max"/> değerine eşit olabilir.</summary>
         /// <typeparam name="T">Karşılaştırma yapılacak tür.</typeparam>
         /// <param name="value">Kontrol edilecek değer.</param>

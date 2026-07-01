@@ -1,14 +1,13 @@
 ﻿namespace UD.Core.Extensions
 {
     using System.Data;
-    using UD.Core.Helper;
     using UD.Core.Helper.Validations;
     public static class DataExtensions
     {
         /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.</summary>
         /// <param name="type">Dönüştürülecek <see cref="SqlDbType"/> enum değeri.</param>
         /// <returns>SQL Server sistem tür kimliği (<c>[system_type_id]</c>) değeri</returns>
-        /// <exception cref="NotSupportedException">Desteklenmeyen bir <see cref="SqlDbType"/> değeri verildiğinde fırlatılır.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Desteklenmeyen bir <see cref="SqlDbType"/> değeri verildiğinde fırlatılır.</exception>
         /// <remarks>SELECT [name], [system_type_id] FROM [sys].[types]</remarks>
         public static int ToSystemTypeId(this SqlDbType type)
         {
@@ -42,13 +41,13 @@
                 SqlDbType.NVarChar => 231,
                 SqlDbType.NChar => 239,
                 SqlDbType.Xml => 241,
-                _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>()
+                _ => throw type.ArgumentOutOfRange(nameof(type))
             };
         }
         /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, ADO.NET&#39;in genel veri türü olan <see cref="DbType"/>&#39;a dönüştürür. SQL Server&#39;a özgü veri türlerini platform bağımsız <see cref="DbType"/> türlerine çevirir.</summary>
         /// <param name="type">Dönüştürülecek <see cref="SqlDbType"/> enum değeri.</param>
         /// <returns>Eşdeğer <see cref="DbType"/> enum değeri.</returns>
-        /// <exception cref="NotSupportedException">Desteklenmeyen bir <see cref="SqlDbType"/> değeri verildiğinde fırlatılır.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Desteklenmeyen bir <see cref="SqlDbType"/> değeri verildiğinde fırlatılır.</exception>
         public static DbType ToDbType(this SqlDbType type)
         {
             return type switch
@@ -75,13 +74,13 @@
                 SqlDbType.NVarChar => DbType.String,
                 SqlDbType.NChar => DbType.StringFixedLength,
                 SqlDbType.Xml => DbType.Xml,
-                _ => throw Utilities.ThrowNotSupportedForEnum<SqlDbType>()
+                _ => throw type.ArgumentOutOfRange(nameof(type))
             };
         }
         /// <summary>Verilen <see cref="DbType"/> enum değerini, SQL Server&#39;a özgü <see cref="SqlDbType"/> enum değerine dönüştürür. ADO.NET&#39;in genel veri türleri (<see cref="DbType"/>) ile SQL Server&#39;ın özel veri türleri (<see cref="SqlDbType"/>) arasında eşleme yapar.</summary>
         /// <param name="type">Dönüştürülecek <see cref="DbType"/> enum değeri.</param>
         /// <returns>Eşdeğer <see cref="SqlDbType"/> enum değeri.</returns>
-        /// <exception cref="NotSupportedException">Desteklenmeyen bir <see cref="DbType"/> değeri verildiğinde fırlatılır.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Desteklenmeyen bir <see cref="DbType"/> değeri verildiğinde fırlatılır.</exception>
         public static SqlDbType ToSqlDbType(this DbType type)
         {
             return type switch
@@ -107,7 +106,7 @@
                 DbType.String => SqlDbType.NVarChar,
                 DbType.StringFixedLength => SqlDbType.NChar,
                 DbType.Xml => SqlDbType.Xml,
-                _ => throw Utilities.ThrowNotSupportedForEnum<DbType>()
+                _ => throw type.ArgumentOutOfRange(nameof(type))
             };
         }
         /// <summary>Belirtilen sütun adını kullanarak <see cref="IDataReader"/> içinden değeri okur ve verilen türde (<typeparamref name="TKey"/>) döndürür. Eğer sütun değeri <c>null</c>, <see cref="DBNull"/> ya da dönüştürülemeyen bir değer içeriyorsa, türün varsayılan değerini (<c>default</c>) geri döner.</summary>

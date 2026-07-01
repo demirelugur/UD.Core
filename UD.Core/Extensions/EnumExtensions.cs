@@ -21,7 +21,7 @@
                     EnumResponseMessage.unauthorized => "You are not authorized for the transaction! Contact the administrator.",
                     EnumResponseMessage.connectionError => "Cannot communicate with the server computer! Contact the administrator.",
                     EnumResponseMessage.maxLengthExceeded => "The maximum character limit that can be entered has been exceeded! Contact the administrator.",
-                    _ => throw Utilities.ThrowNotSupportedForEnum<EnumResponseMessage>()
+                    _ => throw value.ArgumentOutOfRange(nameof(value))
                 };
             }
             return value.GetDescriptionFromEnum();
@@ -37,7 +37,7 @@
                 {
                     EnumNVIIdentityCard.@new => "New ID Card",
                     EnumNVIIdentityCard.old => "Old Identity Card",
-                    _ => throw Utilities.ThrowNotSupportedForEnum<EnumNVIIdentityCard>()
+                    _ => throw value.ArgumentOutOfRange(nameof(value))
                 };
             }
             return value.GetDescriptionFromEnum();
@@ -72,7 +72,7 @@
                     EnumTCMBRateCode.AZN => "AZERBAIJANI MANAT",
                     EnumTCMBRateCode.AED => "UNITED ARAB EMIRATES DIRHAM",
                     EnumTCMBRateCode.KZT => "KAZAKHSTANI TENGE",
-                    _ => throw Utilities.ThrowNotSupportedForEnum<EnumTCMBRateCode>()
+                    _ => throw value.ArgumentOutOfRange(nameof(value))
                 };
             }
             return value.GetDescriptionFromEnum();
