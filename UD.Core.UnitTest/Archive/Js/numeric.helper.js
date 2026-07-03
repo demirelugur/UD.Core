@@ -1,5 +1,23 @@
 import { objectHelper } from "./object.helper";
-function isTCKimlikNo(tckn) {
+const ByteMinValue = 0;
+const ByteMaxValue = 255;
+const Int16MinValue = -32768;
+const Int16MaxValue = 32767;
+const Int32MinValue = -2147483648;
+const Int32MaxValue = 2147483647;
+const Int64MinValue = -9223372036854775808n;
+const Int64MaxValue = 9223372036854775807n;
+const formatNumberTR = (value, fractionDigits) => {
+    value = value ?? 0;
+    if (Number.isNaN(value)) { return value; }
+    let options = {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        ...(fractionDigits ?? {})
+    };
+    return Number(value).toLocaleString('tr-TR', options);
+};
+const isTCKimlikNo = (tckn) => {
     if (objectHelper.isNullOrEmpty(tckn)) { return false; }
     let s = String(tckn).trim();
     if (!/^\d{11}$/.test(s)) { return false; }
@@ -13,8 +31,13 @@ function isTCKimlikNo(tckn) {
     let sumFirst10 = digits.slice(0, 10).reduce((a, b) => a + b, 0);
     if ((sumFirst10 % 10) !== digits[10]) { return false; }
     return true;
-}
-function isVergiKimlikNo(vkn) {
+};
+const isTcknOrVkn = (value) => {
+    if (isTCKimlikNo(value)) { return true; }
+    if (isVergiKimlikNo(value)) { return true; }
+    return false;
+};
+const isVergiKimlikNo = (vkn) => {
     if (objectHelper.isNullOrEmpty(vkn)) { return false; }
     let s = String(vkn).trim();
     if (!/^\d+$/.test(s)) { return false; }
@@ -32,28 +55,18 @@ function isVergiKimlikNo(vkn) {
     let sum = nums.reduce((a, b) => a + b, 0);
     let check = (10 - (sum % 10)) % 10;
     return check === digits[9];
-}
-
-function isTcknOrVkn(value) {
-    if (isTCKimlikNo(value)) { return true; }
-    if (isVergiKimlikNo(value)) { return true; }
-    return false;
-}
-
-function formatNumberTR(value, fractionDigits) {
-    value = value ?? 0;
-    if (Number.isNaN(value)) { return value; }
-    let options = {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-        ...(fractionDigits ?? {})
-    };
-    return Number(value).toLocaleString('tr-TR', options);
-}
-
+};
 export const numericHelper = {
+    ByteMinValue,
+    ByteMaxValue,
+    Int16MinValue,
+    Int16MaxValue,
+    Int32MinValue,
+    Int32MaxValue,
+    Int64MinValue,
+    Int64MaxValue,
+    formatNumberTR,
     isTCKimlikNo,
-    isVergiKimlikNo,
     isTcknOrVkn,
-    formatNumberTR
+    isVergiKimlikNo
 };
