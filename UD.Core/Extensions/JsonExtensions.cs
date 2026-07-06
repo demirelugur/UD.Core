@@ -2,7 +2,6 @@
 {
     using Newtonsoft.Json.Linq;
     using System;
-    using UD.Core.Helper;
     public static class JsonExtensions
     {
         /// <summary><paramref name="jToken"/> değeri null, <see cref="JTokenType.None"/>, <see cref="JTokenType.Null"/> veya <see cref="JTokenType.Undefined"/> ise <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu metot, bir <see cref="JToken"/> nesnesinin geçerli bir değere sahip olup olmadığını kontrol etmek için kullanılır.</summary>
@@ -17,17 +16,6 @@
             if (jToken.IsNoneOrNullOrUndefined()) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
             throw jToken.Type.ArgumentOutOfRange(nameof(jToken.Type));
-        }
-        /// <summary><paramref name="jToken"/> üzerinde güvenli bir şekilde JSONPath ile seçim yapar. Normal SelectToken metodunun aksine, null token, boş path veya geçersiz JSONPath durumunda exception fırlatmak yerine null döner.</summary>
-        /// <param name="jToken">Üzerinde işlem yapılacak JToken nesnesi.</param>
-        /// <param name="path">Seçilecek JSONPath ifadesi.</param>
-        /// <returns>Belirtilen path&#39;e karşılık gelen JToken veya bulunamazsa / hata oluşursa null.</returns>
-        public static JToken? SafeSelectToken(this JToken jToken, string path)
-        {
-            path = path.ToStringOrEmpty();
-            if (path != "" && jToken.IsNoneOrNullOrUndefined()) { return null; }
-            try { return jToken.SelectToken(path); }
-            catch { return null; }
         }
     }
 }

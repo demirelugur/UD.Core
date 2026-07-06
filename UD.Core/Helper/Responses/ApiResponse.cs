@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using UD.Core.Enums;
     using UD.Core.Extensions;
     public class ApiResponse
@@ -10,15 +11,23 @@
         public static readonly ApiResponse setInfo = new(EnumAlertState.info, default);
         public EnumAlertState state { get; set; }
         public string[] messages { get; set; }
-        public bool isSuccess => this.state.Includes(EnumAlertState.success, EnumAlertState.info);
+        public bool stateIsSuccess => this.state.Includes(EnumAlertState.success, EnumAlertState.info);
         public ApiResponse() : this(default, default) { }
         public ApiResponse(EnumAlertState state, string[] messages)
         {
             this.state = state;
-            this.messages = (messages.IsNullOrEmptyOrAllNull() ? (this.isSuccess ? [] : [EnumResponseMessage.error.GetDescriptionLocalized()]) : messages);
+            this.messages = (messages.IsNullOrEmptyOrAllNull() ? (this.stateIsSuccess ? [] : [EnumResponseMessage.error.GetDescriptionLocalized()]) : messages);
         }
         public static ApiResponse setError(params string[] messages) => new(EnumAlertState.error, messages);
         public static ApiResponse setWarning(params string[] messages) => new(EnumAlertState.warning, messages);
+        public HttpStatusCode GetHttpStatusCode() => this.state switch
+        {
+            EnumAlertState.success => HttpStatusCode.OK,
+            EnumAlertState.info => HttpStatusCode.Accepted,
+            EnumAlertState.warning => HttpStatusCode.Accepted,
+            EnumAlertState.error => HttpStatusCode.BadRequest,
+            _ => throw this.state.ArgumentOutOfRange(nameof(this.state))
+        };
     }
     public class ApiResponse<T> : ApiResponse
     {
@@ -26,7 +35,7 @@
         public ApiResponse() : this(default, default, default) { }
         public ApiResponse(T response, EnumAlertState state, string[] messages) : base(state, messages)
         {
-            this.response = (base.isSuccess ? response : this.getCustomDefaultValue());
+            this.response = (base.stateIsSuccess ? response : this.getCustomDefaultValue());
         }
         private T getCustomDefaultValue()
         {

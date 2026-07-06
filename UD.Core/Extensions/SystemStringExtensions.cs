@@ -8,7 +8,6 @@ namespace UD.Core.Extensions
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
-    using UD.Core.Enums;
     using UD.Core.Helper;
     using UD.Core.Helper.Validations;
     public static class SystemStringExtensions
@@ -194,54 +193,6 @@ namespace UD.Core.Extensions
                 else { sb.Append(Char.ToLower(ch, cultureInfo)); }
             }
             return sb.ToString();
-        }
-        /// <summary>
-        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>%&quot; biçimine getirir
-        /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeContains()))</code></para>
-        /// </summary>
-        public static string LikeContains(this string value, EnumStringCaseHandling caseHandling = EnumStringCaseHandling.lower, bool invariant = false)
-        {
-            value = value.ToStringOrEmpty();
-            if (value == "") { return ""; }
-            return caseHandling switch
-            {
-                EnumStringCaseHandling.@default => $"%{value}%",
-                EnumStringCaseHandling.lower => $"%{(invariant ? value.ToLowerInvariant() : value.ToLower())}%",
-                EnumStringCaseHandling.upper => $"%{(invariant ? value.ToUpperInvariant() : value.ToUpper())}%",
-                _ => throw caseHandling.ArgumentOutOfRange(nameof(caseHandling))
-            };
-        }
-        /// <summary>
-        /// Verilen metni SQL LIKE sorgusu için &quot;<paramref name="value"/>%&quot; biçimine getirir 
-        /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeStartWith()))</code></para>
-        /// </summary>
-        public static string LikeStartWith(this string value, EnumStringCaseHandling caseHandling = EnumStringCaseHandling.lower, bool invariant = false)
-        {
-            value = value.ToStringOrEmpty();
-            if (value == "") { return ""; }
-            return caseHandling switch
-            {
-                EnumStringCaseHandling.@default => String.Concat(value, "%"),
-                EnumStringCaseHandling.lower => String.Concat(invariant ? value.ToLowerInvariant() : value.ToLower(), "%"),
-                EnumStringCaseHandling.upper => String.Concat(invariant ? value.ToUpperInvariant() : value.ToUpper(), "%"),
-                _ => throw caseHandling.ArgumentOutOfRange(nameof(caseHandling))
-            };
-        }
-        /// <summary>
-        /// Verilen metni SQL LIKE sorgusu için &quot;%<paramref name="value"/>&quot; biçimine getirir.
-        /// <para><code>.WhereIf(input.Ad.IsNotNullOrEmpty(), x => EF.Functions.Like(x.Ad.ToLower(), input.Ad.LikeEndsWith()))</code></para>
-        /// </summary>
-        public static string LikeEndsWith(this string value, EnumStringCaseHandling caseHandling = EnumStringCaseHandling.lower, bool invariant = false)
-        {
-            value = value.ToStringOrEmpty();
-            if (value == "") { return ""; }
-            return caseHandling switch
-            {
-                EnumStringCaseHandling.@default => String.Concat("%", value),
-                EnumStringCaseHandling.lower => String.Concat("%", invariant ? value.ToLowerInvariant() : value.ToLower()),
-                EnumStringCaseHandling.upper => String.Concat("%", invariant ? value.ToUpperInvariant() : value.ToUpper()),
-                _ => throw caseHandling.ArgumentOutOfRange(nameof(caseHandling))
-            };
         }
         /// <summary>JSON string&#39;inden belirtilen anahtara (key) karþýlýk gelen deðeri tip güvenli þekilde çeker.</summary>
         /// <typeparam name="T">Döndürülecek deðerin tipi (string, int, bool, DateTime, Guid vb.)</typeparam>

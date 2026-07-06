@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
+    using UD.Core.Enums;
     using UD.Core.Helper;
     using UD.Core.Helper.Configurations;
     using UD.Core.Helper.Pages;
@@ -18,6 +19,46 @@
         {
             if (condition) { return source.Where(predicate); }
             return source;
+        }
+        /// <summary><paramref name="source"/> IQueryable kaynağına, <paramref name="condition"/> koşulu sağlandığında, <paramref name="propertySelector"/> ile seçilen string özelliğe göre LIKE filtresi uygular.</summary>
+        /// <typeparam name="T">Eleman tipi</typeparam>
+        /// <param name="source">Kaynak sorgu</param>
+        /// <param name="condition">Filtrenin uygulanıp uygulanmayacağını belirten koşul</param>
+        /// <param name="propertySelector">LIKE filtresi uygulanacak özellik</param>
+        /// <param name="searchTerm">Aranacak değer</param>
+        /// <param name="likeMode">LIKE filtresi modu</param>
+        /// <returns>Filtrelenmiş IQueryable kaynağı</returns>
+        public static IQueryable<T> WhereIfLike<T>(this IQueryable<T> source, bool condition, Expression<Func<T, string>> propertySelector, string searchTerm, EnumLikeMode likeMode = EnumLikeMode.contains)
+        {
+            if (!condition) { return source; }
+            searchTerm = searchTerm.ToStringOrEmpty();
+            var likePattern = likeMode switch
+            {
+                EnumLikeMode.contains => $"%{searchTerm}%",
+                EnumLikeMode.startsWith => $"{searchTerm}%",
+                EnumLikeMode.endsWith => $"%{searchTerm}",
+                _ => throw likeMode.ArgumentOutOfRange(nameof(likeMode))
+            };
+            var likeMethod = typeof(DbFunctionsExtensions).GetMethod(nameof(DbFunctionsExtensions.Like), [typeof(DbFunctions), typeof(string), typeof(string)]);
+            var parameter = propertySelector.Parameters[0];
+            var functionsExpression = Expression.Constant(EF.Functions);
+            var propertyExpression = propertySelector.Body;
+            var patternExpression = Expression.Constant(likePattern);
+            var likeCall = Expression.Call(null, likeMethod, functionsExpression, propertyExpression, patternExpression);
+            var lambda = Expression.Lambda<Func<T, bool>>(likeCall, parameter);
+            return source.Where(lambda);
+        }
+        /// <summary><paramref name="source"/> IQueryable kaynağına, <paramref name="searchTerm"/> boş değilse, <paramref name="propertySelector"/> ile seçilen string özelliğe göre LIKE filtresi uygular.</summary>
+        /// <typeparam name="T">Eleman tipi</typeparam>
+        /// <param name="source">Kaynak sorgu</param>
+        /// <param name="searchTerm">Aranacak değer</param>
+        /// <param name="propertySelector">LIKE filtresi uygulanacak özellik</param>
+        /// <param name="likeMode">LIKE filtresi modu</param>
+        /// <returns>Filtrelenmiş IQueryable kaynağı</returns>
+        public static IQueryable<T> WhereIfLike<T>(this IQueryable<T> source, string searchTerm, Expression<Func<T, string>> propertySelector, EnumLikeMode likeMode = EnumLikeMode.contains)
+        {
+            if (searchTerm.IsNullOrEmpty()) { return source; }
+            return source.WhereIfLike(true, propertySelector, searchTerm, likeMode);
         }
         /// <summary>IQueryable kaynağını asenkron olarak diziye çevirir. EF Core destekliyorsa ToArrayAsync, değilse ToArray kullanır.</summary>
         /// <typeparam name="T">Eleman tipi</typeparam>

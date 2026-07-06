@@ -460,3 +460,24 @@ public static NotSupportedException ThrowNotSupportedForEnum<TEnum>(params strin
     return new(String.Join(" ", r));
 }
 ***************************************
+/// <summary>Metni, SQL &#39;LIKE&#39; sorgularında &quot;içerir&quot; (%<paramref name="value"/>%) araması yapacak biçime dönüştürür.</summary>
+public static string LikeContains(this string value, IFormatProvider? provider = null) => $"%{value.ToStringOrEmpty(provider)}%";
+***************************************
+/// <summary>Metni, SQL &#39;LIKE&#39; sorgularında &quot;ile başlar&quot; (<paramref name="value"/>%) araması yapacak biçime dönüştürür.</summary>
+public static string LikeStartWith(this string value, IFormatProvider? provider = null) => String.Concat(value.ToStringOrEmpty(provider), "%");
+***************************************
+/// <summary>Metni, SQL &#39;LIKE&#39; sorgularında &quot;ile biter&quot; (%<paramref name="value"/>) araması yapacak biçime dönüştürür.</summary>
+public static string LikeEndsWith(this string value, IFormatProvider? provider = null) => String.Concat("%", value.ToStringOrEmpty(provider));
+***************************************
+/// <summary><paramref name="jToken"/> üzerinde güvenli bir şekilde JSONPath ile seçim yapar. Normal SelectToken metodunun aksine, null token, boş path veya geçersiz JSONPath durumunda exception fırlatmak yerine null döner.</summary>
+/// <param name="jToken">Üzerinde işlem yapılacak JToken nesnesi.</param>
+/// <param name="path">Seçilecek JSONPath ifadesi.</param>
+/// <returns>Belirtilen path&#39;e karşılık gelen JToken veya bulunamazsa / hata oluşursa null.</returns>
+public static JToken? SafeSelectToken(this JToken jToken, string path)
+{
+    path = path.ToStringOrEmpty();
+    if (path != "" && jToken.IsNoneOrNullOrUndefined()) { return null; }
+    try { return jToken.SelectToken(path); }
+    catch { return null; }
+}
+***************************************

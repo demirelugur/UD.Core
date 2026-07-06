@@ -3,6 +3,7 @@
     using System;
     using System.Security.Cryptography;
     using System.Text;
+    using UD.Core.Extensions;
     using UD.Core.Helper;
     using UD.Core.Helper.Validations;
     public sealed class AESHelper
@@ -34,7 +35,7 @@
         }
         private static byte[] generateKey(string keyString, int requiredLength)
         {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(keyString), key = new byte[requiredLength];
+            byte[] keyBytes = Encoding.UTF8.GetBytes(keyString.ToStringOrEmpty()), key = new byte[requiredLength];
             Array.Copy(keyBytes, key, Math.Min(keyBytes.Length, key.Length));
             return key;
         }
