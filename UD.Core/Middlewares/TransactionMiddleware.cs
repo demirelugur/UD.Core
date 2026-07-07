@@ -4,6 +4,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using UD.Core.Attributes;
+    using UD.Core.Extensions;
+
     public sealed class TransactionMiddleware<TContext> where TContext : DbContext
     {
         private readonly RequestDelegate next;
@@ -31,6 +33,11 @@
                 await this.next(httpContext);
                 return;
             }
+            if (dbContext.Database.CurrentTransaction != null)
+            {
+                await this.next(httpContext);
+                return;
+            }
             var strategy = dbContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async (cancellationToken) =>
             {
@@ -39,9 +46,13 @@
                 {
                     await this.next(httpContext);
                     var status = httpContext.Response.StatusCode;
-                    if (status >= StatusCodes.Status200OK && status < StatusCodes.Status400BadRequest)
+                    if (status.Between(StatusCodes.Status200OK, StatusCodes.Status400BadRequest - 1))
                     {
-                        if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
+                        if (httpContext.IsTransactionRollbackRequired())
+                        {
+                            await tran.RollbackAsync(cancellationToken);
+                            return;
+                        } //if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
                         await tran.CommitAsync(cancellationToken);
                     }
                     else { await tran.RollbackAsync(cancellationToken); }
