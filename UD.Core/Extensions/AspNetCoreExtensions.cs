@@ -11,6 +11,7 @@
     using System.Web;
     using UD.Core.Enums;
     using UD.Core.Helper;
+    using UD.Core.Helper.Managements.Files;
     using UD.Core.Helper.Validations;
     public static class AspNetCoreExtensions
     {
@@ -148,7 +149,7 @@
                 if (TryValidators.TryValidateObject(_t, out errors)) { return (true, default, errors); }
                 return (false, _t, default);
             }
-            return (true, default, [EnumResponseMessage.error.GetDescriptionLocalized()]);
+            return (true, default, [EnumAlertState.error.GetDescriptionLocalized()]);
         }
         #endregion
         #region IFormFile
@@ -165,7 +166,7 @@
         {
             Guard.ThrowIfNull(file, nameof(file));
             Guard.ThrowIfEmpty(physicallyPath, nameof(physicallyPath));
-            Files.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
+            FileHelper.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
             using var fs = new FileStream(physicallyPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
             await file.CopyToAsync(fs, cancellationToken);
         }

@@ -481,3 +481,54 @@ public static JToken? SafeSelectToken(this JToken jToken, string path)
     catch { return null; }
 }
 ***************************************
+public enum EnumResponseMessage : byte
+{
+    /// <summary>İsteğiniz başarılı bir şekilde sonuçlandı.</summary>
+    [Description("İsteğiniz başarılı bir şekilde sonuçlandı.")]
+    success = 1,
+    /// <summary>İşlem sırasında beklenmeyen bir sonuç meydana geldi.</summary>
+    [Description("İşlem sırasında beklenmeyen bir sonuç meydana geldi.")]
+    error,
+    /// <summary>Parametrelere uyumlu kayıt bulunamadı.</summary>
+    [Description("Parametrelere uyumlu kayıt bulunamadı.")]
+    notFound,
+    /// <summary>Girilen değer tarih biçimine uygun değildir.</summary>
+    [Description("Girilen değer tarih biçimine uygun değildir.")]
+    invalidDate,
+    /// <summary>Metin içinde \"yasaklı\" kelimeler geçmektedir.</summary>
+    [Description("Metin içinde \"yasaklı\" kelimeler geçmektedir.")]
+    unethicalContent,
+    /// <summary>İşlem için yetkiniz bulunmamaktadır.</summary>
+    [Description("İşlem için yetkiniz bulunmamaktadır.")]
+    unauthorized,
+    /// <summary>Sunucu bilgisayar ile iletişim kurulamıyor.</summary>
+    [Description("Sunucu bilgisayar ile iletişim kurulamıyor.")]
+    connectionError,
+    /// <summary>Girilebilecek maksimum karakter sınırı aşıldı.</summary>
+    [Description("Girilebilecek maksimum karakter sınırı aşıldı.")]
+    maxLengthExceeded
+}
+***************************************
+/// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
+/// <param name="value">Açıklaması alınacak Enum değeri.</param>
+/// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
+public static string GetDescriptionLocalized(this EnumResponseMessage value)
+{
+    if (Checks.IsEnglishCurrentUICulture)
+    {
+        return value switch
+        {
+            EnumResponseMessage.success => "Your request has been completed successfully.",
+            EnumResponseMessage.error => "An unexpected result occurred during the process.",
+            EnumResponseMessage.notFound => "No records matching the parameters were found.",
+            EnumResponseMessage.invalidDate => "The entered value does not comply with the date format.",
+            EnumResponseMessage.unethicalContent => "\"Prohibited\" words appear in the text.",
+            EnumResponseMessage.unauthorized => "You are not authorized for the transaction.",
+            EnumResponseMessage.connectionError => "Cannot communicate with the server computer.",
+            EnumResponseMessage.maxLengthExceeded => "The maximum character limit that can be entered has been exceeded.",
+            _ => throw value.ArgumentOutOfRange(nameof(value))
+        };
+    }
+    return value.GetDescriptionFromEnum();
+}
+***************************************

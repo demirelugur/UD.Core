@@ -8,12 +8,13 @@
     using System.Net.Mail;
     using UD.Core.Extensions;
     using UD.Core.Helper;
+    using UD.Core.Helper.Generates;
     /// <summary>
     /// Sahte veri üretimi için kullanılan genel bir sınıf. Bogus kütüphanesini kullanarak farklı veri türlerinde özelleştirilebilir sahte veriler üretir.
     /// <list type="bullet">
-    /// <item>String için özel işaretlenmiş property adları: <c>address,color,email,fullName,ipAddress,mac,name,phone,seo,surname,username,src,uri</c></item>
+    /// <item>String için özel işaretlenmiş property adları: <c>address,color,email,fulladdress,fullname,ipaddress,mac,name,phone,seo,src,surname,uri,username</c></item>
     /// <item>Int16 için özel işaretlenmiş property adları: <c>internal</c></item>
-    /// <item>Int64 için özel işaretlenmiş property adları: <c>trIdentityNumber, trTaxIdentityNumber</c></item>
+    /// <item>Int64 için özel işaretlenmiş property adları: <c>tridentitynumber, trtaxidentitynumber</c></item>
     /// </list>
     /// </summary>
     public sealed class BogusGenericFakeDataGenerator
@@ -23,6 +24,7 @@
         private readonly float nullChange;
         private readonly int arrayMinLength;
         private readonly int arrayMaxLength;
+        private readonly Dictionary<string, Func<Faker, object?>> valueStringFactories;
         private byte minByte = Byte.MinValue, maxByte = Byte.MaxValue;
         private short shortMin = 0, shortMax = Int16.MaxValue;
         private int intMin = 0, intMax = Int32.MaxValue;
@@ -43,6 +45,23 @@
             this.nullChange = (nullChange > 1 ? 1 : (nullChange < 0 ? 0 : nullChange));
             this.arrayMinLength = arrayMinLength > 0 ? arrayMinLength : 0;
             this.arrayMaxLength = arrayMaxLength > 0 ? arrayMaxLength : 0;
+            this.valueStringFactories = new(StringComparer.OrdinalIgnoreCase)
+            {
+                ["address"] = faker => faker.Address.FullAddress(),
+                ["color"] = faker => faker.Internet.Color().ToUpper(),
+                ["email"] = faker => this.createEMail(faker).Address,
+                ["fulladdress"] = faker => faker.Address.FullAddress(),
+                ["fullname"] = faker => createFullName(faker),
+                ["ipaddress"] = faker => this.createIPAdress().ToString(),
+                ["mac"] = faker => faker.Internet.Mac().ToUpper(),
+                ["name"] = faker => faker.Person.FirstName,
+                ["phone"] = faker => faker.Phone.PhoneNumber("(5##) ###-####"),
+                ["seo"] = faker => createFullName(faker).ToSeoFriendly(),
+                ["src"] = _ => this.createUri(),
+                ["surname"] = faker => faker.Person.LastName.ToUpper(),
+                ["uri"] = _ => this.createUri(),
+                ["username"] = faker => this.createEMail(faker).User
+            };
         }
         public BogusGenericFakeDataGenerator WithByteRange(byte minByte, byte maxByte)
         {
@@ -98,41 +117,33 @@
             if (count > 0) { return new Faker<T>(this.locale).CustomInstantiator(f => (T)this.createFakeInstance("", typeof(T), f)).Generate(count).ToArray(); }
             return [];
         }
+        #region Private Methods
         private string createUri() => this.fakerEN.Internet.Url().TrimEnd('/');
-        private static string createFullName(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper());
+        private static string createFullName(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper()).Trim();
         private MailAddress createEMail(Faker faker) => new(this.fakerEN.Internet.ExampleEmail().ToLower(), createFullName(faker));
         private IPAddress createIPAdress() => this.fakerEN.Internet.IpAddress().MapToIPv4();
-        private object createFakeInstance(string parametername, Type type, Faker faker)
+        private bool isEqual(string parameterName, string value) => parameterName.Equals(value, StringComparison.OrdinalIgnoreCase);
+        private int getSignificantDigits(Faker faker) => (faker.Random.Bool(0.95f) ? 10 : faker.Random.ArrayElement([8, 9]));
+        private object createFakeInstance(string parameterName, Type type, Faker faker)
         {
-            if (TryValidators.TryTypeIsNullable(type, out Type _baseType)) { return faker.Random.Bool(this.nullChange) ? null : this.createFakeInstance(parametername, _baseType, faker); }
+            if (TryValidators.TryTypeIsNullable(type, out Type _baseType)) { return faker.Random.Bool(this.nullChange) ? null : this.createFakeInstance(parameterName, _baseType, faker); }
             if (type == typeof(string))
             {
-                if (parametername == "address") { return faker.Address.FullAddress(); }
-                if (parametername == "color") { return faker.Internet.Color().ToUpper(); }
-                if (parametername == "email") { return this.createEMail(faker).Address; }
-                if (parametername == "fullName") { return createFullName(faker); }
-                if (parametername == "ipAddress") { return this.createIPAdress().ToString(); }
-                if (parametername == "mac") { return faker.Internet.Mac().ToUpper(); }
-                if (parametername == "name") { return faker.Person.FirstName; }
-                if (parametername == "phone") { return faker.Phone.PhoneNumber("(5##) ###-####"); }
-                if (parametername == "seo") { return createFullName(faker).ToSeoFriendly(); }
-                if (parametername == "surname") { return faker.Person.LastName.ToUpper(); }
-                if (parametername == "username") { return this.createEMail(faker).User; }
-                if (parametername.Includes("src", "uri")) { return this.createUri(); }
+                if (this.valueStringFactories.TryGetValue(parameterName, out var factory)) { return factory(faker); }
                 return faker.Commerce.ProductName();
             }
             if (type.IsEnum) { return faker.PickRandom(Enum.GetValues(type)); }
             if (type == typeof(byte)) { return faker.Random.Byte(this.minByte, this.maxByte); }
             if (type == typeof(short))
             {
-                if (parametername == "internal") { return faker.Random.Short(1000, 9999); }
+                if (isEqual(parameterName, "internal")) { return faker.Random.Short(1000, 9999); }
                 return faker.Random.Short(this.shortMin, this.shortMax);
             }
             if (type == typeof(int)) { return faker.Random.Int(this.intMin, this.intMax); }
             if (type == typeof(long))
             {
-                if (parametername == "trIdentityNumber") { return faker.Random.ArrayElement([10000000146, 19293160506, 35270291346, 35505252760, 37417041838, 48056596160, 57856397112, 66122384800, 69016478326, 75255184164, 78094801254, 78268733060, 79937798144, 81299907768, 86061923892, 88599002742, 89021372822, 93095299084, 93513339668, 94781067710]); }
-                if (parametername == "trTaxIdentityNumber") { return faker.Random.ArrayElement([33583636, 602883151, 1266516393, 1775916611, 3085865484, 3641323334, 3749934537, 5056541626, 5252719378, 5498069343, 5613060112, 6000479747, 6501266542, 7267046912, 7915288675, 9142970393, 9152251176, 9205280623, 9217990731, 9292694379, 9734899775]); }
+                if (isEqual(parameterName, "tridentitynumber")) { return Generator.FakeTRIdentityNumber(); }
+                if (isEqual(parameterName, "trtaxidentitynumber")) { return Generator.FakeTRTaxIdentityNumber(this.getSignificantDigits(faker)); }
                 return faker.Random.Long(this.longMin, this.longMax);
             }
             if (type == typeof(bool)) { return faker.Random.Bool(); }
@@ -149,7 +160,7 @@
                 int i, count = (this.arrayMaxLength > 0 ? faker.Random.Int(this.arrayMinLength, this.arrayMaxLength) : 0);
                 var elementType = type.GetElementType();
                 var array = Array.CreateInstance(elementType, count);
-                for (i = 0; i < count; i++) { array.SetValue(this.createFakeInstance(parametername, elementType, faker), i); }
+                for (i = 0; i < count; i++) { array.SetValue(this.createFakeInstance(parameterName, elementType, faker), i); }
                 return array;
             }
             if (type.IsGenericType)
@@ -163,9 +174,9 @@
                     var dict = (IDictionary)Activator.CreateInstance(type);
                     for (i = 0; i < count; i++)
                     {
-                        var key = this.createFakeInstance(parametername, keyType, faker);
+                        var key = this.createFakeInstance(parameterName, keyType, faker);
                         if (dict.Contains(key)) { continue; }
-                        dict.Add(key, this.createFakeInstance(parametername, valueType, faker));
+                        dict.Add(key, this.createFakeInstance(parameterName, valueType, faker));
                     }
                     return dict;
                 }
@@ -174,22 +185,23 @@
                     var elementType = type.GetGenericArguments()[0];
                     int i, count = (this.arrayMaxLength > 0 ? faker.Random.Int(this.arrayMinLength, this.arrayMaxLength) : 0);
                     var list = (IList)Activator.CreateInstance(type);
-                    for (i = 0; i < count; i++) { list.Add(this.createFakeInstance(parametername, elementType, faker)); }
+                    for (i = 0; i < count; i++) { list.Add(this.createFakeInstance(parameterName, elementType, faker)); }
                     return list;
                 }
             }
             if (type.IsClass)
             {
-                var ctor = type.GetConstructors().FirstOrDefault();
+                var ctor = type.GetConstructors().OrderByDescending(c => c.GetParameters().Length).FirstOrDefault();
                 if (ctor == null)
                 {
-                    if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"No public constructor found for \"{type.FullName}\"!"); }
-                    throw new InvalidOperationException($"\"{type.FullName}\" için genel bir kurucu (Constructors) bulunamadı!");
+                    if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"No constructor found for \"{type.FullName}\"!"); }
+                    throw new InvalidOperationException($"\"{type.FullName}\" için hiçbir kurucu (Constructors) bulunamadı!");
                 }
                 var args = ctor.GetParameters().Select(x => this.createFakeInstance(x.Name, x.ParameterType, faker)).ToArray();
                 return ctor.Invoke(args);
             }
             return null;
         }
+        #endregion
     }
 }

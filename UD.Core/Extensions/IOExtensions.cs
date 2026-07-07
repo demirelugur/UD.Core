@@ -1,7 +1,7 @@
 ﻿namespace UD.Core.Extensions
 {
     using System.IO;
-    using UD.Core.Helper;
+    using UD.Core.Helper.Managements.Files;
     using UD.Core.Helper.Validations;
     public static class IOExtensions
     {
@@ -12,7 +12,7 @@
         {
             Guard.ThrowIfNull(source, nameof(source));
             Guard.ThrowIfNull(target, nameof(target));
-            Files.DirectoryCreate(target.FullName);
+            FileHelper.DirectoryCreate(target.FullName);
             foreach (var item in source.GetFiles()) { item.CopyTo(Path.Combine(target.FullName, item.Name), true); }
             foreach (var item in source.GetDirectories()) { item.CopyAll(target.CreateSubdirectory(item.Name)); }
         }

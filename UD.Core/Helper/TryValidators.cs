@@ -262,7 +262,7 @@
         {
             try
             {
-                var q = (TryUri(value, out Uri _u) && _u.Host.Contains("maps.google.com")) ? (new QueryString(_u.Query).ParseOrDefaultFromQueryString<string>("q") ?? "").Split(',') : value.ToStringOrEmpty().Split(',').Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
+                var q = ((TryUri(value, out Uri _u) && _u.Host.Contains("maps.google.com")) ? (new QueryString(_u.Query).ParseOrDefaultFromQueryString<string>("q") ?? "") : value.ToStringOrEmpty()).Split(',').Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
                 if (q.Length == 2 && q.All(isGoogleMapsCoordinateCheck))
                 {
                     outvalue = new($"https://maps.google.com/?q={String.Join(",", q)}");
@@ -277,7 +277,7 @@
                 return false;
             }
         }
-        private static bool isGoogleMapsCoordinateCheck(string value) => (Decimal.TryParse(value.Trim(), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out decimal _r) && _r >= Convert.ToDecimal(-180) && _r <= Convert.ToDecimal(180));
+        private static bool isGoogleMapsCoordinateCheck(string value) => (Decimal.TryParse(value.Trim(), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out decimal _r) && _r.Between(-180M, 180M));
         /// <summary>
         /// Verilen bir metni, belirtilen diller arasında asenkron olarak çevirir.
         /// <para>Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;<paramref name="value"/>&quot; parametresindeki metni &quot;<paramref name="from"/>&quot; dilinden &quot;<paramref name="to"/>&quot; diline çevirir. Varsayılan olarak &quot;<paramref name="from"/>&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve <see langword="false"/> durumu döner.</para>
@@ -285,13 +285,7 @@
         public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslate(string value, TimeSpan timeout, string to = "en", string from = "tr", CancellationToken cancellationToken = default)
         {
             value = value.ToStringOrEmpty();
-            to = to.ToStringOrEmpty();
-            from = from.ToStringOrEmpty();
-            if (value == "" || to == "" || from == "")
-            {
-                if (Checks.IsEnglishCurrentUICulture) { return (true, "", new ArgumentException("Value, to and from parameters cannot be empty.")); }
-                return (true, "", new ArgumentException("Value, to ve from parametreleri boş olamaz."));
-            }
+            if (value == "") { return (false, "", default); }
             try
             {
                 using var client = new HttpClient
@@ -299,9 +293,11 @@
                     Timeout = timeout,
                     DefaultRequestHeaders = { UserAgent = { new("Mozilla", "4.0") } }
                 };
+                if (to.IsNullOrEmpty()) { to = "en"; }
+                if (from.IsNullOrEmpty()) { from = "tr"; }
                 var response = await client.GetStringAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl={from}&tl={to}&dt=t&q={Uri.EscapeDataString(HttpUtility.HtmlEncode(value))}", cancellationToken);
                 using var doc = JsonDocument.Parse(response);
-                return (false, doc.RootElement[0][0][0].GetString().ToStringOrEmpty(), null);
+                return (false, doc.RootElement[0][0][0].GetString().ToStringOrEmpty(), default);
             }
             catch (Exception ex) { return (true, "", ex); }
         }

@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
+    using System.Net;
     using UD.Core.Enums;
     using UD.Core.Helper;
     public static class EnumExtensions
@@ -7,25 +8,32 @@
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
         /// <param name="value">Açıklaması alınacak Enum değeri.</param>
         /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
-        public static string GetDescriptionLocalized(this EnumResponseMessage value)
+        public static string GetDescriptionLocalized(this EnumAlertState value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
                 return value switch
                 {
-                    EnumResponseMessage.success => "Your request has been completed successfully.",
-                    EnumResponseMessage.error => "An unexpected result occurred during the process! Contact the administrator.",
-                    EnumResponseMessage.notFound => "No records matching the parameters were found.",
-                    EnumResponseMessage.invalidDate => "The entered value does not comply with the date format! Please check.",
-                    EnumResponseMessage.unethicalContent => "\"Prohibited\" words appear in the text! Contact the administrator.",
-                    EnumResponseMessage.unauthorized => "You are not authorized for the transaction! Contact the administrator.",
-                    EnumResponseMessage.connectionError => "Cannot communicate with the server computer! Contact the administrator.",
-                    EnumResponseMessage.maxLengthExceeded => "The maximum character limit that can be entered has been exceeded! Contact the administrator.",
+                    EnumAlertState.success => "Operation successful.",
+                    EnumAlertState.info => "Information.",
+                    EnumAlertState.warning => "Warning.",
+                    EnumAlertState.error => "An error occurred.",
                     _ => throw value.ArgumentOutOfRange(nameof(value))
                 };
             }
             return value.GetDescriptionFromEnum();
         }
+        /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun <see cref="HttpStatusCode"/> değerini döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış <see cref="HttpStatusCode"/> değerlerini döndürür. Diğer durumlarda, Enum değerlerinin <see cref="HttpStatusCode"/> değerlerini enum tanımlarında belirtilen değerlere göre döndürür.</summary>
+        /// <param name="value">HttpStatusCode değeri alınacak Enum değeri.</param>
+        /// <returns>Geçerli UI kültürüne uygun <see cref="HttpStatusCode"/> değeri.</returns>
+        public static HttpStatusCode GetHttpStatusCode(this EnumAlertState value) => value switch
+        {
+            EnumAlertState.success => HttpStatusCode.OK,
+            EnumAlertState.info => HttpStatusCode.Accepted,
+            EnumAlertState.warning => HttpStatusCode.Accepted,
+            EnumAlertState.error => HttpStatusCode.BadRequest,
+            _ => throw value.ArgumentOutOfRange(nameof(value))
+        };
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
         /// <param name="value">Açıklaması alınacak Enum değeri.</param>
         /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>

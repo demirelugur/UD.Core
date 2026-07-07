@@ -1,6 +1,6 @@
-﻿namespace UD.Core.Helper
+﻿namespace UD.Core.Helper.Managements.Files
 {
-    public sealed class Files
+    public sealed class FileHelper
     {
         /// <summary>Verilen fiziksel dosya yolunda bir dosya varsa onu siler.</summary>
         /// <param name="physicallyPath">Silinecek dosyanın fiziksel yolu.</param>

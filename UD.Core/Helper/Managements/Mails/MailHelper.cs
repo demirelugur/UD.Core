@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper.MailManagements
+﻿namespace UD.Core.Helper.Managements.Mails
 {
     using System.Net.Mail;
     using UD.Core.Extensions;

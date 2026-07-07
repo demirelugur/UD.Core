@@ -1,6 +1,6 @@
 ﻿namespace UD.Core.Enums
 {
-    public enum EnumExecuteNonQuery : byte
+    public enum EnumCrudOperation : byte
     {
         insert = 1,
         update

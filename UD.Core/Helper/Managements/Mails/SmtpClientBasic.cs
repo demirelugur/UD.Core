@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper.MailManagements
+﻿namespace UD.Core.Helper.Managements.Mails
 {
     using Microsoft.AspNetCore.Http;
     using System.ComponentModel;

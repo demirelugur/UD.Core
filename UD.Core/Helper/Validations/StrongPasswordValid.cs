@@ -2,6 +2,7 @@
 {
     using UD.Core.Extensions;
     using UD.Core.Helper;
+    using UD.Core.Helper.Generates;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class StrongPasswordValid
     {

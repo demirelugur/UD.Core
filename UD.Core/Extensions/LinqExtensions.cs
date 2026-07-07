@@ -20,34 +20,6 @@
             if (condition) { return source.Where(predicate); }
             return source;
         }
-        /// <summary><paramref name="source"/> IQueryable kaynağına, <paramref name="condition"/> koşulu sağlandığında, <paramref name="propertySelector"/> ile seçilen string özelliğe göre LIKE filtresi uygular.</summary>
-        /// <typeparam name="T">Eleman tipi</typeparam>
-        /// <param name="source">Kaynak sorgu</param>
-        /// <param name="condition">Filtrenin uygulanıp uygulanmayacağını belirten koşul</param>
-        /// <param name="propertySelector">LIKE filtresi uygulanacak özellik</param>
-        /// <param name="searchTerm">Aranacak değer</param>
-        /// <param name="likeMode">LIKE filtresi modu</param>
-        /// <returns>Filtrelenmiş IQueryable kaynağı</returns>
-        public static IQueryable<T> WhereIfLike<T>(this IQueryable<T> source, bool condition, Expression<Func<T, string>> propertySelector, string searchTerm, EnumLikeMode likeMode = EnumLikeMode.contains)
-        {
-            if (!condition) { return source; }
-            searchTerm = searchTerm.ToStringOrEmpty();
-            var likePattern = likeMode switch
-            {
-                EnumLikeMode.contains => $"%{searchTerm}%",
-                EnumLikeMode.startsWith => $"{searchTerm}%",
-                EnumLikeMode.endsWith => $"%{searchTerm}",
-                _ => throw likeMode.ArgumentOutOfRange(nameof(likeMode))
-            };
-            var likeMethod = typeof(DbFunctionsExtensions).GetMethod(nameof(DbFunctionsExtensions.Like), [typeof(DbFunctions), typeof(string), typeof(string)]);
-            var parameter = propertySelector.Parameters[0];
-            var functionsExpression = Expression.Constant(EF.Functions);
-            var propertyExpression = propertySelector.Body;
-            var patternExpression = Expression.Constant(likePattern);
-            var likeCall = Expression.Call(null, likeMethod, functionsExpression, propertyExpression, patternExpression);
-            var lambda = Expression.Lambda<Func<T, bool>>(likeCall, parameter);
-            return source.Where(lambda);
-        }
         /// <summary><paramref name="source"/> IQueryable kaynağına, <paramref name="searchTerm"/> boş değilse, <paramref name="propertySelector"/> ile seçilen string özelliğe göre LIKE filtresi uygular.</summary>
         /// <typeparam name="T">Eleman tipi</typeparam>
         /// <param name="source">Kaynak sorgu</param>
@@ -58,7 +30,21 @@
         public static IQueryable<T> WhereIfLike<T>(this IQueryable<T> source, string searchTerm, Expression<Func<T, string>> propertySelector, EnumLikeMode likeMode = EnumLikeMode.contains)
         {
             if (searchTerm.IsNullOrEmpty()) { return source; }
-            return source.WhereIfLike(true, propertySelector, searchTerm, likeMode);
+            var likePattern = likeMode switch
+            {
+                EnumLikeMode.contains => $"%{searchTerm}%",
+                EnumLikeMode.startsWith => String.Concat(searchTerm, "%"),
+                EnumLikeMode.endsWith => String.Concat("%", searchTerm),
+                _ => throw likeMode.ArgumentOutOfRange(nameof(likeMode))
+            };
+            var likeMethod = typeof(DbFunctionsExtensions).GetMethod(nameof(DbFunctionsExtensions.Like), [typeof(DbFunctions), typeof(string), typeof(string)]);
+            var parameter = propertySelector.Parameters[0];
+            var functionsExpression = Expression.Constant(EF.Functions);
+            var propertyExpression = propertySelector.Body;
+            var patternExpression = Expression.Constant(likePattern);
+            var likeCall = Expression.Call(null, likeMethod, functionsExpression, propertyExpression, patternExpression);
+            var lambda = Expression.Lambda<Func<T, bool>>(likeCall, parameter);
+            return source.Where(lambda);
         }
         /// <summary>IQueryable kaynağını asenkron olarak diziye çevirir. EF Core destekliyorsa ToArrayAsync, değilse ToArray kullanır.</summary>
         /// <typeparam name="T">Eleman tipi</typeparam>
@@ -142,17 +128,24 @@
                 }
                 else { orderedSource = source.OrderBy(x => 0); }
             }
-            else
-            {
-                try { orderedSource = source.OrderBy(sorting); }
-                catch (Exception ex)
-                {
-                    if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
-                    throw new InvalidOperationException($"Sıralama hatası: {sorting}", ex);
-                }
-            }
+            else { orderedSource = source.OrderByDynamic(sorting); }
             var items = await orderedSource.Paginate(pageNumber, size).ToArrayAsync(cancellationToken);
             return new(pageNumber, size, items, p);
+        }
+        /// <summary><paramref name="source"/> IQueryable kaynağını, <paramref name="sorting"/> parametresine göre dinamik olarak sıralar. Sıralama başarısız olursa, geçersiz bir sıralama ifadesi ile ilgili bir hata fırlatır.</summary>
+        /// <typeparam name="T">Sorgu sonucundaki öğelerin tipi.</typeparam>
+        /// <param name="source">Sıralanacak IQueryable kaynağı.</param>
+        /// <param name="sorting">Sıralama ifadesi.</param>
+        /// <returns>Sıralanmış IOrderedQueryable kaynağı.</returns>
+        /// <exception cref="InvalidOperationException">Geçersiz bir sıralama ifadesi ile ilgili bir hata fırlatır.</exception>
+        public static IOrderedQueryable<T> OrderByDynamic<T>(this IQueryable<T> source, string sorting)
+        {
+            try { return source.OrderBy(sorting); }
+            catch (Exception ex)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
+                throw new InvalidOperationException($"Sıralama hatası: {sorting}", ex);
+            }
         }
         /// <summary>
         /// IOrderedQueryable kaynaklarının sayfalama işlemini gerçekleştirir.

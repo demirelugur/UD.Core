@@ -5,6 +5,7 @@
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Helper;
+    using UD.Core.Helper.Managements.Files;
     using UD.Core.Helper.Validations;
     public static class SystemArrayExtensions
     {
@@ -31,7 +32,7 @@
         {
             var hashBytes = SHA256.HashData(source ?? []);
             var sb = new StringBuilder(hashBytes.Length * 2);
-            foreach (var item in hashBytes) { sb.Append(item.ToString("x2")); }
+            foreach (var item in hashBytes) { sb.Append(item.ToString("X2")); }
             return sb.ToString();
         }
         /// <summary><paramref name="source"/> dizisinin SHA512 hash&#39;ini hesaplar ve sonucu hexadecimal biçiminde bir dize olarak döndürür. Eğer <paramref name="source"/> null ise, boş bir dizi olarak kabul edilir ve hash değeri buna göre hesaplanır. Hash hesaplama işlemi, .NET&#39;in yerleşik SHA512 algoritması kullanılarak gerçekleştirilir. Sonuç olarak, döndürülen dize, her byte&#39;ın iki karakterle temsil edildiği hexadecimal biçiminde olacaktır.</summary>
@@ -39,7 +40,7 @@
         {
             var hashBytes = SHA512.HashData(source ?? []);
             var sb = new StringBuilder(hashBytes.Length * 2);
-            foreach (var item in hashBytes) { sb.Append(item.ToString("x2")); }
+            foreach (var item in hashBytes) { sb.Append(item.ToString("X2")); }
             return sb.ToString();
         }
         /// <summary>İkili verileri base64 biçiminde bir dizeye dönüştürür. <see cref="Converters.ToBinaryFromBase64String(string)"/> işleminin tersidir</summary>
@@ -52,7 +53,7 @@
         {
             Guard.ThrowIfEmpty(bytes, nameof(bytes));
             Guard.ThrowIfEmpty(physicallyPath, nameof(physicallyPath));
-            Files.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
+            FileHelper.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
             using var fs = new FileStream(physicallyPath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true);
             await fs.WriteAsync(bytes.AsMemory(0, bytes.Length), cancellationToken);
             await fs.FlushAsync(cancellationToken);

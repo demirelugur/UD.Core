@@ -1,9 +1,8 @@
-﻿namespace UD.Core.Helper.FileManagements
+﻿namespace UD.Core.Helper.Managements.Files
 {
     using Microsoft.AspNetCore.Http;
     using System.Collections.Generic;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     public sealed class FileUploadProcess
     {
         private readonly HashSet<string> toBeDeletedDirectories = [];
@@ -30,12 +29,12 @@
             var hasAddedFile = this.toBeAddedFiles.Count > 0;
             if (this.toBeDeletedDirectories.Count > 0)
             {
-                foreach (var item in this.toBeDeletedDirectories) { Files.DirectoryExistsThenDelete(item, true); }
+                foreach (var item in this.toBeDeletedDirectories) { FileHelper.DirectoryExistsThenDelete(item, true); }
                 if (hasDeletedFiles || hasAddedFile) { await Task.Delay(300, cancellationToken); }
             }
             if (hasDeletedFiles)
             {
-                foreach (var item in this.toBeDeletedFiles) { Files.FileExistsThenDelete(item); }
+                foreach (var item in this.toBeDeletedFiles) { FileHelper.FileExistsThenDelete(item); }
                 if (hasAddedFile) { await Task.Delay(300, cancellationToken); }
             }
             if (hasAddedFile)

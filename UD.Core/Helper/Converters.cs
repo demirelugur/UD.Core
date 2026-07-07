@@ -1,21 +1,16 @@
 ﻿namespace UD.Core.Helper
 {
     using Microsoft.Data.SqlClient;
-    using Microsoft.IdentityModel.Tokens;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Data;
     using System.Globalization;
-    using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using System.Net;
     using System.Net.Mail;
-    using System.Security.Claims;
-    using System.Text;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validations;
     public sealed class Converters
     {
         /// <summary>Verilen string ifadeyi tersine çevirir. Bu metot, Türkçe karakterler (ğ, ü, ş, ç, ö, ı, İ vb.) dahil olmak üzere tüm Unicode metin öğelerini dikkate alarak çalışır. Standart char tabanlı ters çevirme yöntemlerinden farklı olarak <see cref="StringInfo"/> sınıfını kullanır ve her bir metin öğesini (text element) ayrı değerlendirir.</summary>
@@ -184,30 +179,6 @@
             if (valueString.IndexOf('.') > -1 && _baseType.Includes(typeof(float), typeof(double), typeof(decimal))) { valueString = valueString.Replace(".", ",", StringComparison.InvariantCulture); }
             try { return (TypeDescriptor.GetConverter(propertyType).ConvertFrom(valueString), _baseType); }
             catch { return (default, default); }
-        }
-        /// <summary><paramref name="claims"/> değerlerine göre bir JWT token oluşturur. Token, verilen <paramref name="key"/> ile imzalanır ve belirtilen süre boyunca geçerli olur. İsteğe bağlı olarak, token&#39;ın <paramref name="issuer"/> tarafından verildiği ve <paramref name="audience"/> tarafından hedeflendiği bilgileri de eklenebilir. Ayrıca, token&#39;ın geçerlilik başlangıç zamanı olarak <paramref name="notBefore"/> değeri de belirtilebilir.</summary>
-        /// <param name="claims">JWT token&#39;ında yer alacak claim&#39;ler.</param>
-        /// <param name="key">Token&#39;ı imzalamak için kullanılacak anahtar.</param>
-        /// <param name="expiresIn">Token&#39;ın geçerlilik süresi.</param>
-        /// <param name="issuer">Token&#39;ı oluşturan tarafın kimliği. Zorunlu alan değildir.</param>
-        /// <param name="audience">Token&#39;ın hedef kitlesi. Zorunlu alan değildir.</param>
-        /// <param name="notBefore">Token&#39;ın geçerli olmaya başlayacağı zaman.</param>
-        /// <returns>Oluşturulan JWT token&#39;ı.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Geçersiz bir süre değeri verildiğinde fırlatılır.</exception>
-        public static string GenerateJWTToken(IEnumerable<Claim> claims, string key, TimeSpan expiresIn, string? issuer = null, string? audience = null, DateTime? notBefore = null)
-        {
-            Guard.ThrowIfEmpty(claims, nameof(claims));
-            Guard.ThrowIfEmpty(key, nameof(key));
-            if (expiresIn <= TimeSpan.Zero)
-            {
-                var s = nameof(expiresIn);
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(s, $"{s} must be greater than zero."); }
-                throw new ArgumentOutOfRangeException(s, $"{s} süresi sıfırdan büyük bir değer olmalıdır!");
-            }
-            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var creds = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(issuer.ParseOrDefault<string>(), audience.ParseOrDefault<string>(), claims, notBefore.NullOrDefault(), DateTime.UtcNow.Add(expiresIn), creds);
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

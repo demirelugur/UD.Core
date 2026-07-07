@@ -1,8 +1,9 @@
-﻿namespace UD.Core.Helper.Validations
+﻿namespace UD.Core.Helper.Generates
 {
     using System.Text;
     using System.Text.RegularExpressions;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Validations;
     public sealed class PasswordGenerator
     {
         public static readonly PasswordGenerator Default = new("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "0123456789", "!@#$%^*()_+[]{}|;:,.?");

@@ -166,7 +166,7 @@ namespace UD.Core.Extensions
         private record SanitizeStringTruncateAccessor(IProperty property, int maxLength);
         private record NullableStructNullifyAccessor(IProperty property, Type underlyingType);
         private static SanitizeStringTruncateAccessor[] SanitizeCreateTruncateAccessor(IEntityType entityType) => entityType.GetProperties().Where(p => p.ClrType == typeof(string) && p.PropertyInfo.IsMapped()).Select(p => new SanitizeStringTruncateAccessor(p, p.GetMaxLength() ?? 0)).ToArray();
-        private static NullableStructNullifyAccessor[] CreateNullifyAccessor(IEntityType entityType) => entityType.GetProperties().Where(p => p.ClrType.IsNullable() && p.PropertyInfo.IsMapped()).Select(p => new NullableStructNullifyAccessor(p, Nullable.GetUnderlyingType(p.ClrType))).ToArray();
+        private static NullableStructNullifyAccessor[] CreateNullifyAccessor(IEntityType entityType) => entityType.GetProperties().Where(p => p.PropertyInfo.IsMapped() && p.ClrType.IsNullable()).Select(p => new NullableStructNullifyAccessor(p, Nullable.GetUnderlyingType(p.ClrType))).ToArray();
         private static readonly ConcurrentDictionary<Type, SanitizeStringTruncateAccessor[]> _sanitizeTruncateCache = new();
         private static readonly ConcurrentDictionary<Type, NullableStructNullifyAccessor[]> _nullifyCache = new();
         /// <summary>
