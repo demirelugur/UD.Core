@@ -30,5 +30,19 @@
             var numericIban = String.Concat(rearranged.Select(x => Char.IsDigit(x) ? x.ToString() : (x - 'A' + 10).ToString()));
             return BigInteger.TryParse(numericIban, out BigInteger _bi) && _bi % 97 == 1;
         }
+        /// <summary><paramref name="value"/> değerinin güçlü bir şifre olup olmadığını kontrol eder. Bu metod, şifrenin minimum uzunlukta olup olmadığını ve en az bir rakam, bir küçük harf, bir büyük harf ve bir özel karakter içerip içermediğini değerlendirir. Eğer şifre bu kriterleri karşılıyorsa <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu kontrol, kullanıcıların güvenli şifreler oluşturmasını sağlamak için kullanılabilir.</summary>
+        /// <param name="value">Kontrol edilecek şifre değeri.</param>
+        /// <param name="minimumLength">Şifrenin minimum uzunluğu.</param>
+        /// <returns><see langword="true"/> şifre güçlü ise, aksi takdirde <see langword="false"/>.</returns>
+        public static bool IsStrongPassword(string value, int minimumLength = 8)
+        {
+            value = value.ToStringOrEmpty();
+            var r = value.Length >= minimumLength;
+            if (r) { r = Regex.IsMatch(value, @"[\d]"); }
+            if (r) { r = Regex.IsMatch(value, @"[a-z]"); }
+            if (r) { r = Regex.IsMatch(value, @"[A-Z]"); }
+            if (r) { r = Regex.IsMatch(value, @"[!@#$%^&*()_+\-=\[\]{}|;:',.<>?]"); }
+            return r;
+        }
     }
 }

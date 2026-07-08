@@ -5,7 +5,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using UD.Core.Attributes;
     using UD.Core.Extensions;
-
     public sealed class TransactionMiddleware<TContext> where TContext : DbContext
     {
         private readonly RequestDelegate next;

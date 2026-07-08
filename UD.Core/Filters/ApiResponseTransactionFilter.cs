@@ -10,7 +10,7 @@
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var executedContext = await next();
-            if (executedContext.Result is ObjectResult _or && _or.Value is ApiResponse _ar && _ar.state == EnumAlertState.error) { context.HttpContext.MarkTransactionRollback(); }
+            if (executedContext.Result is ObjectResult _or && _or.Value is ApiResponse _ar && _ar.state.Includes(EnumAlertState.warning, EnumAlertState.error)) { context.HttpContext.MarkTransactionRollback(); }
         }
         /*
         builder.Services.AddControllers(options =>

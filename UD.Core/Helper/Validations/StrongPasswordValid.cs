@@ -2,7 +2,6 @@
 {
     using UD.Core.Extensions;
     using UD.Core.Helper;
-    using UD.Core.Helper.Generates;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class StrongPasswordValid
     {
@@ -25,7 +24,7 @@
             Guard.ThrowIfEmpty(value, nameof(value));
             var r = new List<string>();
             var isEnglish = Checks.IsEnglishCurrentUICulture;
-            if (!PasswordGenerator.IsStrongPassword(value, this.minimumLength))
+            if (!Checks.IsStrongPassword(value, this.minimumLength))
             {
                 if (isEnglish) { r.Add($"The password must have a minimum of {this.minimumLength} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
                 else { r.Add($"Şifre minimum {this.minimumLength} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }

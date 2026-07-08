@@ -1,6 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
-    using System.Net;
+    using Microsoft.AspNetCore.Http;
     using UD.Core.Enums;
     using UD.Core.Helper;
     public static class EnumExtensions
@@ -23,15 +23,15 @@
             }
             return value.GetDescriptionFromEnum();
         }
-        /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun <see cref="HttpStatusCode"/> değerini döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış <see cref="HttpStatusCode"/> değerlerini döndürür. Diğer durumlarda, Enum değerlerinin <see cref="HttpStatusCode"/> değerlerini enum tanımlarında belirtilen değerlere göre döndürür.</summary>
-        /// <param name="value">HttpStatusCode değeri alınacak Enum değeri.</param>
-        /// <returns>Geçerli UI kültürüne uygun <see cref="HttpStatusCode"/> değeri.</returns>
-        public static HttpStatusCode GetHttpStatusCode(this EnumAlertState value) => value switch
+        /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun HTTP durum kodunu döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış HTTP durum kodlarını döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
+        /// <param name="value">HTTP durum kodu alınacak Enum değeri.</param>
+        /// <returns>Geçerli UI kültürüne uygun HTTP durum kodu.</returns>
+        public static int GetStatusCode(this EnumAlertState value) => value switch
         {
-            EnumAlertState.success => HttpStatusCode.OK,
-            EnumAlertState.info => HttpStatusCode.Accepted,
-            EnumAlertState.warning => HttpStatusCode.Accepted,
-            EnumAlertState.error => HttpStatusCode.BadRequest,
+            EnumAlertState.success => StatusCodes.Status200OK,
+            EnumAlertState.info => StatusCodes.Status202Accepted,
+            EnumAlertState.warning => StatusCodes.Status202Accepted,
+            EnumAlertState.error => StatusCodes.Status400BadRequest,
             _ => throw value.ArgumentOutOfRange(nameof(value))
         };
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>

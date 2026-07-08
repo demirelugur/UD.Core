@@ -35,6 +35,16 @@
             var token = new JwtSecurityToken(issuer.ParseOrDefault<string>(), audience.ParseOrDefault<string>(), claims, notBefore.NullOrDefault(), DateTime.UtcNow.Add(expiresIn), creds);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        /// <summary><paramref name="length"/> uzunluğunda rastgele karakterlerden oluşan bir string üretir. Eğer <paramref name="elements"/> parametresi boş bırakılırsa, varsayılan olarak büyük harfler, küçük harfler ve rakamlardan oluşan bir karakter kümesi kullanılır.</summary>
+        /// <param name="length">Oluşturulacak string&#39;in uzunluğu.</param>
+        /// <param name="elements">Kullanılacak karakter kümesi. Boş bırakılırsa varsayılan olarak &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&quot; kullanılır.</param>
+        /// <returns>Oluşturulan rastgele string.</returns>
+        public static string RandomString(int length, string elements = "")
+        {
+            length = Math.Max(1, length);
+            if (elements.IsNullOrEmpty()) { elements = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; }
+            return new(Enumerable.Repeat(elements, length).Select(x => x[Random.Shared.Next(x.Length)]).ToArray());
+        }
         /// <summary>Kurallara uygun olarak sahte bir Türkiye Cumhuriyeti kimlik numarası üretir. Üretilen kimlik numarası, 11 haneli olup, ilk hanesi 0 olamaz ve son iki hanesi belirli bir algoritmaya göre hesaplanır. Bu metod, test ve geliştirme ortamlarında geçerli bir kimlik numarası gerektiren senaryolar için kullanılabilir.</summary>
         /// <returns>Oluşturulan sahte Türkiye Cumhuriyeti kimlik numarası.</returns>
         public static long FakeTRIdentityNumber()
@@ -60,7 +70,7 @@
             significantDigits = Math.Max(1, significantDigits);
             significantDigits = Math.Min(10, significantDigits);
             Span<int> digits = stackalloc int[MaximumLengthConstants.TRTaxIdentityNumber];
-            int i, tmp, sum = 0, leadingZeros = 10 - significantDigits;
+            int i, tmp, sum = 0, leadingZeros = MaximumLengthConstants.TRTaxIdentityNumber - significantDigits;
             for (i = 0; i < leadingZeros; i++) { digits[i] = 0; }
             var random = Random.Shared;
             for (i = leadingZeros; i < 9; i++) { digits[i] = random.Next(10); }

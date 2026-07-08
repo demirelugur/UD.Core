@@ -1,8 +1,6 @@
 ﻿namespace UD.Core.Helper.Generates
 {
     using System.Text;
-    using System.Text.RegularExpressions;
-    using UD.Core.Extensions;
     using UD.Core.Helper.Validations;
     public sealed class PasswordGenerator
     {
@@ -39,22 +37,6 @@
         {
             int i;
             foreach (var item in new string[] { this.upperCases, this.lowerCases, this.digits, this.punctuations }) { for (i = 0; i < count; i++) { sb.Append(item[Random.Shared.Next(item.Length)]); } }
-        }
-        public static string GenerateRandomChars(int length, string elements = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
-        {
-            Guard.ThrowIfZeroOrNegative(length, nameof(length));
-            Guard.ThrowIfEmpty(elements, nameof(elements));
-            return new(Enumerable.Repeat(elements, length).Select(x => x[Random.Shared.Next(x.Length)]).ToArray());
-        }
-        public static bool IsStrongPassword(string value, int minimumLength = 8)
-        {
-            value = value.ToStringOrEmpty();
-            var r = value.Length >= minimumLength;
-            if (r) { r = Regex.IsMatch(value, @"[\d]"); }
-            if (r) { r = Regex.IsMatch(value, @"[a-z]"); }
-            if (r) { r = Regex.IsMatch(value, @"[A-Z]"); }
-            if (r) { r = Regex.IsMatch(value, @"[!@#$%^&*()_+\-=\[\]{}|;:',.<>?]"); }
-            return r;
         }
     }
 }
