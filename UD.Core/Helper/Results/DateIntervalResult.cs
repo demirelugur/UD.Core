@@ -3,35 +3,33 @@
     using UD.Core.Helper;
     public sealed class DateIntervalResult
     {
-        public int yil { get; set; }
-        public int ay { get; set; }
-        public int gun { get; set; }
-        public TimeOnly ts { get; set; }
-        public DateIntervalResult() : this(default, default, default, default) { }
-        public DateIntervalResult(int yil, int ay, int gun, TimeOnly ts)
+        public int year { get; set; }
+        public int month { get; set; }
+        public int day { get; set; }
+        public DateIntervalResult() : this(default, default, default) { }
+        public DateIntervalResult(int year, int month, int day)
         {
-            this.yil = yil;
-            this.ay = ay;
-            this.gun = gun;
-            this.ts = ts;
+            this.year = year;
+            this.month = month;
+            this.day = day;
         }
-        public string ToPrettyString()
+        public override string ToString()
         {
             var r = new List<string>();
-            if (this.yil > 0)
+            if (this.year > 0)
             {
                 var p0 = Checks.IsEnglishCurrentUICulture ? "year" : "yıl";
-                r.Add(String.Join(" ", this.yil.ToString(), p0));
+                r.Add(String.Join(" ", this.year.ToString(), p0));
             }
-            if (this.ay > 0)
+            if (this.month > 0)
             {
                 var p1 = Checks.IsEnglishCurrentUICulture ? "month" : "ay";
-                r.Add(String.Join(" ", this.ay.ToString(), p1));
+                r.Add(String.Join(" ", this.month.ToString(), p1));
             }
-            if (this.gun > 0)
+            if (this.day > 0)
             {
                 var p2 = Checks.IsEnglishCurrentUICulture ? "day" : "gün";
-                r.Add(String.Join(" ", this.gun.ToString(), p2));
+                r.Add(String.Join(" ", this.day.ToString(), p2));
             }
             return (r.Count > 0 ? String.Join(", ", r) : "");
         }

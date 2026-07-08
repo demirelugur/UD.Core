@@ -28,7 +28,7 @@
         }
         #region byte[]
         /// <summary><paramref name="source"/> dizisinin SHA256 hash&#39;ini hesaplar ve sonucu hexadecimal biçiminde bir dize olarak döndürür. Eğer <paramref name="source"/> null ise, boş bir dizi olarak kabul edilir ve hash değeri buna göre hesaplanır. Hash hesaplama işlemi, .NET&#39;in yerleşik SHA256 algoritması kullanılarak gerçekleştirilir. Sonuç olarak, döndürülen dize, her byte&#39;ın iki karakterle temsil edildiği hexadecimal biçiminde olacaktır.</summary>
-        public static string ToSHA256Hexadecimal(this byte[] source)
+        public static string ComputeHash256(this byte[] source)
         {
             var hashBytes = SHA256.HashData(source ?? []);
             var sb = new StringBuilder(hashBytes.Length * 2);
@@ -36,7 +36,7 @@
             return sb.ToString();
         }
         /// <summary><paramref name="source"/> dizisinin SHA512 hash&#39;ini hesaplar ve sonucu hexadecimal biçiminde bir dize olarak döndürür. Eğer <paramref name="source"/> null ise, boş bir dizi olarak kabul edilir ve hash değeri buna göre hesaplanır. Hash hesaplama işlemi, .NET&#39;in yerleşik SHA512 algoritması kullanılarak gerçekleştirilir. Sonuç olarak, döndürülen dize, her byte&#39;ın iki karakterle temsil edildiği hexadecimal biçiminde olacaktır.</summary>
-        public static string ToSHA512Hexadecimal(this byte[] source)
+        public static string ComputeHash512(this byte[] source)
         {
             var hashBytes = SHA512.HashData(source ?? []);
             var sb = new StringBuilder(hashBytes.Length * 2);

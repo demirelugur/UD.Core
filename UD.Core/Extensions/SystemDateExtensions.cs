@@ -83,7 +83,6 @@
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
                 throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!");
             }
-            var ts = (bitDate - basDate).ToTimeOnly();
             var yil = bitDate.Year - basDate.Year;
             var ay = bitDate.Month - basDate.Month;
             var gun = bitDate.Day - basDate.Day;
@@ -97,7 +96,7 @@
                 yil--;
                 ay += 12;
             }
-            return new(yil, ay, gun, ts);
+            return new(yil, ay, gun);
         }
         #endregion
         #region DayOfWeek
@@ -114,8 +113,13 @@
         }
         #endregion
         #region TimeSpan
-        /// <summary><paramref name="timeSpan"/> değerini, gece yarısından (00:00:00) itibaren geçen toplam süre olarak temsil eden bir <see cref="TimeOnly"/> nesnesine dönüştürür. Dönüşüm sırasında, <paramref name="timeSpan"/> değerinin gün kısmı dikkate alınmaz ve yalnızca saat, dakika, saniye ve milisaniye bilgisi kullanılır. Bu sayede, <paramref name="timeSpan"/> değeri 24 saatten büyük olsa bile, sonuç her zaman 00:00:00 ile 23:59:59.999 arasında bir zaman dilimini temsil eder.</summary>
-        public static TimeOnly ToTimeOnly(this TimeSpan timeSpan) => TimeOnly.FromTimeSpan(timeSpan - TimeSpan.FromDays((int)timeSpan.TotalDays));
+        /// <summary>Verilen <see cref="TimeSpan"/> değerini yalnızca saat, dakika ve saniye bileşenlerini içeren bir <see cref="TimeOnly"/> nesnesine dönüştürür. Negatif süreleri destekler.</summary>
+        public static TimeOnly ToTimeOnly(this TimeSpan timeSpan)
+        {
+            var ticks = timeSpan.Ticks % TimeSpan.TicksPerDay;
+            if (ticks < 0) { ticks += TimeSpan.TicksPerDay; }
+            return TimeOnly.FromTimeSpan(new(ticks));
+        }
         /// <summary>TimeSpan değerini gün, saat, dakika ve saniye (milisaniye dahil) bileşenlerine ayırarak okunabilir bir metne dönüştürür. Negatif süreleri destekler.</summary>
         public static string ToPretty(this TimeSpan timeSpan)
         {
@@ -123,29 +127,29 @@
             var secondText = isEnglish ? "sec." : "sn.";
             if (timeSpan == TimeSpan.Zero) { return String.Concat("0 ", secondText); }
             var isNegative = timeSpan < TimeSpan.Zero;
-            var ts = isNegative ? timeSpan.Duration() : timeSpan;
+            if (isNegative) { timeSpan = timeSpan.Duration(); }
             var parts = new List<string>();
-            if (ts.Days > 0)
+            if (timeSpan.Days > 0)
             {
-                var dayText = isEnglish ? (ts.Days > 1 ? "days" : "day") : "gün";
-                parts.Add(String.Join(" ", ts.Days, dayText));
+                var dayText = isEnglish ? (timeSpan.Days > 1 ? "days" : "day") : "gün";
+                parts.Add(String.Join(" ", timeSpan.Days, dayText));
             }
-            if (ts.Hours > 0)
+            if (timeSpan.Hours > 0)
             {
-                var hourText = isEnglish ? (ts.Hours > 1 ? "hours" : "hour") : "saat";
-                parts.Add(String.Join(" ", ts.Hours.ToString().Replicate(), hourText));
+                var hourText = isEnglish ? (timeSpan.Hours > 1 ? "hours" : "hour") : "saat";
+                parts.Add(String.Join(" ", timeSpan.Hours.ToString().Replicate(), hourText));
             }
-            if (ts.Minutes > 0)
+            if (timeSpan.Minutes > 0)
             {
                 var minuteText = isEnglish ? "min." : "dk.";
-                parts.Add(String.Join(" ", ts.Minutes.ToString().Replicate(), minuteText));
+                parts.Add(String.Join(" ", timeSpan.Minutes.ToString().Replicate(), minuteText));
             }
-            if (ts.Milliseconds > 0)
+            if (timeSpan.Milliseconds > 0)
             {
                 var nf = CultureInfo.CurrentUICulture.NumberFormat;
-                parts.Add($"{(ts.Seconds > 0 ? ts.Seconds.ToString().Replicate() : "0")}{nf.CurrencyDecimalSeparator}{ts.Milliseconds.ToString().Replicate(3)} {secondText}");
+                parts.Add($"{(timeSpan.Seconds > 0 ? timeSpan.Seconds.ToString().Replicate() : "0")}{nf.CurrencyDecimalSeparator}{timeSpan.Milliseconds.ToString().Replicate(3)} {secondText}");
             }
-            else if (ts.Seconds > 0) { parts.Add(String.Join(" ", ts.Seconds.ToString().Replicate(), secondText)); }
+            else if (timeSpan.Seconds > 0) { parts.Add(String.Join(" ", timeSpan.Seconds.ToString().Replicate(), secondText)); }
             var result = String.Join(" ", parts);
             return isNegative ? String.Concat("- ", result) : result;
         }

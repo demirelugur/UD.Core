@@ -140,8 +140,16 @@
             {
                 if (value is DateOnly _da) { return (_da, _baseType); }
                 if (DateOnly.TryParse(valueString, out _da)) { return (_da, _baseType); }
-                var date = value.ParseOrDefault<DateTime?>();
-                if (date.HasValue) { return (date.Value.ToDateOnly(), _baseType); }
+                var dateTime = value.ParseOrDefault<DateTime?>();
+                if (dateTime.HasValue) { return (dateTime.Value.ToDateOnly(), _baseType); }
+                return (default, _baseType);
+            }
+            if (_baseType == typeof(DateTimeOffset))
+            {
+                if (value is DateTimeOffset _dto) { return (_dto, _baseType); }
+                if (DateTimeOffset.TryParse(valueString, out _dto)) { return (_dto, _baseType); }
+                var dateTime = value.ParseOrDefault<DateTime?>();
+                if (dateTime.HasValue) { return (new DateTimeOffset(dateTime.Value), _baseType); }
                 return (default, _baseType);
             }
             if (_baseType == typeof(TimeSpan))

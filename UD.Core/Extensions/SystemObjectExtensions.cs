@@ -1,11 +1,14 @@
 ﻿namespace UD.Core.Extensions
 {
+    using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Data;
     using System.Dynamic;
     using System.Globalization;
+    using System.Web;
     using UD.Core.Helper;
     using UD.Core.Helper.Validations;
     public static class SystemObjectExtensions
@@ -14,14 +17,49 @@
         /// <param name="value">JSON&#39;a dönüştürülecek nesne.</param>
         /// <returns>Nesnenin JSON string biçiminde temsili.</returns>
         public static string ToJSON(this object value) => JsonConvert.SerializeObject(value, Formatting.None, GlobalConstants.JsonSerializerSettings);
-        /// <summary>Verilen bir dizeyi, belirtilen türde bir değere dönüştürür. Dönüşüm başarısız olursa, varsayılan değeri döner.</summary>
-        /// <typeparam name="TKey">Dönüşüm yapılacak hedef tür.</typeparam>
-        /// <param name="value">Dönüştürülecek dize değeri.</param>
-        /// <returns>Dönüştürülen değeri veya dönüşüm başarısızsa varsayılan değeri döner.</returns>
-        public static TKey ParseOrDefault<TKey>(this object value)
+        /// <summary>Belirtilen değeri istenen türe (<typeparamref name="TKey"/>) güvenli bir şekilde dönüştürür. Anahtar (<paramref name="key"/>) parametresi verildiğinde, <paramref name="value"/> nesnesini farklı veri kaynaklarından (<see cref="IDataReader"/>, <see cref="IDictionary{String, Object}"/>, <see cref="IFormCollection"/>, <see cref="QueryString"/>) anahtar bazlı olarak okuyup dönüştürür.</summary>
+        /// <typeparam name="TKey">Dönüştürülecek hedef tür (int, Guid, bool, DateTime, enum vb.).</typeparam>
+        /// <param name="value">Dönüştürülecek ana nesne. <paramref name="key"/> parametresi boş ise direkt bu değer dönüştürülür.</param>
+        /// <param name="key">Opsiyonel. Değerin hangi anahtardan okunacağını belirtir.
+        /// <para>Desteklenen türler (key parametresi dolu olduğunda):</para>
+        /// <list type="bullet">
+        ///   <item><see cref="IDataReader"/> - DataReader&#39;dan kolon ismiyle değeri okur. <see cref="DBNull"/> durumunda default döner.</item>
+        ///   <item><see cref="IDictionary{String, Object}"/> - Dictionary&#39;den anahtara göre değeri çeker.</item>
+        ///   <item><see cref="IFormCollection"/> - Form verilerinden <c><see cref="AspNetCoreExtensions.TryGetStringValue(IFormCollection, string, out string)"/></c> ile okur.</item>
+        ///   <item><see cref="QueryString"/> - Query string&#39;i parse edip ilgili değeri alır.</item>
+        /// </list>
+        /// </param>
+        /// <returns>Dönüştürme başarılı ise istenen türde değer, aksi takdirde <typeparamref name="TKey"/> türünün default değeri.</returns>
+        /// <remarks>
+        /// <para>• <paramref name="key"/> boş veya null ise, <paramref name="value"/> direkt olarak <see cref="Converters.ParseOrDefault(object, Type)"/> metodu ile dönüştürülür.</para>
+        /// <para>• <paramref name="key"/> dolu ise <paramref name="value"/> parametresi (<see cref="IDataReader"/>, <see cref="IDictionary{String, Object}"/>, <see cref="IFormCollection"/>, <see cref="QueryString"/>) türlerinden biri olmalıdır. Aksi halde default değer döner.</para>
+        /// <para>Bu metod, controller&#39;larda, repository&#39;lerde ve veri dönüşüm katmanlarında database reader, dictionary, form ve query string gibi farklı kaynaklardan gelen verileri tek bir yöntemle güvenli şekilde okumak için idealdir.</para>
+        /// </remarks>
+        public static TKey ParseOrDefault<TKey>(this object value, string key = "")
         {
-            var pd = Converters.ParseOrDefault(value, typeof(TKey));
-            return pd is TKey _tValue ? _tValue : default;
+            if (key.IsNullOrEmpty())
+            {
+                var pd = Converters.ParseOrDefault(value, typeof(TKey));
+                return pd is TKey _tValue ? _tValue : default;
+            }
+            if (value is IDataReader _dr)
+            {
+                try
+                {
+                    var valueObject = _dr[key];
+                    if (valueObject == null || valueObject == DBNull.Value) { return default; }
+                    return valueObject.ParseOrDefault<TKey>();
+                }
+                catch { return default; }
+            }
+            if (value is IDictionary<string, object> _dic && _dic.TryGetValue(key, out object _dicValue)) { return _dicValue.ParseOrDefault<TKey>(); }
+            if (value is IFormCollection _form && _form.TryGetStringValue(key, out string _formValue)) { return _formValue.ParseOrDefault<TKey>(); }
+            if (value is QueryString _qs && _qs.HasValue)
+            {
+                var querydic = HttpUtility.ParseQueryString(_qs.Value);
+                if (querydic.AllKeys.Contains(key)) { return querydic[key].ParseOrDefault<TKey>(); }
+            }
+            return default;
         }
         /// <summary>Nesneyi string değere dönüştürür. Nesne null ise boş string döndürür.</summary>
         /// <param name="value">String&#39;e dönüştürülecek nesne</param>

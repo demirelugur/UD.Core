@@ -177,7 +177,7 @@ namespace UD.Core.Extensions
             if (isWhiteSpace) { separators.Add(' '); }
             cultureInfo ??= CultureInfo.GetCultureInfo("tr-TR");
             var sb = new StringBuilder(value.Length);
-            bool newWord = true;
+            var newWord = true;
             foreach (var ch in value)
             {
                 if (separators.Contains(ch))
@@ -218,7 +218,7 @@ namespace UD.Core.Extensions
         /// <para>SQL Server karþýlýðý:</para>
         /// <code>SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_256&#39;, &#39;Lorem Ipsum&#39;)), 3, 64)</code>
         /// </remarks>
-        public static string ToSHA256Hexadecimal(this string value) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ToSHA256Hexadecimal(); // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
+        public static string ComputeHash256(this string value) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ComputeHash256(); // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
         /// <summary>Verilen string ifadesinin SHA-512 hash deðerini hesaplar ve hexadecimal (hex) formatýnda döndürür.</summary>
         /// <param name="value">Hash deðeri hesaplanacak string ifade.</param>
         /// <returns>SHA-512 hash&#39;inin 128 karakterlik hexadecimal string deðeri.</returns>
@@ -227,6 +227,6 @@ namespace UD.Core.Extensions
         /// <para>SQL Server karþýlýðý:</para>
         /// <code>SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_512&#39;, &#39;Lorem Ipsum&#39;)), 3, 128)</code>
         /// </remarks>
-        public static string ToSHA512Hexadecimal(this string value) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ToSHA512Hexadecimal(); // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128)
+        public static string ComputeHash512(this string value) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ComputeHash512(); // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128)
     }
 }

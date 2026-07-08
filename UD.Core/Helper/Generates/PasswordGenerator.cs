@@ -9,13 +9,14 @@
         private string lowerCases { get; }
         private string digits { get; }
         private string punctuations { get; }
-        private string all => String.Join("", this.upperCases, this.lowerCases, this.digits, this.punctuations);
+        private string allowedCharacters { get; }
         public PasswordGenerator(string upperCases, string lowerCases, string digits, string punctuations)
         {
             this.upperCases = upperCases;
             this.lowerCases = lowerCases;
             this.digits = digits;
             this.punctuations = punctuations;
+            this.allowedCharacters = String.Join("", this.upperCases, this.lowerCases, this.digits, this.punctuations).Trim();
         }
         public string Generate()
         {
@@ -29,7 +30,7 @@
             else
             {
                 this.set(sb, 1);
-                for (i = minLength; i < maxLength; i++) { sb.Append(this.all[Random.Shared.Next(this.all.Length)]); }
+                for (i = minLength; i < maxLength; i++) { sb.Append(this.allowedCharacters[Random.Shared.Next(this.allowedCharacters.Length)]); }
             }
             return new(sb.ToString().ToCharArray().Shuffle().ToArray());
         }

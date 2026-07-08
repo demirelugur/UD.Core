@@ -8,7 +8,6 @@
     using System.Globalization;
     using System.Linq;
     using System.Net;
-    using System.Web;
     using UD.Core.Enums;
     using UD.Core.Helper;
     using UD.Core.Helper.Managements.Files;
@@ -68,16 +67,6 @@
         public static bool IsTransactionRollbackRequired(this HttpContext context) => (context.Items.TryGetValue(TransactionRollbackKey, out object _value) && _value is Boolean _b && _b);
         #endregion
         #region IFormCollection
-        /// <summary>Belirtilen anahtar ile form verilerinden bir değeri alır ve belirtilen türde bir nesneye dönüştürür.</summary>
-        /// <typeparam name="TKey">Dönüştürülecek nesne türü.</typeparam>
-        /// <param name="form">Form koleksiyonu.</param>
-        /// <param name="key">Anahtar adı.</param>
-        /// <returns>Belirtilen türdeki değeri döndürür; anahtar bulunamazsa varsayılan değer döner.</returns>
-        public static TKey ParseOrDefaultFromFormCollection<TKey>(this IFormCollection form, string key)
-        {
-            if (form.TryGetStringValue(key, out string _value)) { return _value.ParseOrDefault<TKey>(); }
-            return default;
-        }
         /// <summary>Form koleksiyonundan belirtilen anahtar ile bir dize değerini alır.</summary>
         /// <param name="form">Form koleksiyonu.</param>
         /// <param name="key">Anahtar adı.</param>
@@ -187,18 +176,6 @@
             return ms.ToArray();
         }
         #endregion
-        /// <summary><see cref="QueryString"/> içindeki belirtilen anahtarı alır ve uygun türde bir değere dönüştürür. Eğer anahtar bulunamazsa veya dönüştürme başarısız olursa, varsayılan değeri döner.</summary>
-        /// <typeparam name="TKey">Dönüştürülecek hedef tür.</typeparam>
-        /// <param name="queryString">İçinde sorgu parametrelerini barındıran <see cref="QueryString"/> nesnesi.</param>
-        /// <param name="key">Alınacak sorgu parametresinin adı (anahtar).</param>
-        /// <returns>Başarılıysa sorgu parametresi uygun türe dönüştürülür, aksi halde varsayılan değer döner.</returns>
-        public static TKey ParseOrDefaultFromQueryString<TKey>(this QueryString queryString, string key)
-        {
-            var querydic = (queryString.HasValue ? HttpUtility.ParseQueryString(queryString.Value) : []);
-            key = key.ToStringOrEmpty();
-            if (querydic.AllKeys.Contains(key)) { return querydic[key].ParseOrDefault<TKey>(); }
-            return default;
-        }
         /// <summary>ModelStateDictionary nesnesine bir dizi hata mesajını topluca eklemek için kullanılan bir genişletme metodu.</summary>
         /// <param name="modelstate">Hataların ekleneceği ModelStateDictionary nesnesi.</param>
         /// <param name="errors">Eklenecek hata mesajlarını içeren string listesi.</param>

@@ -1,7 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
     using System.Data;
-    using UD.Core.Helper.Validations;
     public static class DataExtensions
     {
         /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.</summary>
@@ -108,23 +107,6 @@
                 DbType.Xml => SqlDbType.Xml,
                 _ => throw type.ArgumentOutOfRange(nameof(type))
             };
-        }
-        /// <summary>Belirtilen sütun adını kullanarak <see cref="IDataReader"/> içinden değeri okur ve verilen türde (<typeparamref name="TKey"/>) döndürür. Eğer sütun değeri <c>null</c>, <see cref="DBNull"/> ya da dönüştürülemeyen bir değer içeriyorsa, türün varsayılan değerini (<c>default</c>) geri döner.</summary>
-        /// <typeparam name="TKey">Dönüştürülmek istenen hedef tür.</typeparam>
-        /// <param name="reader">Veri kaynağından okuma yapan <see cref="IDataReader"/> nesnesi.</param>
-        /// <param name="key">Okunacak sütunun adı.</param>
-        /// <returns>Sütun değeri başarıyla dönüştürülebilirse <typeparamref name="TKey"/> tipinde değer, aksi durumda varsayılan değer döner.</returns>
-        public static TKey ParseOrDefaultFromDataReader<TKey>(this IDataReader reader, string key)
-        {
-            Guard.ThrowIfNull(reader, nameof(reader));
-            try
-            {
-                key = key.ToStringOrEmpty();
-                var value = reader[key];
-                if (value == null || value == DBNull.Value) { return default; }
-                return value.ParseOrDefault<TKey>();
-            }
-            catch { return default; }
         }
     }
 }

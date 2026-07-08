@@ -55,6 +55,16 @@
             if (source.Provider is IAsyncQueryProvider) { return source.ToArrayAsync(cancellationToken); }
             return Task.FromResult(source.ToArray());
         }
+        /// <summary>IQueryable kaynağını asenkron olarak listeye çevirir. EF Core destekliyorsa ToListAsync, değilse ToList kullanır.</summary>
+        /// <typeparam name="T">Eleman tipi</typeparam>
+        /// <param name="source">Kaynak sorgu</param>
+        /// <param name="cancellationToken">İptal token&#39;ı</param>
+        /// <returns>Asenkron olarak listeye çevrilmiş IQueryable kaynağı</returns>
+        public static Task<List<T>> ToListSafe<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
+        {
+            if (source.Provider is IAsyncQueryProvider) { return source.ToListAsync(cancellationToken); }
+            return Task.FromResult(source.ToList());
+        }
         /// <summary>İki IQueryable arasında 1-1 sol birleştirme (left join) işlemi gerçekleştirir.</summary>
         /// <typeparam name="TLeft">Sol taraftaki nesne türü.</typeparam>
         /// <typeparam name="TRight">Sağ taraftaki nesne türü.</typeparam>
@@ -102,10 +112,10 @@
         /// <param name="source">Sayfalanacak IQueryable veri kaynağı.</param>
         /// <param name="pageNumber">İstenen sayfa numarası. (1 tabanlı)</param>
         /// <param name="size">Sayfa başına öğe sayısı.</param>
-        /// <param name="sorting">Sorgu sıralaması</param>
+        /// <param name="ordering">Sorgu sıralaması</param>
         /// <param name="loadInfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
-        public static async Task<Paginate<T>> ToPagedList<T>(this IQueryable<T> source, int pageNumber, int size, string sorting, bool loadInfo = true, CancellationToken cancellationToken = default)
+        public static async Task<Paginate<T>> ToPagedList<T>(this IQueryable<T> source, int pageNumber, int size, string ordering, bool loadInfo = true, CancellationToken cancellationToken = default)
         {
             Guard.ThrowIfNull(source, nameof(source));
             PagingInfo? p = null;
@@ -116,7 +126,7 @@
                 p = new(totalCount, totalPage, pageNumber);
             }
             IOrderedQueryable<T> orderedSource;
-            if (sorting.IsNullOrEmpty())
+            if (ordering.IsNullOrEmpty())
             {
                 if (typeof(T).IsSubclassOfOpenGeneric(typeof(EntityDto<>)))
                 {
@@ -124,27 +134,33 @@
                     var idProperty = typeof(T).GetProperty(idName);
                     Guard.ThrowIfNull(idProperty, nameof(idProperty));
                     if (idProperty.PropertyType == typeof(Guid)) { orderedSource = source.OrderBy(x => 0); }
-                    else { orderedSource = source.OrderBy(idName); }
+                    else { orderedSource = source.OrderByDynamic(idName); }
                 }
                 else { orderedSource = source.OrderBy(x => 0); }
             }
-            else { orderedSource = source.OrderByDynamic(sorting); }
+            else { orderedSource = source.OrderByDynamic(ordering); }
             var items = await orderedSource.Paginate(pageNumber, size).ToArrayAsync(cancellationToken);
             return new(pageNumber, size, items, p);
         }
-        /// <summary><paramref name="source"/> IQueryable kaynağını, <paramref name="sorting"/> parametresine göre dinamik olarak sıralar. Sıralama başarısız olursa, geçersiz bir sıralama ifadesi ile ilgili bir hata fırlatır.</summary>
+        /// <summary><paramref name="source"/> IQueryable kaynağını, <paramref name="ordering"/> parametresine göre sıralar. Sıralama sırasında bir hata oluşursa, geçerli UI kültürüne bağlı olarak İngilizce veya Türkçe bir hata mesajı ile birlikte InvalidOperationException fırlatır.</summary>
         /// <typeparam name="T">Sorgu sonucundaki öğelerin tipi.</typeparam>
         /// <param name="source">Sıralanacak IQueryable kaynağı.</param>
-        /// <param name="sorting">Sıralama ifadesi.</param>
+        /// <param name="ordering">Sıralama ifadesi.</param>
+        /// <param name="args">Sıralama ifadesi için argümanlar.</param>
         /// <returns>Sıralanmış IOrderedQueryable kaynağı.</returns>
-        /// <exception cref="InvalidOperationException">Geçersiz bir sıralama ifadesi ile ilgili bir hata fırlatır.</exception>
-        public static IOrderedQueryable<T> OrderByDynamic<T>(this IQueryable<T> source, string sorting)
+        /// <exception cref="InvalidOperationException">Sıralama işlemi sırasında bir hata oluşursa fırlatılır.</exception>
+        public static IOrderedQueryable<T> OrderByDynamic<T>(this IQueryable<T> source, string ordering, params object[] args)
         {
-            try { return source.OrderBy(sorting); }
+            try { return source.OrderBy(ordering, args); }
             catch (Exception ex)
             {
-                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Sorting failed: {sorting}", ex); }
-                throw new InvalidOperationException($"Sıralama hatası: {sorting}", ex);
+                if (Checks.IsEnglishCurrentUICulture)
+                {
+                    if (args.IsNullOrEmptyOrAllNull()) { throw new InvalidOperationException($"Sorting failed: {ordering}", ex); }
+                    throw new InvalidOperationException($"Sorting failed: {ordering}, Arguments: {String.Join(", ", args)}", ex);
+                }
+                if (args.IsNullOrEmptyOrAllNull()) { throw new InvalidOperationException($"Sıralama hatası: {ordering}", ex); }
+                throw new InvalidOperationException($"Sıralama hatası: {ordering}, Argümanlar: {String.Join(", ", args)}", ex);
             }
         }
         /// <summary>

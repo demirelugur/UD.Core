@@ -7,27 +7,27 @@
     {
         int pageNumber { get; set; }
         int size { get; set; }
-        string? sorting { get; set; }
+        string? ordering { get; set; }
         Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken);
     }
     [Serializable]
     public class SearchAndPaginateDto : ISearchAndPaginateDto
     {
-        private string? _Sorting;
+        private string? _Ordering;
         [UDRangePositiveInt32]
         [DefaultValue(1)]
         public int pageNumber { get; set; }
         [UDRangePositiveInt32]
         [DefaultValue(20)]
         public int size { get; set; }
-        public string? sorting { get { return _Sorting; } set { _Sorting = value.ParseOrDefault<string>(); } }
+        public string? ordering { get { return _Ordering; } set { _Ordering = value.ParseOrDefault<string>(); } }
         public SearchAndPaginateDto() : this(default, default, default) { }
-        public SearchAndPaginateDto(int pageNumber, int size, string? sorting)
+        public SearchAndPaginateDto(int pageNumber, int size, string? ordering)
         {
             this.pageNumber = pageNumber;
             this.size = size;
-            this.sorting = sorting;
+            this.ordering = ordering;
         }
-        public virtual Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedList(this.pageNumber, this.size, this.sorting, loadInfo, cancellationToken);
+        public virtual Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedList(this.pageNumber, this.size, this.ordering, loadInfo, cancellationToken);
     }
 }

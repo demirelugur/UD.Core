@@ -33,6 +33,8 @@
         private DateTime? dateTimeMin = null, dateTimeMax = null;
         private DateOnly? dateOnlyMin = null, dateOnlyMax = null;
         private DateTimeOffset? dateTimeOffsetMin = null, dateTimeOffsetMax = null;
+        private TimeSpan? timeSpanMin = null, timeSpanMax = null;
+        private TimeOnly? timeOnlyMin = null, timeOnlyMax = null;
         /// <summary>Varsayılan yapılandırıcı</summary>
         /// <param name="locale">Kullanılacak yerel ayar (örneğin, &quot;tr&quot; için Türkçe, &quot;en&quot; için İngilizce).</param>
         /// <param name="nullChange">0 ile 1 arasında bir olasılık değeri (0: asla null, 1: her zaman null).</param>
@@ -111,6 +113,18 @@
             this.dateTimeOffsetMax = dateTimeOffsetMax;
             return this;
         }
+        public BogusGenericFakeDataGenerator WithTimeSpanRange(TimeSpan timeSpanMin, TimeSpan timeSpanMax)
+        {
+            this.timeSpanMin = timeSpanMin;
+            this.timeSpanMax = timeSpanMax;
+            return this;
+        }
+        public BogusGenericFakeDataGenerator WithTimeOnlyRange(TimeOnly timeOnlyMin, TimeOnly timeOnlyMax)
+        {
+            this.timeOnlyMin = timeOnlyMin;
+            this.timeOnlyMax = timeOnlyMax;
+            return this;
+        }
         public T Generate<T>() where T : class => this.GenerateArray<T>(1)[0];
         public T[] GenerateArray<T>(int count) where T : class
         {
@@ -152,6 +166,16 @@
             if (type == typeof(DateTime)) { return ((this.dateTimeMin.HasValue && this.dateTimeMax.HasValue) ? faker.Date.Between(this.dateTimeMin.Value, this.dateTimeMax.Value) : faker.Date.Past()); }
             if (type == typeof(DateOnly)) { return ((this.dateOnlyMin.HasValue && this.dateOnlyMax.HasValue) ? faker.Date.BetweenDateOnly(this.dateOnlyMin.Value, this.dateOnlyMax.Value) : faker.Date.PastDateOnly()); }
             if (type == typeof(DateTimeOffset)) { return ((this.dateTimeOffsetMin.HasValue && this.dateTimeOffsetMax.HasValue) ? faker.Date.BetweenOffset(this.dateTimeOffsetMin.Value, this.dateTimeOffsetMax.Value) : faker.Date.PastOffset()); }
+            if (type == typeof(TimeSpan))
+            {
+                if (this.timeSpanMin.HasValue && this.timeSpanMax.HasValue)
+                {
+                    var ticksRange = this.timeSpanMax.Value.Ticks - this.timeSpanMin.Value.Ticks;
+                    return TimeSpan.FromTicks(this.timeSpanMin.Value.Ticks + faker.Random.Long(0, ticksRange));
+                }
+                return faker.Date.Timespan();
+            }
+            if (type == typeof(TimeOnly)) { return ((this.timeOnlyMin.HasValue && this.timeOnlyMax.HasValue) ? faker.Date.BetweenTimeOnly(this.timeOnlyMin.Value, this.timeOnlyMax.Value) : faker.Date.RecentTimeOnly()); }
             if (type == typeof(Uri)) { return new Uri(this.createUri()); }
             if (type == typeof(MailAddress)) { return this.createEMail(faker); }
             if (type == typeof(IPAddress)) { return this.createIPAdress(); }

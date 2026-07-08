@@ -109,7 +109,7 @@ namespace UD.Core.Extensions
                 var (columnName, sqlDbTypeName) = getPrimaryKeyInfo(type);
                 if (columnName == "" || sqlDbTypeName == "") { continue; }
                 var tableName = type.GetTableName(true);
-                var variableName = $"@MAXID_{index}";
+                var variableName = String.Concat("@MAXID_", index);
                 sb.AppendLine($"DECLARE {variableName} {sqlDbTypeName}");
                 sb.AppendLine($"SELECT {variableName} = MAX([{columnName}]) FROM {tableName}");
                 sb.AppendLine($"SET {variableName} = ISNULL({variableName}, 0)");

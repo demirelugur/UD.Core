@@ -26,13 +26,13 @@
             if (objA is byte[] _ba1 && objB is byte[] _ba2) { return _ba1.IsAbsoluteEqual(_ba2); }
             return Equals(objA, objB);
         }
-        private static string toSHA512Hexadecimal(object value)
+        private static string computeHash512(object value)
         {
-            if (value == null) { return Array.Empty<byte>().ToSHA512Hexadecimal(); }
-            if (value is String _s) { return _s.ToSHA512Hexadecimal(); }
-            if (value is byte[] _byteArray) { return _byteArray.ToSHA512Hexadecimal(); }
-            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"{nameof(toSHA512Hexadecimal)} method only supports null, string and byte[] values"); }
-            throw new NotSupportedException($"{nameof(toSHA512Hexadecimal)} metodu sadece null, string ve byte[] değerlerini destekler.");
+            if (value == null) { return Array.Empty<byte>().ComputeHash512(); }
+            if (value is String _s) { return _s.ComputeHash512(); }
+            if (value is byte[] _byteArray) { return _byteArray.ComputeHash512(); }
+            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"{nameof(computeHash512)} method only supports null, string and byte[] values"); }
+            throw new NotSupportedException($"{nameof(computeHash512)} metodu sadece null, string ve byte[] değerlerini destekler.");
         }
         private static object getPKValue(object entity, Type entityType)
         {
@@ -40,7 +40,7 @@
             if (pks.Length == 1) { return entityType.GetProperty(pks[0]).GetValue(entity); }
             return null;
         }
-        private static Dictionary<string, object> extractScalarProperties(object entity, Type entityType) => entityType.GetProperties().Where(isMapped).ToDictionary(x => x.GetColumnName(), x => (isTypeByteArrayOrHtmlContent(x) ? toSHA512Hexadecimal(x.GetValue(entity)) : x.GetValue(entity)));
+        private static Dictionary<string, object> extractScalarProperties(object entity, Type entityType) => entityType.GetProperties().Where(isMapped).ToDictionary(x => x.GetColumnName(), x => (isTypeByteArrayOrHtmlContent(x) ? computeHash512(x.GetValue(entity)) : x.GetValue(entity)));
         /// <summary><paramref name="value"/> için tanımlanan nesneler: ChangeEntry, EntityEntry, AnonymousObjectClass</summary>
         public static ChangeEntry ToEntityFromObject(object value)
         {
@@ -63,7 +63,7 @@
                     .Where(x => !areEqual(x.Original, x.Current))
                     .ToDictionary(
                         x => x.PropertyInfo.GetColumnName(),
-                        x => (isTypeByteArrayOrHtmlContent(x.PropertyInfo) ? new ChangePropertyInfo(toSHA512Hexadecimal(x.Original), toSHA512Hexadecimal(x.Current)) : new ChangePropertyInfo(x.Original, x.Current))
+                        x => (isTypeByteArrayOrHtmlContent(x.PropertyInfo) ? new ChangePropertyInfo(computeHash512(x.Original), computeHash512(x.Current)) : new ChangePropertyInfo(x.Original, x.Current))
                     );
                 }
                 return new(_ee.Metadata.ClrType.GetTableName(true), getPKValue(_ee.Entity, _ee.Metadata.ClrType), extractScalarProperties(_ee.Entity, _ee.Metadata.ClrType), changes);

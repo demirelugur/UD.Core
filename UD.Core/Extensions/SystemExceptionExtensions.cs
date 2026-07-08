@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Extensions
 {
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
@@ -19,28 +20,28 @@
         }
         /// <summary>Verilen bir istisna (exception) nesnesine göre uygun HTTP durum kodunu döndüren bir genişletme yöntemidir. Belirli istisna türleri için önceden tanımlı HTTP durum kodları eşleştirilir; eşleşme bulunamazsa varsayılan durum kodu döndürülür.</summary>
         /// <param name="exception">HTTP durum kodunun belirleneceği istisna nesnesi.</param>
-        /// <param name="defaultValue">Eşleşen bir durum kodu bulunamazsa döndürülecek varsayılan HTTP durum kodu (varsayılan olarak <see cref="HttpStatusCode.InternalServerError"/>).</param>
-        /// <returns>İstisna türüne karşılık gelen <see cref="HttpStatusCode"/> değeri.</returns>
+        /// <param name="defaultValue">Eşleşen bir durum kodu bulunamazsa döndürülecek varsayılan HTTP durum kodu (varsayılan olarak <see cref="StatusCodes.Status500InternalServerError"/>).</param>
+        /// <returns>İstisna türüne karşılık gelen <see cref="StatusCodes"/> değeri.</returns>
         /// <remarks>
         /// Bu yöntem, aşağıdaki istisna türlerini destekler:
         /// <list type="bullet">
         /// <item><description><see cref="HttpRequestException"/> (<see cref="HttpRequestException.StatusCode"/> mevcutsa): İlgili durum kodu</description></item>
         /// <item><description><see cref="WebException"/> (<see cref="HttpWebResponse"/> mevcutsa): İlgili durum kodu</description></item>
-        /// <item><description><see cref="UnauthorizedAccessException"/>: <see cref="HttpStatusCode.Unauthorized"/></description></item>
-        /// <item><description><see cref="ArgumentException"/>: <see cref="HttpStatusCode.BadRequest"/></description></item>
-        /// <item><description><see cref="TimeoutException"/>: <see cref="HttpStatusCode.RequestTimeout"/></description></item>
-        /// <item><description><see cref="InvalidOperationException"/>: <see cref="HttpStatusCode.Conflict"/></description></item>
+        /// <item><description><see cref="UnauthorizedAccessException"/>: <see cref="StatusCodes.Status401Unauthorized"/></description></item>
+        /// <item><description><see cref="ArgumentException"/>: <see cref="StatusCodes.Status400BadRequest"/></description></item>
+        /// <item><description><see cref="TimeoutException"/>: <see cref="StatusCodes.Status408RequestTimeout"/></description></item>
+        /// <item><description><see cref="InvalidOperationException"/>: <see cref="StatusCodes.Status409Conflict"/></description></item>
         /// </list>
         /// </remarks>
-        public static HttpStatusCode GetHttpStatusCode(this Exception exception, HttpStatusCode defaultValue = HttpStatusCode.InternalServerError)
+        public static int GetStatusCode(this Exception exception, int defaultValue = StatusCodes.Status500InternalServerError)
         {
             Guard.ThrowIfNull(exception, nameof(exception));
-            if (exception is HttpRequestException _hre && _hre.StatusCode.HasValue) { return _hre.StatusCode.Value; }
-            if (exception is WebException _we && _we.Response is HttpWebResponse _hwr) { return _hwr.StatusCode; }
-            if (exception is UnauthorizedAccessException) { return HttpStatusCode.Unauthorized; }
-            if (exception is ArgumentException) { return HttpStatusCode.BadRequest; }
-            if (exception is TimeoutException) { return HttpStatusCode.RequestTimeout; }
-            if (exception is InvalidOperationException) { return HttpStatusCode.Conflict; }
+            if (exception is HttpRequestException _hre && _hre.StatusCode.HasValue) { return (int)_hre.StatusCode.Value; }
+            if (exception is WebException _we && _we.Response is HttpWebResponse _hwr) { return (int)_hwr.StatusCode; }
+            if (exception is UnauthorizedAccessException) { return StatusCodes.Status401Unauthorized; }
+            if (exception is ArgumentException) { return StatusCodes.Status400BadRequest; }
+            if (exception is TimeoutException) { return StatusCodes.Status408RequestTimeout; }
+            if (exception is InvalidOperationException) { return StatusCodes.Status409Conflict; }
             return defaultValue;
         }
         /// <summary>Belirtilen hatanın ve varsa iç içe geçmiş tüm hata nesnelerinin bir yığın (Stack) olarak döndürülmesini sağlar. Bu yöntem, hata zincirindeki tüm Exception nesnelerini elde etmenize olanak tanır.</summary>

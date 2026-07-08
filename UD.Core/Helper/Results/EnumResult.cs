@@ -7,8 +7,8 @@
     {
         #region Equals
         public override bool Equals(object other) => this.Equals(other as EnumResult);
-        public override int GetHashCode() => HashCode.Combine(this.value, this.text, this.description);
-        public bool Equals(EnumResult other) => other != null && this.value == other.value && this.text == other.text && this.description == other.description;
+        public override int GetHashCode() => HashCode.Combine(this.value, this.text);
+        public bool Equals(EnumResult other) => (other != null && this.ToString() == other.ToString());
         #endregion
         public long value { get; }
         public string text { get; }
@@ -20,6 +20,7 @@
             this.text = text;
             this.description = description;
         }
+        public override string ToString() => String.Join("-", this.value, this.text);
         /// <summary><paramref name="value"/> için tanımlanan nesneler: EnumResult, IFormCollection, Enum, AnonymousObjectClass</summary>
         public static EnumResult ToEntityFromObject(object value)
         {
