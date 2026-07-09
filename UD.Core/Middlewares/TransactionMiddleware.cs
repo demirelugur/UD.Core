@@ -45,15 +45,7 @@
                 {
                     await this.next(httpContext);
                     var status = httpContext.Response.StatusCode;
-                    if (status.Between(StatusCodes.Status200OK, StatusCodes.Status400BadRequest - 1))
-                    {
-                        if (httpContext.IsTransactionRollbackRequired())
-                        {
-                            await tran.RollbackAsync(cancellationToken);
-                            return;
-                        } //if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
-                        await tran.CommitAsync(cancellationToken);
-                    }
+                    if (status.Between(StatusCodes.Status200OK, StatusCodes.Status400BadRequest - 1) && !httpContext.IsTransactionRollbackRequired()) { await tran.CommitAsync(cancellationToken); } //if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
                     else { await tran.RollbackAsync(cancellationToken); }
                 }
                 catch
