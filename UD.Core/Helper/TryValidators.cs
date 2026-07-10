@@ -332,5 +332,34 @@
                 return false;
             }
         }
+        /// <summary>
+        /// <paramref name="value"/> değişkeninde verilen değerin Türkiye plakası biçimine uygun olup olmadığını kontrol eder. Eğer değer geçerli bir Türkiye plakası ise, <paramref name="outvalue"/> parametresine standart biçime dönüştürülmüş plaka değeri atanır ve metot <see langword="true"/> döner. Geçersiz bir plaka durumunda, <paramref name="outvalue"/> boş bir değer olarak atanır ve metot <see langword="false"/> döner.
+        /// <para>
+        /// Desteklenen plaka biçimleri:
+        /// <list type="bullet">
+        /// <item><description>2 rakam + 1 harf + 4 veya 5 rakam (Örnek: 06 A 1234, 06 A 12345)</description></item>
+        /// <item><description>2 rakam + 2 harf + 3 veya 4 rakam (Örnek: 34 AB 123, 34 AB 1234)</description></item>
+        /// <item><description>2 rakam + 3 harf + 2 veya 3 rakam (Örnek: 35 ABC 12, 35 ABC 123)</description></item>
+        /// </list>
+        /// Giriş değeri içerisindeki boşluklar ve rakam/harf dışındaki karakterler dikkate alınmaz.
+        /// </para>
+        /// </summary>
+        /// <param name="value">Kontrol edilecek plaka değeri.</param>
+        /// <param name="outvalue">Geçerli plaka durumunda standart biçime dönüştürülmüş plaka değeri.</param>
+        /// <returns>Plaka geçerliyse <see langword="true"/>, aksi halde <see langword="false"/> döner.</returns>
+        public static bool TryFormatTurkishPlate(string value, out string outvalue)
+        {
+            outvalue = "";
+            value = new(value.ToStringOrEmpty().ToUpperInvariant().Where(Char.IsLetterOrDigit).ToArray());
+            if (value == "") { return false; }
+            var match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{1})(?<number>\d{4,5})$"); // 2 rakam + 1 harf + 4-5 rakam
+            if (!match.Success) { match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{2})(?<number>\d{3,4})$"); } // 2 rakam + 2 harf + 3-4 rakam
+            if (!match.Success) { match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{3})(?<number>\d{2,3})$"); } // 2 rakam + 3 harf + 2-3 rakam
+            if (!match.Success) { return false; }
+            var cityPlate = match.Groups["city"].Value.ParseOrDefault<int>();
+            if (!cityPlate.Between(1, 81)) { return false; }
+            outvalue = String.Join(" ", cityPlate.ToString().Replicate(2), match.Groups["letters"].Value, match.Groups["number"].Value);
+            return true;
+        }
     }
 }
