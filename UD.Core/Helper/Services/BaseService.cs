@@ -37,6 +37,7 @@
     where TUpdateDto : class, IEntityDto
     {
         protected BaseService(TContext Context, IMapper Mapper) : base(Context, Mapper) { }
+        protected abstract object GetKeyValue(TEntity entity);
         public virtual async Task Delete(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (entity != null)
@@ -118,30 +119,6 @@
                     if (autoSave) { await base.Context.SaveChangesAsync(cancellationToken); }
                 }
             }
-        }
-        protected virtual object GetKeyValue(TEntity entity)
-        {
-            var type = typeof(TEntity);
-            var properties = this.Context.Model.FindEntityType(type)?.FindPrimaryKey()?.Properties;
-            var keyName = (properties.IsNullOrEmptyOrAllNull() ? "" : properties[0].Name);
-            if (keyName.IsNullOrEmpty())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException("PK not found"); }
-                throw new InvalidOperationException("Birincil Anahtar(PK) bulunamadı!");
-            }
-            var property = type.GetProperty(keyName);
-            if (property == null)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Property \"{keyName}\" not found on {type.Name}"); }
-                throw new InvalidOperationException($"\"{keyName}\" özelliği \"{type.Name}\" üzerinde bulunamadı!");
-            }
-            var value = property.GetValue(entity);
-            if (value == null)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Key value is null"); }
-                throw new InvalidOperationException($"Anahtar(Key) değeri boş.");
-            }
-            return value;
         }
     }
 }
