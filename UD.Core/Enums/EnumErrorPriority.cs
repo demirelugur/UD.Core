@@ -5,6 +5,6 @@
         low = 1,
         normal,
         high,
-        catastrophicFailure = 255
+        catastrophicFailure = Byte.MaxValue
     }
 }
