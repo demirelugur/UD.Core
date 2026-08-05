@@ -583,3 +583,13 @@ public sealed class TitleCaseConfiguration
     }
 }
 ***************************************
+public static bool IsNullOrEmptyOrAllNull_OLD<T>(this IEnumerable<T> source)
+{
+    if (source == null) { return true; }
+    using var enumerator = source.GetEnumerator();
+    if (!enumerator.MoveNext()) { return true; }
+    do { if (enumerator.Current != null) { return false; } }
+    while (enumerator.MoveNext());
+    return true;
+}
+***************************************
