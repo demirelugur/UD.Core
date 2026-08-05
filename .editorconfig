@@ -42,9 +42,6 @@ dotnet_diagnostic.CS8619.severity = none
 # CA1416: Validate platform compatibility
 dotnet_diagnostic.CA1416.severity = none
 
-# SYSLIB1045: Convert to 'GeneratedRegexAttribute'.
-dotnet_diagnostic.SYSLIB1045.severity = none
-
 # IDE0057: Use range operator
 dotnet_diagnostic.IDE0057.severity = none
 

@@ -8,12 +8,14 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Validations;
     using static UD.Core.Helper.GlobalConstants;
-    public sealed class Checks
+    public sealed partial class Checks
     {
         /// <summary><see cref="CultureInfo.CurrentUICulture"/>&#39;un iki harfli ISO dil kodunun &quot;en&quot; içerip içermediğini kontrol eder. Bu özellik, uygulamanın geçerli kullanıcı arayüzü kültürünün İngilizce olup olmadığını belirlemek için kullanılabilir. Eğer geçerli UI kültürü İngilizce ise <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</summary>
         public static bool IsEnglishCurrentUICulture => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.CurrentCultureIgnoreCase);
+        [GeneratedRegex(@"</?\w+\s*[^>]*>", RegexOptions.Compiled)]
+        private static partial Regex IsHtmlRegex();
         /// <summary><paramref name="value"/> değerinin HTML içeriği içerip içermediğini kontrol eder. Bu metod, verilen string değerin HTML etiketleri içerip içermediğini belirlemek için düzenli ifadeler kullanır. Eğer string değerde HTML etiketleri bulunursa, bu metod <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu kontrol, kullanıcı tarafından sağlanan verilerin HTML içeriği içerip içermediğini tespit etmek ve potansiyel XSS saldırılarına karşı önlem almak için kullanılabilir.</summary>
-        public static bool IsHtml(string value) => Regex.IsMatch(value.ToStringOrEmpty(), @"</?\w+\s*[^>]*>", RegexOptions.Compiled);
+        public static bool IsHtml(string value) => IsHtmlRegex().IsMatch(value.ToStringOrEmpty());
         /// <summary>Belirtilen path&#39;in tarayıcıda görüntülenebilir bir dosya türüne sahip olup olmadığını kontrol eder. Bu metod, dosya uzantısına göre MIME tipi belirleyerek, tarayıcıların desteklediği türleri tespit eder. PDF dosyaları ve görüntü dosyaları (image/*) tarayıcıda görüntülenebilir olarak kabul edilmez, diğer tüm türler görüntülenebilir olarak değerlendirilir.</summary>
         public static bool IsViewableInBrowser(string path)
         {
@@ -30,6 +32,14 @@
             var numericIban = String.Concat(rearranged.Select(x => Char.IsDigit(x) ? x.ToString() : (x - 'A' + 10).ToString()));
             return BigInteger.TryParse(numericIban, out BigInteger _bi) && _bi % 97 == 1;
         }
+        [GeneratedRegex(@"[\d]")]
+        private static partial Regex IsStrongPasswordRegex1();
+        [GeneratedRegex(@"[a-z]")]
+        private static partial Regex IsStrongPasswordRegex2();
+        [GeneratedRegex(@"[A-Z]")]
+        private static partial Regex IsStrongPasswordRegex3();
+        [GeneratedRegex(@"[!@#$%^&*()_+\-=\[\]{}|;:',.<>?]")]
+        private static partial Regex IsStrongPasswordRegex4();
         /// <summary><paramref name="value"/> değerinin güçlü bir şifre olup olmadığını kontrol eder. Bu metod, şifrenin minimum uzunlukta olup olmadığını ve en az bir rakam, bir küçük harf, bir büyük harf ve bir özel karakter içerip içermediğini değerlendirir. Eğer şifre bu kriterleri karşılıyorsa <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu kontrol, kullanıcıların güvenli şifreler oluşturmasını sağlamak için kullanılabilir.</summary>
         /// <param name="value">Kontrol edilecek şifre değeri.</param>
         /// <param name="minimumLength">Şifrenin minimum uzunluğu.</param>
@@ -38,10 +48,10 @@
         {
             value = value.ToStringOrEmpty();
             var r = value.Length >= minimumLength;
-            if (r) { r = Regex.IsMatch(value, @"[\d]"); }
-            if (r) { r = Regex.IsMatch(value, @"[a-z]"); }
-            if (r) { r = Regex.IsMatch(value, @"[A-Z]"); }
-            if (r) { r = Regex.IsMatch(value, @"[!@#$%^&*()_+\-=\[\]{}|;:',.<>?]"); }
+            if (r) { r = IsStrongPasswordRegex1().IsMatch(value); }
+            if (r) { r = IsStrongPasswordRegex2().IsMatch(value); }
+            if (r) { r = IsStrongPasswordRegex3().IsMatch(value); }
+            if (r) { r = IsStrongPasswordRegex4().IsMatch(value); }
             return r;
         }
     }

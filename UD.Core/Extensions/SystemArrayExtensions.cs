@@ -27,18 +27,16 @@
             return ex;
         }
         #region byte[]
-        /// <summary><paramref name="source"/> dizisinin SHA256 hash&#39;ini hesaplar ve sonucu hexadecimal biçiminde bir dize olarak döndürür. Eğer <paramref name="source"/> null ise, boş bir dizi olarak kabul edilir ve hash değeri buna göre hesaplanır. Hash hesaplama işlemi, .NET&#39;in yerleşik SHA256 algoritması kullanılarak gerçekleştirilir. Sonuç olarak, döndürülen dize, her byte&#39;ın iki karakterle temsil edildiği hexadecimal biçiminde olacaktır.</summary>
-        public static string ComputeHash256(this byte[] source)
+        /// <summary>
+        /// <paramref name="source"/> veri kümesinin <see cref="SHA512"/> veya <see cref="SHA256"/> karmasını hesaplar ve hexadecimal biçiminde bir dize olarak döndürür.
+        /// </summary>
+        /// <param name="source">Hash değeri hesaplanacak byte dizisi.</param>
+        /// <param name="is512"><see langword="true"/> ise <see cref="SHA512"/>, false ise <see cref="SHA256"/> kullanılır.</param>
+        /// <returns>Hexadecimal biçiminde hash değeri.</returns>
+        public static string ComputeHash(this byte[] source, bool is512)
         {
-            var hashBytes = SHA256.HashData(source ?? []);
-            var sb = new StringBuilder(hashBytes.Length * 2);
-            foreach (var item in hashBytes) { sb.Append(item.ToString("X2")); }
-            return sb.ToString();
-        }
-        /// <summary><paramref name="source"/> dizisinin SHA512 hash&#39;ini hesaplar ve sonucu hexadecimal biçiminde bir dize olarak döndürür. Eğer <paramref name="source"/> null ise, boş bir dizi olarak kabul edilir ve hash değeri buna göre hesaplanır. Hash hesaplama işlemi, .NET&#39;in yerleşik SHA512 algoritması kullanılarak gerçekleştirilir. Sonuç olarak, döndürülen dize, her byte&#39;ın iki karakterle temsil edildiği hexadecimal biçiminde olacaktır.</summary>
-        public static string ComputeHash512(this byte[] source)
-        {
-            var hashBytes = SHA512.HashData(source ?? []);
+            source = source ?? [];
+            var hashBytes = is512 ? SHA512.HashData(source) : SHA256.HashData(source);
             var sb = new StringBuilder(hashBytes.Length * 2);
             foreach (var item in hashBytes) { sb.Append(item.ToString("X2")); }
             return sb.ToString();

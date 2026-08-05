@@ -10,7 +10,7 @@ namespace UD.Core.Extensions
     using System.Text.RegularExpressions;
     using UD.Core.Helper;
     using UD.Core.Helper.Validations;
-    public static class SystemStringExtensions
+    public static partial class SystemStringExtensions
     {
         /// <summary>Bir string&#39;i Guid&#39;e dönüþtürür. String null veya geçersizse varsayýlan Guid döner.</summary>
         /// <param name="value">Dönüþtürülecek string.</param>
@@ -30,6 +30,10 @@ namespace UD.Core.Extensions
             { 'ý', 'i' }, { 'I', 'i' }, { 'Ý', 'i' }
         };
         private static readonly char[] charsToRemove = ['?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+'];
+        [GeneratedRegex(@"[^a-z0-9-]")]
+        private static partial Regex SeoFriendlyRegex1();
+        [GeneratedRegex(@"-+")]
+        private static partial Regex SeoFriendlyRegex2();
         /// <summary>Verilen dizeyi SEO dostu bir hale getirir.</summary>
         /// <param name="value">Dönüþtürülecek dize.</param>
         /// <returns>SEO dostu hale getirilmiþ dize.</returns>
@@ -45,8 +49,8 @@ namespace UD.Core.Extensions
                 else if (Array.IndexOf(charsToRemove, item) == -1) { sb.Append(item); }
             }
             value = sb.ToString().ToLower().Trim();
-            value = Regex.Replace(value, @"[^a-z0-9-]", "-");
-            value = Regex.Replace(value, @"-+", "-");
+            value = SeoFriendlyRegex1().Replace(value, "-");
+            value = SeoFriendlyRegex2().Replace(value, "-");
             return value.Trim('-');
         }
         /// <summary>
@@ -132,9 +136,11 @@ namespace UD.Core.Extensions
             return $"/{(useFullTypeName ? typeof(T).FullName : typeof(T).Name)}/{methodName}";
         }
         /// <summary>Metin içerisindeki tab (\t), satýr baþý (\r) ve yeni satýr (\n) karakterlerini boþluk ile deðiþtirir ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null deðerlerde güvenli þekilde çalýþýr.</summary>
-        public static string ReplaceTRNSpace(this string value) => value.ToStringOrEmpty().Replace("\t", " ").Replace("\r", " ").Replace("\n", " ").Trim();
+        public static string ReplaceTRNSpace(this string value) => value.ToStringOrEmpty().Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').Trim();
+        [GeneratedRegex(" +")]
+        private static partial Regex RemoveMultipleSpaceRegex();
         /// <summary>Metin içerisindeki birden fazla ardýþýk boþluðu tek bir boþluða indirger ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null veya boþ metinlerde güvenli þekilde çalýþýr.</summary>
-        public static string RemoveMultipleSpace(this string value) => Regex.Replace(value.ToStringOrEmpty(), " +", " ").Trim();
+        public static string RemoveMultipleSpace(this string value) => RemoveMultipleSpaceRegex().Replace(value.ToStringOrEmpty(), " ").Trim();
         /// <summary>Belirtilen karakter ile doldurarak bir string deðerini belirli bir uzunluða getirir.</summary>
         /// <param name="value">Uzunluðu ayarlanacak string deðeri.</param>
         /// <param name="totalValueLength">Hedef toplam uzunluk. Varsayýlan deðer 2&#39;dir.</param>
@@ -159,10 +165,18 @@ namespace UD.Core.Extensions
             value = value.ToStringOrEmpty();
             return (value.Length > length ? value.Substring(0, length).Trim() : value);
         }
-        /// <summary><paramref name="value"/> deðerini baþlýk biçimine (Title Case) dönüþtürür. Her kelimenin ilk harfi büyük, geri kalan harfler küçük olur. Kelimeler arasýndaki ayracý belirlemek için boþluk karakteri ve noktalama iþaretleri dikkate alýnýr. Kültüre özgü büyük/küçük harf dönüþümü saðlanýr (varsayýlan olarak Türkçe kültürü kullanýlýr). </summary>
+        private static readonly string[] LowerCaseWords = ["Ancak", "Ama", "Da", "De", "Fakat", "Gibi", "Ýle", "Ýse", "Ki", "Lakin", "Ve", "Veya"];
+        /// <summary><paramref name="value"/> deðerini baþlýk biçimine (Title Case) dönüþtürür. Her kelimenin ilk harfi büyük, geri kalan harfler küçük olur. Küçük harfe çevrilecek baðlaçlar: <c>Ancak,Ama,Da,De,Fakat,Gibi,Ýle,Ýse,Ki,Lakin,Ve,Veya</c></summary>
         /// <param name="value">Dönüþtürülecek string.</param>
         /// <returns>Baþlýk durumuna dönüþtürülmüþ string.</returns>
-        public static string ToTitleCase(this string value) => value.ToTitleCase(true, default);
+        public static string ToTitleCase(this string value)
+        {
+            value = value.ToTitleCase(true, ['.', '+', '(', '-']);
+            if (value == "") { return ""; }
+            var cultureInfo = new CultureInfo("tr-TR");
+            foreach (var word in LowerCaseWords) { value = value.Replace($" {word} ", $" {word.ToLower(cultureInfo)} "); }
+            return value;
+        }
         /// <summary><paramref name="value"/> deðerini baþlýk biçimine (Title Case) dönüþtürür. Her kelimenin ilk harfi büyük, geri kalan harfler küçük olur. Kelimeler arasýndaki ayracý belirlemek için <paramref name="isWhiteSpace"/> ve <paramref name="punctuations"/> parametreleri kullanýlýr. <paramref name="cultureInfo"/> parametresi ile kültüre özgü büyük/küçük harf dönüþümü saðlanabilir (varsayýlan olarak Türkçe kültürü kullanýlýr).</summary>
         /// <param name="value">Dönüþtürülecek string.</param>
         /// <param name="isWhiteSpace">Boþluk karakterlerinin yeni kelimeleri ayýrmak için dikkate alýnýp alýnmayacaðýný belirtir.</param>
@@ -210,23 +224,20 @@ namespace UD.Core.Extensions
             }
             return default;
         }
-        /// <summary>Verilen string ifadesinin SHA-256 hash deðerini hesaplar ve hexadecimal (hex) formatýnda döndürür.</summary>
-        /// <param name="value">Hash deðeri hesaplanacak string ifade.</param>
-        /// <returns>SHA-256 hash&#39;inin 64 karakterlik hexadecimal string deðeri.</returns>
+        /// <summary>Verilen metnin SHA-256 veya SHA-512 hash deðerini hesaplayarak hexadecimal (hex) formatýnda döndürür.</summary>
+        /// <param name="value">Hash deðeri hesaplanacak metin.</param>
+        /// <param name="is512"><see langword="true"/> ise SHA-512, <see langword="false"/> ise SHA-256 algoritmasý kullanýlýr.</param>
+        /// <returns>SHA-512 için 128 karakter, SHA-256 için 64 karakter uzunluðunda hexadecimal hash deðeri.</returns>
         /// <remarks>
-        /// <para>Bu extension method, string&#39;i önce UTF-8 byte dizisine çevirir ve ardýndan SHA-256 algoritmasý ile hash&#39;ler.</para>
-        /// <para>SQL Server karþýlýðý:</para>
-        /// <code>SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_256&#39;, &#39;Lorem Ipsum&#39;)), 3, 64)</code>
-        /// </remarks>
-        public static string ComputeHash256(this string value) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ComputeHash256(); // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
-        /// <summary>Verilen string ifadesinin SHA-512 hash deðerini hesaplar ve hexadecimal (hex) formatýnda döndürür.</summary>
-        /// <param name="value">Hash deðeri hesaplanacak string ifade.</param>
-        /// <returns>SHA-512 hash&#39;inin 128 karakterlik hexadecimal string deðeri.</returns>
-        /// <remarks>
-        /// <para>Bu extension method, string&#39;i önce UTF-8 byte dizisine çevirir ve ardýndan SHA-512 algoritmasý ile hash&#39;ler.</para>
-        /// <para>SQL Server karþýlýðý:</para>
-        /// <code>SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES(&#39;SHA2_512&#39;, &#39;Lorem Ipsum&#39;)), 3, 128)</code>
-        /// </remarks>
-        public static string ComputeHash512(this string value) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ComputeHash512(); // SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128)
+        /// <para>Metin önce UTF-8 byte dizisine dönüþtürülür, ardýndan seçilen SHA algoritmasý ile hash deðeri hesaplanýr.</para>
+        /// <para>SQL Server karþýlýklarý:</para>
+        /// <code>
+        /// -- SHA-512
+        /// SELECT SUBSTRING(sys.fn_varbintohexstr(HASHBYTES(&#39;SHA2_512&#39;, &#39;Lorem Ipsum&#39;)), 3, 128)
+        /// -- SHA-256
+        /// SELECT SUBSTRING(sys.fn_varbintohexstr(HASHBYTES(&#39;SHA2_256&#39;, &#39;Lorem Ipsum&#39;)), 3, 64)
+        /// </code>
+        /// </remarks>s
+        public static string ComputeHash(this string value, bool is512) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ComputeHash(is512); // SHA2_512 ->  SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128), SHA2_256 ->  SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
     }
 }

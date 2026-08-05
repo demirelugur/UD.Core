@@ -21,7 +21,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Validations;
     using static UD.Core.Helper.GlobalConstants;
-    public sealed class TryValidators
+    public sealed partial class TryValidators
     {
         /// <summary>Verilen nesnenin doğrulama kurallarına göre geçerliliğini kontrol eder. Eğer nesne geçerli değilse, doğrulama hatalarını içeren bir dizi döner.</summary>
         /// <param name="instance">Doğrulama işlemi yapılacak nesne.</param>
@@ -112,6 +112,8 @@
                 return false;
             }
         }
+        [GeneratedRegex(@"^\d+$")]
+        private static partial Regex TryPhoneNumberTRRegex();
         /// <summary>
         /// Türkiye için verilen telefon numarasının geçerli biçimde olup olmadığını kontrol eder.
         /// <para>Geçerli örnekler:</para>
@@ -133,7 +135,7 @@
             else if (phoneNumberTR.Length == 13 && phoneNumberTR.StartsWith("+90")) { phoneNumberTR = phoneNumberTR.Substring(3); }
             else if (phoneNumberTR.Length == 12 && phoneNumberTR.StartsWith("90")) { phoneNumberTR = phoneNumberTR.Substring(2); }
             else if (phoneNumberTR.Length == 11 && phoneNumberTR[0] == '0') { phoneNumberTR = phoneNumberTR.Substring(1); }
-            var r = phoneNumberTR.Length == 10 && Regex.IsMatch(phoneNumberTR, @"^\d+$");
+            var r = phoneNumberTR.Length == 10 && TryPhoneNumberTRRegex().IsMatch(phoneNumberTR);
             outvalue = r ? phoneNumberTR : "";
             return r;
         }
@@ -213,6 +215,8 @@
                 return false;
             }
         }
+        [GeneratedRegex(@"^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$")]
+        private static partial Regex TryMACAddressRegex();
         /// <summary>Verilen değerin geçerli bir MAC adresi olup olmadığını kontrol eder. Eğer geçerliyse, <paramref name="outvalue"/> parametresine temizlenmiş MAC adresi atanır. MAC adresinin belirli bir biçimde olması gerekmektedir.</summary>
         /// <param name="value">Kontrol edilecek MAC adresi.</param>
         /// <param name="outvalue">Geçerli MAC adresi, dönüş değeri olarak atanır.</param>
@@ -222,7 +226,7 @@
             try
             {
                 value = value.ToStringOrEmpty().ToUpper();
-                if (value.Length == MaximumLengthConstants.Mac && Regex.IsMatch(value, @"^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$"))
+                if (value.Length == MaximumLengthConstants.Mac && TryMACAddressRegex().IsMatch(value))
                 {
                     outvalue = value.Replace("-", ":");
                     return true;
@@ -332,6 +336,12 @@
                 return false;
             }
         }
+        [GeneratedRegex(@"^(?<city>\d{2})(?<letters>[A-Z]{1})(?<number>\d{4,5})$")]
+        private static partial Regex TryFormatTurkishPlateRegex1();
+        [GeneratedRegex(@"^(?<city>\d{2})(?<letters>[A-Z]{2})(?<number>\d{3,4})$")]
+        private static partial Regex TryFormatTurkishPlateRegex2();
+        [GeneratedRegex(@"^(?<city>\d{2})(?<letters>[A-Z]{3})(?<number>\d{2,3})$")]
+        private static partial Regex TryFormatTurkishPlateRegex3();
         /// <summary>
         /// <paramref name="value"/> değişkeninde verilen değerin Türkiye plakası biçimine uygun olup olmadığını kontrol eder. Eğer değer geçerli bir Türkiye plakası ise, <paramref name="outvalue"/> parametresine standart biçime dönüştürülmüş plaka değeri atanır ve metot <see langword="true"/> döner. Geçersiz bir plaka durumunda, <paramref name="outvalue"/> boş bir değer olarak atanır ve metot <see langword="false"/> döner.
         /// <para>
@@ -352,9 +362,9 @@
             outvalue = "";
             value = new(value.ToStringOrEmpty().ToUpperInvariant().Where(Char.IsLetterOrDigit).ToArray());
             if (value == "") { return false; }
-            var match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{1})(?<number>\d{4,5})$"); // 2 rakam + 1 harf + 4-5 rakam
-            if (!match.Success) { match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{2})(?<number>\d{3,4})$"); } // 2 rakam + 2 harf + 3-4 rakam
-            if (!match.Success) { match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{3})(?<number>\d{2,3})$"); } // 2 rakam + 3 harf + 2-3 rakam
+            var match = TryFormatTurkishPlateRegex1().Match(value); // 2 rakam + 1 harf + 4-5 rakam
+            if (!match.Success) { match = TryFormatTurkishPlateRegex2().Match(value); } // 2 rakam + 2 harf + 3-4 rakam
+            if (!match.Success) { match = TryFormatTurkishPlateRegex3().Match(value); } // 2 rakam + 3 harf + 2-3 rakam
             if (!match.Success) { return false; }
             var cityPlate = match.Groups["city"].Value.ParseOrDefault<int>();
             if (!cityPlate.Between(1, 81)) { return false; }
