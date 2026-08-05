@@ -7,6 +7,13 @@ const beautifyPhoneNumber = (value) => {
     if (!/^\d+$/.test(s)) { return ''; }
     return `(${s.substring(0, 3)}) ${s.substring(3, 6)}-${s.substring(6, 10)}`;
 };
+const beautifyTurkishPlate = (value) => {
+    if (isNullOrEmpty(value)) { return ''; }
+    value = String(value).trim().toUpperCase();
+    let index = 2;
+    while (index < value.length && value.charCodeAt(index) >= 65 && value.charCodeAt(index) <= 90) { index++; }
+    return (index > 2 && index <= 5) ? `${value.slice(0, 2)} ${value.slice(2, index)} ${value.slice(index)}` : value;
+};
 const decodeTokenPayload = (token) => {
     if (isNullOrEmpty(token)) { return null; }
     let split = String(token).trim().split('.');
@@ -88,7 +95,10 @@ const isValidPhoneNumber = (value) => {
     let phoneRegex = /^\d{10}$/;
     return phoneRegex.test(cleanedValue);
 };
-const toTitleCase = (value, isWhiteSpace = true, punctuations = [], locale = 'tr-TR') => {
+const toTitleCase = (value) => {
+    return toTitleCaseBase(value, true, ['.', '+', '(', '-']).replaceAll(' Ve ', ' ve ').replaceAll('+', ' + ').replaceAll('-', ' - ');
+};
+const toTitleCaseBase = (value, isWhiteSpace = true, punctuations = [], locale = 'tr-TR') => {
     if (isNullOrEmpty(value)) { return ''; }
     let ch, result = '', newWord = true, separators = new Set(punctuations || []);
     if (isWhiteSpace) { separators.add(' '); }
@@ -110,6 +120,7 @@ export const objectHelper = {
     GuidEmpty,
     GuidMaxValue,
     beautifyPhoneNumber,
+    beautifyTurkishPlate,
     decodeTokenPayload,
     distinct,
     generateGuid,
@@ -121,5 +132,6 @@ export const objectHelper = {
     isValidEmail,
     isValidGuid,
     isValidPhoneNumber,
-    toTitleCase
+    toTitleCase,
+    toTitleCaseBase
 };
