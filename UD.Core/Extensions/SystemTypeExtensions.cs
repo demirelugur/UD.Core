@@ -5,33 +5,20 @@
     using System.Linq;
     using UD.Core.Helper;
     using UD.Core.Helper.Results;
-    using UD.Core.Helper.Validations;
     public static class SystemTypeExtensions
     {
         /// <summary>Verilen türün (Type) bir tabloya eşlendiğini kontrol eder. Türün, <see cref="TableAttribute"/> ile işaretlenmiş olup olmadığını kontrol ederek tabloya eşlenip eşlenmediğini döndürür.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
         /// <returns>Tür bir tabloya eşlenmişse <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsMappedTable(this Type type)
-        {
-            Guard.ThrowIfNull(type, nameof(type));
-            return TryValidators.TryCustomAttribute(type, out TableAttribute _);
-        }
+        public static bool IsMappedTable(this Type type) => TryValidators.TryCustomAttribute(type, out TableAttribute _);
         /// <summary>Belirtilen türün nullable olup olmadığını kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
         /// <returns>Nullable ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsNullable(this Type type)
-        {
-            Guard.ThrowIfNull(type, nameof(type));
-            return TryValidators.TryTypeIsNullable(type, out _);
-        }
+        public static bool IsNullable(this Type type) => TryValidators.TryTypeIsNullable(type, out _);
         /// <summary>Belirtilen türün özel bir sınıf olup olmadığını kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
         /// <returns>Özel sınıf ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
-        public static bool IsCustomClass(this Type type)
-        {
-            Guard.ThrowIfNull(type, nameof(type));
-            return (type.IsClass && type != typeof(string) && !type.IsArray && !typeof(Delegate).IsAssignableFrom(type) && !type.IsInterface);
-        }
+        public static bool IsCustomClass(this Type type) => (type.IsClass && type != typeof(string) && !type.IsArray && !typeof(Delegate).IsAssignableFrom(type) && !type.IsInterface);
         /// <summary>Belirtilen <see cref="Type"/> için tanımlı <see cref="TableAttribute"/> özniteliğini kullanarak tablo adını döndürür. Varsayılan olarak şema adı &quot;dbo&quot; kabul edilir. <paramref name="isSquareBrackets"/> true ise tablo ve şema adları köşeli parantez içerisine alınır.</summary>
         /// <param name="type">Tabloya karşılık gelen sınıf tipi.</param>
         /// <param name="isSquareBrackets">Tablo ve şema adlarının köşeli parantez içerisine alınıp alınmayacağını belirtir.</param>
@@ -39,10 +26,8 @@
         /// <exception cref="NotSupportedException">Eğer belirtilen tip üzerinde <see cref="TableAttribute"/> özniteliği bulunmazsa fırlatılır.</exception>
         public static string GetTableName(this Type type, bool isSquareBrackets)
         {
-            Guard.ThrowIfNull(type, nameof(type));
             if (TryValidators.TryCustomAttribute(type, out TableAttribute _ta))
             {
-                Guard.ThrowIfEmpty(_ta.Name, nameof(_ta.Name));
                 var r = new List<string> { _ta.Schema.CoalesceOrDefault("dbo"), _ta.Name };
                 if (isSquareBrackets) { return String.Join(".", r.Select(x => $"[{x}]").ToArray()); }
                 return String.Join(".", r);
@@ -57,7 +42,6 @@
         /// <returns>Enum sonuçları dizisi.</returns>
         public static EnumResult[] ToEnumResultArray(this Type type)
         {
-            Guard.ThrowIfNull(type, nameof(type));
             if (!type.IsEnum)
             {
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The type \"{type.FullName}\" must be a valid \"{nameof(Enum)}\" type!", nameof(type)); }
@@ -71,8 +55,6 @@
         /// <param name="openGeneric">Açık generic taban türü.</param>
         public static bool IsSubclassOfOpenGeneric(this Type type, Type openGeneric)
         {
-            Guard.ThrowIfNull(type, nameof(type));
-            Guard.ThrowIfNull(openGeneric, nameof(openGeneric));
             while (type != null && type != typeof(object))
             {
                 var cur = (type.IsGenericType ? type.GetGenericTypeDefinition() : type);
@@ -86,7 +68,6 @@
         /// <returns>Enum isimlerini ve long karşılıklarını içeren sözlük.</returns>
         public static Dictionary<string, long> ToDictionaryFromEnum(this Type type)
         {
-            Guard.ThrowIfNull(type, nameof(type));
             if (!type.IsEnum) { return []; }
             var values = Enum.GetValues(type);
             var names = Enum.GetNames(type);

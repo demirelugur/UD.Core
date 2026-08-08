@@ -96,7 +96,11 @@ const isValidPhoneNumber = (value) => {
     return phoneRegex.test(cleanedValue);
 };
 const toTitleCase = (value) => {
-    return toTitleCaseBase(value, true, ['.', '+', '(', '-']).replaceAll(' Ve ', ' ve ').replaceAll('+', ' + ').replaceAll('-', ' - ');
+    value = toTitleCaseBase(value, true, ['.', '+', '(', '-']);
+    if (value === '') { return ''; }
+    let word;
+    for (word of ['Ancak', 'Ama', 'Da', 'De', 'Fakat', 'Gibi', 'İle', 'İse', 'Ki', 'Lakin', 'Ve', 'Veya']) { value = value.replaceAll(` ${word} `, ` ${word.toLocaleLowerCase('tr-TR')} `); }
+    return value.replaceAll('+', ' + ').replaceAll('-', ' - ');
 };
 const toTitleCaseBase = (value, isWhiteSpace = true, punctuations = [], locale = 'tr-TR') => {
     if (isNullOrEmpty(value)) { return ''; }

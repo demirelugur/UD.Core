@@ -9,6 +9,7 @@
     using UD.Core.Extensions;
     using UD.Core.Helper;
     using UD.Core.Helper.Generates;
+    using static UD.Core.Helper.GlobalConstants;
     /// <summary>
     /// Sahte veri üretimi için kullanılan genel bir sınıf. Bogus kütüphanesini kullanarak farklı veri türlerinde özelleştirilebilir sahte veriler üretir.
     /// <list type="bullet">
@@ -137,7 +138,7 @@
         private MailAddress createEMail(Faker faker) => new(this.fakerEN.Internet.ExampleEmail().ToLower(), createFullName(faker));
         private IPAddress createIPAdress() => this.fakerEN.Internet.IpAddress().MapToIPv4();
         private bool isEqual(string parameterName, string value) => parameterName.Equals(value, StringComparison.OrdinalIgnoreCase);
-        private int getSignificantDigits(Faker faker) => (faker.Random.Bool(0.95f) ? 10 : faker.Random.ArrayElement([8, 9]));
+        private int getSignificantDigits(Faker faker) => (MaximumLengthConstants.TRTaxIdentityNumber - (faker.Random.Bool(0.9f) ? 0 : (faker.Random.Bool(0.9f) ? 1 : 2)));
         private object createFakeInstance(string parameterName, Type type, Faker faker)
         {
             if (TryValidators.TryTypeIsNullable(type, out Type _baseType)) { return faker.Random.Bool(this.nullChange) ? null : this.createFakeInstance(parameterName, _baseType, faker); }

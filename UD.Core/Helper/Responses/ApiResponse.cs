@@ -25,7 +25,7 @@
         public ApiResponse() : this(default, default, default) { }
         public ApiResponse(T response, EnumAlertState state, string[] messages) : base(state, messages)
         {
-            this.response = (base.state == EnumAlertState.error ? this.getCustomDefaultValue() : response);
+            this.response = (state == EnumAlertState.error ? this.getCustomDefaultValue() : response);
         }
         private T getCustomDefaultValue()
         {
@@ -37,7 +37,7 @@
                 if (t.GetGenericTypeDefinition() == typeof(Dictionary<,>)) { return (T)Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(t.GetGenericArguments())); }
                 if (t.GetGenericTypeDefinition() == typeof(List<>)) { return (T)Activator.CreateInstance(typeof(List<>).MakeGenericType(t.GetGenericArguments())); }
             }
-            return default;
+            return (t.GetDefaultValue() is T _t ? _t : default);
         }
     }
 }

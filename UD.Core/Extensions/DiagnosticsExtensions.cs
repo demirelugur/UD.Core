@@ -2,7 +2,6 @@
 {
     using System;
     using System.Diagnostics;
-    using UD.Core.Helper.Validations;
     public static class DiagnosticsExtensions
     {
         /// <summary>Stopwatch&#39;ı durdurur ve geçen süreyi döner.</summary>
@@ -10,7 +9,6 @@
         /// <returns>Durdurulduktan sonra geçen süre.</returns>
         public static TimeSpan StopThenGetElapsed(this Stopwatch stopWatch)
         {
-            Guard.ThrowIfNull(stopWatch, nameof(stopWatch));
             stopWatch.Stop();
             return stopWatch.Elapsed;
         }

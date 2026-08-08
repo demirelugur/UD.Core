@@ -10,7 +10,6 @@
     using System.Linq.Expressions;
     using System.Transactions;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validations;
     public sealed class Utilities
     {
         /// <summary>
@@ -30,34 +29,21 @@
         /// <item><description><b>TrustServerCertificate</b>: Sunucu sertifikasının doğrulanmadan güvenilir kabul edilmesi sağlanır</description></item>
         /// </list>
         /// </remarks>
-        public static string GetConnectionString(string dataSource, string initialCatalog, string userID, string password)
+        public static string GetConnectionString(string dataSource, string initialCatalog, string userID, string password) => new SqlConnectionStringBuilder
         {
-            Guard.ThrowIfEmpty(dataSource, nameof(dataSource));
-            Guard.ThrowIfEmpty(initialCatalog, nameof(initialCatalog));
-            Guard.ThrowIfEmpty(userID, nameof(userID));
-            Guard.ThrowIfEmpty(password, nameof(password));
-            return new SqlConnectionStringBuilder
-            {
-                DataSource = dataSource,
-                InitialCatalog = initialCatalog,
-                UserID = userID,
-                Password = password,
-                PersistSecurityInfo = true,
-                MultipleActiveResultSets = true,
-                TrustServerCertificate = true
-            }.ToString();
-        }
+            DataSource = dataSource,
+            InitialCatalog = initialCatalog,
+            UserID = userID,
+            Password = password,
+            PersistSecurityInfo = true,
+            MultipleActiveResultSets = true,
+            TrustServerCertificate = true
+        }.ToString();
         /// <summary>Verilen sınıfın belirtilen özelliğindeki maksimum karakter uzunluğunu döner. Eğer <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> gibi uzunluk sınırlayıcı öznitelikler atanmışsa, bu değeri alır. Aksi takdirde 0 döner.</summary>
         /// <typeparam name="T">Kontrol edilecek sınıf türü.</typeparam>
         /// <param name="name">Kontrol edilecek özelliğin adı.</param>
         /// <returns>Özellik için maksimum uzunluk değeri; öznitelik bulunmazsa 0 döner.</returns>
-        public static int GetStringOrMaxLength<T>(string name) where T : class
-        {
-            Guard.ThrowIfEmpty(name, nameof(name));
-            var prop = typeof(T).GetProperty(name);
-            Guard.ThrowIfNull(prop, nameof(name));
-            return prop.GetStringOrMaxLength();
-        }
+        public static int GetStringOrMaxLength<T>(string name) where T : class => typeof(T).GetProperty(name).GetStringOrMaxLength();
         /// <summary>Verilen sınıfın belirli bir string ifadesi için maksimum karakter uzunluğunu döner. <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> atanmışsa bu değeri alır, aksi takdirde 0 döner.</summary>
         /// <typeparam name="T">Kontrol edilecek sınıf türü.</typeparam>
         /// <param name="expression">Özellik ismini içeren ifade.</param>
@@ -135,8 +121,6 @@
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> veya <paramref name="propertyName"/> null ise fırlatılır.</exception>
         public static void SetPropertyValue(object entity, string propertyName, object propertyNewValue)
         {
-            Guard.ThrowIfNull(entity, nameof(entity));
-            Guard.ThrowIfEmpty(propertyName, nameof(propertyName));
             var type = entity.GetType();
             if (!type.IsCustomClass())
             {
@@ -144,7 +128,6 @@
                 throw new ArgumentException($"\"{nameof(entity)}\" argümanı türü class olmalıdır!", nameof(entity));
             }
             var pi = type.GetProperty(propertyName);
-            Guard.ThrowIfNull(pi, nameof(pi));
             if (!pi.CanWrite)
             {
                 if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }

@@ -34,7 +34,7 @@
         public static string Decrypt(string cipherText, int shift)
         {
             Guard.ThrowIfZeroOrNegative(shift, nameof(shift));
-            return ApplyShift(cipherText, (0 - shift));
+            return ApplyShift(cipherText, 0 - shift);
         }
     }
 }

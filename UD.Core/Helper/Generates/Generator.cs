@@ -7,7 +7,6 @@
     using System.Security.Claims;
     using System.Text;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validations;
     using static UD.Core.Helper.GlobalConstants;
     public sealed class Generator
     {
@@ -22,13 +21,11 @@
         /// <exception cref="ArgumentOutOfRangeException">Geçersiz bir süre değeri verildiğinde fırlatılır.</exception>
         public static string WriteToken(IEnumerable<Claim> claims, string key, TimeSpan expiresIn, string? issuer = null, string? audience = null, DateTime? notBefore = null)
         {
-            Guard.ThrowIfEmpty(claims, nameof(claims));
-            Guard.ThrowIfEmpty(key, nameof(key));
             if (expiresIn <= TimeSpan.Zero)
             {
                 var s = nameof(expiresIn);
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(s, $"{s} must be greater than zero."); }
-                throw new ArgumentOutOfRangeException(s, $"{s} süresi sıfırdan büyük bir değer olmalıdır!");
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(s, $"\"{s}\" must be greater than zero."); }
+                throw new ArgumentOutOfRangeException(s, $"\"{s}\" süresi sıfırdan büyük bir değer olmalıdır!");
             }
             var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var creds = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);

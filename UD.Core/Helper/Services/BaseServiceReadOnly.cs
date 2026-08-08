@@ -8,7 +8,6 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Configurations;
     using UD.Core.Helper.Pages;
-    using UD.Core.Helper.Validations;
     public interface IBaseServiceReadOnly<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto> : IBaseServiceInfrastructure<TContext, TEntity>
     where TContext : DbContext
     where TEntity : class, IBaseEntity
@@ -52,15 +51,10 @@
             }
             return null;
         }
-        public virtual Task<TEntityDto?> GetBySearch(TSearchDto searchDto, CancellationToken cancellationToken = default)
-        {
-            Guard.ThrowIfNull(searchDto, nameof(searchDto));
-            return this.ApplyFiltering(base.DbSet, searchDto).AsNoTracking().ProjectTo<TEntityDto>(this.Mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
-        }
+        public virtual Task<TEntityDto?> GetBySearch(TSearchDto searchDto, CancellationToken cancellationToken = default) => this.ApplyFiltering(base.DbSet, searchDto).AsNoTracking().ProjectTo<TEntityDto>(this.Mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
         public virtual async Task<TEntityListDto[]> GetAll(TSearchDto searchDto, CancellationToken cancellationToken = default) => (await this.GetAllPaginate(searchDto, false, cancellationToken)).items;
         public virtual Task<Paginate<TEntityListDto>> GetAllPaginate(TSearchDto searchDto, bool loadInfo = true, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(searchDto, nameof(searchDto));
             var query = this.ApplyFiltering(base.DbSet, searchDto).AsNoTracking();
             return searchDto.ToPagedList(query.ProjectTo<TEntityListDto>(this.Mapper.ConfigurationProvider), loadInfo, cancellationToken);
         }

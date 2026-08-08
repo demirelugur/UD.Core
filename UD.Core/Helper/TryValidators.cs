@@ -16,10 +16,8 @@
     using System.Security.Claims;
     using System.Text;
     using System.Text.Json;
-    using System.Text.RegularExpressions;
     using System.Web;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validations;
     using static UD.Core.Helper.GlobalConstants;
     public sealed partial class TryValidators
     {
@@ -112,8 +110,6 @@
                 return false;
             }
         }
-        [GeneratedRegex(@"^\d+$")]
-        private static partial Regex TryPhoneNumberTRRegex();
         /// <summary>
         /// Türkiye için verilen telefon numarasının geçerli biçimde olup olmadığını kontrol eder.
         /// <para>Geçerli örnekler:</para>
@@ -135,7 +131,7 @@
             else if (phoneNumberTR.Length == 13 && phoneNumberTR.StartsWith("+90")) { phoneNumberTR = phoneNumberTR.Substring(3); }
             else if (phoneNumberTR.Length == 12 && phoneNumberTR.StartsWith("90")) { phoneNumberTR = phoneNumberTR.Substring(2); }
             else if (phoneNumberTR.Length == 11 && phoneNumberTR[0] == '0') { phoneNumberTR = phoneNumberTR.Substring(1); }
-            var r = phoneNumberTR.Length == 10 && TryPhoneNumberTRRegex().IsMatch(phoneNumberTR);
+            var r = phoneNumberTR.Length == 10 && RegexPatterns.NumericOnlyPattern().IsMatch(phoneNumberTR);
             outvalue = r ? phoneNumberTR : "";
             return r;
         }
@@ -145,7 +141,6 @@
         /// <returns>Tür nullable ise <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool TryTypeIsNullable(Type type, out Type outvalue)
         {
-            Guard.ThrowIfNull(type, nameof(type));
             var t = (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
             outvalue = (t ? type.GenericTypeArguments[0] : type);
             return t;
@@ -215,8 +210,6 @@
                 return false;
             }
         }
-        [GeneratedRegex(@"^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$")]
-        private static partial Regex TryMACAddressRegex();
         /// <summary>Verilen değerin geçerli bir MAC adresi olup olmadığını kontrol eder. Eğer geçerliyse, <paramref name="outvalue"/> parametresine temizlenmiş MAC adresi atanır. MAC adresinin belirli bir biçimde olması gerekmektedir.</summary>
         /// <param name="value">Kontrol edilecek MAC adresi.</param>
         /// <param name="outvalue">Geçerli MAC adresi, dönüş değeri olarak atanır.</param>
@@ -226,7 +219,7 @@
             try
             {
                 value = value.ToStringOrEmpty().ToUpper();
-                if (value.Length == MaximumLengthConstants.Mac && TryMACAddressRegex().IsMatch(value))
+                if (value.Length == MaximumLengthConstants.Mac && RegexPatterns.MacAddressPattern().IsMatch(value))
                 {
                     outvalue = value.Replace("-", ":");
                     return true;
@@ -305,14 +298,17 @@
             }
             catch (Exception ex) { return (true, "", ex); }
         }
-        /// <summary><paramref name="token"/> değişkeninde verilen JWT (JSON Web Token) değerinin geçerli olup olmadığını kontrol eder. Doğrulama işlemi sırasında, token&#39;ın imzası, geçerlilik süresi, issuer (yayıncı) ve audience (hedef kitle) gibi kriterler göz önünde bulundurulur. Eğer token geçerliyse, token içindeki claim&#39;ler <paramref name="claims"/> parametresine atanır ve metot <see langword="true"/> döner. Geçersiz bir token durumunda, <paramref name="claims"/> boş bir dizi olarak atanır ve metot <see langword="false"/> döner.</summary>
-        public static bool TryValidateJWTToken(string token, string key, string issuer, string audience, out Claim[] claims)
+        /// <summary><paramref name="token"/> değişkeninde verilen JWT token değerinin geçerliliğini kontrol eder. Eğer token geçerli ise, <paramref name="claimsPrincipal"/> parametresine token içerisindeki kullanıcı bilgilerini içeren <see cref="ClaimsPrincipal"/> nesnesi atanır ve metot <see langword="true"/> döner. Geçersiz bir token durumunda, <paramref name="claimsPrincipal"/> boş bir değer olarak atanır ve metot <see langword="false"/> döner.</summary>
+        /// <param name="token">JWT token değeri</param>
+        /// <param name="key">Token doğrulama anahtarı</param>
+        /// <param name="issuer">Token yayıncısı</param>
+        /// <param name="audience">Token hedef kitlesi</param>
+        /// <param name="claimsPrincipal">Token içerisindeki kullanıcı bilgilerini içeren <see cref="ClaimsPrincipal"/> nesnesi</param>
+        /// <returns>Token geçerliyse <see langword="true"/>, aksi halde <see langword="false"/></returns>
+        public static bool TryValidateJWTToken(string token, string key, string issuer, string audience, out ClaimsPrincipal claimsPrincipal)
         {
-            if (token.IsNullOrEmpty() || key.IsNullOrEmpty())
-            {
-                claims = [];
-                return false;
-            }
+            claimsPrincipal = default;
+            if (token.IsNullOrEmpty() || key.IsNullOrEmpty()) { return false; }
             try
             {
                 var validationParameters = new TokenValidationParameters
@@ -327,21 +323,15 @@
                     ClockSkew = TimeSpan.Zero
                 };
                 var principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out _);
-                claims = (principal.Identity.IsAuthenticated ? principal.Claims.ToArray() : []);
-                return claims.Length > 0;
-            }
-            catch
-            {
-                claims = [];
+                if (principal != null && principal.Identity.IsAuthenticated)
+                {
+                    claimsPrincipal = principal;
+                    return true;
+                }
                 return false;
             }
+            catch { return false; }
         }
-        [GeneratedRegex(@"^(?<city>\d{2})(?<letters>[A-Z]{1})(?<number>\d{4,5})$")]
-        private static partial Regex TryFormatTurkishPlateRegex1();
-        [GeneratedRegex(@"^(?<city>\d{2})(?<letters>[A-Z]{2})(?<number>\d{3,4})$")]
-        private static partial Regex TryFormatTurkishPlateRegex2();
-        [GeneratedRegex(@"^(?<city>\d{2})(?<letters>[A-Z]{3})(?<number>\d{2,3})$")]
-        private static partial Regex TryFormatTurkishPlateRegex3();
         /// <summary>
         /// <paramref name="value"/> değişkeninde verilen değerin Türkiye plakası biçimine uygun olup olmadığını kontrol eder. Eğer değer geçerli bir Türkiye plakası ise, <paramref name="outvalue"/> parametresine standart biçime dönüştürülmüş plaka değeri atanır ve metot <see langword="true"/> döner. Geçersiz bir plaka durumunda, <paramref name="outvalue"/> boş bir değer olarak atanır ve metot <see langword="false"/> döner.
         /// <para>
@@ -362,9 +352,9 @@
             outvalue = "";
             value = new(value.ToStringOrEmpty().ToUpperInvariant().Where(Char.IsLetterOrDigit).ToArray());
             if (value == "") { return false; }
-            var match = TryFormatTurkishPlateRegex1().Match(value); // 2 rakam + 1 harf + 4-5 rakam
-            if (!match.Success) { match = TryFormatTurkishPlateRegex2().Match(value); } // 2 rakam + 2 harf + 3-4 rakam
-            if (!match.Success) { match = TryFormatTurkishPlateRegex3().Match(value); } // 2 rakam + 3 harf + 2-3 rakam
+            var match = RegexPatterns.TurkishPlatePattern1().Match(value); // 2 rakam + 1 harf + 4-5 rakam
+            if (!match.Success) { match = RegexPatterns.TurkishPlatePattern2().Match(value); } // 2 rakam + 2 harf + 3-4 rakam
+            if (!match.Success) { match = RegexPatterns.TurkishPlatePattern3().Match(value); } // 2 rakam + 3 harf + 2-3 rakam
             if (!match.Success) { return false; }
             var cityPlate = match.Groups["city"].Value.ParseOrDefault<int>();
             if (!cityPlate.Between(1, 81)) { return false; }

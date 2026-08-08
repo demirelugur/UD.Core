@@ -5,7 +5,6 @@
     using System;
     using System.Reflection;
     using UD.Core.Helper.Services;
-    using UD.Core.Helper.Validations;
     public static class DependencyInjectionExtensions
     {
         /// <summary><paramref name="services"/> içerisinde, <paramref name="assembly"/> içinde bulunan ve <paramref name="typeInterface"/> arayüzünü uygulayan veya <paramref name="typeBaseclass"/> sınıfından türeyen tüm sınıfları tarar ve bunları bağımlılık enjeksiyonuna Scoped yaşam süresi ile ekler. Bu yöntem, belirli bir assembly içinde yer alan servis sınıflarını otomatik olarak tespit edip kaydetmek için kullanışlıdır, böylece her bir servis için manuel olarak AddScoped tanımı yapmaya gerek kalmaz.</summary>
@@ -16,10 +15,6 @@
         /// <returns>Güncellenmiş IServiceCollection nesnesi</returns>
         public static IServiceCollection AddScopedRange(this IServiceCollection services, Assembly assembly, Type typeInterface, Type typeBaseclass)
         {
-            Guard.ThrowIfNull(services, nameof(services));
-            Guard.ThrowIfNull(assembly, nameof(assembly));
-            Guard.ThrowIfNull(typeInterface, nameof(typeInterface));
-            Guard.ThrowIfNull(typeBaseclass, nameof(typeBaseclass));
             var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeBaseclass)).ToArray();
             foreach (var implementation in types)
             {

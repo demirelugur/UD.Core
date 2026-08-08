@@ -3,7 +3,6 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using UD.Core.Helper.Validations;
     public static class SystemUriExtensions
     {
         /// <summary>Verilen dizeye &quot;v&quot; parametresiyle bir sürüm numarası ekleyerek yeni bir URL oluşturur.</summary>
@@ -11,22 +10,16 @@
         /// <returns>Sürüm numarası eklenmiş URL.</returns>
         public static string GenerateVersionedUrl(this Uri uri)
         {
-            Guard.ThrowIfNull(uri, nameof(uri));
             var separator = (uri.Query.Length > 0 ? "&" : "?");
             return $"{uri.ToString().TrimEnd('/')}{separator}v={DateTime.Now.Ticks}";
         }
         /// <summary>Verilen URI&#39;nin bir YouTube gömme(embed) bağlantısı olup olmadığını kontrol eder.</summary>
         /// <param name="uri">Kontrol edilecek URI.</param>
         /// <returns>URI bir YouTube gömme bağlantısı ise <see langword="true"/>, aksi halde <see langword="false"/> döner.</returns>
-        public static bool IsYouTubeEmbedLink(this Uri uri)
-        {
-            Guard.ThrowIfNull(uri, nameof(uri));
-            return (uri.Host.Contains("youtube.com") && uri.AbsolutePath.StartsWith("/embed/"));
-        }
+        public static bool IsYouTubeEmbedLink(this Uri uri) => (uri.Host.Contains("youtube.com") && uri.AbsolutePath.StartsWith("/embed/"));
         /// <summary>Verilen URI&#39;nin bağlantı durumunu kontrol eder.</summary>
         public static async Task<(bool hasError, Uri requestUri)> IsConnectionStatus(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(uri, nameof(uri));
             using var client = new HttpClient
             {
                 Timeout = timeSpan
@@ -42,7 +35,6 @@
         /// <summary>Belirtilen <see cref="Uri"/> adresinden byte[] veri almaya çalışır.</summary>
         public static async Task<(bool hasError, byte[] dataBinary, string mimeType, Exception ex)> GetBinaryData(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(uri, nameof(uri));
             using var client = new HttpClient
             {
                 Timeout = timeSpan
@@ -77,7 +69,6 @@
         /// <exception cref="ArgumentNullException">Eğer URI null ise bir hata fırlatılır.</exception>
         public static string SetHttpsAndRemoveWww(this Uri uri)
         {
-            Guard.ThrowIfNull(uri, nameof(uri));
             var host = uri.Host;
             if (host.StartsWith("www.", StringComparison.OrdinalIgnoreCase)) { host = host.Substring(4); }
             return new UriBuilder(uri)

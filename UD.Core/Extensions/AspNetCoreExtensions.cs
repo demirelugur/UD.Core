@@ -11,7 +11,6 @@
     using UD.Core.Enums;
     using UD.Core.Helper;
     using UD.Core.Helper.Managements.Files;
-    using UD.Core.Helper.Validations;
     public static class AspNetCoreExtensions
     {
         #region HttpContext
@@ -20,7 +19,6 @@
         /// <returns>Mobil bir cihaz ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
         public static bool IsMobileDevice(this HttpContext context)
         {
-            Guard.ThrowIfNull(context, nameof(context));
             var userAgent = context.Request.Headers.UserAgent.ToStringOrEmpty().ToLower();
             if (userAgent != "") { foreach (var item in new string[] { "android", "iphone", "ipad", "mobile" }) { if (userAgent.Contains(item)) { return true; } } }
             return false;
@@ -28,31 +26,24 @@
         /// <summary>Mevcut HTTP isteğinin şema (http/https) ve host bilgisini kullanarak uygulamanın temel (base) adresini Uri olarak döner. </summary>
         public static Uri GetBaseUri(this HttpContext context)
         {
-            Guard.ThrowIfNull(context, nameof(context));
             var request = context.Request;
             return new($"{request.Scheme}://{(request.Host.HasValue ? request.Host.Value : "")}");
         }
         /// <summary>Mevcut HTTP isteğinin tam adresini (base adres + path + query string) Uri formatında döner. </summary>
         public static Uri GetFullRequestUri(this HttpContext context)
         {
-            Guard.ThrowIfNull(context, nameof(context));
             var request = context.Request;
             return new(String.Concat(context.GetBaseUri().ToString().TrimEnd('/'), request.Path.HasValue ? request.Path.Value : "", request.QueryString.HasValue ? request.QueryString.Value : ""));
         }
         /// <summary>Bearer token&#39;ı HttpContext&#39;den alır.</summary>
         /// <param name="context">HttpContext nesnesi.</param>
         /// <returns>Bearer token.</returns>
-        public static string GetToken(this HttpContext context)
-        {
-            Guard.ThrowIfNull(context, nameof(context));
-            return context.Request.Headers.Authorization.ToString().Replace("Bearer ", "").ToStringOrEmpty();
-        }
+        public static string GetToken(this HttpContext context) => context.Request.Headers.Authorization.ToString().Replace("Bearer ", "").ToStringOrEmpty();
         /// <summary>İstemcinin IP adresini döndürür. Öncelikle <c>X-Forwarded-For</c> HTTP başlığını kontrol eder; eğer geçerli bir IP bulunamazsa bağlantının <see cref="ConnectionInfo.RemoteIpAddress"/> değerini kullanır. Geçerli bir IP adresi elde edilemezse <see cref="IPAddress.Any"/> döndürülür.</summary>
         /// <param name="context">HTTP isteğini temsil eden <see cref="HttpContext"/> nesnesi.</param>
         /// <returns>İstemcinin IPv4 formatındaki IP adresi veya bulunamazsa <see cref="IPAddress.Any"/>.</returns>
         public static IPAddress GetIPAddress(this HttpContext context)
         {
-            Guard.ThrowIfNull(context, nameof(context));
             if (IPAddress.TryParse(context.Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "", out IPAddress _ip)) { return _ip.MapToIPv4(); }
             _ip = context.Connection.RemoteIpAddress;
             return (_ip == null ? IPAddress.Any : _ip.MapToIPv4());
@@ -74,7 +65,6 @@
         /// <returns>Değer başarıyla alındıysa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool TryGetStringValue(this IFormCollection form, string key, out string outvalue)
         {
-            Guard.ThrowIfNull(form, nameof(form));
             if (form.TryGetValue(key.ToStringOrEmpty(), out StringValues _sv) && _sv.Count > 0)
             {
                 outvalue = _sv.ToStringOrEmpty();
@@ -92,7 +82,6 @@
         /// <remarks>Bu metot, bir form verisindeki (IFormCollection) belirli bir anahtara karşılık gelen değerleri belirtilen türe dönüştürerek bir dizi olarak döndürmek için kullanılır. Eğer anahtar &quot;[]&quot; ile bitmiyorsa, otomatik olarak eklenir. Dönüştürme sırasında hata oluşursa, varsayılan değerler kullanılır.</remarks>
         public static bool TryGetArrayValue<TKey>(this IFormCollection form, string key, out TKey[] outvalues)
         {
-            Guard.ThrowIfNull(form, nameof(form));
             key = key.ToStringOrEmpty();
             if (!key.EndsWith("[]")) { key = String.Concat(key, "[]"); }
             if (form.TryGetValue(key, out StringValues _sv) && _sv.Count > 0)
@@ -121,7 +110,6 @@
         /// </returns>
         public static async Task<(bool hasError, T model, string[] errors)> TryBindFromFormAsync<T>(this IFormCollection form, HttpContext? httpContext = null, CultureInfo? cultureInfo = null) where T : class, new()
         {
-            Guard.ThrowIfNull(form, nameof(form));
             httpContext ??= Utilities.GetDefaultHttpContext;
             var modelState = new ModelStateDictionary();
             var bindingContext = new DefaultModelBindingContext
@@ -161,8 +149,6 @@
         /// <summary>Verilen IFormFile nesnesini belirtilen fiziksel yola asenkron olarak yükler.</summary>
         public static async Task FileUpload(this IFormFile file, string physicallyPath, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(file, nameof(file));
-            Guard.ThrowIfEmpty(physicallyPath, nameof(physicallyPath));
             FileHelper.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
             using var fs = new FileStream(physicallyPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
             await file.CopyToAsync(fs, cancellationToken);
@@ -170,7 +156,6 @@
         /// <summary>Bir IFormFile nesnesini byte dizisine dönüştürür.</summary>
         public static async Task<byte[]> ToByteArray(this IFormFile file, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(file, nameof(file));
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms, cancellationToken);
             return ms.ToArray();
@@ -183,7 +168,6 @@
         public static void AddModelErrorRange(this ModelStateDictionary modelstate, IEnumerable<string> errors)
         {
             if (errors.IsNullOrEmptyOrAllNull()) { return; }
-            Guard.ThrowIfNull(modelstate, nameof(modelstate));
             foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("", item); }
         }
     }

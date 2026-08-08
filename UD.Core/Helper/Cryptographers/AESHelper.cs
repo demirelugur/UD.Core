@@ -5,7 +5,6 @@
     using System.Text;
     using UD.Core.Extensions;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validations;
     public sealed class AESHelper
     {
         #region Private
@@ -42,7 +41,6 @@
         #endregion
         public static string Encrypt(string plainText, string key)
         {
-            Guard.ThrowIfEmpty(plainText, nameof(plainText));
             using var aes = Aes.Create();
             aes.Key = generateKey(key, keyRequiredLength);
             aes.GenerateIV();
@@ -56,7 +54,6 @@
         }
         public static string Decrypt(string cipherText, string key)
         {
-            Guard.ThrowIfEmpty(cipherText, nameof(cipherText));
             var cipherBytes = Convert.FromBase64String(cipherText);
             if (cipherBytes.Length < ivRequiredLength)
             {

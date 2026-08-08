@@ -10,7 +10,6 @@
     using System.Globalization;
     using System.Web;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validations;
     public static class SystemObjectExtensions
     {
         /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None biçiminde ve bazı özel ayarlarla döner.</summary>
@@ -134,7 +133,6 @@
         /// <returns>Dinamik bir nesne olarak temsil edilen <see cref="ExpandoObject"/>.</returns>
         public static dynamic ToDynamic(this object value)
         {
-            Guard.ThrowIfNull(value, nameof(value));
             IDictionary<string, object> eo = new ExpandoObject();
             foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType())) { eo.Add(property.Name, property.GetValue(value)); }
             return eo as ExpandoObject;

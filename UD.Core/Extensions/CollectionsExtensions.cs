@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using UD.Core.Helper.Results;
-    using UD.Core.Helper.Validations;
     public static class CollectionsExtensions
     {
         #region IDictionary
@@ -58,8 +57,8 @@
         public static bool IsNullOrEmptyOrAllNull<T>(this IEnumerable<T> source)
         {
             if (source == null) { return true; } // Alternatif: (source == null || !source.Any() || source.All(x => x == null))
-            if (source.TryGetNonEnumeratedCount(out int _count) && _count == 0)  { return true; }
-            foreach (var item in source)  {   if (item != null) { return false; } }
+            if (source.TryGetNonEnumeratedCount(out int _count) && _count == 0) { return true; }
+            foreach (var item in source) { if (item != null) { return false; } }
             return true;
         }
         /// <summary><paramref name="objA"/> ve <paramref name="objB"/> koleksiyonlarının sırasız olarak eşit olup olmadığını kontrol eder. İki koleksiyonun aynı öğeleri içerip içermediğini, ancak sıralarının önemli olmadığı durumlarda kullanılır. Her iki koleksiyonun da aynı öğeleri içerdiği, ancak farklı sıralarda olabilirlerse <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
@@ -79,7 +78,6 @@
         /// <param name="other">Eklenecek öğeleri içeren diğer koleksiyon.</param>
         public static void AddRangeOptimized<T>(this ICollection<T> initial, IEnumerable<T> other)
         {
-            Guard.ThrowIfNull(initial, nameof(initial));
             if (!other.IsNullOrEmptyOrAllNull())
             {
                 if (initial is List<T> _l) { _l.AddRange(other); }

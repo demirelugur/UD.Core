@@ -23,7 +23,7 @@ namespace UD.Core.Attributes.DataAnnotations
             }
             if (TryValidators.TryMailAddress(email, out MailAddress _ma) && (this.hosts.Length == 0 || this.IsHostAllowed(_ma.Host)))
             {
-                validationContext.SetValidatePropertyValue(_ma.Address);
+                validationContext.SetValidatePropertyValue(_ma.Address.ToLowerInvariant());
                 return ValidationResult.Success;
             }
             if (this.ErrorMessage.IsNullOrEmpty())

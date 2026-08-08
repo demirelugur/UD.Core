@@ -6,7 +6,6 @@
     using System.Linq;
     using System.Numerics;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validations;
     using static UD.Core.Helper.GlobalConstants;
     public static class SystemNumericExtensions
     {
@@ -17,7 +16,6 @@
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> değeri negatif veya 128 bitten büyükse fırlatılır.</exception>
         public static Guid ToGuid(this BigInteger value)
         {
-            Guard.ThrowIfNegative(value, nameof(value));
             var maxValue = (BigInteger.One << 128) - BigInteger.One;
             if (value > maxValue) { throw new ArgumentOutOfRangeException(nameof(value), Checks.IsEnglishCurrentUICulture ? $"The argument \"{nameof(value)}\" must be less than or equal to \"{maxValue}\"!" : $"\"{nameof(value)}\" argümanı, \"{maxValue}\" değerinden büyük olamaz!"); }
             var bytes = value.ToByteArray(true, true);

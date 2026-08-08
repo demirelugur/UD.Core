@@ -7,17 +7,12 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Net;
-    using UD.Core.Helper.Validations;
     public static class SystemExceptionExtensions
     {
         /// <summary>Verilen istisnanın en içteki (inner) istisnasını döner.</summary>
         /// <param name="exception">İşlem yapılacak istisna.</param>
         /// <returns>En içteki istisna.</returns>
-        public static Exception InnerEx(this Exception exception)
-        {
-            Guard.ThrowIfNull(exception, nameof(exception));
-            return (exception.InnerException == null ? exception : exception.InnerException.InnerEx());
-        }
+        public static Exception InnerEx(this Exception exception) => (exception.InnerException == null ? exception : exception.InnerException.InnerEx());
         /// <summary>Verilen bir istisna (exception) nesnesine göre uygun HTTP durum kodunu döndüren bir genişletme yöntemidir. Belirli istisna türleri için önceden tanımlı HTTP durum kodları eşleştirilir; eşleşme bulunamazsa varsayılan durum kodu döndürülür.</summary>
         /// <param name="exception">HTTP durum kodunun belirleneceği istisna nesnesi.</param>
         /// <param name="defaultValue">Eşleşen bir durum kodu bulunamazsa döndürülecek varsayılan HTTP durum kodu (varsayılan olarak <see cref="StatusCodes.Status500InternalServerError"/>).</param>
@@ -35,13 +30,15 @@
         /// </remarks>
         public static int GetStatusCode(this Exception exception, int defaultValue = StatusCodes.Status500InternalServerError)
         {
-            Guard.ThrowIfNull(exception, nameof(exception));
-            if (exception is HttpRequestException _hre && _hre.StatusCode.HasValue) { return (int)_hre.StatusCode.Value; }
-            if (exception is WebException _we && _we.Response is HttpWebResponse _hwr) { return (int)_hwr.StatusCode; }
-            if (exception is UnauthorizedAccessException) { return StatusCodes.Status401Unauthorized; }
-            if (exception is ArgumentException) { return StatusCodes.Status400BadRequest; }
-            if (exception is TimeoutException) { return StatusCodes.Status408RequestTimeout; }
-            if (exception is InvalidOperationException) { return StatusCodes.Status409Conflict; }
+            if (exception != null)
+            {
+                if (exception is HttpRequestException _hre && _hre.StatusCode.HasValue) { return (int)_hre.StatusCode.Value; }
+                if (exception is WebException _we && _we.Response is HttpWebResponse _hwr) { return (int)_hwr.StatusCode; }
+                if (exception is UnauthorizedAccessException) { return StatusCodes.Status401Unauthorized; }
+                if (exception is ArgumentException) { return StatusCodes.Status400BadRequest; }
+                if (exception is TimeoutException) { return StatusCodes.Status408RequestTimeout; }
+                if (exception is InvalidOperationException) { return StatusCodes.Status409Conflict; }
+            }
             return defaultValue;
         }
         /// <summary>Belirtilen hatanın ve varsa iç içe geçmiş tüm hata nesnelerinin bir yığın (Stack) olarak döndürülmesini sağlar. Bu yöntem, hata zincirindeki tüm Exception nesnelerini elde etmenize olanak tanır.</summary>
@@ -49,7 +46,6 @@
         /// <returns>Exception nesnelerinden oluşan bir yığın (Stack).</returns>
         public static Stack<Exception> AllException(this Exception exception)
         {
-            Guard.ThrowIfNull(exception, nameof(exception));
             var stack = new Stack<Exception>();
             do
             {

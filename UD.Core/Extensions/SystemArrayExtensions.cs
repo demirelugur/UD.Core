@@ -6,7 +6,6 @@
     using System.Text;
     using UD.Core.Helper;
     using UD.Core.Helper.Managements.Files;
-    using UD.Core.Helper.Validations;
     public static class SystemArrayExtensions
     {
         /// <summary>Hata mesajları dizisini iç içe geçmiş istisnalara dönüştürür.</summary>
@@ -15,7 +14,6 @@
         public static Exception ToNestedException(this string[] errors)
         {
             errors = (errors ?? []).Reverse().ToArray();
-            Guard.ThrowIfEmpty(errors, nameof(errors));
             Exception ex = null;
             var i = errors.Length - 1;
             while (i >= 0)
@@ -49,8 +47,6 @@
         /// <summary>Verilen byte dizisini belirtilen fiziksel yola asenkron olarak yükler.</summary>
         public static async Task FileUpload(this byte[] bytes, string physicallyPath, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfEmpty(bytes, nameof(bytes));
-            Guard.ThrowIfEmpty(physicallyPath, nameof(physicallyPath));
             FileHelper.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
             using var fs = new FileStream(physicallyPath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true);
             await fs.WriteAsync(bytes.AsMemory(0, bytes.Length), cancellationToken);

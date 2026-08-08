@@ -9,7 +9,6 @@ namespace UD.Core.Extensions
     using System.Text;
     using System.Text.RegularExpressions;
     using UD.Core.Helper;
-    using UD.Core.Helper.Validations;
     public static partial class SystemStringExtensions
     {
         /// <summary>Bir string&#39;i Guid&#39;e dönüþtürür. String null veya geçersizse varsayýlan Guid döner.</summary>
@@ -30,10 +29,6 @@ namespace UD.Core.Extensions
             { 'ý', 'i' }, { 'I', 'i' }, { 'Ý', 'i' }
         };
         private static readonly char[] charsToRemove = ['?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+'];
-        [GeneratedRegex(@"[^a-z0-9-]")]
-        private static partial Regex SeoFriendlyRegex1();
-        [GeneratedRegex(@"-+")]
-        private static partial Regex SeoFriendlyRegex2();
         /// <summary>Verilen dizeyi SEO dostu bir hale getirir.</summary>
         /// <param name="value">Dönüþtürülecek dize.</param>
         /// <returns>SEO dostu hale getirilmiþ dize.</returns>
@@ -49,8 +44,8 @@ namespace UD.Core.Extensions
                 else if (Array.IndexOf(charsToRemove, item) == -1) { sb.Append(item); }
             }
             value = sb.ToString().ToLower().Trim();
-            value = SeoFriendlyRegex1().Replace(value, "-");
-            value = SeoFriendlyRegex2().Replace(value, "-");
+            value = RegexPatterns.NonAlphanumericPattern().Replace(value, "-");
+            value = RegexPatterns.MultipleHyphensPattern().Replace(value, "-");
             return value.Trim('-');
         }
         /// <summary>
@@ -95,7 +90,6 @@ namespace UD.Core.Extensions
         public static bool IsMailFromHost(this string value, string host)
         {
             host = host.ToStringOrEmpty().TrimStart('@').ToLower();
-            Guard.ThrowIfEmpty(host, nameof(host));
             return TryValidators.TryMailAddress(value, out MailAddress _ma) && _ma.Host == host;
         }
         /// <summary>Verilen dize deðerinin geçerli bir URI olup olmadýðýný kontrol eder.</summary>
@@ -130,17 +124,11 @@ namespace UD.Core.Extensions
         /// <param name="useFullTypeName">Tam tip ismi (<see cref="Type.FullName"/>) kullanýlacak mý? <see langword="false"/> ise kýsa tip ismi (<see cref="MemberInfo.Name"/>) kullanýlýr</param>
         /// <returns>Biçimli route string&#39;i (örn: &quot;/ControllerName/Method&quot; veya &quot;/Namespace.ControllerName/Method&quot;)</returns>
         /// <exception cref="ArgumentException">method parametresi boþ veya null olduðunda fýrlatýlýr</exception>
-        public static string GetRouteName<T>(this string methodName, bool useFullTypeName) where T : class
-        {
-            Guard.ThrowIfEmpty(methodName, nameof(methodName));
-            return $"/{(useFullTypeName ? typeof(T).FullName : typeof(T).Name)}/{methodName}";
-        }
+        public static string GetRouteName<T>(this string methodName, bool useFullTypeName) where T : class => $"/{(useFullTypeName ? typeof(T).FullName : typeof(T).Name)}/{methodName}";
         /// <summary>Metin içerisindeki tab (\t), satýr baþý (\r) ve yeni satýr (\n) karakterlerini boþluk ile deðiþtirir ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null deðerlerde güvenli þekilde çalýþýr.</summary>
         public static string ReplaceTRNSpace(this string value) => value.ToStringOrEmpty().Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').Trim();
-        [GeneratedRegex(" +")]
-        private static partial Regex RemoveMultipleSpaceRegex();
         /// <summary>Metin içerisindeki birden fazla ardýþýk boþluðu tek bir boþluða indirger ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null veya boþ metinlerde güvenli þekilde çalýþýr.</summary>
-        public static string RemoveMultipleSpace(this string value) => RemoveMultipleSpaceRegex().Replace(value.ToStringOrEmpty(), " ").Trim();
+        public static string RemoveMultipleSpace(this string value) => RegexPatterns.MultipleSpacesPattern().Replace(value.ToStringOrEmpty(), " ").Trim();
         /// <summary>Belirtilen karakter ile doldurarak bir string deðerini belirli bir uzunluða getirir.</summary>
         /// <param name="value">Uzunluðu ayarlanacak string deðeri.</param>
         /// <param name="totalValueLength">Hedef toplam uzunluk. Varsayýlan deðer 2&#39;dir.</param>
@@ -161,7 +149,6 @@ namespace UD.Core.Extensions
         /// <returns>Kesilmiþ dize.</returns>
         public static string SubstringUpToLength(this string value, int length)
         {
-            Guard.ThrowIfZeroOrNegative(length, nameof(length));
             value = value.ToStringOrEmpty();
             return (value.Length > length ? value.Substring(0, length).Trim() : value);
         }

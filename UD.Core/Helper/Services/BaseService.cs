@@ -7,7 +7,6 @@
     using UD.Core.Extensions;
     using UD.Core.Helper.Configurations;
     using UD.Core.Helper.Pages;
-    using UD.Core.Helper.Validations;
     public interface IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseServiceReadOnly<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class, IBaseEntity
@@ -48,7 +47,6 @@
         }
         public virtual async Task DeleteByPredicate(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(predicate, nameof(predicate));
             var entities = await base.DbSet.Where(predicate).ToArrayAsync(cancellationToken);
             await this.DeleteRange(entities, autoSave, cancellationToken);
         }
@@ -70,21 +68,18 @@
         }
         public virtual async Task Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(insertDto, nameof(insertDto));
             var entity = base.Mapper.Map<TEntity>(insertDto);
             await base.DbSet.AddAsync(entity, cancellationToken);
             if (autoSave) { await base.Context.SaveChangesAsync(cancellationToken); }
         }
         public virtual async Task InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfEmpty(insertDtos, nameof(insertDtos));
             var entities = insertDtos.Select(base.Mapper.Map<TEntity>);
             await base.DbSet.AddRangeAsync(entities, cancellationToken);
             if (autoSave) { await base.Context.SaveChangesAsync(cancellationToken); }
         }
         public virtual async Task<TKey> InsertReturningId<TKey>(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct
         {
-            Guard.ThrowIfNull(insertDto, nameof(insertDto));
             var entity = base.Mapper.Map<TEntity>(insertDto);
             await base.DbSet.AddAsync(entity, cancellationToken);
             if (autoSave)
@@ -96,7 +91,6 @@
         }
         public virtual async Task<TKey[]> InsertRangeReturningIds<TKey>(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct
         {
-            Guard.ThrowIfEmpty(insertDtos, nameof(insertDtos));
             var entities = insertDtos.Select(base.Mapper.Map<TEntity>);
             await base.DbSet.AddRangeAsync(entities, cancellationToken);
             if (autoSave)
@@ -110,7 +104,6 @@
         {
             if (base.TryGetKeyValues(id, out object[] _keyValues))
             {
-                Guard.ThrowIfNull(updateDto, nameof(updateDto));
                 var entity = await base.DbSet.FindAsync(_keyValues, cancellationToken);
                 if (entity != null)
                 {

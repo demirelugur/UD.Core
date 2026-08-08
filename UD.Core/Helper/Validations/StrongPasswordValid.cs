@@ -21,7 +21,6 @@
         }
         public bool TryIsWarning(string value, string name, string surname, out string[] errors)
         {
-            Guard.ThrowIfEmpty(value, nameof(value));
             var r = new List<string>();
             var isEnglish = Checks.IsEnglishCurrentUICulture;
             if (!Checks.IsStrongPassword(value, this.minimumLength))
@@ -31,7 +30,6 @@
             }
             if (this.maximumLength.HasValue)
             {
-                Guard.ThrowIfZeroOrNegative(this.maximumLength.Value, nameof(this.maximumLength));
                 if (value.Length > this.maximumLength.Value)
                 {
                     if (isEnglish) { r.Add($"Password can be maximum {this.maximumLength.Value} characters!"); }

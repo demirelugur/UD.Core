@@ -1,7 +1,6 @@
 ﻿namespace UD.Core.Helper.Generates
 {
     using System.Text;
-    using UD.Core.Helper.Validations;
     public sealed class PasswordGenerator
     {
         public static readonly PasswordGenerator Default = new("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "0123456789", "!@#$%^*()_+[]{}|;:,.?");
@@ -20,10 +19,6 @@
         }
         public string Generate()
         {
-            Guard.ThrowIfEmpty(this.upperCases, nameof(this.upperCases));
-            Guard.ThrowIfEmpty(this.lowerCases, nameof(this.lowerCases));
-            Guard.ThrowIfEmpty(this.digits, nameof(this.digits));
-            Guard.ThrowIfEmpty(this.punctuations, nameof(this.punctuations));
             int i, minLength = 4, maxLength = Random.Shared.Next(minLength * 2, (minLength * 4) + 1);
             var sb = new StringBuilder();
             if (maxLength % minLength == 0) { this.set(sb, maxLength / minLength); }

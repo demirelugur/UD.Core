@@ -4,7 +4,6 @@
     using System.Reflection;
     using UD.Core.Helper;
     using UD.Core.Helper.Configurations;
-    using UD.Core.Helper.Validations;
     public static class ExpressionsExtensions
     {
         /// <summary>Verilen ifadenin adını alır.</summary>
@@ -13,7 +12,6 @@
         /// <exception cref="ArgumentException">İfade geçersiz ise fırlatılır.</exception>
         public static string GetMemberName(this Expression expression)
         {
-            Guard.ThrowIfNull(expression, nameof(expression));
             if (expression is LambdaExpression _lambda) { expression = _lambda.Body; }
             var result = "";
             if (expression is MemberExpression _me) { result = _me.Member.Name; }

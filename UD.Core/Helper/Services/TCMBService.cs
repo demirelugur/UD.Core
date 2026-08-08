@@ -8,7 +8,6 @@ namespace UD.Core.Helper.Services
     using UD.Core.Enums;
     using UD.Core.Extensions;
     using UD.Core.Helper.Responses;
-    using UD.Core.Helper.Validations;
     public interface ITCMBService // AddSingleton
     {
         Task<TCMBResponse> Get(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default);
@@ -40,7 +39,6 @@ namespace UD.Core.Helper.Services
         private TCMBResponse GetRate(XDocument xml, string code)
         {
             var node = xml.Descendants("Currency").FirstOrDefault(x => x.Attribute("CurrencyCode")?.Value == code);
-            Guard.ThrowIfNull(node, nameof(node));
             var data = new TCMBResponse();
             if (Int32.TryParse(node.Element(nameof(data.Unit))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out int _valueInt)) { data.Unit = _valueInt; }
             data.ForexBuying = this.ParseDecimalValue(node.Element(nameof(data.ForexBuying)));

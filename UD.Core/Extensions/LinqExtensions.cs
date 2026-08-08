@@ -11,7 +11,6 @@
     using UD.Core.Helper.Configurations;
     using UD.Core.Helper.Pages;
     using UD.Core.Helper.Results;
-    using UD.Core.Helper.Validations;
     public static class LinqExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>
@@ -93,10 +92,8 @@
         /// <summary>Verilen metin için benzersiz bir SEO dostu string oluşturur.</summary>
         public static async Task<string> GenerateUniqueSEOString(this IQueryable<string> source, string text, int maxLength, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(source, nameof(source));
             var i = 0;
             string r, textSeo = text.ToSeoFriendly();
-            Guard.ThrowIfEmpty(textSeo, nameof(textSeo));
             while (true)
             {
                 r = (i == 0 ? textSeo : String.Join("-", textSeo, i.ToString()));
@@ -117,7 +114,6 @@
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
         public static async Task<Paginate<T>> ToPagedList<T>(this IQueryable<T> source, int pageNumber, int size, string ordering, bool loadInfo = true, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfNull(source, nameof(source));
             PagingInfo? p = null;
             if (loadInfo)
             {
@@ -132,7 +128,6 @@
                 {
                     var idName = nameof(EntityDto<>.Id);
                     var idProperty = typeof(T).GetProperty(idName);
-                    Guard.ThrowIfNull(idProperty, nameof(idProperty));
                     if (idProperty.PropertyType == typeof(Guid)) { orderedSource = source.OrderBy(x => 0); }
                     else { orderedSource = source.OrderByDynamic(idName); }
                 }

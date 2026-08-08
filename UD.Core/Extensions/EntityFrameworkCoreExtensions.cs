@@ -16,7 +16,6 @@ namespace UD.Core.Extensions
     using UD.Core.Auditings;
     using UD.Core.Helper;
     using UD.Core.Helper.Databases;
-    using UD.Core.Helper.Validations;
     public static class EntityFrameworkCoreExtensions
     {
         #region DbContext
@@ -28,7 +27,6 @@ namespace UD.Core.Extensions
         /// <returns>Deðiþtirilmiþse <see langword="true"/>, deðilse <see langword="false"/> döner.</returns>
         public static bool IsModified<T>(this DbContext context, T entity, params Expression<Func<T, object>>[] expressions) where T : class
         {
-            Guard.ThrowIfNull(context, nameof(context));
             var entry = context.Entry(entity);
             var properties = typeof(T).GetProperties().Where(x => x.IsMapped() && entry.Property(x.Name).IsModified).ToArray();
             var columns = (expressions ?? []).Select(x => x.GetMemberName()).ToArray();
@@ -38,8 +36,6 @@ namespace UD.Core.Extensions
         /// <summary>Belirli bir bileþik anahtar(composite key) özelliði ile eski varlýðýn güncellenmesini saðlar.</summary>
         public static async Task<T> SetCompositeKey<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyNewValue, CancellationToken cancellationToken = default) where T : class, new()
         {
-            Guard.ThrowIfNull(context, nameof(context));
-            Guard.ThrowIfNull(oldEntity, nameof(oldEntity));
             var type = typeof(T);
             var tableName = type.GetTableName(false);
             var compositeKeyName = compositeKey.GetMemberName();
@@ -95,8 +91,6 @@ namespace UD.Core.Extensions
         public static Task<int> TableReseed(this DbContext context, bool isDebug, Type[] mappedTables, CancellationToken cancellationToken = default)
         {
             if (isDebug) { return Task.FromResult(0); }
-            Guard.ThrowIfNull(context, nameof(context));
-            Guard.ThrowIfEmpty(mappedTables, nameof(mappedTables));
             var sb = new StringBuilder();
             var index = 0;
             if (!mappedTables.All(x => x.IsMappedTable()))
@@ -151,7 +145,6 @@ namespace UD.Core.Extensions
         /// <param name="modelBuilder">EF Core modelini yapýlandýrmak için kullanýlan <see cref="ModelBuilder"/>.</param>
         public static void ApplySoftDeleteQueryFilters(this ModelBuilder modelBuilder)
         {
-            Guard.ThrowIfNull(modelBuilder, nameof(modelBuilder));
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (!typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType)) { continue; }
@@ -183,7 +176,6 @@ namespace UD.Core.Extensions
         /// <param name="sanitizer">HTML içerik temizleme iþlemi için kullanýlacak <see cref="IHtmlSanitizer"/> instance&#39;ý. Null verilirse sanitize iþlemi uygulanmaz.</param>
         public static void SanitizeAndTruncate(this EntityEntry entry, IHtmlSanitizer? sanitizer)
         {
-            Guard.ThrowIfNull(entry, nameof(entry));
             var accessor = _sanitizeTruncateCache.GetOrAdd(entry.Metadata.ClrType, _ => SanitizeCreateTruncateAccessor(entry.Metadata));
             foreach (var item in accessor)
             {
@@ -199,7 +191,6 @@ namespace UD.Core.Extensions
         /// <summary><paramref name="entry"/> nesnesine ait nullable struct türündeki özelliklerin deðerlerini, eðer mevcut deðerleri ilgili struct türünün varsayýlan deðeriyle eþitse, null olarak günceller. Bu iþlem, veritabanýnda gereksiz yere varsayýlan deðerlerin saklanmasýný önlemek ve veri bütünlüðünü artýrmak amacýyla kullanýlabilir. Özellikle, nullable struct türlerinin kullanýldýðý durumlarda, bu tür özelliklerin null olarak kalmasý tercih edilebilir ve bu metot bu durumu saðlamak için tasarlanmýþtýr.</summary>
         public static void NullifyDefaultStructs(this EntityEntry entry)
         {
-            Guard.ThrowIfNull(entry, nameof(entry));
             var accessor = _nullifyCache.GetOrAdd(entry.Metadata.ClrType, _ => CreateNullifyAccessor(entry.Metadata));
             foreach (var item in accessor)
             {
