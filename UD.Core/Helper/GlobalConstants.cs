@@ -11,6 +11,7 @@
         /// <summary><code>new(){MetadataPropertyHandling=MetadataPropertyHandling.Ignore,DateParseHandling=DateParseHandling.None,NullValueHandling=NullValueHandling.Include,Converters={new IsoDateTimeConverter{DateTimeStyles=DateTimeStyles.AssumeUniversal},new StringEnumConverter()}};</code></summary>
         public static readonly JsonSerializerSettings JsonSerializerSettings = new()
         {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
             DateParseHandling = DateParseHandling.None,
             NullValueHandling = NullValueHandling.Include,
