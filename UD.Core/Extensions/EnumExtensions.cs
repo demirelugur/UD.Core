@@ -5,6 +5,10 @@
     using UD.Core.Helper;
     public static class EnumExtensions
     {
+        /// <summary><paramref name="value"/> değerinin, <see cref="EnumAlertState.warning"/> veya <see cref="EnumAlertState.error"/> değerlerini içerip içermediğini kontrol eder. Eğer <paramref name="value"/> değeri bu iki değerden herhangi birini içeriyorsa, <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
+        /// <param name="value">Kontrol edilecek EnumAlertState değeri.</param>
+        /// <returns>Belirtilen değerlerin herhangi birini içeriyorsa <see langword="true"/>, aksi takdirde <see langword="false"/>.</returns>
+        public static bool IsFailed(this EnumAlertState value) => value.Includes(EnumAlertState.warning, EnumAlertState.error);
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
         /// <param name="value">Açıklaması alınacak Enum değeri.</param>
         /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
@@ -14,10 +18,10 @@
             {
                 return value switch
                 {
-                    EnumAlertState.success => "Operation successful.",
-                    EnumAlertState.info => "Information.",
-                    EnumAlertState.warning => "Warning.",
-                    EnumAlertState.error => "An error occurred.",
+                    EnumAlertState.success => "Operation successful",
+                    EnumAlertState.info => "Information",
+                    EnumAlertState.warning => "Warning",
+                    EnumAlertState.error => "An error occurred",
                     _ => throw value.ArgumentOutOfRange(nameof(value))
                 };
             }
