@@ -47,8 +47,7 @@
                 if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The type \"{type.FullName}\" must be a valid \"{nameof(Enum)}\" type!", nameof(type)); }
                 throw new ArgumentException($"\"{type.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(type));
             }
-            var values = Enum.GetValues(type);
-            return Enum.GetNames(type).Select((enumName, i) => new EnumResult(Convert.ToInt64(values.GetValue(i)), enumName, type.GetField(enumName).GetDescription())).ToArray();
+            return Enum.GetValues(type).Cast<object>().Select(EnumResult.ToEntityFromObject).ToArray();
         }
         /// <summary>Belirtilen <paramref name="type"/> türünün, verilen açık generic (<paramref name="openGeneric"/>) türünden türeyip türemediğini kontrol eder.</summary>
         /// <param name="type">Kontrol edilecek tür.</param>
