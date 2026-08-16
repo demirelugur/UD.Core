@@ -33,7 +33,7 @@
         /// <returns>Hexadecimal biçiminde hash değeri.</returns>
         public static string ComputeHash(this byte[] source, bool is512)
         {
-            source = source ?? [];
+            source ??= [];
             var hashBytes = is512 ? SHA512.HashData(source) : SHA256.HashData(source);
             var sb = new StringBuilder(hashBytes.Length * 2);
             foreach (var item in hashBytes) { sb.Append(item.ToString("X2")); }
