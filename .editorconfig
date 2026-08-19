@@ -59,3 +59,6 @@ dotnet_diagnostic.CA1822.severity = none
 
 # IDE0022: Use block body for method
 dotnet_diagnostic.IDE0022.severity = none
+
+# CA2208: Instantiate argument exceptions correctly
+dotnet_diagnostic.CA2208.severity = none

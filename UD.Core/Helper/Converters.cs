@@ -1,11 +1,12 @@
 ﻿namespace UD.Core.Helper
 {
-    using Microsoft.Data.SqlClient;
     using Newtonsoft.Json.Linq;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Data;
+    using System.Data.Common;
     using System.Globalization;
     using System.Linq;
     using System.Net;
@@ -27,30 +28,45 @@
             Array.Reverse(elements);
             return String.Concat(elements);
         }
-        /// <summary>Verilen nesneyi, özellik isimlerini ve değerlerini içeren bir sözlüğe dönüştürür. Yalnızca özel sınıf türlerinde çalışır.</summary>
+        /// <summary><paramref name="obj"/> nesnesini Dictionary&lt;string, object&gt; tipine dönüştürür. <paramref name="obj"/> için tanımlanan nesneler: IDictionary, KeyValuePair&lt;string, object&gt;, IEnumerable&lt;KeyValuePair&lt;string, object&gt;&gt;, Custom Class (Property&#39;leri Dictionary&#39;e dönüştürülebilir olmalı)</summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>
-        /// <returns>Nesnenin özellik isimlerini ve değerlerini içeren sözlük.</returns>
+        /// <returns>Dictionary&lt;string, object&gt; tipinde dönüştürülmüş nesne.</returns>
+        /// <exception cref="ArgumentNullException">Parametre adı boş olduğunda fırlatılır.</exception>
+        /// <exception cref="Exception">Uygun olmayan türde bir nesne ile karşılaşıldığında fırlatılır.</exception>
         public static Dictionary<string, object> ToDictionaryFromObject(object obj)
         {
             if (obj == null) { return []; }
-            if (obj is Dictionary<string, object> _d) { return _d; }
+            if (obj is IDictionary _dic)
+            {
+                return _dic.Cast<DictionaryEntry>().ToDictionary(x =>
+                {
+                    var key = x.Key?.ToString();
+                    if (key.IsNullOrEmpty()) { throw new ArgumentNullException(nameof(x.Key), (Checks.IsEnglishCurrentUICulture ? "A parameter name cannot be empty." : "Parametre adı boş olamaz.")); }
+                    return key;
+                }, x => x.Value);
+            }
+            if (obj is KeyValuePair<string, object> _pair) { return ToDictionaryFromObject(_pair.ToEnumerable()); }
+            if (obj is IEnumerable<KeyValuePair<string, object>> _pairs) { return ToDictionaryFromObject(_pairs.ToDictionary(x => x.Key, x => x.Value)); }
             var t = obj.GetType();
-            if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
+            if (t.IsCustomClass()) { return ToDictionaryFromObject(t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj))); }
             if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
             throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
         }
-        /// <summary>Verilen nesneyi SQL parametrelerine dönüştürür. Eğer nesne <see cref="SqlParameter"/> türünde ise doğrudan SQL parametreleri olarak döner. Özel sınıf türlerinde çalışır ve özellik isimlerine göre SQL parametrelerini oluşturur.<para><paramref name="obj"/> için tanımlanan nesneler: SqlParameter, IEnumerable&lt;SqlParameter&gt;, IDictionary&lt;string, object&gt;, AnonymousObjectClass</para></summary>
+        /// <summary><paramref name="obj"/> nesnesini DbParameter dizisine dönüştürür. <paramref name="obj"/> için tanımlanan nesneler: DbParameter, IEnumerable&lt;DbParameter&gt;, Custom Class (Property&#39;leri DbParameter&#39;a dönüştürülebilir olmalı)</summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>
-        /// <returns>Nesneyi temsil eden SQL parametrelerinin dizisi.</returns>
-        public static SqlParameter[] ToSqlParameterFromObject(object obj)
+        /// <param name="command">DbCommand nesnesi.</param>
+        /// <returns>DbParameter dizisi.</returns>
+        public static DbParameter[] ToDbParameterFromObject(object obj, DbCommand command)
         {
             if (obj == null) { return []; }
-            if (obj is SqlParameter _sp) { return [_sp]; }
-            if (obj is IEnumerable<SqlParameter> _sps) { return _sps.ToArray(); }
-            return (obj is IDictionary<string, object> _dic ? _dic : ToDictionaryFromObject(obj)).Select(x => new SqlParameter
+            if (obj is DbParameter parameter) { return [parameter]; }
+            if (obj is IEnumerable<DbParameter> parameters) { return parameters.ToArray(); }
+            return ToDictionaryFromObject(obj).Select(x =>
             {
-                ParameterName = x.Key,
-                Value = x.Value ?? DBNull.Value
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = x.Key;
+                parameter.Value = x.Value ?? DBNull.Value;
+                return parameter;
             }).ToArray();
         }
         /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı), JToken(DateTime türüne uygun biçimde olmalı)</para></summary>
