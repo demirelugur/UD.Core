@@ -6,7 +6,6 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Data;
-    using System.Data.Common;
     using System.Globalization;
     using System.Linq;
     using System.Net;
@@ -51,23 +50,6 @@
             if (t.IsCustomClass()) { return ToDictionaryFromObject(t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj))); }
             if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
             throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
-        }
-        /// <summary><paramref name="obj"/> nesnesini DbParameter dizisine dönüştürür. <paramref name="obj"/> için tanımlanan nesneler: DbParameter, IEnumerable&lt;DbParameter&gt;, Custom Class (Property&#39;leri DbParameter&#39;a dönüştürülebilir olmalı)</summary>
-        /// <param name="obj">Dönüştürülecek nesne.</param>
-        /// <param name="command">DbCommand nesnesi.</param>
-        /// <returns>DbParameter dizisi.</returns>
-        public static DbParameter[] ToDbParameterFromObject(object obj, DbCommand command)
-        {
-            if (obj == null) { return []; }
-            if (obj is DbParameter parameter) { return [parameter]; }
-            if (obj is IEnumerable<DbParameter> parameters) { return parameters.ToArray(); }
-            return ToDictionaryFromObject(obj).Select(x =>
-            {
-                var parameter = command.CreateParameter();
-                parameter.ParameterName = x.Key;
-                parameter.Value = x.Value ?? DBNull.Value;
-                return parameter;
-            }).ToArray();
         }
         /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı), JToken(DateTime türüne uygun biçimde olmalı)</para></summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>

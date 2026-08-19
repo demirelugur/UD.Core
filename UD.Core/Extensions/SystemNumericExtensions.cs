@@ -21,10 +21,74 @@
             if (value < minValue || value > maxValue) { throw new ArgumentOutOfRangeException(nameof(value), Checks.IsEnglishCurrentUICulture ? $"The argument \"{nameof(value)}\" must be between [{minValue} - {maxValue}]" : $"\"{nameof(value)}\" argümanı [{minValue} - {maxValue}] arasında olmalıdır!"); }
             var bytes = value.ToByteArray(true, true);
             if (bytes.Length < 16) { bytes = [.. Enumerable.Repeat(Byte.MinValue, 16 - bytes.Length), .. bytes]; }
-            return new Guid(bytes, bigEndian: true);
+            return new(bytes, true);
         }
         #endregion
-        #region Long
+        #region Byte
+        /// <summary>SQL Server&#39;ın sistem tür kimliğini <c>([system_type_id])</c> <see cref="SqlDbType"/> enum değerine dönüştürür.</summary>
+        /// <param name="systemTypeId">SQL Server [sys].[types] tablosundaki [system_type_id] değeri.</param>
+        /// <returns>Eşleşen <see cref="SqlDbType"/> enum değeri.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Geçersiz veya desteklenmeyen bir sistem tür kimliği verildiğinde fırlatılır.</exception>
+        public static SqlDbType ToSqlDbType(this byte systemTypeId)
+        {
+            return systemTypeId switch
+            {
+                34 => SqlDbType.Image,
+                35 => SqlDbType.Text,
+                36 => SqlDbType.UniqueIdentifier,
+                40 => SqlDbType.Date,
+                41 => SqlDbType.Time,
+                42 => SqlDbType.DateTime2,
+                43 => SqlDbType.DateTimeOffset,
+                48 => SqlDbType.TinyInt,
+                52 => SqlDbType.SmallInt,
+                56 => SqlDbType.Int,
+                58 => SqlDbType.SmallDateTime,
+                59 => SqlDbType.Real,
+                60 => SqlDbType.Money,
+                61 => SqlDbType.DateTime,
+                62 => SqlDbType.Float,
+                99 => SqlDbType.NText,
+                104 => SqlDbType.Bit,
+                106 => SqlDbType.Decimal,
+                122 => SqlDbType.SmallMoney,
+                127 => SqlDbType.BigInt,
+                165 => SqlDbType.VarBinary,
+                167 => SqlDbType.VarChar,
+                173 => SqlDbType.Binary,
+                175 => SqlDbType.Char,
+                189 => SqlDbType.Timestamp,
+                231 => SqlDbType.NVarChar,
+                239 => SqlDbType.NChar,
+                241 => SqlDbType.Xml,
+                _ => throw systemTypeId.ArgumentOutOfRange(nameof(systemTypeId))
+            };
+        }
+        #endregion
+        #region Decimal
+        /// <summary>Verilen bir ondalık değeri belirtilen ondalık basamak sayısına yuvarlayarak string olarak döndürür. İsteğe bağlı olarak, yuvarlama yöntemi belirtilebilir.</summary>
+        /// <param name="d">Yuvarlanacak <see cref="Decimal"/> değeri.</param>
+        /// <param name="decimals">Yuvarlanacak ondalık basamak sayısı (varsayılan olarak 2).</param>
+        /// <param name="midpointRounding">Yuvarlama yöntemi (varsayılan olarak <see cref="MidpointRounding.AwayFromZero"/>).</param>
+        /// <returns>Yuvarlanmış değerin string temsili.</returns>
+        public static string ToRound(this decimal d, int decimals = 2, MidpointRounding midpointRounding = MidpointRounding.AwayFromZero) => Decimal.Round(d, decimals, midpointRounding).ToString();
+        /// <summary>Bir decimal değeri, InvariantCulture kullanarak string&#39;e dönüştürür.</summary>
+        /// <param name="value">Dönüştürülecek <see cref="Decimal"/> değer.</param>
+        /// <returns>Decimal değerin string temsilini döner.</returns>
+        /// <remarks>Bu metodun ters işlemi için <code>Convert.ToDecimal(value, CultureInfo.InvariantCulture);</code> kullanılabilir.</remarks>
+        public static string ToStringInvariantCulture(this decimal value) => value.ToString(CultureInfo.InvariantCulture);
+        #endregion
+        #region Double
+        /// <summary>Dosya boyutu gibi büyük sayıları insan tarafından okunabilir bir biçimde formatlar. Örneğin, 1536 değeri &quot;1.5 KB&quot; olarak dönecektir.</summary>
+        public static string ToFileSizeString(this double value)
+        {
+            value = Math.Max(0, value);
+            int j = 0, sz = ArrayConstants.FileSizeUnits.Length - 1;
+            while (value > 1024 && j < sz) { value /= 1024; j++; }
+            return String.Join(" ", (Math.Ceiling(value * 100) / 100).ToString(), ArrayConstants.FileSizeUnits[j]);
+        }
+        #endregion
+        #region Int64
         /// <summary>Verilen değerin geçerli bir T.C. Kimlik Numarası olup olmadığını kontrol eder.
         /// <para>
         /// Doğrulama adımları:
@@ -100,8 +164,16 @@
         /// <param name="getTime">Unix zaman damgası (milisaniye cinsinden).</param>
         /// <returns>Dönüştürülen yerel <see cref="DateTime"/> değeri.</returns>
         public static DateTime ToJsDate(this long getTime) => DateTime.UnixEpoch.AddMilliseconds(Convert.ToDouble(getTime)).ToLocalTime();
+        /// <summary><paramref name="value"/> değerini bir <see cref="Guid"/> nesnesine dönüştürür. Dönüşüm sırasında, <paramref name="value"/> değeri negatif olmamalıdır. Eğer <paramref name="value"/> negatif ise, 0 olarak kabul edilir. Bu yöntem, uzun tamsayıları benzersiz tanımlayıcılar olarak kullanmak isteyen senaryolarda faydalı olabilir.</summary>
+        /// <param name="value">Dönüştürülecek long değeri.</param>
+        /// <returns>Dönüştürülen Guid değeri.</returns>
+        public static Guid ToGuid(this long value)
+        {
+            value = Math.Max(0, value);
+            return new BigInteger(value).ToGuid();
+        }
         #endregion
-        #region Ulong
+        #region UInt64
         /// <summary>Verilen sayının asal olup olmadığını kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek pozitif tamsayı.</param>
         /// <returns>Asal ise <see langword="true"/>, değilse <see langword="false"/> döner.</returns>
@@ -115,70 +187,6 @@
             ulong i, limit = Convert.ToUInt64(Math.Sqrt(value));
             for (i = 3; i <= limit; i += 2) { if ((value % i) == 0) { return false; } }
             return true;
-        }
-        #endregion
-        #region Decimal
-        /// <summary>Verilen bir ondalık değeri belirtilen ondalık basamak sayısına yuvarlayarak string olarak döndürür. İsteğe bağlı olarak, yuvarlama yöntemi belirtilebilir.</summary>
-        /// <param name="d">Yuvarlanacak <see cref="Decimal"/> değeri.</param>
-        /// <param name="decimals">Yuvarlanacak ondalık basamak sayısı (varsayılan olarak 2).</param>
-        /// <param name="midpointRounding">Yuvarlama yöntemi (varsayılan olarak <see cref="MidpointRounding.AwayFromZero"/>).</param>
-        /// <returns>Yuvarlanmış değerin string temsili.</returns>
-        public static string ToRound(this decimal d, int decimals = 2, MidpointRounding midpointRounding = MidpointRounding.AwayFromZero) => Decimal.Round(d, decimals, midpointRounding).ToString();
-        /// <summary>Bir decimal değeri, InvariantCulture kullanarak string&#39;e dönüştürür.</summary>
-        /// <param name="value">Dönüştürülecek <see cref="Decimal"/> değer.</param>
-        /// <returns>Decimal değerin string temsilini döner.</returns>
-        /// <remarks>Bu metodun ters işlemi için <code>Convert.ToDecimal(value, CultureInfo.InvariantCulture);</code> kullanılabilir.</remarks>
-        public static string ToStringInvariantCulture(this decimal value) => value.ToString(CultureInfo.InvariantCulture);
-        #endregion
-        #region Double
-        /// <summary>Dosya boyutu gibi büyük sayıları insan tarafından okunabilir bir biçimde formatlar. Örneğin, 1536 değeri &quot;1.5 KB&quot; olarak dönecektir.</summary>
-        public static string ToFileSizeString(this double value)
-        {
-            value = Math.Max(0, value);
-            int j = 0, sz = ArrayConstants.FileSizeUnits.Length - 1;
-            while (value > 1024 && j < sz) { value /= 1024; j++; }
-            return String.Join(" ", (Math.Ceiling(value * 100) / 100).ToString(), ArrayConstants.FileSizeUnits[j]);
-        }
-        #endregion
-        #region Byte
-        /// <summary>SQL Server&#39;ın sistem tür kimliğini <c>([system_type_id])</c> <see cref="SqlDbType"/> enum değerine dönüştürür.</summary>
-        /// <param name="systemTypeId">SQL Server [sys].[types] tablosundaki [system_type_id] değeri.</param>
-        /// <returns>Eşleşen <see cref="SqlDbType"/> enum değeri.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Geçersiz veya desteklenmeyen bir sistem tür kimliği verildiğinde fırlatılır.</exception>
-        public static SqlDbType ToSqlDbType(this byte systemTypeId)
-        {
-            return systemTypeId switch
-            {
-                34 => SqlDbType.Image,
-                35 => SqlDbType.Text,
-                36 => SqlDbType.UniqueIdentifier,
-                40 => SqlDbType.Date,
-                41 => SqlDbType.Time,
-                42 => SqlDbType.DateTime2,
-                43 => SqlDbType.DateTimeOffset,
-                48 => SqlDbType.TinyInt,
-                52 => SqlDbType.SmallInt,
-                56 => SqlDbType.Int,
-                58 => SqlDbType.SmallDateTime,
-                59 => SqlDbType.Real,
-                60 => SqlDbType.Money,
-                61 => SqlDbType.DateTime,
-                62 => SqlDbType.Float,
-                99 => SqlDbType.NText,
-                104 => SqlDbType.Bit,
-                106 => SqlDbType.Decimal,
-                122 => SqlDbType.SmallMoney,
-                127 => SqlDbType.BigInt,
-                165 => SqlDbType.VarBinary,
-                167 => SqlDbType.VarChar,
-                173 => SqlDbType.Binary,
-                175 => SqlDbType.Char,
-                189 => SqlDbType.Timestamp,
-                231 => SqlDbType.NVarChar,
-                239 => SqlDbType.NChar,
-                241 => SqlDbType.Xml,
-                _ => throw systemTypeId.ArgumentOutOfRange(nameof(systemTypeId))
-            };
         }
         #endregion
     }

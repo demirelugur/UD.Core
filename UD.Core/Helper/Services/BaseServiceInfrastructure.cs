@@ -1,5 +1,6 @@
 ﻿namespace UD.Core.Helper.Services
 {
+    using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Storage;
     using System.Data;
@@ -30,8 +31,8 @@
         public TContext Context { get; }
         public DbSet<TEntity> DbSet => this.Context.Set<TEntity>();
         public DbConnection GetDbConnection() => this.Context.Database.GetDbConnection();
-        public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.Context.Database.SqlQueryRaw<T>(sql, Converters.ToSqlParameterFromObject(parameters));
-        public Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, Converters.ToSqlParameterFromObject(parameters), cancellationToken);
+        public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.Context.Database.SqlQueryRaw<T>(sql, toSqlParameterFromObject(parameters));
+        public Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, toSqlParameterFromObject(parameters), cancellationToken);
         public virtual Task<int> SaveChanges(CancellationToken cancellationToken = default) => this.Context.SaveChangesAsync(cancellationToken);
         public async Task<List<dynamic>> QueryRawDynamic(string query, CommandType commandType, CommandBehavior commandBehavior, int? commandTimeout, object parameters, CancellationToken cancellationToken = default)
         {
@@ -46,8 +47,8 @@
                 if (commandTimeout.HasValue) { command.CommandTimeout = commandTimeout.Value; }
                 var transaction = this.Context.Database.CurrentTransaction; // Not: using eklenmemelidir!
                 if (transaction != null) { command.Transaction = transaction.GetDbTransaction(); }
-                var sqlParameters = Converters.ToSqlParameterFromObject(parameters);
-                if (sqlParameters.Length > 0) { command.Parameters.AddRange(sqlParameters); }
+                var dbParameters = toDbParameterFromObject(parameters, command);
+                if (dbParameters.Length > 0) { command.Parameters.AddRange(dbParameters); }
                 int i, fieldCount;
                 string columnName;
                 IDictionary<string, object> row;
@@ -71,6 +72,20 @@
         {
             this.Context.Dispose();
             GC.SuppressFinalize(this);
+        }
+        private SqlParameter[] toSqlParameterFromObject(object parameters) => Converters.ToDictionaryFromObject(parameters).Select(x => new SqlParameter(x.Key, x.Value ?? DBNull.Value)).ToArray();
+        private static IDataParameter[] toDbParameterFromObject(object obj, DbCommand command)
+        {
+            if (obj == null) { return []; }
+            if (obj is IDataParameter parameter) { return [parameter]; }
+            if (obj is IEnumerable<IDataParameter> parameters) { return parameters.ToArray(); }
+            return Converters.ToDictionaryFromObject(obj).Select(x =>
+            {
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = x.Key;
+                parameter.Value = x.Value ?? DBNull.Value;
+                return parameter;
+            }).ToArray();
         }
     }
 }

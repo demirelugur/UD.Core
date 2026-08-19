@@ -147,7 +147,7 @@
             if (value != null)
             {
                 if (value is TEnum _enum) { return _enum; }
-                if (value.GetType().IsEnum) { value = value.ToInt64(); }
+                if (value.GetType().IsEnum) { return value.ToInt64().TryToEnum<TEnum>(); }
                 if (value is (Byte or Int16 or Int32 or Int64))
                 {
                     try { return (TEnum)Enum.ToObject(typeof(TEnum), value); }

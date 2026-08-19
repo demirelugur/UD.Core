@@ -1,1 +1,6 @@
-dotnet new sbsgmprojesablonu -n ProjeAdi
+1) sln kısmında .template.config klasorü kopyalanmalı
+2) sln bulunduğu bir üst yola çıkılıp -> dotnet new install .\{projeklasöradı} Örnek: .\BitkiselUrunTakipSistemi
+3) dotnet new list sbsgmprojesablonu powershell'de kayıt gelmeli
+4) projenin kopyalanacağı klasör açılır ve   dotnet new sbsgmprojesablonu -n {ProjeAdı} yazılmalı
+5) dotnet new uninstall "C:\Users\ugur.demirel6\Source\Repos\{projeklasöradı}"
+6) dotnet new list sbsgmprojesablonu kayıt gelmemeli!
