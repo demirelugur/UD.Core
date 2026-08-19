@@ -31,8 +31,8 @@
         public TContext Context { get; }
         public DbSet<TEntity> DbSet => this.Context.Set<TEntity>();
         public DbConnection GetDbConnection() => this.Context.Database.GetDbConnection();
-        public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.Context.Database.SqlQueryRaw<T>(sql, toSqlParameterFromObject(parameters));
-        public Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, toSqlParameterFromObject(parameters), cancellationToken);
+        public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.Context.Database.SqlQueryRaw<T>(sql, toDbParameterFromObject(parameters, null));
+        public Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, toDbParameterFromObject(parameters, null), cancellationToken);
         public virtual Task<int> SaveChanges(CancellationToken cancellationToken = default) => this.Context.SaveChangesAsync(cancellationToken);
         public async Task<List<dynamic>> QueryRawDynamic(string query, CommandType commandType, CommandBehavior commandBehavior, int? commandTimeout, object parameters, CancellationToken cancellationToken = default)
         {
@@ -73,13 +73,15 @@
             this.Context.Dispose();
             GC.SuppressFinalize(this);
         }
-        private SqlParameter[] toSqlParameterFromObject(object parameters) => Converters.ToDictionaryFromObject(parameters).Select(x => new SqlParameter(x.Key, x.Value ?? DBNull.Value)).ToArray();
-        private static IDataParameter[] toDbParameterFromObject(object obj, DbCommand command)
+        private static IDataParameter[] toDbParameterFromObject(object obj, DbCommand? command)
         {
             if (obj == null) { return []; }
             if (obj is IDataParameter parameter) { return [parameter]; }
             if (obj is IEnumerable<IDataParameter> parameters) { return parameters.ToArray(); }
-            return Converters.ToDictionaryFromObject(obj).Select(x =>
+            var dic = Converters.ToDictionaryFromObject(obj);
+            if (dic.Count == 0) { return []; }
+            if (command == null) { return dic.Select(x => new SqlParameter(x.Key, x.Value ?? DBNull.Value)).ToArray(); }
+            return dic.Select(x =>
             {
                 var parameter = command.CreateParameter();
                 parameter.ParameterName = x.Key;
