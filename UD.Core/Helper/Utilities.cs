@@ -128,6 +128,11 @@
                 throw new ArgumentException($"\"{nameof(entity)}\" argümanı türü class olmalıdır!", nameof(entity));
             }
             var pi = type.GetProperty(propertyName);
+            if (pi == null)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentNullException(nameof(propertyName), $"The \"{nameof(propertyName)}\" property was not found!"); }
+                throw new ArgumentNullException(nameof(propertyName), $"\"{nameof(propertyName)}\" özelliği bulunamadı!");
+            }
             if (!pi.CanWrite)
             {
                 if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }

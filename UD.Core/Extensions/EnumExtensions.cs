@@ -1,6 +1,7 @@
 ﻿namespace UD.Core.Extensions
 {
     using Microsoft.AspNetCore.Http;
+    using System.Data;
     using UD.Core.Enums;
     using UD.Core.Helper;
     public static class EnumExtensions
@@ -88,6 +89,46 @@
                 };
             }
             return value.GetDescriptionFromEnum();
+        }
+        /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.</summary>
+        /// <param name="type">Dönüştürülecek <see cref="SqlDbType"/> enum değeri.</param>
+        /// <returns>SQL Server sistem tür kimliği (<c>[system_type_id]</c>) değeri</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Desteklenmeyen bir <see cref="SqlDbType"/> değeri verildiğinde fırlatılır.</exception>
+        /// <remarks>SELECT [name], [system_type_id] FROM [sys].[types]</remarks>
+        public static int ToSystemTypeId(this SqlDbType type)
+        {
+            return type switch
+            {
+                SqlDbType.Image => 34,
+                SqlDbType.Text => 35,
+                SqlDbType.UniqueIdentifier => 36,
+                SqlDbType.Date => 40,
+                SqlDbType.Time => 41,
+                SqlDbType.DateTime2 => 42,
+                SqlDbType.DateTimeOffset => 43,
+                SqlDbType.TinyInt => 48,
+                SqlDbType.SmallInt => 52,
+                SqlDbType.Int => 56,
+                SqlDbType.SmallDateTime => 58,
+                SqlDbType.Real => 59,
+                SqlDbType.Money => 60,
+                SqlDbType.DateTime => 61,
+                SqlDbType.Float => 62,
+                SqlDbType.NText => 99,
+                SqlDbType.Bit => 104,
+                SqlDbType.Decimal => 106,
+                SqlDbType.SmallMoney => 122,
+                SqlDbType.BigInt => 127,
+                SqlDbType.VarBinary => 165,
+                SqlDbType.VarChar => 167,
+                SqlDbType.Binary => 173,
+                SqlDbType.Char => 175,
+                SqlDbType.Timestamp => 189,
+                SqlDbType.NVarChar => 231,
+                SqlDbType.NChar => 239,
+                SqlDbType.Xml => 241,
+                _ => throw type.ArgumentOutOfRange(nameof(type))
+            };
         }
     }
 }

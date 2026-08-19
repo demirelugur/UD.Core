@@ -4,6 +4,7 @@
     using Microsoft.IdentityModel.Tokens;
     using Newtonsoft.Json.Linq;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Data;
@@ -72,7 +73,7 @@
         }
         /// <summary>
         /// Verilen nesne üzerinde belirtilen anahtar (property veya sözlük elemanı) aranır.
-        /// <para>Eğer nesne bir <see cref="IDictionary{String, Object}"/> ise anahtar sözlükte aranır. Eğer normal ya da anonim bir nesne ise reflection ile public özelliklerde aranır.</para>
+        /// <para>Eğer nesne bir <see cref="IDictionary"/> ise anahtar sözlükte aranır. Eğer normal ya da anonim bir nesne ise reflection ile public özelliklerde aranır.</para>
         /// </summary>
         /// <typeparam name="TKey">Beklenen değer tipi.</typeparam>
         /// <param name="value">Üzerinde arama yapılacak nesne (sözlük, anonim tip, dinamik nesne vb.).</param>
@@ -85,7 +86,7 @@
             {
                 if (value != null && !key.IsNullOrEmpty())
                 {
-                    if (value is IDictionary<string, object> _dic && _dic.TryGetValue(key, out object _dictval) && _dictval is TKey _tdic)
+                    if (value is IDictionary _dic && _dic.Contains(key) && _dic[key] is TKey _tdic)
                     {
                         outvalue = _tdic;
                         return true;
@@ -322,12 +323,8 @@
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
-                var principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out _);
-                if (principal != null && principal.Identity.IsAuthenticated)
-                {
-                    claimsPrincipal = principal;
-                    return true;
-                }
+                claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out _);
+                if (claimsPrincipal != null && claimsPrincipal.Identity.IsAuthenticated) { return true; }
                 return false;
             }
             catch { return false; }
