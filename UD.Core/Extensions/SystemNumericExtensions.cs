@@ -16,11 +16,12 @@
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> değeri negatif veya 128 bitten büyükse fırlatılır.</exception>
         public static Guid ToGuid(this BigInteger value)
         {
+            var minValue = BigInteger.Zero;
             var maxValue = (BigInteger.One << 128) - BigInteger.One;
-            if (value > maxValue) { throw new ArgumentOutOfRangeException(nameof(value), Checks.IsEnglishCurrentUICulture ? $"The argument \"{nameof(value)}\" must be less than or equal to \"{maxValue}\"!" : $"\"{nameof(value)}\" argümanı, \"{maxValue}\" değerinden büyük olamaz!"); }
+            if (value < minValue || value > maxValue) { throw new ArgumentOutOfRangeException(nameof(value), Checks.IsEnglishCurrentUICulture ? $"The argument \"{nameof(value)}\" must be between [{minValue} - {maxValue}]" : $"\"{nameof(value)}\" argümanı [{minValue} - {maxValue}] arasında olmalıdır!"); }
             var bytes = value.ToByteArray(true, true);
             if (bytes.Length < 16) { bytes = [.. Enumerable.Repeat(Byte.MinValue, 16 - bytes.Length), .. bytes]; }
-            return new(bytes, true);
+            return new Guid(bytes, bigEndian: true);
         }
         #endregion
         #region Long
