@@ -18,7 +18,7 @@
         IQueryable<T> SqlQueryRaw<T>(string sql, object parameters);
         Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default);
         Task<int> SaveChanges(CancellationToken cancellationToken = default);
-        Task<List<dynamic>> QueryRawDynamic(string query, CommandType commandType, CommandBehavior commandBehavior, int? commandTimeout, object parameters, CancellationToken cancellationToken = default);
+        Task<List<dynamic>> QueryRawDynamic(string query, object parameters, CommandBehavior commandBehavior = CommandBehavior.Default, int? commandTimeout = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
     }
     public abstract class BaseServiceInfrastructure<TContext, TEntity> : IBaseServiceInfrastructure<TContext, TEntity>, IDisposable
         where TContext : DbContext
@@ -34,7 +34,7 @@
         public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.Context.Database.SqlQueryRaw<T>(sql, toDbParameterFromObject(parameters, null));
         public Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, toDbParameterFromObject(parameters, null), cancellationToken);
         public virtual Task<int> SaveChanges(CancellationToken cancellationToken = default) => this.Context.SaveChangesAsync(cancellationToken);
-        public async Task<List<dynamic>> QueryRawDynamic(string query, CommandType commandType, CommandBehavior commandBehavior, int? commandTimeout, object parameters, CancellationToken cancellationToken = default)
+        public async Task<List<dynamic>> QueryRawDynamic(string query, object parameters, CommandBehavior commandBehavior = CommandBehavior.Default, int? commandTimeout = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
         {
             var connection = this.GetDbConnection();
             try
