@@ -11,15 +11,5 @@
         /// <param name="guid">Dönüştürülecek GUID değeri.</param>
         /// <returns>GUID&#39;in temsil ettiği <see cref="BigInteger"/> değeri.</returns>
         public static BigInteger ToBigInteger(this Guid guid) => new(guid.ToByteArray(true), true, true);
-        /// <summary><paramref name="guid"/> değerini, büyük-endian (big-endian) bayt sıralaması kullanarak bir <see cref="long"/> (Int64) nesnesine dönüştürür. Bu yöntem, GUID&#39;in bayt dizisini büyük-endian biçiminde okuyarak, GUID&#39;in benzersiz değerini temsil eden bir tamsayı oluşturur. Eğer GUID değeri <see cref="long"/> veri tipinin sınırları içinde değilse, belirtilen <paramref name="defaultValue"/> değeri döndürülür.</summary>
-        /// <param name="guid">Dönüştürülecek GUID değeri.</param>
-        /// <param name="defaultValue">GUID değeri <see cref="long"/> veri tipinin sınırları dışında ise döndürülecek varsayılan değer.</param>
-        /// <returns>GUID&#39;in temsil ettiği <see cref="long"/> değeri veya <paramref name="defaultValue"/>.</returns>
-        public static long ToLongFromGuid(this Guid guid, long defaultValue = 0)
-        {
-            var bi = guid.ToBigInteger();
-            if (bi.Between(0, Int64.MaxValue)) { return (long)bi; }
-            return defaultValue;
-        }
     }
 }

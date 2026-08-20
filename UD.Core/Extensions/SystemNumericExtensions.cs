@@ -5,7 +5,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Numerics;
-    using UD.Core.Helper;
+    using UD.Core.Helper.Validations;
     using static UD.Core.Helper.GlobalConstants;
     public static class SystemNumericExtensions
     {
@@ -18,7 +18,7 @@
         {
             var minValue = BigInteger.Zero;
             var maxValue = (BigInteger.One << 128) - BigInteger.One;
-            if (value < minValue || value > maxValue) { throw new ArgumentOutOfRangeException(nameof(value), Checks.IsEnglishCurrentUICulture ? $"The argument \"{nameof(value)}\" must be between [{minValue} - {maxValue}]" : $"\"{nameof(value)}\" argümanı [{minValue} - {maxValue}] arasında olmalıdır!"); }
+            Guard.ThrowIfNotValidRange(value, minValue, maxValue, nameof(value));
             var bytes = value.ToByteArray(true, true);
             if (bytes.Length < 16) { bytes = [.. Enumerable.Repeat(Byte.MinValue, 16 - bytes.Length), .. bytes]; }
             return new(bytes, true);
@@ -164,14 +164,6 @@
         /// <param name="getTime">Unix zaman damgası (milisaniye cinsinden).</param>
         /// <returns>Dönüştürülen yerel <see cref="DateTime"/> değeri.</returns>
         public static DateTime ToJsDate(this long getTime) => DateTime.UnixEpoch.AddMilliseconds(Convert.ToDouble(getTime)).ToLocalTime();
-        /// <summary><paramref name="value"/> değerini bir <see cref="Guid"/> nesnesine dönüştürür. Dönüşüm sırasında, <paramref name="value"/> değeri negatif olmamalıdır. Eğer <paramref name="value"/> negatif ise, 0 olarak kabul edilir. Bu yöntem, uzun tamsayıları benzersiz tanımlayıcılar olarak kullanmak isteyen senaryolarda faydalı olabilir.</summary>
-        /// <param name="value">Dönüştürülecek long değeri.</param>
-        /// <returns>Dönüştürülen Guid değeri.</returns>
-        public static Guid ToGuid(this long value)
-        {
-            value = Math.Max(0, value);
-            return new BigInteger(value).ToGuid();
-        }
         #endregion
         #region UInt64
         /// <summary>Verilen sayının asal olup olmadığını kontrol eder.</summary>
@@ -180,12 +172,10 @@
         public static bool IsPrimeNumber(this ulong value)
         {
             if (value < 2) { return false; }
-            if (value == 2) { return true; }
-            if ((value % 2) == 0) { return false; }
-            if (value == 5) { return true; }
-            if ((value % 5) == 0) { return false; }
+            if (value.Includes((ulong)2, (ulong)3)) { return true; }
+            if (value % 2 == 0 || value % 3 == 0) { return false; }
             ulong i, limit = Convert.ToUInt64(Math.Sqrt(value));
-            for (i = 3; i <= limit; i += 2) { if ((value % i) == 0) { return false; } }
+            for (i = 5; i <= limit; i += 6) { if (value % i == 0 || (value % (i + 2)) == 0) { return false; } }
             return true;
         }
         #endregion
