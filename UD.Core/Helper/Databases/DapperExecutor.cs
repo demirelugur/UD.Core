@@ -44,7 +44,7 @@
             this._disposed = true;
         }
         [ActivatorUtilitiesConstructor]
-        public DapperExecutor(DbContext dbContext) : this(dbContext.Database.GetDbConnection(), dbContext.Database.CurrentTransaction?.GetDbTransaction())
+        public DapperExecutor(DbContext context) : this(context.Database.GetDbConnection(), context.Database.CurrentTransaction?.GetDbTransaction())
         {
             this._ownsConnection = false;
         }
