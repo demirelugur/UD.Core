@@ -43,7 +43,6 @@
         }
         public sealed class MaximumLengthConstants
         {
-            public const int SerialNumber = 9;
             public const int EMail = 50;
             public const int EMailUserName = 20;
             /// <summary><see cref="SHA256.HashSizeInBytes"/> değerinin 2 katı</summary>
@@ -53,6 +52,7 @@
             public const int IPAddress = 15;
             public const int Mac = 17;
             public const int TRIdentityNumber = 11;
+            public const int TRIdentitySerialNumber = 9;
             public const int TRTaxIdentityNumber = 10;
         }
         public sealed class TitleConstants
@@ -62,14 +62,14 @@
             public const string Xss = "XSS(Cross - Site Scripting)";
             public const string Iban = "IBAN(Uluslararası Banka Hesap Numarası)";
         }
-        public sealed class ValidationErrorMessageConstants
+        public sealed class ValidationMessageTurkishConstants
         {
             public const string ArrayMinLength = "{0} boş geçilemez! En az {1} adet eleman içermelidir.";
             public const string ArrayMaxLength = "{0} boş geçilemez! En çok {1} adet eleman içermelidir.";
-            public const string EMail = "{0}, geçerli bir e-Posta adresi olmalıdır!";
+            public const string Email = "{0}, geçerli bir e-Posta adresi olmalıdır!";
             /// <summary>1: minimum, 2: maksimum</summary>
             public const string Range = "{0}, [{1} - {2}] arasında olmalıdır!";
-            public const string GreaterThenZero = "{0}, sıfırdan büyük bir değer olmalıdır!";
+            public const string GreaterThanZero = "{0}, sıfırdan büyük bir değer olmalıdır!";
             public const string Required = "{0}, boş geçilemez!";
             public const string StringLengthMax = "{0}, en fazla {1} karakter uzunluğunda olmalıdır.";
             /// <summary>1: maksimum, 2: minimum</summary>

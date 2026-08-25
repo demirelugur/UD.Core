@@ -108,12 +108,12 @@
         /// <summary><paramref name="value"/> değerini belirtilen <paramref name="type"/> türüne dönüştürmeye çalışır. Dönüştürme işlemi başarısız olursa veya değer null ise, nullable türler için null, nullable olmayan türler için default değer döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür. Ayrıca bool, DateOnly, Uri, MailAddress ve IPAddress türleri için özel dönüşüm mantığı içerir.</summary>
         public static object ParseOrDefault(object value, Type type)
         {
-            var pd = parseOrDefault(value, type);
+            var pd = PrepareValueForConversion(value, type);
             if (pd.value == null) { return type.GetDefaultValue(); }
             try { return Convert.ChangeType(pd.value, pd.baseType); }
             catch { return type.GetDefaultValue(); }
         }
-        private static (object value, Type baseType) parseOrDefault(object value, Type propertyType)
+        private static (object value, Type baseType) PrepareValueForConversion(object value, Type propertyType)
         {
             if (value == null) { return (default, default); }
             if (value is JToken _jTokenValue && _jTokenValue.IsNoneOrNullOrUndefined()) { return (default, default); }

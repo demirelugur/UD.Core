@@ -5,29 +5,29 @@
     using UD.Core.Extensions;
     public interface ISearchAndPaginateDto
     {
-        int pageNumber { get; set; }
-        int size { get; set; }
-        string? ordering { get; set; }
+        int PageNumber { get; set; }
+        int Size { get; set; }
+        string? Ordering { get; set; }
         Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken);
     }
     [Serializable]
     public class SearchAndPaginateDto : ISearchAndPaginateDto
     {
-        private string? _Ordering;
+        private string? _ordering;
         [UDRangePositiveInt32]
         [DefaultValue(1)]
-        public int pageNumber { get; set; }
+        public int PageNumber { get; set; }
         [UDRangePositiveInt32]
         [DefaultValue(20)]
-        public int size { get; set; }
-        public string? ordering { get { return _Ordering; } set { _Ordering = value.ParseOrDefault<string>(); } }
+        public int Size { get; set; }
+        public string? Ordering { get { return _ordering; } set { _ordering = value.ParseOrDefault<string>(); } }
         public SearchAndPaginateDto() : this(default, default, default) { }
-        public SearchAndPaginateDto(int pageNumber, int size, string? ordering)
+        public SearchAndPaginateDto(int PageNumber, int Size, string? Ordering)
         {
-            this.pageNumber = pageNumber;
-            this.size = size;
-            this.ordering = ordering;
+            this.PageNumber = PageNumber;
+            this.Size = Size;
+            this.Ordering = Ordering;
         }
-        public virtual Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedList(this.pageNumber, this.size, this.ordering, loadInfo, cancellationToken);
+        public virtual Task<Paginate<T>> ToPagedList<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedList(this.PageNumber, this.Size, this.Ordering, loadInfo, cancellationToken);
     }
 }

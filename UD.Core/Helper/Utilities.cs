@@ -10,35 +10,44 @@
     using System.Linq.Expressions;
     using System.Transactions;
     using UD.Core.Extensions;
+    using UD.Core.Helper.Validations;
     public sealed class Utilities
     {
-        /// <summary>
-        /// Veritabanı bağlantı dizesi oluşturur. 
+        /// <summary>SQL Server veritabanı bağlantı dizesi oluşturur. 
         /// <para><c>Data Source=###;Initial Catalog=###;Persist Security Info=True;User ID=###;Password=###;MultipleActiveResultSets=True;TrustServerCertificate=True</c></para>
         /// </summary>
-        /// <param name="dataSource">Veritabanı sunucu adı veya IP adresi (DataSource)</param>
-        /// <param name="initialCatalog">Bağlanılacak veritabanı adı (Initial Catalog)</param>
-        /// <param name="userID">Veritabanı kullanıcı adı (User ID)</param>
-        /// <param name="password">Veritabanı kullanıcı şifresi (Password)</param>
-        /// <returns>Oluşturulan SQL bağlantı dizesini döndürür</returns>
+        /// <param name="dataSource">SQL Server sunucu adı, IP adresi veya sunucu/instance adı. Örneğin: <c>localhost</c>, <c>192.168.1.100</c> veya <c>SERVER\SQLEXPRESS</c>.</param>
+        /// <param name="initialCatalog">Bağlanılacak veritabanının adı (Initial Catalog).</param>
+        /// <param name="userID">SQL Server kullanıcı adı (User ID).</param>
+        /// <param name="password">SQL Server kullanıcısının şifresi (Password).</param>
+        /// <param name="port">SQL Server bağlantısı için kullanılacak port numarası. Belirtilmezse <paramref name="dataSource"/> değeri olduğu gibi kullanılır. Belirtildiğinde <paramref name="dataSource"/> değeri <c>sunucu,port</c> biçiminde oluşturulur.</param>
+        /// <returns>Oluşturulan SQL Server bağlantı dizesini döndürür.</returns>
         /// <remarks>
-        /// Oluşturulan bağlantı dizesinde aşağıdaki özellikler ayarlanır:
+        /// Oluşturulan bağlantı dizesinde aşağıdaki özellikler etkinleştirilir:
         /// <list type="bullet">
-        /// <item><description><b>PersistSecurityInfo</b>: Güvenlik bilgilerinin bağlantı dizesinde kalması sağlanır</description></item>
-        /// <item><description><b>MultipleActiveResultSets</b>: Aynı bağlantı üzerinde birden fazla aktif sonuç kümesine izin verilir (MARS)</description></item>
-        /// <item><description><b>TrustServerCertificate</b>: Sunucu sertifikasının doğrulanmadan güvenilir kabul edilmesi sağlanır</description></item>
+        /// <item><description><b>PersistSecurityInfo</b>: Güvenlik bilgilerinin bağlantı dizesinde korunmasını sağlar.</description></item>
+        /// <item><description><b>MultipleActiveResultSets</b>:Aynı SQL Server bağlantısı üzerinden birden fazla aktif sonuç kümesinin kullanılmasına izin verir (MARS).</description></item>
+        /// <item><description><b>TrustServerCertificate</b>:SQL Server&#39;ın TLS/SSL sertifikasının doğrulanmadan güvenilir kabul edilmesini sağlar.</description></item>
         /// </list>
         /// </remarks>
-        public static string GetConnectionString(string dataSource, string initialCatalog, string userID, string password) => new SqlConnectionStringBuilder
+        public static string GetConnectionString(string dataSource, string initialCatalog, string userID, string password, int? port = null)
         {
-            DataSource = dataSource,
-            InitialCatalog = initialCatalog,
-            UserID = userID,
-            Password = password,
-            PersistSecurityInfo = true,
-            MultipleActiveResultSets = true,
-            TrustServerCertificate = true
-        }.ToString();
+            if (port.HasValue)
+            {
+                var p = Math.Max(0, port.Value);
+                if (p > 0) { dataSource = String.Join(",", dataSource, p); }
+            }
+            return new SqlConnectionStringBuilder
+            {
+                DataSource = dataSource,
+                InitialCatalog = initialCatalog,
+                UserID = userID,
+                Password = password,
+                PersistSecurityInfo = true,
+                MultipleActiveResultSets = true,
+                TrustServerCertificate = true
+            }.ToString();
+        }
         /// <summary>Verilen sınıfın belirtilen özelliğindeki maksimum karakter uzunluğunu döner. Eğer <see cref="StringLengthAttribute"/> veya <see cref="MaxLengthAttribute"/> gibi uzunluk sınırlayıcı öznitelikler atanmışsa, bu değeri alır. Aksi takdirde 0 döner.</summary>
         /// <typeparam name="T">Kontrol edilecek sınıf türü.</typeparam>
         /// <param name="name">Kontrol edilecek özelliğin adı.</param>

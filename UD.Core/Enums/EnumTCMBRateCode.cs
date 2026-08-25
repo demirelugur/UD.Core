@@ -1,70 +1,70 @@
 ﻿namespace UD.Core.Enums
 {
-    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
     public enum EnumTCMBRateCode : byte
     {
         /// <summary>ABD DOLARI</summary>
-        [Description("ABD DOLARI")]
+        [Display(Name = "ABD DOLARI")]
         USD = 1,
         /// <summary>AVUSTRALYA DOLARI</summary>
-        [Description("AVUSTRALYA DOLARI")]
+        [Display(Name = "AVUSTRALYA DOLARI")]
         AUD,
         /// <summary>DANİMARKA KRONU</summary>
-        [Description("DANİMARKA KRONU")]
+        [Display(Name = "DANİMARKA KRONU")]
         DKK,
         /// <summary>AVRO</summary>
-        [Description("AVRO")]
+        [Display(Name = "AVRO")]
         EUR,
         /// <summary>İNGİLİZ STERLİNİ</summary>
-        [Description("İNGİLİZ STERLİNİ")]
+        [Display(Name = "İNGİLİZ STERLİNİ")]
         GBP,
         /// <summary>İSVİÇRE FRANGI</summary>
-        [Description("İSVİÇRE FRANGI")]
+        [Display(Name = "İSVİÇRE FRANGI")]
         CHF,
         /// <summary>İSVEÇ KRONU</summary>
-        [Description("İSVEÇ KRONU")]
+        [Display(Name = "İSVEÇ KRONU")]
         SEK,
         /// <summary>KANADA DOLARI</summary>
-        [Description("KANADA DOLARI")]
+        [Display(Name = "KANADA DOLARI")]
         CAD,
         /// <summary>KUVEYT DİNARI</summary>
-        [Description("KUVEYT DİNARI")]
+        [Display(Name = "KUVEYT DİNARI")]
         KWD,
         /// <summary>NORVEÇ KRONU</summary>
-        [Description("NORVEÇ KRONU")]
+        [Display(Name = "NORVEÇ KRONU")]
         NOK,
         /// <summary>SUUDİ ARABİSTAN RİYALİ</summary>
-        [Description("SUUDİ ARABİSTAN RİYALİ")]
+        [Display(Name = "SUUDİ ARABİSTAN RİYALİ")]
         SAR,
         /// <summary>JAPON YENİ</summary>
-        [Description("JAPON YENİ")]
+        [Display(Name = "JAPON YENİ")]
         JPY,
         /// <summary>RUMEN LEYİ</summary>
-        [Description("RUMEN LEYİ")]
+        [Display(Name = "RUMEN LEYİ")]
         RON,
         /// <summary>RUS RUBLESİ</summary>
-        [Description("RUS RUBLESİ")]
+        [Display(Name = "RUS RUBLESİ")]
         RUB,
         /// <summary>ÇİN YUANI</summary>
-        [Description("ÇİN YUANI")]
+        [Display(Name = "ÇİN YUANI")]
         CNY,
         /// <summary>PAKİSTAN RUPİSİ</summary>
-        [Description("PAKİSTAN RUPİSİ")]
+        [Display(Name = "PAKİSTAN RUPİSİ")]
         PKR,
         /// <summary>KATAR RİYALİ</summary>
-        [Description("KATAR RİYALİ")]
+        [Display(Name = "KATAR RİYALİ")]
         QAR,
         /// <summary>GÜNEY KORE WONU</summary>
-        [Description("GÜNEY KORE WONU")]
+        [Display(Name = "GÜNEY KORE WONU")]
         KRW,
         /// <summary>AZERBAYCAN YENİ MANATI</summary>
-        [Description("AZERBAYCAN YENİ MANATI")]
+        [Display(Name = "AZERBAYCAN YENİ MANATI")]
         AZN,
         /// <summary>BİRLEŞİK ARAP EMİRLİKLERİ DİRHEMİ</summary>
-        [Description("BİRLEŞİK ARAP EMİRLİKLERİ DİRHEMİ")]
+        [Display(Name = "BİRLEŞİK ARAP EMİRLİKLERİ DİRHEMİ")]
         AED,
         /// <summary>KAZAKİSTAN TENGESİ</summary>
-        [Description("KAZAKİSTAN TENGESİ")]
+        [Display(Name = "KAZAKİSTAN TENGESİ")]
         KZT
     }
 }

@@ -3,33 +3,33 @@
     using UD.Core.Helper;
     public sealed class DateIntervalResult
     {
-        public int year { get; set; }
-        public int month { get; set; }
-        public int day { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int Day { get; set; }
         public DateIntervalResult() : this(default, default, default) { }
-        public DateIntervalResult(int year, int month, int day)
+        public DateIntervalResult(int Year, int Month, int Day)
         {
-            this.year = year;
-            this.month = month;
-            this.day = day;
+            this.Year = Year;
+            this.Month = Month;
+            this.Day = Day;
         }
         public override string ToString()
         {
             var r = new List<string>();
-            if (this.year > 0)
+            if (this.Year > 0)
             {
                 var p0 = Checks.IsEnglishCurrentUICulture ? "year" : "yıl";
-                r.Add(String.Join(" ", this.year.ToString(), p0));
+                r.Add(String.Join(" ", this.Year.ToString(), p0));
             }
-            if (this.month > 0)
+            if (this.Month > 0)
             {
                 var p1 = Checks.IsEnglishCurrentUICulture ? "month" : "ay";
-                r.Add(String.Join(" ", this.month.ToString(), p1));
+                r.Add(String.Join(" ", this.Month.ToString(), p1));
             }
-            if (this.day > 0)
+            if (this.Day > 0)
             {
                 var p2 = Checks.IsEnglishCurrentUICulture ? "day" : "gün";
-                r.Add(String.Join(" ", this.day.ToString(), p2));
+                r.Add(String.Join(" ", this.Day.ToString(), p2));
             }
             return (r.Count > 0 ? String.Join(", ", r) : "");
         }

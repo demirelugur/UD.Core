@@ -1,13 +1,13 @@
 ﻿namespace UD.Core.Enums
 {
-    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
     public enum EnumNVIIdentityCard : byte
     {
         /// <summary>Yeni Kimlik Kartı</summary>
-        [Description("Yeni Kimlik Kartı")]
+        [Display(Name = "Yeni Kimlik Kartı")]
         @new = 1,
         /// <summary>Eski Nüfus Cüzdanı</summary>
-        [Description("Eski Nüfus Cüzdanı")]
+        [Display(Name = "Eski Nüfus Cüzdanı")]
         old
     }
 }

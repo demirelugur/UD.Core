@@ -48,14 +48,14 @@
             _ip = context.Connection.RemoteIpAddress;
             return (_ip == null ? IPAddress.Any : _ip.MapToIPv4());
         }
-        private const string TransactionRollbackKey = "__UDTransactionRollback";
+        private const string _transactionRollbackKey = "__UDTransactionRollback";
         /// <summary><paramref name="context"/> için bir işleme geri alma (rollback) işareti ekler. Bu işaret, işlem sırasında bir hata oluştuğunu ve veritabanı işlemlerinin geri alınması gerektiğini belirtir. İşlem tamamlanmadan önce bu işaret kontrol edilerek gerekli geri alma işlemleri yapılabilir.</summary>
         /// <param name="context">İşlem geri alma işareti eklenmek istenen <see cref="HttpContext"/> nesnesi.</param>
-        public static void MarkTransactionRollback(this HttpContext context) => context.Items[TransactionRollbackKey] = true;
+        public static void MarkTransactionRollback(this HttpContext context) => context.Items[_transactionRollbackKey] = true;
         /// <summary><paramref name="context"/> için bir işleme geri alma (rollback) işareti olup olmadığını kontrol eder. Eğer işaret varsa, işlem sırasında bir hata oluştuğunu ve veritabanı işlemlerinin geri alınması gerektiğini belirtir.</summary>
         /// <param name="context">İşlem geri alma işareti kontrol edilecek <see cref="HttpContext"/> nesnesi.</param>
         /// <returns><see langword="true"/> ise işlem geri alma işareti mevcut, aksi takdirde <see langword="false"/>.</returns>
-        public static bool IsTransactionRollbackRequired(this HttpContext context) => (context.Items.TryGetValue(TransactionRollbackKey, out object _value) && _value is Boolean _b && _b);
+        public static bool IsTransactionRollbackRequired(this HttpContext context) => (context.Items.TryGetValue(_transactionRollbackKey, out object _value) && _value is Boolean _b && _b);
         #endregion
         #region IFormCollection
         /// <summary>Form koleksiyonundan belirtilen anahtar ile bir dize değerini alır.</summary>
@@ -134,7 +134,7 @@
                 if (TryValidators.TryValidateObject(_t, out errors)) { return (true, default, errors); }
                 return (false, _t, default);
             }
-            return (true, default, [EnumAlertState.error.GetDescriptionLocalized()]);
+            return (true, default, [EnumAlertState.error.GetDisplayNameLocalized()]);
         }
         #endregion
         #region IFormFile

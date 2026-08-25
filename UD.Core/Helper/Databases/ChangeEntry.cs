@@ -19,28 +19,28 @@
             this.entity = entity ?? [];
             this.changeProperties = changeProperties ?? [];
         }
-        private static bool isMapped(PropertyInfo propertyInfo) => (!propertyInfo.IsSkipAuditLog() && propertyInfo.IsMapped());
-        private static bool isTypeByteArrayOrHtmlContent(PropertyInfo propertyInfo) => (propertyInfo.PropertyType == typeof(byte[]) || propertyInfo.IsHtmlContent());
-        private static bool areEqual(object objA, object objB)
+        private static bool IsMapped(PropertyInfo propertyInfo) => (!propertyInfo.IsSkipAuditLog() && propertyInfo.IsMapped());
+        private static bool IsTypeByteArrayOrHtmlContent(PropertyInfo propertyInfo) => (propertyInfo.PropertyType == typeof(byte[]) || propertyInfo.IsHtmlContent());
+        private static bool AreEqual(object objA, object objB)
         {
             if (objA is byte[] _ba1 && objB is byte[] _ba2) { return _ba1.IsAbsoluteEqual(_ba2); }
             return Equals(objA, objB);
         }
-        private static string computeHash(object value)
+        private static string ComputeHash(object value)
         {
             if (value == null) { return Array.Empty<byte>().ComputeHash(true); }
             if (value is String _s) { return _s.ComputeHash(true); }
             if (value is byte[] _byteArray) { return _byteArray.ComputeHash(true); }
-            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"{nameof(computeHash)} method only supports null, string and byte[] values"); }
-            throw new NotSupportedException($"{nameof(computeHash)} metodu sadece null, string ve byte[] değerlerini destekler.");
+            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"{nameof(ComputeHash)} method only supports null, string and byte[] values"); }
+            throw new NotSupportedException($"{nameof(ComputeHash)} metodu sadece null, string ve byte[] değerlerini destekler.");
         }
-        private static object getPKValue(object entity, Type entityType)
+        private static object GetPKValue(object entity, Type entityType)
         {
             var pks = entityType.GetProperties().Where(x => x.IsPK()).Select(x => x.Name).ToArray();
             if (pks.Length == 1) { return entityType.GetProperty(pks[0]).GetValue(entity); }
             return null;
         }
-        private static Dictionary<string, object> extractScalarProperties(object entity, Type entityType) => entityType.GetProperties().Where(isMapped).ToDictionary(x => x.GetColumnName(), x => (isTypeByteArrayOrHtmlContent(x) ? computeHash(x.GetValue(entity)) : x.GetValue(entity)));
+        private static Dictionary<string, object> ExtractScalarProperties(object entity, Type entityType) => entityType.GetProperties().Where(IsMapped).ToDictionary(x => x.GetColumnName(), x => (IsTypeByteArrayOrHtmlContent(x) ? ComputeHash(x.GetValue(entity)) : x.GetValue(entity)));
         /// <summary><paramref name="value"/> için tanımlanan nesneler: ChangeEntry, EntityEntry, AnonymousObjectClass</summary>
         public static ChangeEntry ToEntityFromObject(object value)
         {
@@ -53,20 +53,20 @@
                 if (_ee.State == EntityState.Modified)
                 {
                     changes = _ee.OriginalValues.Properties
-                    .Where(x => isMapped(x.PropertyInfo))
+                    .Where(x => IsMapped(x.PropertyInfo))
                     .Select(x => new
                     {
                         x.PropertyInfo,
                         Original = _ee.OriginalValues[x],
                         Current = _ee.CurrentValues[x]
                     })
-                    .Where(x => !areEqual(x.Original, x.Current))
+                    .Where(x => !AreEqual(x.Original, x.Current))
                     .ToDictionary(
                         x => x.PropertyInfo.GetColumnName(),
-                        x => (isTypeByteArrayOrHtmlContent(x.PropertyInfo) ? new ChangePropertyInfo(computeHash(x.Original), computeHash(x.Current)) : new ChangePropertyInfo(x.Original, x.Current))
+                        x => (IsTypeByteArrayOrHtmlContent(x.PropertyInfo) ? new ChangePropertyInfo(ComputeHash(x.Original), ComputeHash(x.Current)) : new ChangePropertyInfo(x.Original, x.Current))
                     );
                 }
-                return new(_ee.Metadata.ClrType.GetTableName(true), getPKValue(_ee.Entity, _ee.Metadata.ClrType), extractScalarProperties(_ee.Entity, _ee.Metadata.ClrType), changes);
+                return new(_ee.Metadata.ClrType.GetTableName(true), GetPKValue(_ee.Entity, _ee.Metadata.ClrType), ExtractScalarProperties(_ee.Entity, _ee.Metadata.ClrType), changes);
             }
             /*
             if (value is IFormCollection _form)

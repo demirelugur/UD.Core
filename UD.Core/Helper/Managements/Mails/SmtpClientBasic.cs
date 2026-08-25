@@ -43,7 +43,7 @@
         [UDRangePositiveInt32]
         [Display(Name = nameof(DisplayNames.SmtpClientBasicTimeout), ResourceType = typeof(DisplayNames))]
         public int? Timeout { get { return _timeout; } set { _timeout = value.NullOrDefault(); } }
-        public SmtpClient toSmtpClient()
+        public SmtpClient ToSmtpClient()
         {
             var sc = new SmtpClient
             {

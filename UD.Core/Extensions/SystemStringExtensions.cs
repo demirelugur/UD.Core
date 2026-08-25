@@ -19,7 +19,7 @@ namespace UD.Core.Extensions
         /// <param name="value">Dönüþtürülecek tarih içeren dize.</param>
         /// <returns>Geçerli bir <see cref="DateTime"/> nesnesi veya varsayýlan <see cref="DateTime"/> deðeri.</returns>
         public static DateTime ToDate(this string value) => value.ParseOrDefault<DateTime>();
-        private static readonly Dictionary<char, char> charReplacements = new()
+        private static readonly Dictionary<char, char> _charReplacements = new()
         {
             { 'þ', 's' }, { 'Þ', 's' },
             { 'ö', 'o' }, { 'Ö', 'o' },
@@ -28,7 +28,7 @@ namespace UD.Core.Extensions
             { 'ð', 'g' }, { 'Ð', 'g' },
             { 'ý', 'i' }, { 'I', 'i' }, { 'Ý', 'i' }
         };
-        private static readonly char[] charsToRemove = ['?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+'];
+        private static readonly char[] _charsToRemove = ['?', '/', '.', '\'', '"', '#', '%', '&', '*', '!', '@', '+'];
         /// <summary>Verilen dizeyi SEO dostu bir hale getirir.</summary>
         /// <param name="value">Dönüþtürülecek dize.</param>
         /// <returns>SEO dostu hale getirilmiþ dize.</returns>
@@ -39,9 +39,9 @@ namespace UD.Core.Extensions
             var sb = new StringBuilder(value.Length);
             foreach (var item in value.ToCharArray())
             {
-                if (charReplacements.TryGetValue(item, out char _v)) { sb.Append(_v); }
+                if (_charReplacements.TryGetValue(item, out char _v)) { sb.Append(_v); }
                 else if (item == ' ') { sb.Append('-'); }
-                else if (Array.IndexOf(charsToRemove, item) == -1) { sb.Append(item); }
+                else if (Array.IndexOf(_charsToRemove, item) == -1) { sb.Append(item); }
             }
             value = sb.ToString().ToLower().Trim();
             value = RegexPatterns.NonAlphanumericPattern().Replace(value, "-");
@@ -152,7 +152,7 @@ namespace UD.Core.Extensions
             value = value.ToStringOrEmpty();
             return (value.Length > length ? value.Substring(0, length).Trim() : value);
         }
-        private static readonly string[] LowerCaseWords = ["Ancak", "Ama", "Da", "De", "Fakat", "Gibi", "Ýle", "Ýse", "Ki", "Lakin", "Ve", "Veya"];
+        private static readonly string[] _lowerCaseWords = ["Ancak", "Ama", "Da", "De", "Fakat", "Gibi", "Ýle", "Ýse", "Ki", "Lakin", "Ve", "Veya"];
         /// <summary><paramref name="value"/> deðerini baþlýk biçimine (Title Case) dönüþtürür. Her kelimenin ilk harfi büyük, geri kalan harfler küçük olur. Küçük harfe çevrilecek baðlaçlar: <c>Ancak,Ama,Da,De,Fakat,Gibi,Ýle,Ýse,Ki,Lakin,Ve,Veya</c></summary>
         /// <param name="value">Dönüþtürülecek string.</param>
         /// <returns>Baþlýk durumuna dönüþtürülmüþ string.</returns>
@@ -161,7 +161,7 @@ namespace UD.Core.Extensions
             value = value.ToTitleCase(true, ['.', '+', '(', '-']);
             if (value == "") { return ""; }
             var cultureInfo = new CultureInfo("tr-TR");
-            foreach (var word in LowerCaseWords) { value = value.Replace($" {word} ", $" {word.ToLower(cultureInfo)} "); }
+            foreach (var word in _lowerCaseWords) { value = value.Replace($" {word} ", $" {word.ToLower(cultureInfo)} "); }
             return value;
         }
         /// <summary><paramref name="value"/> deðerini baþlýk biçimine (Title Case) dönüþtürür. Her kelimenin ilk harfi büyük, geri kalan harfler küçük olur. Kelimeler arasýndaki ayracý belirlemek için <paramref name="isWhiteSpace"/> ve <paramref name="punctuations"/> parametreleri kullanýlýr. <paramref name="cultureInfo"/> parametresi ile kültüre özgü büyük/küçük harf dönüþümü saðlanabilir (varsayýlan olarak Türkçe kültürü kullanýlýr).</summary>

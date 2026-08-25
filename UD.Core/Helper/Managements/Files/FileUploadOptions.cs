@@ -11,38 +11,37 @@
     using UD.Core.Extensions;
     using UD.Core.Helper;
     using UD.Core.Helper.Resources;
-    public sealed class FileRequest : IEquatable<FileRequest>
+    public sealed class FileUploadOptions : IEquatable<FileUploadOptions>
     {
         #region Equals
-        public override bool Equals(object other) => this.Equals(other as FileRequest);
-        public override int GetHashCode() => HashCode.Combine(this.accept, this.size, this.fileCount);
-        public bool Equals(FileRequest other) => (other != null && this.accept.IsUnorderedEqual(other.accept) && this.size == other.size && this.fileCount == other.fileCount);
+        public override bool Equals(object other) => this.Equals(other as FileUploadOptions);
+        public override int GetHashCode() => HashCode.Combine(this.Accept, this.Size, this.FileCount);
+        public bool Equals(FileUploadOptions other) => (other != null && this.Accept.IsUnorderedEqual(other.Accept) && this.Size == other.Size && this.FileCount == other.FileCount);
         #endregion
-        private string[] _Accept;
         [UDRequired]
         [UDArrayMinLength]
         [Display(Name = nameof(DisplayNames.FileSettingsHelperAccept), ResourceType = typeof(DisplayNames))]
-        public string[] accept { get { return _Accept; } set { _Accept = (value ?? []); } }
+        public string[] Accept { get; set; } = [];
         [Range(1, Int64.MaxValue, ErrorMessageResourceName = nameof(DisplayNames.RangeValidationError), ErrorMessageResourceType = typeof(DisplayNames))]
         [Display(Name = nameof(DisplayNames.FileSettingsHelperSize), ResourceType = typeof(DisplayNames))]
         [DefaultValue(1048576)]
-        public long size { get; set; }
+        public long Size { get; set; }
         [Range(1, Byte.MaxValue, ErrorMessageResourceName = nameof(DisplayNames.RangeValidationError), ErrorMessageResourceType = typeof(DisplayNames))]
         [Display(Name = nameof(DisplayNames.FileSettingsHelperFileCount), ResourceType = typeof(DisplayNames))]
         [DefaultValue(1)]
-        public byte fileCount { get; set; }
+        public byte FileCount { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]
-        public string getFileSizeString => Convert.ToDouble(this.size).ToFileSizeString();
-        public bool getTryFileIsException(ICollection<IFormFile> files, out string[] errors) => TryFileisException(files, this, out errors);
-        public FileRequest() : this(default, default, default) { }
-        public FileRequest(string[] accept, long size, byte fileCount)
+        public string FormattedFileSize => Convert.ToDouble(this.Size).ToFileSizeString();
+        public bool HasFileValidationErrors(ICollection<IFormFile> files, out string[] errors) => HasFileValidationErrors(files, this, out errors);
+        public FileUploadOptions() : this(default, default, default) { }
+        public FileUploadOptions(string[] Accept, long Size, byte FileCount)
         {
-            this.accept = accept;
-            this.size = size;
-            this.fileCount = fileCount;
+            this.Accept = Accept ?? [];
+            this.Size = Size;
+            this.FileCount = FileCount;
         }
-        public static bool TryFileisException(ICollection<IFormFile> files, FileRequest fileRequest, out string[] errors)
+        public static bool HasFileValidationErrors(ICollection<IFormFile> files, FileUploadOptions fileRequest, out string[] errors)
         {
             if (files.Count == 0)
             {
@@ -53,6 +52,21 @@
             if (TryValidators.TryValidateObject(fileRequest, out errors)) { return false; }
             try
             {
+                if (files.Count > fileRequest.FileCount)
+                {
+                    errors = [
+                       "Yüklenecek maksimum dosya sayısını aştınız!",
+                       $"Maksimum dosya sayısı: {fileRequest.FileCount}"
+                    ];
+                    if (Checks.IsEnglishCurrentUICulture)
+                    {
+                        errors = [
+                           "You have exceeded the maximum number of files allowed to upload!",
+                           $"Maximum file count: {fileRequest.FileCount}"
+                        ];
+                    }
+                    return true;
+                }
                 var filesArray = files.Select(file => new
                 {
                     file,
@@ -62,37 +76,22 @@
                     fileName = x.file.FileName,
                     x.uzn,
                     size = x.file.Length,
-                    checkExt = fileRequest.accept.Contains(x.uzn),
-                    checkSize = x.file.Length <= fileRequest.size
+                    checkExt = fileRequest.Accept.Contains(x.uzn),
+                    checkSize = x.file.Length <= fileRequest.Size
                 }).ToArray();
-                if (filesArray.Length > fileRequest.fileCount)
-                {
-                    errors = [
-                       "Yüklenecek maksimum dosya sayısını aştınız!",
-                       $"Maksimum dosya sayısı: {fileRequest.fileCount}"
-                    ];
-                    if (Checks.IsEnglishCurrentUICulture)
-                    {
-                        errors = [
-                           "You have exceeded the maximum number of files allowed to upload!",
-                           $"Maximum file count: {fileRequest.fileCount}"
-                        ];
-                    }
-                    return true;
-                }
                 if (filesArray.Any(x => !x.checkExt))
                 {
                     errors = [
                        "Yüklenecek dosya uzantıları uyumsuzdur!",
                        $"Uyumsuz olan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
-                       $"İzin verilen uzantı türleri: {String.Join(", ", fileRequest.accept)}"
+                       $"İzin verilen uzantı türleri: {String.Join(", ", fileRequest.Accept)}"
                     ];
                     if (Checks.IsEnglishCurrentUICulture)
                     {
                         errors = [
                             "The file extensions are not compatible!",
                             $"Incompatible files: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
-                            $"Allowed extension types: {String.Join(", ", fileRequest.accept)}"
+                            $"Allowed extension types: {String.Join(", ", fileRequest.Accept)}"
                         ];
                     }
                     return true;
@@ -102,14 +101,14 @@
                     errors = [
                        "Tek bir dosya için izin verilen yükleme miktarını aştınız!",
                        $"Kapasite miktarı aşan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(": ", x.fileName, Convert.ToDouble(x.size).ToFileSizeString())).ToArray())}",
-                       $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileRequest.getFileSizeString}"
+                       $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileRequest.FormattedFileSize}"
                     ];
                     if (Checks.IsEnglishCurrentUICulture)
                     {
                         errors = [
                             "You have exceeded the allowed upload size for a single file!",
                             $"Files exceeding the size limit: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(": ", x.fileName, Convert.ToDouble(x.size).ToFileSizeString())).ToArray())}",
-                            $"Maximum allowed size for a single file: {fileRequest.getFileSizeString}"
+                            $"Maximum allowed size for a single file: {fileRequest.FormattedFileSize}"
                         ];
                     }
                     return true;

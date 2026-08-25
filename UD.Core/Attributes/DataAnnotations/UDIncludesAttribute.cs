@@ -19,7 +19,7 @@
             var isRequired = validationContext.IsRequiredAttribute();
             if (value == null)
             {
-                if (isRequired) { return this.tovalidationresult(validationContext); }
+                if (isRequired) { return this.ToResult(validationContext); }
                 return ValidationResult.Success;
             }
             bool contains;
@@ -43,9 +43,9 @@
                 contains = this.values.Any(v => Convert.ToInt64(v) == valueLong);
             }
             else { contains = this.values.Any(v => v.ToString() == value.ToString()); }
-            return (contains == this.isEqual ? ValidationResult.Success : this.tovalidationresult(validationContext));
+            return (contains == this.isEqual ? ValidationResult.Success : this.ToResult(validationContext));
         }
-        private ValidationResult tovalidationresult(ValidationContext validationContext)
+        private ValidationResult ToResult(ValidationContext validationContext)
         {
             if (this.ErrorMessage.IsNullOrEmpty())
             {

@@ -28,7 +28,7 @@ namespace UD.Core.Attributes.DataAnnotations
             }
             if (this.ErrorMessage.IsNullOrEmpty())
             {
-                var message = String.Format(ValidationErrorMessageConstants.EMail, validationContext.DisplayName);
+                var message = String.Format(ValidationMessageTurkishConstants.Email, validationContext.DisplayName);
                 if (this.hosts.Length > 0) { message = $"{message}, Geçerli {(this.hosts.Length == 1 ? "host" : "hostlar")}: {String.Join(", ", this.hosts)}"; }
                 if (Checks.IsEnglishCurrentUICulture)
                 {

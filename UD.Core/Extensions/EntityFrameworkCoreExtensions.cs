@@ -100,7 +100,7 @@ namespace UD.Core.Extensions
             }
             foreach (var type in mappedTables)
             {
-                var (columnName, sqlDbTypeName) = getPrimaryKeyInfo(type);
+                var (columnName, sqlDbTypeName) = GetPrimaryKeyInfo(type);
                 if (columnName == "" || sqlDbTypeName == "") { continue; }
                 var tableName = type.GetTableName(true);
                 var variableName = String.Concat("@MAXID_", index);
@@ -113,7 +113,7 @@ namespace UD.Core.Extensions
             if (sb.Length == 0) { return Task.FromResult(0); }
             return context.Database.ExecuteSqlRawAsync(sb.ToString(), [], cancellationToken);
         }
-        private static (string columnName, string sqlDbTypeName) getPrimaryKeyInfo(Type tableType)
+        private static (string columnName, string sqlDbTypeName) GetPrimaryKeyInfo(Type tableType)
         {
             if (TryValidators.TryTableisKeyAttribute(tableType, out PropertyInfo[] _properties) && _properties.Length == 1 && _properties[0].IsPK() && _properties[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
             {

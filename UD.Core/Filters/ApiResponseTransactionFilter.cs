@@ -9,7 +9,7 @@
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var executedContext = await next();
-            if (executedContext.Result is ObjectResult _or && _or.Value is ApiResponse _ar && _ar.state.IsFailed()) { context.HttpContext.MarkTransactionRollback(); }
+            if (executedContext.Result is ObjectResult _or && _or.Value is ApiResponse _ar && _ar.State.IsFailed()) { context.HttpContext.MarkTransactionRollback(); }
         }
         /*
         builder.Services.AddControllers(options =>

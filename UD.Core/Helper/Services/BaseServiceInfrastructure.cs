@@ -14,13 +14,13 @@
     {
         TContext Context { get; }
         DbSet<TEntity> DbSet { get; }
-        DbConnection GetDbConnection();
+        DbConnection GetConnection();
         IQueryable<T> SqlQueryRaw<T>(string sql, object parameters);
         Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default);
         Task<int> SaveChanges(CancellationToken cancellationToken = default);
         Task<List<dynamic>> QueryRawDynamic(string query, object parameters, CommandBehavior commandBehavior = CommandBehavior.Default, int? commandTimeout = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
     }
-    public abstract class BaseServiceInfrastructure<TContext, TEntity> : IBaseServiceInfrastructure<TContext, TEntity>, IDisposable
+    public abstract class BaseServiceInfrastructure<TContext, TEntity> : IBaseServiceInfrastructure<TContext, TEntity>
         where TContext : DbContext
         where TEntity : class, IBaseEntity
     {
@@ -30,58 +30,53 @@
         }
         public TContext Context { get; }
         public DbSet<TEntity> DbSet => this.Context.Set<TEntity>();
-        public DbConnection GetDbConnection() => this.Context.Database.GetDbConnection();
-        public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.Context.Database.SqlQueryRaw<T>(sql, toDbParameterFromObject(parameters, null));
-        public Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, toDbParameterFromObject(parameters, null), cancellationToken);
+        public DbConnection GetConnection() => this.Context.Database.GetDbConnection();
+        public IQueryable<T> SqlQueryRaw<T>(string sql, object parameters) => this.Context.Database.SqlQueryRaw<T>(sql, ToSqlParameters(parameters));
+        public Task<int> ExecuteSqlRaw(string sql, object parameters, CancellationToken cancellationToken = default) => this.Context.Database.ExecuteSqlRawAsync(sql, ToSqlParameters(parameters), cancellationToken);
         public virtual Task<int> SaveChanges(CancellationToken cancellationToken = default) => this.Context.SaveChangesAsync(cancellationToken);
         public async Task<List<dynamic>> QueryRawDynamic(string query, object parameters, CommandBehavior commandBehavior = CommandBehavior.Default, int? commandTimeout = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
         {
-            var connection = this.GetDbConnection();
+            var connection = this.GetConnection();
+            var shouldCloseConnection = connection.State != ConnectionState.Open;
+            if (shouldCloseConnection) { await connection.OpenAsync(cancellationToken); }
             try
             {
                 var result = new List<dynamic>();
-                if (connection.State != ConnectionState.Open) { await connection.OpenAsync(cancellationToken); }
                 await using var command = connection.CreateCommand();
                 command.CommandText = query;
                 command.CommandType = commandType;
                 if (commandTimeout.HasValue) { command.CommandTimeout = commandTimeout.Value; }
                 var transaction = this.Context.Database.CurrentTransaction; // Not: using eklenmemelidir!
                 if (transaction != null) { command.Transaction = transaction.GetDbTransaction(); }
-                var dbParameters = toDbParameterFromObject(parameters, command);
+                var dbParameters = ToDbParameters(parameters, command);
                 if (dbParameters.Length > 0) { command.Parameters.AddRange(dbParameters); }
                 int i, fieldCount;
-                string columnName;
                 IDictionary<string, object> row;
                 await using var reader = await command.ExecuteReaderAsync(commandBehavior, cancellationToken);
                 while (await reader.ReadAsync(cancellationToken))
                 {
                     row = new ExpandoObject();
                     fieldCount = reader.FieldCount;
-                    for (i = 0; i < fieldCount; i++)
-                    {
-                        columnName = reader.GetName(i);
-                        row.Add(columnName, await reader.IsDBNullAsync(i, cancellationToken) ? null : reader.GetValue(i));
-                    }
+                    for (i = 0; i < fieldCount; i++) { row.Add(reader.GetName(i), await reader.IsDBNullAsync(i, cancellationToken) ? null : reader.GetValue(i)); }
                     result.Add(row);
                 }
                 return result;
             }
-            finally { if (connection.State != ConnectionState.Closed) { await connection.CloseAsync(); } }
+            finally { if (shouldCloseConnection) { await connection.CloseAsync(); } }
         }
-        public void Dispose()
+        private static SqlParameter[] ToSqlParameters(object value)
         {
-            this.Context.Dispose();
-            GC.SuppressFinalize(this);
+            if (value == null) { return []; }
+            if (value is SqlParameter parameter) { return [parameter]; }
+            if (value is IEnumerable<SqlParameter> parameters) { return parameters.ToArray(); }
+            return Converters.ToDictionaryFromObject(value).Select(x => new SqlParameter(x.Key, x.Value ?? DBNull.Value)).ToArray();
         }
-        private static IDataParameter[] toDbParameterFromObject(object obj, DbCommand? command)
+        private static DbParameter[] ToDbParameters(object value, DbCommand command)
         {
-            if (obj == null) { return []; }
-            if (obj is IDataParameter parameter) { return [parameter]; }
-            if (obj is IEnumerable<IDataParameter> parameters) { return parameters.ToArray(); }
-            var dic = Converters.ToDictionaryFromObject(obj);
-            if (dic.Count == 0) { return []; }
-            if (command == null) { return dic.Select(x => new SqlParameter(x.Key, x.Value ?? DBNull.Value)).ToArray(); }
-            return dic.Select(x =>
+            if (value == null) { return []; }
+            if (value is DbParameter parameter) { return [parameter]; }
+            if (value is IEnumerable<DbParameter> parameters) { return parameters.ToArray(); }
+            return Converters.ToDictionaryFromObject(value).Select(x =>
             {
                 var parameter = command.CreateParameter();
                 parameter.ParameterName = x.Key;

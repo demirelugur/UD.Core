@@ -26,7 +26,7 @@
             if (valueDecimal >= Convert.ToDecimal(this.Minimum) && valueDecimal <= Convert.ToDecimal(this.Maximum)) { return ValidationResult.Success; }
             if (this.ErrorMessage.IsNullOrEmpty())
             {
-                this.ErrorMessage = String.Format(ValidationErrorMessageConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum);
+                this.ErrorMessage = String.Format(ValidationMessageTurkishConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum);
                 if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be between [{this.Minimum} - {this.Maximum}]!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);

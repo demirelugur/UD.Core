@@ -49,9 +49,9 @@
             r
         }).SelectMany(x => x.r.DefaultIfEmpty(), (l, r) => new LeftJoinResult<TLeft, TRight>
         {
-            left = l.l,
-            hasRight = r != null,
-            right = r
+            Left = l.l,
+            HasRight = r != null,
+            Right = r
         });
         /// <summary><paramref name="source"/> koleksiyonunun null, boş veya tüm öğelerinin null olup olmadığını kontrol eder. Koleksiyon null ise, boş ise veya tüm öğeleri null ise <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
         public static bool IsNullOrEmptyOrAllNull<T>(this IEnumerable<T> source)

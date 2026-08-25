@@ -9,8 +9,8 @@
     using static UD.Core.Helper.GlobalConstants;
     public interface IClientRequestInfo
     {
-        bool isMobil { get; set; }
-        string? ipAddress { get; set; }
+        bool IsMobil { get; set; }
+        string? IpAddress { get; set; }
     }
     public class ClientRequestInfo : IEquatable<ClientRequestInfo>, IClientRequestInfo
     {
@@ -21,21 +21,21 @@
         #endregion
         [UDRequired]
         [Display(Name = nameof(DisplayNames.ClientRequestInfoResultMobile), ResourceType = typeof(DisplayNames))]
-        public bool isMobil { get; set; }
+        public bool IsMobil { get; set; }
         [UDStringLength(MaximumLengthConstants.IPAddress)]
         [UDIPAddress]
         [Display(Name = nameof(DisplayNames.ClientRequestInfoResultIpAddress), ResourceType = typeof(DisplayNames))]
-        public string? ipAddress { get; set; }
+        public string? IpAddress { get; set; }
         public ClientRequestInfo() : this(default, default) { }
-        public ClientRequestInfo(bool isMobil, object ipAddress)
+        public ClientRequestInfo(bool IsMobil, object IpAddress)
         {
-            this.isMobil = isMobil;
-            this.ipAddress = this.ipAddressCast(ipAddress);
+            this.IsMobil = IsMobil;
+            this.IpAddress = this.ipAddressCast(IpAddress);
         }
-        private string? ipAddressCast(object ipaddress)
+        private string? ipAddressCast(object ipAddress)
         {
-            if (ipaddress is IPAddress _ip) { return _ip.MapToIPv4().ToString(); }
-            if (ipaddress is String _s && IPAddress.TryParse(_s, out _ip)) { return _ip.MapToIPv4().ToString(); }
+            if (ipAddress is IPAddress _ip) { return _ip.MapToIPv4().ToString(); }
+            if (ipAddress is String _s && IPAddress.TryParse(_s, out _ip)) { return _ip.MapToIPv4().ToString(); }
             return null;
         }
         /// <summary><paramref name="value"/> için tanımlanan nesneler: ClientRequestInfo, IHttpContextAccessor, HttpContext, IFormCollection, AnonymousObjectClass</summary>
@@ -51,7 +51,7 @@
                 if (hasError) { throw errors.ToNestedException(); }
                 return model;
             }
-            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ClientRequestInfo((bool)x.ismobil, (object)x.ipaddress)).FirstOrDefault();
+            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ClientRequestInfo((bool)x.IsMobil, (object)x.IpAddress)).FirstOrDefault();
         }
     }
 }

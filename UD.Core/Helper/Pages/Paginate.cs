@@ -2,26 +2,25 @@
 {
     public interface IPaginate<T>
     {
-        int pageNumber { get; set; }
-        int size { get; set; }
-        T[] items { get; set; }
-        PagingInfo? info { get; set; }
+        int PageNumber { get; set; }
+        int Size { get; set; }
+        T[] Items { get; set; }
+        PagingInfo? Info { get; set; }
     }
     [Serializable]
     public class Paginate<T> : IPaginate<T>
     {
-        private T[] _Items;
-        public int pageNumber { get; set; }
-        public int size { get; set; }
-        public T[] items { get { return _Items; } set { _Items = value ?? []; } }
-        public PagingInfo? info { get; set; }
+        public int PageNumber { get; set; }
+        public int Size { get; set; }
+        public T[] Items { get; set; } = [];
+        public PagingInfo? Info { get; set; }
         public Paginate() : this(default, default, default, default) { }
-        public Paginate(int pageNumber, int size, T[] items, PagingInfo? info)
+        public Paginate(int PageNumber, int Size, T[] Items, PagingInfo? Info)
         {
-            this.pageNumber = pageNumber;
-            this.size = size;
-            this.items = items;
-            this.info = info;
+            this.PageNumber = PageNumber;
+            this.Size = Size;
+            this.Items = Items ?? [];
+            this.Info = Info;
         }
     }
 }

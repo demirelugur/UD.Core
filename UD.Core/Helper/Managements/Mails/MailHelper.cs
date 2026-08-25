@@ -47,7 +47,7 @@
                 foreach (var item in this.CCs) { mm.CC.Add(item); }
                 foreach (var item in this.Bccs) { mm.Bcc.Add(item); }
                 foreach (var item in this.Attachments) { mm.Attachments.Add(item); }
-                await smtpClientBasic.toSmtpClient().SendMailAsync(mm, cancellationToken);
+                await smtpClientBasic.ToSmtpClient().SendMailAsync(mm, cancellationToken);
                 return (false, default);
             }
             catch (Exception ex) { return (true, ex); }

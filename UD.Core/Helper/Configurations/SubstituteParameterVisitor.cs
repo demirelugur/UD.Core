@@ -3,14 +3,14 @@
     using System.Linq.Expressions;
     internal sealed class SubstituteParameterVisitor : ExpressionVisitor
     {
-        private readonly Dictionary<Expression, Expression> sub;
+        private readonly Dictionary<Expression, Expression> _sub;
         public SubstituteParameterVisitor(ParameterExpression leftParameter, ParameterExpression rightParameter)
         {
-            this.sub = new Dictionary<Expression, Expression>
+            this._sub = new Dictionary<Expression, Expression>
             {
                 { rightParameter, leftParameter }
             };
         }
-        protected override Expression VisitParameter(ParameterExpression node) => (this.sub.TryGetValue(node, out Expression _exp) ? _exp : node);
+        protected override Expression VisitParameter(ParameterExpression node) => (this._sub.TryGetValue(node, out Expression _exp) ? _exp : node);
     }
 }

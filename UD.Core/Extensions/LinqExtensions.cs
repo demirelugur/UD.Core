@@ -79,9 +79,9 @@
             r
         }).SelectMany(x => x.r.DefaultIfEmpty(), (l, r) => new LeftJoinResult<TLeft, TRight>
         {
-            left = l.l,
-            hasRight = r != null,
-            right = r
+            Left = l.l,
+            HasRight = r != null,
+            Right = r
         });
         /// <summary>Seçilen ifadeye göre ilk kayıt veya varsayılan değeri asenkron olarak getirir.</summary>
         public static Task<TObject> SelectThenFirstOrDefault<T, TObject>(this IQueryable<T> source, Expression<Func<T, TObject>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).FirstOrDefaultAsync(cancellationToken);

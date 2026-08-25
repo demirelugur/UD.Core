@@ -7,20 +7,20 @@
     {
         #region Equals
         public override bool Equals(object other) => this.Equals(other as EnumResult);
-        public override int GetHashCode() => HashCode.Combine(this.value, this.text);
+        public override int GetHashCode() => HashCode.Combine(this.Value, this.Text);
         public bool Equals(EnumResult other) => (other != null && this.ToString() == other.ToString());
         #endregion
-        public long value { get; }
-        public string text { get; }
-        public string description { get; }
+        public long Value { get; }
+        public string Text { get; }
+        public string DisplayName { get; }
         public EnumResult() : this(default, "", "") { }
-        public EnumResult(long value, string text, string description)
+        public EnumResult(long Value, string Text, string DisplayName)
         {
-            this.value = value;
-            this.text = text;
-            this.description = description;
+            this.Value = Value;
+            this.Text = Text;
+            this.DisplayName = DisplayName;
         }
-        public override string ToString() => String.Join("-", this.value, this.text);
+        public override string ToString() => String.Join("-", this.Value, this.Text);
         /// <summary><paramref name="value"/> için tanımlanan nesneler: EnumResult, IFormCollection, Enum, AnonymousObjectClass</summary>
         public static EnumResult ToEntityFromObject(object value)
         {
@@ -35,14 +35,11 @@
             var valueType = value.GetType();
             if (valueType.IsEnum)
             {
-                try
-                {
-                    var text = Enum.GetName(valueType, value);
-                    return new(Convert.ToInt64(value), text, valueType.GetField(text).GetDescription());
-                }
-                catch { return new(); }
+                var text = Enum.GetName(valueType, value);
+                if (text.IsNullOrEmpty()) { return new(); }
+                return new(Convert.ToInt64(value), text, valueType.GetField(text).GetDisplayName());
             }
-            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new EnumResult((long)x.value, (string)x.text, (string)x.description)).FirstOrDefault();
+            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new EnumResult((long)x.Value, (string)x.Text, (string)x.DisplayName)).FirstOrDefault();
         }
     }
 }

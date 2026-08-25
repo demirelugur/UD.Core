@@ -18,12 +18,12 @@
             var types = assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface && x.IsSubclassOfOpenGeneric(typeBaseclass)).ToArray();
             foreach (var implementation in types)
             {
-                var interfaces = implementation.GetInterfaces().Where(x => x != typeInterface && hasInterface(x, typeInterface)).ToArray();
+                var interfaces = implementation.GetInterfaces().Where(x => x != typeInterface && HasInterface(x, typeInterface)).ToArray();
                 foreach (var service in interfaces) { services.AddScoped(service, implementation); }
             }
             return services;
         }
-        private static bool hasInterface(Type type, Type typeInterface)
+        private static bool HasInterface(Type type, Type typeInterface)
         {
             if (typeInterface.IsGenericTypeDefinition) { return type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeInterface); }
             return typeInterface.IsAssignableFrom(type);

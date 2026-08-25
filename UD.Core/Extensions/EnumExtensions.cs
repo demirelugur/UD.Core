@@ -13,7 +13,7 @@
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
         /// <param name="value">Açıklaması alınacak Enum değeri.</param>
         /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
-        public static string GetDescriptionLocalized(this EnumAlertState value)
+        public static string GetDisplayNameLocalized(this EnumAlertState value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
@@ -26,7 +26,7 @@
                     _ => throw value.ArgumentOutOfRange(nameof(value))
                 };
             }
-            return value.GetDescriptionFromEnum();
+            return value.GetDisplayNameFromEnum();
         }
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun HTTP durum kodunu döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış HTTP durum kodlarını döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
         /// <param name="value">HTTP durum kodu alınacak Enum değeri.</param>
@@ -42,7 +42,7 @@
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
         /// <param name="value">Açıklaması alınacak Enum değeri.</param>
         /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
-        public static string GetDescriptionLocalized(this EnumNVIIdentityCard value)
+        public static string GetDisplayNameLocalized(this EnumNVIIdentityCard value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
@@ -53,12 +53,12 @@
                     _ => throw value.ArgumentOutOfRange(nameof(value))
                 };
             }
-            return value.GetDescriptionFromEnum();
+            return value.GetDisplayNameFromEnum();
         }
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
         /// <param name="value">Açıklaması alınacak Enum değeri.</param>
         /// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
-        public static string GetDescriptionLocalized(this EnumTCMBRateCode value)
+        public static string GetDisplayNameLocalized(this EnumTCMBRateCode value)
         {
             if (Checks.IsEnglishCurrentUICulture)
             {
@@ -88,7 +88,7 @@
                     _ => throw value.ArgumentOutOfRange(nameof(value))
                 };
             }
-            return value.GetDescriptionFromEnum();
+            return value.GetDisplayNameFromEnum();
         }
         /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.</summary>
         /// <param name="type">Dönüştürülecek <see cref="SqlDbType"/> enum değeri.</param>

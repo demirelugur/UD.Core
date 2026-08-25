@@ -8,26 +8,26 @@
     {
         public static readonly ApiResponse setSuccess = new(EnumAlertState.success, default);
         public static readonly ApiResponse setInfo = new(EnumAlertState.info, default);
-        public EnumAlertState state { get; set; }
-        public string[] messages { get; set; }
+        public EnumAlertState State { get; set; }
+        public string[] Messages { get; set; } = [];
         public ApiResponse() : this(default, default) { }
-        public ApiResponse(EnumAlertState state, string[] messages)
+        public ApiResponse(EnumAlertState State, string[] Messages)
         {
-            this.state = state;
-            this.messages = (messages.IsNullOrEmptyOrAllNull() ? [this.state.GetDescriptionLocalized()] : messages);
+            this.State = State;
+            this.Messages = (Messages.IsNullOrEmptyOrAllNull() ? [this.State.GetDisplayNameLocalized()] : Messages);
         }
-        public static ApiResponse setError(params string[] messages) => new(EnumAlertState.error, messages);
-        public static ApiResponse setWarning(params string[] messages) => new(EnumAlertState.warning, messages);
+        public static ApiResponse setError(params string[] Messages) => new(EnumAlertState.error, Messages);
+        public static ApiResponse setWarning(params string[] Messages) => new(EnumAlertState.warning, Messages);
     }
     public class ApiResponse<T> : ApiResponse
     {
-        public T response { get; set; }
+        public T Response { get; set; }
         public ApiResponse() : this(default, default, default) { }
-        public ApiResponse(T response, EnumAlertState state, string[] messages) : base(state, messages)
+        public ApiResponse(T Response, EnumAlertState State, string[] Messages) : base(State, Messages)
         {
-            this.response = (state == EnumAlertState.error ? this.getCustomDefaultValue() : response);
+            this.Response = (State.IsFailed() ? this.GetDefaultValue() : Response);
         }
-        private T getCustomDefaultValue()
+        private T GetDefaultValue()
         {
             var t = typeof(T);
             if (t == typeof(string)) { return (T)(object)String.Empty; }

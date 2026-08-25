@@ -1,19 +1,19 @@
 ﻿namespace UD.Core.Enums
 {
-    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
     public enum EnumAlertState : byte
     {
         /// <summary>İşlem başarılı</summary>
-        [Description("İşlem başarılı")]
+        [Display(Name = "İşlem başarılı")]
         success = 1,
         /// <summary>Bilgilendirme</summary>
-        [Description("Bilgilendirme")]
+        [Display(Name = "Bilgilendirme")]
         info,
         /// <summary>Uyarı</summary>
-        [Description("Uyarı")]
+        [Display(Name = "Uyarı")]
         warning,
         /// <summary>Bir hata oluştu</summary>
-        [Description("Bir hata oluştu")]
+        [Display(Name = "Bir hata oluştu")]
         error
     }
 }
