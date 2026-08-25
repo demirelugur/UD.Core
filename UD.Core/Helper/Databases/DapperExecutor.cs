@@ -3,6 +3,7 @@
     using Dapper;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Storage;
+    using Microsoft.Extensions.DependencyInjection;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
@@ -42,6 +43,7 @@
             }
             this._disposed = true;
         }
+        [ActivatorUtilitiesConstructor]
         public DapperExecutor(DbContext dbContext) : this(dbContext.Database.GetDbConnection(), dbContext.Database.CurrentTransaction?.GetDbTransaction())
         {
             this._ownsConnection = false;
