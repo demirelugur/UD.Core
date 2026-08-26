@@ -16,15 +16,15 @@
     where TInsertDto : class, IEntityDto
     where TUpdateDto : class, IEntityDto
     {
-        Task Delete(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task DeleteByPredicate(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task DeleteRange(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task DeleteById(object id, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default);
-        Task<TKey> InsertReturningId<TKey>(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct;
-        Task<TKey[]> InsertRangeReturningIds<TKey>(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct;
-        Task Update(object id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteByPredicateAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteByIdAsync(object id, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task InsertRangeAsync(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task<TKey> InsertReturningIdAsync<TKey>(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct;
+        Task<TKey[]> InsertRangeReturningIdsAsync<TKey>(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct;
+        Task UpdateAsync(object id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default);
     }
     public abstract class BaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : BaseServiceReadOnly<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>, IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto>
     where TContext : DbContext
@@ -36,7 +36,7 @@
     where TUpdateDto : class, IEntityDto
     {
         protected BaseService(TContext Context, IMapper Mapper) : base(Context, Mapper) { }
-        public virtual async Task Delete(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (entity != null)
             {
@@ -45,40 +45,40 @@
                 if (autoSave) { await base.Context.SaveChangesAsync(cancellationToken); }
             }
         }
-        public virtual async Task DeleteByPredicate(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteByPredicateAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entities = await base.DbSet.Where(predicate).ToArrayAsync(cancellationToken);
-            await this.DeleteRange(entities, autoSave, cancellationToken);
+            await this.DeleteRangeAsync(entities, autoSave, cancellationToken);
         }
-        public virtual async Task DeleteRange(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (!entities.IsNullOrEmptyOrAllNull())
             {
-                foreach (var entity in entities) { await this.Delete(entity, false, cancellationToken); }
+                foreach (var entity in entities) { await this.DeleteAsync(entity, false, cancellationToken); }
                 if (autoSave) { await base.Context.SaveChangesAsync(cancellationToken); }
             }
         }
-        public virtual async Task DeleteById(object id, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteByIdAsync(object id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (base.TryGetKeyValues(id, out object[] _keyValues))
             {
                 var entity = await base.DbSet.FindAsync(_keyValues, cancellationToken);
-                await this.Delete(entity, autoSave, cancellationToken);
+                await this.DeleteAsync(entity, autoSave, cancellationToken);
             }
         }
-        public virtual async Task Insert(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task InsertAsync(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entity = base.Mapper.Map<TEntity>(insertDto);
             await base.DbSet.AddAsync(entity, cancellationToken);
             if (autoSave) { await base.Context.SaveChangesAsync(cancellationToken); }
         }
-        public virtual async Task InsertRange(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task InsertRangeAsync(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entities = insertDtos.Select(base.Mapper.Map<TEntity>);
             await base.DbSet.AddRangeAsync(entities, cancellationToken);
             if (autoSave) { await base.Context.SaveChangesAsync(cancellationToken); }
         }
-        public virtual async Task<TKey> InsertReturningId<TKey>(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct
+        public virtual async Task<TKey> InsertReturningIdAsync<TKey>(TInsertDto insertDto, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct
         {
             var entity = base.Mapper.Map<TEntity>(insertDto);
             await base.DbSet.AddAsync(entity, cancellationToken);
@@ -89,7 +89,7 @@
             }
             return default;
         }
-        public virtual async Task<TKey[]> InsertRangeReturningIds<TKey>(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct
+        public virtual async Task<TKey[]> InsertRangeReturningIdsAsync<TKey>(IEnumerable<TInsertDto> insertDtos, bool autoSave = false, CancellationToken cancellationToken = default) where TKey : struct
         {
             var entities = insertDtos.Select(base.Mapper.Map<TEntity>);
             await base.DbSet.AddRangeAsync(entities, cancellationToken);
@@ -100,7 +100,7 @@
             }
             return [];
         }
-        public virtual async Task Update(object id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task UpdateAsync(object id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (base.TryGetKeyValues(id, out object[] _keyValues))
             {

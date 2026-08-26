@@ -32,7 +32,7 @@
 
         }
         [Test]
-        public async Task Test2()
+        public async Task Test2Async()
         {
             //var f = await this.context.Countries.Where(x=>x.CountriesDependent.Count > 0).ToArrayAsync();
             await Task.CompletedTask;

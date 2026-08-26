@@ -16,8 +16,8 @@
     {
         #region Equals
         public override bool Equals(object other) => this.Equals(other as ClientRequestInfo);
-        public override int GetHashCode() => HashCode.Combine(this.isMobil, this.ipAddress);
-        public bool Equals(ClientRequestInfo other) => (other != null && this.isMobil == other.isMobil && this.ipAddress == other.ipAddress);
+        public override int GetHashCode() => HashCode.Combine(this.IsMobil, this.IpAddress);
+        public bool Equals(ClientRequestInfo other) => (other != null && this.IsMobil == other.IsMobil && this.IpAddress == other.IpAddress);
         #endregion
         [UDRequired]
         [Display(Name = nameof(DisplayNames.ClientRequestInfoResultMobile), ResourceType = typeof(DisplayNames))]

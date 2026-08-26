@@ -16,7 +16,7 @@
             Assert.Pass();
         }
         [Test]
-        public async Task Test2()
+        public async Task Test2Async()
         {
             await Task.CompletedTask;
             Assert.Pass();

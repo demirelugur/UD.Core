@@ -34,7 +34,7 @@ namespace UD.Core.Extensions
             return properties.Any(x => columns.Contains(x.Name));
         }
         /// <summary>Belirli bir bileþik anahtar(composite key) özelliði ile eski varlýðýn güncellenmesini saðlar.</summary>
-        public static async Task<T> SetCompositeKey<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyNewValue, CancellationToken cancellationToken = default) where T : class, new()
+        public static async Task<T> SetCompositeKeyAsync<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyNewValue, CancellationToken cancellationToken = default) where T : class, new()
         {
             var type = typeof(T);
             var tableName = type.GetTableName(false);
@@ -72,7 +72,7 @@ namespace UD.Core.Extensions
         /// <summary> Baðlý bulunulan <see cref="DbContext"/> üzerinden SQL Server sunucusuna ait sistem özelliklerini asenkron olarak sorgular ve <see cref="SqlServerProperties"/> nesnesi olarak döndürür. </summary>
         /// <param name="context"> Sorgunun çalýþtýrýlacaðý veritabaný baðlamý.</param>
         /// <param name="cancellationToken"> Ýþlemi iptal etmek için kullanýlabilecek isteðe baðlý <see cref="CancellationToken"/>.</param>
-        public static Task<SqlServerProperties> GetServerProperty(this DbContext context, CancellationToken cancellationToken = default) => context.Database.SqlQueryRaw<SqlServerProperties>(SqlServerProperties.Query).FirstOrDefaultAsync(cancellationToken);
+        public static Task<SqlServerProperties> GetServerPropertyAsync(this DbContext context, CancellationToken cancellationToken = default) => context.Database.SqlQueryRaw<SqlServerProperties>(SqlServerProperties.Query).FirstOrDefaultAsync(cancellationToken);
         /// <summary>
         /// Belirtilen entity türlerine karþýlýk gelen tablolar için, Identity özelliðine sahip birincil anahtar alanlarýnýn mevcut maksimum deðerini baz alarak yeniden numaralandýrma (RESEED) iþlemini asenkron olarak gerçekleþtirir. Metot, her tablo için ilgili birincil anahtar kolonunun mevcut en büyük deðerini (MAX) hesaplar ve <c>DBCC CHECKIDENT</c> komutu ile Identity deðerini bu deðere eþitler. Böylece manuel veri ekleme, toplu veri taþýma veya seed iþlemleri sonrasý oluþabilecek kimlik (Identity) kaymalarýnýn önüne geçilmiþ olur.
         /// <para>Sadece</para>
@@ -88,7 +88,7 @@ namespace UD.Core.Extensions
         /// <param name="mappedTables"> Reseed iþlemi uygulanacak entity türleri. <see cref="TableAttribute"/> özelliðine sahip olmalýdýr.</param>
         /// <param name="cancellationToken"> Ýþlemi iptal etmek için kullanýlabilecek isteðe baðlý <see cref="CancellationToken"/>.</param>
         /// <returns>Çalýþtýrýlan SQL komutundan etkilenen satýr sayýsýný temsil eden <see cref="Task{Int32}"/>. </returns>
-        public static Task<int> TableReseed(this DbContext context, bool isDebug, Type[] mappedTables, CancellationToken cancellationToken = default)
+        public static Task<int> TableReseedAsync(this DbContext context, bool isDebug, Type[] mappedTables, CancellationToken cancellationToken = default)
         {
             if (isDebug) { return Task.FromResult(0); }
             var sb = new StringBuilder();

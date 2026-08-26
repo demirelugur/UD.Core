@@ -49,7 +49,7 @@
         /// <typeparam name="T">Eleman tipi</typeparam>
         /// <param name="source">Kaynak sorgu</param>
         /// <param name="cancellationToken">İptal token&#39;ı</param>
-        public static Task<T[]> ToArraySafe<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
+        public static Task<T[]> ToArraySafeAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
         {
             if (source.Provider is IAsyncQueryProvider) { return source.ToArrayAsync(cancellationToken); }
             return Task.FromResult(source.ToArray());
@@ -59,7 +59,7 @@
         /// <param name="source">Kaynak sorgu</param>
         /// <param name="cancellationToken">İptal token&#39;ı</param>
         /// <returns>Asenkron olarak listeye çevrilmiş IQueryable kaynağı</returns>
-        public static Task<List<T>> ToListSafe<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
+        public static Task<List<T>> ToListSafeAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
         {
             if (source.Provider is IAsyncQueryProvider) { return source.ToListAsync(cancellationToken); }
             return Task.FromResult(source.ToList());
@@ -84,13 +84,13 @@
             Right = r
         });
         /// <summary>Seçilen ifadeye göre ilk kayıt veya varsayılan değeri asenkron olarak getirir.</summary>
-        public static Task<TObject> SelectThenFirstOrDefault<T, TObject>(this IQueryable<T> source, Expression<Func<T, TObject>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).FirstOrDefaultAsync(cancellationToken);
+        public static Task<TObject> SelectThenFirstOrDefaultAsync<T, TObject>(this IQueryable<T> source, Expression<Func<T, TObject>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).FirstOrDefaultAsync(cancellationToken);
         /// <summary>Verilen ifade ile maksimum değeri asenkron olarak getirir, yoksa varsayılan değeri döner.</summary>
-        public static Task<TKey> MaxOrDefault<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).DefaultIfEmpty().MaxAsync(cancellationToken);
+        public static Task<TKey> MaxOrDefaultAsync<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).DefaultIfEmpty().MaxAsync(cancellationToken);
         /// <summary>Verilen ifade ile minimum değeri asenkron olarak getirir, yoksa varsayılan değeri döner.</summary>
-        public static Task<TKey> MinOrDefault<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).DefaultIfEmpty().MinAsync(cancellationToken);
+        public static Task<TKey> MinOrDefaultAsync<T, TKey>(this IQueryable<T> source, Expression<Func<T, TKey>> selector, CancellationToken cancellationToken = default) where T : class => source.Select(selector).DefaultIfEmpty().MinAsync(cancellationToken);
         /// <summary>Verilen metin için benzersiz bir SEO dostu string oluşturur.</summary>
-        public static async Task<string> GenerateUniqueSEOString(this IQueryable<string> source, string text, int maxLength, CancellationToken cancellationToken = default)
+        public static async Task<string> GenerateUniqueSEOStringAsync(this IQueryable<string> source, string text, int maxLength, CancellationToken cancellationToken = default)
         {
             var i = 0;
             string r, textSeo = text.ToSeoFriendly();
@@ -112,7 +112,7 @@
         /// <param name="ordering">Sorgu sıralaması</param>
         /// <param name="loadInfo">Sayfalama bilgilerinin (toplam sayfa, toplam öğe sayısı vb.) yüklenip yüklenmeyeceğini belirtir. Varsayılan değer: <see langword="true"/>.</param>
         /// <param name="cancellationToken">Asenkron işlemi iptal etmek için kullanılan token.</param>
-        public static async Task<Paginate<T>> ToPagedList<T>(this IQueryable<T> source, int pageNumber, int size, string ordering, bool loadInfo = true, CancellationToken cancellationToken = default)
+        public static async Task<Paginate<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageNumber, int size, string ordering, bool loadInfo = true, CancellationToken cancellationToken = default)
         {
             PagingInfo? p = null;
             if (loadInfo)

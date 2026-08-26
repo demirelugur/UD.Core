@@ -18,7 +18,7 @@
         /// <returns>URI bir YouTube gömme bağlantısı ise <see langword="true"/>, aksi halde <see langword="false"/> döner.</returns>
         public static bool IsYouTubeEmbedLink(this Uri uri) => (uri.Host.Contains("youtube.com") && uri.AbsolutePath.StartsWith("/embed/"));
         /// <summary>Verilen URI&#39;nin bağlantı durumunu kontrol eder.</summary>
-        public static async Task<(bool hasError, Uri requestUri)> IsConnectionStatus(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
+        public static async Task<(bool hasError, Uri requestUri)> IsConnectionStatusAsync(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
             using var client = new HttpClient
             {
@@ -33,7 +33,7 @@
             catch { return (true, default); }
         }
         /// <summary>Belirtilen <see cref="Uri"/> adresinden byte[] veri almaya çalışır.</summary>
-        public static async Task<(bool hasError, byte[] dataBinary, string mimeType, Exception ex)> GetBinaryData(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
+        public static async Task<(bool hasError, byte[] dataBinary, string mimeType, Exception ex)> GetBinaryDataAsync(this Uri uri, TimeSpan timeSpan, CancellationToken cancellationToken = default)
         {
             using var client = new HttpClient
             {

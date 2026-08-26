@@ -15,10 +15,10 @@
     where TEntityListDto : class, IEntityDto
     where TSearchDto : class, ISearchAndPaginateDto
     {
-        Task<TEntityDto?> GetById(object id, CancellationToken cancellationToken = default);
-        Task<TEntityDto?> GetBySearch(TSearchDto searchDto, CancellationToken cancellationToken = default);
-        Task<TEntityListDto[]> GetAll(TSearchDto searchDto, CancellationToken cancellationToken = default);
-        Task<Paginate<TEntityListDto>> GetAllPaginate(TSearchDto searchDto, bool loadInfo = true, CancellationToken cancellationToken = default);
+        Task<TEntityDto?> GetByIdAsync(object id, CancellationToken cancellationToken = default);
+        Task<TEntityDto?> GetBySearchAsync(TSearchDto searchDto, CancellationToken cancellationToken = default);
+        Task<TEntityListDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default);
+        Task<Paginate<TEntityListDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadInfo = true, CancellationToken cancellationToken = default);
     }
     public abstract class BaseServiceReadOnly<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto> : BaseServiceInfrastructure<TContext, TEntity>, IBaseServiceReadOnly<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
@@ -42,7 +42,7 @@
             return !keyValues.IsNullOrEmptyOrAllNull();
         }
         protected abstract IQueryable<TEntity> ApplyFiltering(IQueryable<TEntity> query, TSearchDto searchDto);
-        public virtual async Task<TEntityDto?> GetById(object id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntityDto?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
         {
             if (this.TryGetKeyValues(id, out object[] _keyValues))
             {
@@ -51,12 +51,12 @@
             }
             return null;
         }
-        public virtual Task<TEntityDto?> GetBySearch(TSearchDto searchDto, CancellationToken cancellationToken = default) => this.ApplyFiltering(base.DbSet, searchDto).AsNoTracking().ProjectTo<TEntityDto>(this.Mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
-        public virtual async Task<TEntityListDto[]> GetAll(TSearchDto searchDto, CancellationToken cancellationToken = default) => (await this.GetAllPaginate(searchDto, false, cancellationToken)).items;
-        public virtual Task<Paginate<TEntityListDto>> GetAllPaginate(TSearchDto searchDto, bool loadInfo = true, CancellationToken cancellationToken = default)
+        public virtual Task<TEntityDto?> GetBySearchAsync(TSearchDto searchDto, CancellationToken cancellationToken = default) => this.ApplyFiltering(base.DbSet, searchDto).AsNoTracking().ProjectTo<TEntityDto>(this.Mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
+        public virtual async Task<TEntityListDto[]> GetAllAsync(TSearchDto searchDto, CancellationToken cancellationToken = default) => (await this.GetAllPaginateAsync(searchDto, false, cancellationToken)).Items;
+        public virtual Task<Paginate<TEntityListDto>> GetAllPaginateAsync(TSearchDto searchDto, bool loadInfo = true, CancellationToken cancellationToken = default)
         {
             var query = this.ApplyFiltering(base.DbSet, searchDto).AsNoTracking();
-            return searchDto.ToPagedList(query.ProjectTo<TEntityListDto>(this.Mapper.ConfigurationProvider), loadInfo, cancellationToken);
+            return searchDto.ToPagedListAsync(query.ProjectTo<TEntityListDto>(this.Mapper.ConfigurationProvider), loadInfo, cancellationToken);
         }
     }
 }

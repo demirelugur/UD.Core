@@ -14,10 +14,10 @@
             this.next = next;
             this.tokenBlacklistService = tokenBlacklistService;
         }
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext httpContext)
         {
             var token = httpContext.GetToken();
-            if (!token.IsNullOrEmpty() && await this.tokenBlacklistService.Any(token))
+            if (!token.IsNullOrEmpty() && this.tokenBlacklistService.Any(token))
             {
                 httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 httpContext.Response.ContentType = "application/json";

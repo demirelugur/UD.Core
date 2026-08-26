@@ -45,7 +45,7 @@
         /// <returns>Base64 biçimindeki dize.</returns>
         public static string ToBase64StringFromBinary(this byte[] bytes, string mimeType) => $"data:{mimeType};base64,{Convert.ToBase64String(bytes)}";
         /// <summary>Verilen byte dizisini belirtilen fiziksel yola asenkron olarak yükler.</summary>
-        public static async Task FileUpload(this byte[] bytes, string physicallyPath, CancellationToken cancellationToken = default)
+        public static async Task FileUploadAsync(this byte[] bytes, string physicallyPath, CancellationToken cancellationToken = default)
         {
             FileHelper.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
             using var fs = new FileStream(physicallyPath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true);

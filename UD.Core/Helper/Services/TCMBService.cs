@@ -10,9 +10,9 @@ namespace UD.Core.Helper.Services
     using UD.Core.Helper.Responses;
     public interface ITCMBService // AddSingleton
     {
-        Task<TCMBResponse> Get(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default);
-        Task<TCMBResponse> GetUSD(DateOnly? date = null, CancellationToken cancellationToken = default);
-        Task<TCMBResponse> GetEUR(DateOnly? date = null, CancellationToken cancellationToken = default);
+        Task<TCMBResponse> GetAsync(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default);
+        Task<TCMBResponse> GetUSDAsync(DateOnly? date = null, CancellationToken cancellationToken = default);
+        Task<TCMBResponse> GetEURAsync(DateOnly? date = null, CancellationToken cancellationToken = default);
     }
     public sealed class TCMBService : ITCMBService
     {
@@ -20,10 +20,10 @@ namespace UD.Core.Helper.Services
         private readonly ConcurrentDictionary<DateTime, XmlCacheItem> dicXmlCache = new();
         private int cacheIndex;
         public TCMBService() { }
-        private async Task<XDocument> GetXml(DateTime date, CancellationToken cancellationToken)
+        private async Task<XDocument> GetXmlAsync(DateTime date, CancellationToken cancellationToken)
         {
             if (this.dicXmlCache.TryGetValue(date, out XmlCacheItem _cachedXml)) { return _cachedXml.xml; }
-            var (hasError, dataBinary, _, ex) = await this.GetUrl(date).GetBinaryData(TimeSpan.FromSeconds(5), cancellationToken);
+            var (hasError, dataBinary, _, ex) = await this.GetUrl(date).GetBinaryDataAsync(TimeSpan.FromSeconds(5), cancellationToken);
             if (hasError) { throw ex; }
             var parsedXml = XDocument.Parse(Encoding.UTF8.GetString(dataBinary));
             var doc = this.dicXmlCache.GetOrAdd(date, _ => new(Interlocked.Increment(ref this.cacheIndex), parsedXml));
@@ -47,13 +47,13 @@ namespace UD.Core.Helper.Services
             data.BanknoteSelling = this.ParseDecimalValue(node.Element(nameof(data.BanknoteSelling)));
             return data;
         }
-        public async Task<TCMBResponse> Get(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default)
+        public async Task<TCMBResponse> GetAsync(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default)
         {
             var dateTime = (date.HasValue ? date.Value.ToDateTime(default) : DateTime.Today);
-            if (dateTime.DayOfWeek.IsWeekDays()) { return this.GetRate(await this.GetXml(dateTime, cancellationToken), rateCode.ToString("g")); }
+            if (dateTime.DayOfWeek.IsWeekDays()) { return this.GetRate(await this.GetXmlAsync(dateTime, cancellationToken), rateCode.ToString("g")); }
             return new();
         }
-        public Task<TCMBResponse> GetUSD(DateOnly? date = null, CancellationToken cancellationToken = default) => this.Get(EnumTCMBRateCode.USD, date, cancellationToken);
-        public Task<TCMBResponse> GetEUR(DateOnly? date = null, CancellationToken cancellationToken = default) => this.Get(EnumTCMBRateCode.EUR, date, cancellationToken);
+        public Task<TCMBResponse> GetUSDAsync(DateOnly? date = null, CancellationToken cancellationToken = default) => this.GetAsync(EnumTCMBRateCode.USD, date, cancellationToken);
+        public Task<TCMBResponse> GetEURAsync(DateOnly? date = null, CancellationToken cancellationToken = default) => this.GetAsync(EnumTCMBRateCode.EUR, date, cancellationToken);
     }
 }

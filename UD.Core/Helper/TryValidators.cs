@@ -280,7 +280,7 @@
         /// Verilen bir metni, belirtilen diller arasında asenkron olarak çevirir.
         /// <para>Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;<paramref name="value"/>&quot; parametresindeki metni &quot;<paramref name="from"/>&quot; dilinden &quot;<paramref name="to"/>&quot; diline çevirir. Varsayılan olarak &quot;<paramref name="from"/>&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve <see langword="false"/> durumu döner.</para>
         /// </summary>
-        public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslate(string value, TimeSpan timeout, string to = "en", string from = "tr", CancellationToken cancellationToken = default)
+        public static async Task<(bool hasError, string value, Exception ex)> TryGoogleTranslateAsync(string value, TimeSpan timeout, string to = "en", string from = "tr", CancellationToken cancellationToken = default)
         {
             value = value.ToStringOrEmpty();
             if (value == "") { return (false, "", default); }

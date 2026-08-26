@@ -147,14 +147,14 @@
         /// <returns>Dosya uzantısı (ilk karater &quot;.&quot; olacak biçimde).</returns>
         public static string GetFileExtension(this IFormFile file) => Path.GetExtension(file.FileName).ToLower();
         /// <summary>Verilen IFormFile nesnesini belirtilen fiziksel yola asenkron olarak yükler.</summary>
-        public static async Task FileUpload(this IFormFile file, string physicallyPath, CancellationToken cancellationToken = default)
+        public static async Task FileUploadAsync(this IFormFile file, string physicallyPath, CancellationToken cancellationToken = default)
         {
             FileHelper.DirectoryCreate(new FileInfo(physicallyPath).DirectoryName);
             using var fs = new FileStream(physicallyPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
             await file.CopyToAsync(fs, cancellationToken);
         }
         /// <summary>Bir IFormFile nesnesini byte dizisine dönüştürür.</summary>
-        public static async Task<byte[]> ToByteArray(this IFormFile file, CancellationToken cancellationToken = default)
+        public static async Task<byte[]> ToByteArrayAsync(this IFormFile file, CancellationToken cancellationToken = default)
         {
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms, cancellationToken);
