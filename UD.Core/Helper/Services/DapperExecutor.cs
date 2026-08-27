@@ -1,4 +1,4 @@
-﻿namespace UD.Core.Helper.Databases
+﻿namespace UD.Core.Helper.Services
 {
     using Dapper;
     using Microsoft.EntityFrameworkCore;
