@@ -9,6 +9,7 @@
     using System.Data;
     using System.Dynamic;
     using System.Globalization;
+    using System.Numerics;
     using System.Web;
     using UD.Core.Helper;
     public static class SystemObjectExtensions
@@ -77,6 +78,7 @@
         public static byte ToByte(this object value, byte defaultValue = Byte.MinValue)
         {
             if (value == null) { return defaultValue; }
+            if (value is Byte _byte) { return _byte; }
             try { return Convert.ToByte(value); }
             catch { return defaultValue; }
         }
@@ -87,6 +89,7 @@
         public static short ToInt16(this object value, short defaultValue = 0)
         {
             if (value == null) { return defaultValue; }
+            if (value is Int16 _short) { return _short; }
             try { return Convert.ToInt16(value); }
             catch { return defaultValue; }
         }
@@ -102,6 +105,7 @@
         public static int ToInt32(this object value, int defaultValue = 0)
         {
             if (value == null) { return defaultValue; }
+            if (value is Int32 _int) { return _int; }
             try { return Convert.ToInt32(value); }
             catch { return defaultValue; }
         }
@@ -112,6 +116,7 @@
         public static long ToInt64(this object value, long defaultValue = 0)
         {
             if (value == null) { return defaultValue; }
+            if (value is Int64 _long) { return _long; }
             try { return Convert.ToInt64(value); }
             catch { return defaultValue; }
         }
@@ -127,7 +132,23 @@
         public static decimal ToDecimal(this object value, decimal defaultValue = Decimal.Zero)
         {
             if (value == null) { return defaultValue; }
+            if (value is Decimal _d) { return _d; }
             return value.ToStringOrEmpty(CultureInfo.InvariantCulture).ParseOrDefault<decimal?>() ?? defaultValue;
+        }
+        /// <summary><paramref name="value"/> nesnesini <see cref="BigInteger"/> türüne dönüştürür. Dönüşüm başarısız olursa belirtilen varsayılan değeri döner.</summary>
+        /// <param name="value">Dönüştürülecek nesne değeri.</param>
+        /// <param name="defaultValue">Dönüşüm başarısız olursa dönecek varsayılan <see cref="BigInteger"/> değeri.</param>
+        /// <returns>Belirtilen nesnenin <see cref="BigInteger"/> karşılığını veya dönüşüm başarısızsa varsayılan değeri döner.</returns>
+        public static BigInteger ToBigInteger(this object value, BigInteger defaultValue = default)
+        {
+            if (value == null) { return defaultValue; }
+            if (value is BigInteger _bi) { return _bi; }
+            try
+            {
+                if (value is String _s) { return BigInteger.Parse(_s); }
+                return new(Convert.ToDecimal(value));
+            }
+            catch { return defaultValue; }
         }
         /// <summary>Bir nesneyi dinamik bir nesneye (<see cref="ExpandoObject"/>) dönüştürür. Dönüştürülen nesne, içindeki tüm özellik adları ve değerleriyle birlikte dinamik bir yapı sunar.</summary>
         /// <param name="value">Dönüştürülecek nesne.</param>
