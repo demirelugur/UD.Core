@@ -11,5 +11,9 @@
         /// <param name="guid">Dönüştürülecek GUID değeri.</param>
         /// <returns>GUID&#39;in temsil ettiği <see cref="BigInteger"/> değeri.</returns>
         public static BigInteger ToBigInteger(this Guid guid) => new(guid.ToByteArray(true), true, true);
+        /// <summary><paramref name="guid"/> değerini, 32 karakter uzunluğunda ve büyük harflerle temsil eden bir dizeye dönüştürür. Bu yöntem, GUID&#39;in standart biçimlendirilmiş dize temsili yerine, yalnızca alfasayısal karakterleri içeren kompakt bir biçim sağlar. Sonuç olarak, GUID&#39;in benzersizliğini koruyan ve daha kısa bir dize temsili elde edilir.</summary>
+        /// <param name="guid">Dönüştürülecek GUID değeri.</param>
+        /// <returns>GUID&#39;in temsil ettiği kompakt dize.</returns>
+        public static string ToCompactString(this Guid guid) => guid.ToString("N").ToUpperInvariant();
     }
 }
