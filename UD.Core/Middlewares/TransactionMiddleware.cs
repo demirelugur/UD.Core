@@ -7,34 +7,34 @@
     using UD.Core.Extensions;
     public sealed class TransactionMiddleware<TContext> where TContext : DbContext
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
         public TransactionMiddleware(RequestDelegate next)
         {
-            this.next = next;
+            this._next = next;
         }
         public async Task InvokeAsync(HttpContext httpContext)
         {
             var endPoint = httpContext.GetEndpoint();
             if (endPoint?.Metadata?.GetMetadata<DisableTransactionAttribute>() != null)
             {
-                await this.next(httpContext);
+                await this._next(httpContext);
                 return;
             }
             var method = httpContext.Request.Method;
             if (!(HttpMethods.IsPost(method) || HttpMethods.IsPut(method) || HttpMethods.IsPatch(method) || HttpMethods.IsDelete(method)))
             {
-                await this.next(httpContext);
+                await this._next(httpContext);
                 return;
             }
             var dbContext = httpContext.RequestServices.GetService<TContext>();
             if (dbContext == null)
             {
-                await this.next(httpContext);
+                await this._next(httpContext);
                 return;
             }
             if (dbContext.Database.CurrentTransaction != null)
             {
-                await this.next(httpContext);
+                await this._next(httpContext);
                 return;
             }
             var strategy = dbContext.Database.CreateExecutionStrategy();
@@ -43,7 +43,7 @@
                 using var tran = await dbContext.Database.BeginTransactionAsync(cancellationToken);
                 try
                 {
-                    await this.next(httpContext);
+                    await this._next(httpContext);
                     var status = httpContext.Response.StatusCode;
                     if (status.Between(StatusCodes.Status200OK, StatusCodes.Status400BadRequest - 1) && !httpContext.IsTransactionRollbackRequired()) { await tran.CommitAsync(cancellationToken); } //if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
                     else { await tran.RollbackAsync(cancellationToken); }

@@ -5,10 +5,10 @@
     using System.Text;
     public sealed class SecurityHeadersMiddleware
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
         public SecurityHeadersMiddleware(RequestDelegate next)
         {
-            this.next = next;
+            this._next = next;
         }
         public Task InvokeAsync(HttpContext context)
         {
@@ -34,7 +34,7 @@
             headers.Append("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
             headers.Append("Cross-Origin-Opener-Policy", "same-origin");
             headers.Append("Cross-Origin-Resource-Policy", "same-origin");
-            return this.next(context);
+            return this._next(context);
         }
     }
 }

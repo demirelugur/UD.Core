@@ -22,7 +22,7 @@
         public static bool IsIBANValid(string iban)
         {
             iban = iban.ToStringOrEmpty().Replace(" ", "").ToUpperInvariant();
-            if (iban.Length < 15 || iban.Length > 34 || iban.Any(x => !Char.IsLetterOrDigit(x))) { return false; }
+            if (!iban.Length.Between(15, 34) || iban.Any(x => !Char.IsLetterOrDigit(x))) { return false; }
             var rearranged = String.Concat(iban[4..], iban[..4]);
             var numericIban = String.Concat(rearranged.Select(x => Char.IsDigit(x) ? x.ToString() : (x - 'A' + 10).ToString()));
             return BigInteger.TryParse(numericIban, out BigInteger _bi) && _bi % 97 == 1;
