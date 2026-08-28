@@ -226,5 +226,38 @@ namespace UD.Core.Extensions
         /// </code>
         /// </remarks>s
         public static string ComputeHash(this string value, bool is512) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ComputeHash(is512); // SHA2_512 ->  SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128), SHA2_256 ->  SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
+        /// <summary><paramref name="value"/> deðerini Base62 biçiminden Guid tipine dönüþtürür.</summary>
+        /// <param name="value">Base62 biçimindeki string deðer.</param>
+        /// <returns>Guid tipinde dönüþtürülmüþ deðer.</returns>
+        /// <exception cref="ArgumentException"><paramref name="value"/> deðeri null veya boþ ise fýrlatýlýr.</exception>
+        /// <exception cref="FormatException"><paramref name="value"/> deðeri geçerli bir Base62 biçiminde deðilse fýrlatýlýr.</exception>
+        public static Guid ToGuidFromBase62(this string value)
+        {
+            if (value.IsNullOrEmpty())
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("Base62 value cannot be null or empty.", nameof(value)); }
+                throw new ArgumentException("Base62 deðeri boþ olamaz.", nameof(value));
+            }
+            BigInteger number = 0;
+            foreach (var character in value)
+            {
+                var index = SystemGuidExtensions._base62Chars.IndexOf(character);
+                if (index < 0)
+                {
+                    if (Checks.IsEnglishCurrentUICulture) { throw new FormatException($"Invalid Base62 character: \"{character}\""); }
+                    throw new FormatException($"Geçersiz Base62 karakteri: \"{character}\"");
+                }
+                number = (number * SystemGuidExtensions._base62Chars.Length) + index;
+            }
+            var bytes = number.ToByteArray(true, true);
+            if (bytes.Length > 16)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new FormatException("The Base62 value is too large to represent a valid Guid."); }
+                throw new FormatException("Base62 deðeri geçerli bir Guid için çok büyük.");
+            }
+            var guidBytes = new byte[16];
+            Buffer.BlockCopy(bytes, 0, guidBytes, 16 - bytes.Length, bytes.Length);
+            return new(guidBytes, true);
+        }
     }
 }
