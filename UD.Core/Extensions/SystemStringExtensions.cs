@@ -11,10 +11,36 @@ namespace UD.Core.Extensions
     using UD.Core.Helper;
     public static partial class SystemStringExtensions
     {
-        /// <summary>Bir string&#39;i Guid&#39;e dönüþtürür. String null veya geçersizse varsayýlan Guid döner.</summary>
-        /// <param name="value">Dönüþtürülecek string.</param>
-        /// <returns>Dönüþtürülmüþ Guid.</returns>
-        public static Guid ToGuid(this string value) => value.ParseOrDefault<Guid>();
+        /// <summary>
+        /// <paramref name="value"/> deðerini <see cref="Guid"/> türüne dönüþtürür. Eðer <paramref name="isBase62"/> parametresi <see langword="true"/> ise, <paramref name="value"/> deðeri Base62 biçiminde kabul edilir ve Base62 çözümlemesi yapýlýr. Aksi takdirde, standart <see cref="Guid"/> biçiminde kullanýlýr. Dönüþtürme iþlemi sýrasýnda geçersiz bir biçimle karþýlaþýlýrsa, varsayýlan <see cref="Guid"/> deðeri döndürülür.
+        /// </summary>
+        /// <param name="value">Dönüþtürülecek dize.</param>
+        /// <param name="isBase62">Dize Base62 formatýnda mý?</param>
+        /// <returns>Dönüþtürülmüþ <see cref="Guid"/> deðeri.</returns>
+        public static Guid ToGuid(this string value, bool isBase62 = false) => (isBase62 ? ToGuidFromBase62(value) : value.ParseOrDefault<Guid>());
+        private static Guid ToGuidFromBase62(string value)
+        {
+            BigInteger number = 0;
+            foreach (var character in value)
+            {
+                var index = SystemGuidExtensions._base62Chars.IndexOf(character);
+                if (index < 0)
+                {
+                    if (Checks.IsEnglishCurrentUICulture) { throw new FormatException($"Invalid Base62 character: \"{character}\""); }
+                    throw new FormatException($"Geçersiz Base62 karakteri: \"{character}\"");
+                }
+                number = (number * SystemGuidExtensions._base62Chars.Length) + index;
+            }
+            var bytes = number.ToByteArray(true, true);
+            if (bytes.Length > 16)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { throw new FormatException("The Base62 value is too large to represent a valid Guid."); }
+                throw new FormatException("Base62 deðeri geçerli bir Guid için çok büyük.");
+            }
+            var guidBytes = new byte[16];
+            Buffer.BlockCopy(bytes, 0, guidBytes, 16 - bytes.Length, bytes.Length);
+            return new(guidBytes, true);
+        }
         /// <summary>Bir dizeyi <see cref="DateTime"/> türüne dönüþtürür. Dize geçerli bir tarih formatýnda deðilse, varsayýlan <see cref="DateTime"/> deðeri döndürülür.</summary>
         /// <param name="value">Dönüþtürülecek tarih içeren dize.</param>
         /// <returns>Geçerli bir <see cref="DateTime"/> nesnesi veya varsayýlan <see cref="DateTime"/> deðeri.</returns>
@@ -226,38 +252,5 @@ namespace UD.Core.Extensions
         /// </code>
         /// </remarks>s
         public static string ComputeHash(this string value, bool is512) => Encoding.UTF8.GetBytes(value.ToStringOrEmpty()).ComputeHash(is512); // SHA2_512 ->  SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_512', 'Lorem Ipsum')), 3, 128), SHA2_256 ->  SELECT SUBSTRING([sys].[fn_varbintohexstr](HASHBYTES('SHA2_256', 'Lorem Ipsum')), 3, 64)
-        /// <summary><paramref name="value"/> deðerini Base62 biçiminden Guid tipine dönüþtürür.</summary>
-        /// <param name="value">Base62 biçimindeki string deðer.</param>
-        /// <returns>Guid tipinde dönüþtürülmüþ deðer.</returns>
-        /// <exception cref="ArgumentException"><paramref name="value"/> deðeri null veya boþ ise fýrlatýlýr.</exception>
-        /// <exception cref="FormatException"><paramref name="value"/> deðeri geçerli bir Base62 biçiminde deðilse fýrlatýlýr.</exception>
-        public static Guid ToGuidFromBase62(this string value)
-        {
-            if (value.IsNullOrEmpty())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("Base62 value cannot be null or empty.", nameof(value)); }
-                throw new ArgumentException("Base62 deðeri boþ olamaz.", nameof(value));
-            }
-            BigInteger number = 0;
-            foreach (var character in value)
-            {
-                var index = SystemGuidExtensions._base62Chars.IndexOf(character);
-                if (index < 0)
-                {
-                    if (Checks.IsEnglishCurrentUICulture) { throw new FormatException($"Invalid Base62 character: \"{character}\""); }
-                    throw new FormatException($"Geçersiz Base62 karakteri: \"{character}\"");
-                }
-                number = (number * SystemGuidExtensions._base62Chars.Length) + index;
-            }
-            var bytes = number.ToByteArray(true, true);
-            if (bytes.Length > 16)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new FormatException("The Base62 value is too large to represent a valid Guid."); }
-                throw new FormatException("Base62 deðeri geçerli bir Guid için çok büyük.");
-            }
-            var guidBytes = new byte[16];
-            Buffer.BlockCopy(bytes, 0, guidBytes, 16 - bytes.Length, bytes.Length);
-            return new(guidBytes, true);
-        }
     }
 }

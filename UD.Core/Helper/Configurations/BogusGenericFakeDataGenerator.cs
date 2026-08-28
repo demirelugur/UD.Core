@@ -52,18 +52,18 @@
             {
                 ["address"] = faker => faker.Address.FullAddress(),
                 ["color"] = faker => faker.Internet.Color().ToUpper(),
-                ["email"] = faker => this.createEMail(faker).Address,
+                ["email"] = faker => this.CreateEMail(faker).Address,
                 ["fulladdress"] = faker => faker.Address.FullAddress(),
-                ["fullname"] = faker => createFullName(faker),
-                ["ipaddress"] = faker => this.createIPAdress().ToString(),
+                ["fullname"] = this.CreateFullName,
+                ["ipaddress"] = faker => this.CreateIPAddress().ToString(),
                 ["mac"] = faker => faker.Internet.Mac().ToUpper(),
                 ["name"] = faker => faker.Person.FirstName,
                 ["phone"] = faker => faker.Phone.PhoneNumber("(5##) ###-####"),
-                ["seo"] = faker => createFullName(faker).ToSeoFriendly(),
-                ["src"] = _ => this.createUri(),
+                ["seo"] = faker => this.CreateFullName(faker).ToSeoFriendly(),
+                ["src"] = _ => this.CreateUri(),
                 ["surname"] = faker => faker.Person.LastName.ToUpper(),
-                ["uri"] = _ => this.createUri(),
-                ["username"] = faker => this.createEMail(faker).User
+                ["uri"] = _ => this.CreateUri(),
+                ["username"] = faker => this.CreateEMail(faker).User
             };
         }
         public BogusGenericFakeDataGenerator WithByteRange(byte minByte, byte maxByte)
@@ -129,19 +129,19 @@
         public T Generate<T>() where T : class => this.GenerateArray<T>(1)[0];
         public T[] GenerateArray<T>(int count) where T : class
         {
-            if (count > 0) { return new Faker<T>(this._locale).CustomInstantiator(f => (T)this.createFakeInstance("", typeof(T), f)).Generate(count).ToArray(); }
+            if (count > 0) { return new Faker<T>(this._locale).CustomInstantiator(f => (T)this.CreateFakeInstance("", typeof(T), f)).Generate(count).ToArray(); }
             return [];
         }
         #region Private Methods
-        private string createUri() => this._fakerEN.Internet.Url().TrimEnd('/');
-        private static string createFullName(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper()).Trim();
-        private MailAddress createEMail(Faker faker) => new(this._fakerEN.Internet.ExampleEmail().ToLower(), createFullName(faker));
-        private IPAddress createIPAdress() => this._fakerEN.Internet.IpAddress().MapToIPv4();
-        private bool isEqual(string parameterName, string value) => parameterName.Equals(value, StringComparison.OrdinalIgnoreCase);
-        private int getSignificantDigits(Faker faker) => (MaximumLengthConstants.TRTaxIdentityNumber - (faker.Random.Bool(0.9f) ? 0 : (faker.Random.Bool(0.9f) ? 1 : 2)));
-        private object createFakeInstance(string parameterName, Type type, Faker faker)
+        private string CreateUri() => this._fakerEN.Internet.Url().TrimEnd('/');
+        private string CreateFullName(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper()).Trim();
+        private MailAddress CreateEMail(Faker faker) => new(this._fakerEN.Internet.ExampleEmail().ToLower(), CreateFullName(faker));
+        private IPAddress CreateIPAddress() => this._fakerEN.Internet.IpAddress().MapToIPv4();
+        private bool IsEqual(string parameterName, string value) => parameterName.Equals(value, StringComparison.OrdinalIgnoreCase);
+        private int GetSignificantDigits(Faker faker) => (MaximumLengthConstants.TRTaxIdentityNumber - (faker.Random.Bool(0.9f) ? 0 : (faker.Random.Bool(0.9f) ? 1 : 2)));
+        private object CreateFakeInstance(string parameterName, Type type, Faker faker)
         {
-            if (TryValidators.TryTypeIsNullable(type, out Type _baseType)) { return faker.Random.Bool(this._nullChange) ? null : this.createFakeInstance(parameterName, _baseType, faker); }
+            if (TryValidators.TryTypeIsNullable(type, out Type _baseType)) { return faker.Random.Bool(this._nullChange) ? null : this.CreateFakeInstance(parameterName, _baseType, faker); }
             if (type == typeof(string))
             {
                 if (this._valueStringFactories.TryGetValue(parameterName, out var factory)) { return factory(faker); }
@@ -151,14 +151,14 @@
             if (type == typeof(byte)) { return faker.Random.Byte(this._minByte, this._maxByte); }
             if (type == typeof(short))
             {
-                if (isEqual(parameterName, "internal")) { return faker.Random.Short(1000, 9999); }
+                if (IsEqual(parameterName, "internal")) { return faker.Random.Short(1000, 9999); }
                 return faker.Random.Short(this._shortMin, this._shortMax);
             }
             if (type == typeof(int)) { return faker.Random.Int(this._intMin, this._intMax); }
             if (type == typeof(long))
             {
-                if (isEqual(parameterName, "tridentitynumber")) { return Generator.FakeTRIdentityNumber(); }
-                if (isEqual(parameterName, "trtaxidentitynumber")) { return Generator.FakeTRTaxIdentityNumber(this.getSignificantDigits(faker)); }
+                if (IsEqual(parameterName, "tridentitynumber")) { return Generator.FakeTRIdentityNumber(); }
+                if (IsEqual(parameterName, "trtaxidentitynumber")) { return Generator.FakeTRTaxIdentityNumber(this.GetSignificantDigits(faker)); }
                 return faker.Random.Long(this._longMin, this._longMax);
             }
             if (type == typeof(bool)) { return faker.Random.Bool(); }
@@ -177,15 +177,15 @@
                 return faker.Date.Timespan();
             }
             if (type == typeof(TimeOnly)) { return ((this._timeOnlyMin.HasValue && this._timeOnlyMax.HasValue) ? faker.Date.BetweenTimeOnly(this._timeOnlyMin.Value, this._timeOnlyMax.Value) : faker.Date.RecentTimeOnly()); }
-            if (type == typeof(Uri)) { return new Uri(this.createUri()); }
-            if (type == typeof(MailAddress)) { return this.createEMail(faker); }
-            if (type == typeof(IPAddress)) { return this.createIPAdress(); }
+            if (type == typeof(Uri)) { return new Uri(this.CreateUri()); }
+            if (type == typeof(MailAddress)) { return this.CreateEMail(faker); }
+            if (type == typeof(IPAddress)) { return this.CreateIPAddress(); }
             if (type.IsArray)
             {
                 int i, count = (this._arrayMaxLength > 0 ? faker.Random.Int(this._arrayMinLength, this._arrayMaxLength) : 0);
                 var elementType = type.GetElementType();
                 var array = Array.CreateInstance(elementType, count);
-                for (i = 0; i < count; i++) { array.SetValue(this.createFakeInstance(parameterName, elementType, faker), i); }
+                for (i = 0; i < count; i++) { array.SetValue(this.CreateFakeInstance(parameterName, elementType, faker), i); }
                 return array;
             }
             if (type.IsGenericType)
@@ -199,9 +199,9 @@
                     var dict = (IDictionary)Activator.CreateInstance(type);
                     for (i = 0; i < count; i++)
                     {
-                        var key = this.createFakeInstance(parameterName, keyType, faker);
+                        var key = this.CreateFakeInstance(parameterName, keyType, faker);
                         if (dict.Contains(key)) { continue; }
-                        dict.Add(key, this.createFakeInstance(parameterName, valueType, faker));
+                        dict.Add(key, this.CreateFakeInstance(parameterName, valueType, faker));
                     }
                     return dict;
                 }
@@ -210,7 +210,7 @@
                     var elementType = type.GetGenericArguments()[0];
                     int i, count = (this._arrayMaxLength > 0 ? faker.Random.Int(this._arrayMinLength, this._arrayMaxLength) : 0);
                     var list = (IList)Activator.CreateInstance(type);
-                    for (i = 0; i < count; i++) { list.Add(this.createFakeInstance(parameterName, elementType, faker)); }
+                    for (i = 0; i < count; i++) { list.Add(this.CreateFakeInstance(parameterName, elementType, faker)); }
                     return list;
                 }
             }
@@ -222,7 +222,7 @@
                     if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"No constructor found for \"{type.FullName}\"!"); }
                     throw new InvalidOperationException($"\"{type.FullName}\" için hiçbir kurucu (Constructors) bulunamadı!");
                 }
-                var args = ctor.GetParameters().Select(x => this.createFakeInstance(x.Name, x.ParameterType, faker)).ToArray();
+                var args = ctor.GetParameters().Select(x => this.CreateFakeInstance(x.Name, x.ParameterType, faker)).ToArray();
                 return ctor.Invoke(args);
             }
             return null;
