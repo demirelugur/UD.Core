@@ -10,7 +10,6 @@
     using System.Linq.Expressions;
     using System.Transactions;
     using UD.Core.Extensions;
-    using UD.Core.Helper.Validations;
     public sealed class Utilities
     {
         /// <summary>SQL Server veritabanı bağlantı dizesi oluşturur. 
@@ -154,8 +153,7 @@
         {
             var hs = new HtmlSanitizer(options ?? new()); // XSS örnekleri: https://github.com/pgaijin66/XSS-Payloads/blob/master/payload/payload.txt
             hs.AllowedTags.Remove("script");
-            hs.AllowedAttributes.Remove("onerror");
-            hs.AllowedAttributes.Remove("onclick");
+            foreach (var item in new[] { "onerror", "onclick" }) { hs.AllowedAttributes.Remove(item); }
             return hs;
         }
     }

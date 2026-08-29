@@ -168,7 +168,8 @@
         public static void AddModelErrorRange(this ModelStateDictionary modelstate, IEnumerable<string> errors)
         {
             if (errors.IsNullOrEmptyOrAllNull()) { return; }
-            foreach (var item in errors.Distinct().ToArray()) { modelstate.AddModelError("", item); }
+            var data = errors.Distinct().ToArray();
+            foreach (var item in data) { modelstate.AddModelError("", item); }
         }
     }
 }
