@@ -130,5 +130,12 @@
                 _ => throw type.ArgumentOutOfRange(nameof(type))
             };
         }
+        internal static (int maxLength, string chars) GetFormatInfo(this EnumGuidFormat format) => format switch
+        {
+            EnumGuidFormat.Base32 => (26, "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
+            EnumGuidFormat.Base36 => (25, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+            EnumGuidFormat.Base62 => (22, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"),
+            _ => throw format.ArgumentOutOfRange(nameof(format))
+        };
     }
 }

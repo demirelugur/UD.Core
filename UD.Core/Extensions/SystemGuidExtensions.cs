@@ -18,25 +18,15 @@
         /// <param name="guid">Dönüştürülecek GUID değeri.</param>
         /// <returns>GUID&#39;in temsil ettiği <see cref="BigInteger"/> değeri.</returns>
         public static BigInteger ToBigInteger(this Guid guid) => new(guid.ToByteArray(true), true, true);
-        internal const string _base32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-        internal const string _base36Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        internal const string _base62Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         /// <summary><paramref name="guid"/> değerini, belirtilen <paramref name="format"/> kullanarak bir taban dizesine dönüştürür. Bu yöntem, GUID&#39;in benzersiz değerini temsil eden bir tamsayıyı alır ve belirtilen taban karakter kümesini kullanarak, GUID&#39;in kompakt bir dize temsili elde eder. Sonuç olarak, GUID&#39;in benzersizliğini koruyan ve daha kısa bir dize temsili elde edilir.</summary>
         /// <param name="guid">Dönüştürülecek GUID değeri.</param>
         /// <param name="format">Kullanılacak taban formatı.</param>
         /// <returns>GUID&#39;in belirtilen taban biçiminde temsil ettiği dize.</returns>
         public static string ToBaseString(this Guid guid, EnumGuidFormat format)
         {
-            if (guid == Guid.Empty) { return "0"; }
             var value = guid.ToBigInteger();
             if (value == 0) { return "0"; }
-            var chars = format switch
-            {
-                EnumGuidFormat.Base32 => _base32Chars,
-                EnumGuidFormat.Base36 => _base36Chars,
-                EnumGuidFormat.Base62 => _base62Chars,
-                _ => throw format.ArgumentOutOfRange(nameof(format))
-            };
+            var (_, chars) = format.GetFormatInfo();
             var sb = new StringBuilder();
             while (value > 0)
             {

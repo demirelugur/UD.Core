@@ -24,13 +24,7 @@ namespace UD.Core.Extensions
         }
         private static Guid ToGuidFromBase(string value, EnumGuidFormat format)
         {
-            var (maxLength, chars) = format switch
-            {
-                EnumGuidFormat.Base32 => (26, SystemGuidExtensions._base32Chars),
-                EnumGuidFormat.Base36 => (25, SystemGuidExtensions._base36Chars),
-                EnumGuidFormat.Base62 => (22, SystemGuidExtensions._base62Chars),
-                _ => throw format.ArgumentOutOfRange(nameof(format))
-            };
+            var (maxLength, chars) = format.GetFormatInfo();
             if (value.Length > maxLength) { throw ToGuidFromBaseFormatException(null); }
             BigInteger number = 0;
             foreach (var character in value)
