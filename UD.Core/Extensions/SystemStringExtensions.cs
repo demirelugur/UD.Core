@@ -8,38 +8,52 @@ namespace UD.Core.Extensions
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
+    using UD.Core.Enums;
     using UD.Core.Helper;
     public static partial class SystemStringExtensions
     {
-        /// <summary>
-        /// <paramref name="value"/> deðerini <see cref="Guid"/> türüne dönüþtürür. Eðer <paramref name="isBase62"/> parametresi <see langword="true"/> ise, <paramref name="value"/> deðeri Base62 biçiminde kabul edilir ve Base62 çözümlemesi yapýlýr. Aksi takdirde, standart <see cref="Guid"/> biçiminde kullanýlýr. Dönüþtürme iþlemi sýrasýnda geçersiz bir biçimle karþýlaþýlýrsa, varsayýlan <see cref="Guid"/> deðeri döndürülür.
-        /// </summary>
+        /// <summary><paramref name="value"/> deðerini <see cref="Guid"/> türüne dönüþtürür. Eðer <paramref name="value"/> geçerli bir Guid biçiminde deðilse, varsayýlan <see cref="Guid"/> deðeri döndürülür.</summary>
         /// <param name="value">Dönüþtürülecek dize.</param>
-        /// <param name="isBase62">Dize Base62 formatýnda mý?</param>
-        /// <returns>Dönüþtürülmüþ <see cref="Guid"/> deðeri.</returns>
-        public static Guid ToGuid(this string value, bool isBase62 = false) => (isBase62 ? ToGuidFromBase62(value) : value.ParseOrDefault<Guid>());
-        private static Guid ToGuidFromBase62(string value)
+        /// <param name="format">Kullanýlacak <see cref="EnumGuidFormat"/> formatý.</param>
+        /// <returns>Geçerli bir <see cref="Guid"/> nesnesi veya varsayýlan <see cref="Guid"/> deðeri.</returns>
+        public static Guid ToGuid(this string value, EnumGuidFormat? format = null)
         {
+            value = value.ToStringOrEmpty();
+            if (value == "") { return Guid.Empty; }
+            return (format.HasValue ? ToGuidFromBase(value, format.Value) : value.ParseOrDefault<Guid>());
+        }
+        private static Guid ToGuidFromBase(string value, EnumGuidFormat format)
+        {
+            var (maxLength, chars) = format switch
+            {
+                EnumGuidFormat.Base32 => (26, SystemGuidExtensions._base32Chars),
+                EnumGuidFormat.Base36 => (25, SystemGuidExtensions._base36Chars),
+                EnumGuidFormat.Base62 => (22, SystemGuidExtensions._base62Chars),
+                _ => throw format.ArgumentOutOfRange(nameof(format))
+            };
+            if (value.Length > maxLength) { throw ToGuidFromBaseFormatException(null); }
             BigInteger number = 0;
             foreach (var character in value)
             {
-                var index = SystemGuidExtensions._base62Chars.IndexOf(character);
-                if (index < 0)
-                {
-                    if (Checks.IsEnglishCurrentUICulture) { throw new FormatException($"Invalid Base62 character: \"{character}\""); }
-                    throw new FormatException($"Geçersiz Base62 karakteri: \"{character}\"");
-                }
-                number = (number * SystemGuidExtensions._base62Chars.Length) + index;
+                var index = chars.IndexOf(character);
+                if (index < 0) { throw ToGuidFromBaseFormatException(character); }
+                number = (number * chars.Length) + index;
             }
             var bytes = number.ToByteArray(true, true);
-            if (bytes.Length > 16)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new FormatException("The Base62 value is too large to represent a valid Guid."); }
-                throw new FormatException("Base62 deðeri geçerli bir Guid için çok büyük.");
-            }
+            if (bytes.Length > 16) { throw ToGuidFromBaseFormatException(null); }
             var guidBytes = new byte[16];
             Buffer.BlockCopy(bytes, 0, guidBytes, 16 - bytes.Length, bytes.Length);
             return new(guidBytes, true);
+        }
+        private static FormatException ToGuidFromBaseFormatException(char? c)
+        {
+            if (c.HasValue)
+            {
+                if (Checks.IsEnglishCurrentUICulture) { return new($"Invalid character: \"{c.Value}\""); }
+                return new($"Geçersiz karakter: \"{c.Value}\"");
+            }
+            if (Checks.IsEnglishCurrentUICulture) { return new("The value is too large to represent a valid Guid."); }
+            return new("Deðer geçerli bir Guid için çok büyük.");
         }
         /// <summary>Bir dizeyi <see cref="DateTime"/> türüne dönüþtürür. Dize geçerli bir tarih formatýnda deðilse, varsayýlan <see cref="DateTime"/> deðeri döndürülür.</summary>
         /// <param name="value">Dönüþtürülecek tarih içeren dize.</param>
