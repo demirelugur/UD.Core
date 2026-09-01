@@ -35,7 +35,7 @@
     where TInsertDto : class, IEntityDto
     where TUpdateDto : class, IEntityDto
     {
-        protected BaseService(TContext Context, IMapper Mapper) : base(Context, Mapper) { }
+        protected BaseService(TContext context, IMapper mapper) : base(context, mapper) { }
         public virtual async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             if (entity != null)
@@ -60,7 +60,7 @@
         }
         public virtual async Task DeleteByIdAsync(object id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            if (base.TryGetKeyValues(id, out object[] _keyValues))
+            if (TryGetKeyValues(id, out object[] _keyValues))
             {
                 var entity = await base.DbSet.FindAsync(_keyValues, cancellationToken);
                 await this.DeleteAsync(entity, autoSave, cancellationToken);
@@ -102,7 +102,7 @@
         }
         public virtual async Task UpdateAsync(object id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            if (base.TryGetKeyValues(id, out object[] _keyValues))
+            if (TryGetKeyValues(id, out object[] _keyValues))
             {
                 var entity = await base.DbSet.FindAsync(_keyValues, cancellationToken);
                 if (entity != null)

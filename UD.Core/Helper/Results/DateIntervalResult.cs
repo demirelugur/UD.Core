@@ -7,11 +7,11 @@
         public int Month { get; set; }
         public int Day { get; set; }
         public DateIntervalResult() : this(default, default, default) { }
-        public DateIntervalResult(int Year, int Month, int Day)
+        public DateIntervalResult(int year, int month, int day)
         {
-            this.Year = Year;
-            this.Month = Month;
-            this.Day = Day;
+            this.Year = year;
+            this.Month = month;
+            this.Day = day;
         }
         public override string ToString()
         {

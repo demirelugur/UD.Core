@@ -14,17 +14,17 @@
             this._next = next;
             this._tokenBlacklistService = tokenBlacklistService;
         }
-        public async Task InvokeAsync(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context)
         {
-            var token = httpContext.GetToken();
+            var token = context.GetToken();
             if (!token.IsNullOrEmpty() && this._tokenBlacklistService.Any(token))
             {
-                httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                httpContext.Response.ContentType = "application/json";
-                await httpContext.Response.WriteAsJsonAsync(ApiResponse.setWarning(Checks.IsEnglishCurrentUICulture ? "Token invalid!" : "Token geçersiz!"), httpContext.RequestAborted);
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsJsonAsync(ApiResponse.setWarning(Checks.IsEnglishCurrentUICulture ? "Token invalid!" : "Token geçersiz!"), context.RequestAborted);
                 return;
             }
-            await this._next(httpContext);
+            await this._next(context);
         }
     }
 }

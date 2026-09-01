@@ -8,10 +8,10 @@ namespace UD.Core.Attributes.DataAnnotations
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDEmailAttribute : ValidationAttribute
     {
-        public string[] hosts { get; }
+        public string[] Hosts { get; }
         public UDEmailAttribute(params string[] hosts)
         {
-            this.hosts = (hosts ?? []).Select(x => x.ToStringOrEmpty()).Where(x => x.Length > 0).Select(x => x.TrimStart('@').ToLower()).Distinct().ToArray();
+            this.Hosts = (hosts ?? []).Select(x => x.TrimStart('@').ToLower()).ToArray();
         }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -21,7 +21,7 @@ namespace UD.Core.Attributes.DataAnnotations
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (TryValidators.TryMailAddress(email, out MailAddress _ma) && (this.hosts.Length == 0 || this.IsHostAllowed(_ma.Host)))
+            if (TryValidators.TryMailAddress(email, out MailAddress _ma) && (this.Hosts.Length == 0 || this.IsHostAllowed(_ma.Host)))
             {
                 validationContext.SetValidatePropertyValue(_ma.Address.ToLowerInvariant());
                 return ValidationResult.Success;
@@ -29,11 +29,11 @@ namespace UD.Core.Attributes.DataAnnotations
             if (this.ErrorMessage.IsNullOrEmpty())
             {
                 var message = String.Format(ValidationMessageTurkishConstants.Email, validationContext.DisplayName);
-                if (this.hosts.Length > 0) { message = $"{message}, Geçerli {(this.hosts.Length == 1 ? "host" : "hostlar")}: {String.Join(", ", this.hosts)}"; }
+                if (this.Hosts.Length > 0) { message = $"{message}, Geçerli {(this.Hosts.Length == 1 ? "host" : "hostlar")}: {String.Join(", ", this.Hosts)}"; }
                 if (Checks.IsEnglishCurrentUICulture)
                 {
                     message = String.Concat(validationContext.DisplayName, " must be a valid email address!");
-                    if (this.hosts.Length > 0) { message = $"{message}, Valid {(this.hosts.Length == 1 ? "host" : "hosts")}: {String.Join(", ", this.hosts)}"; }
+                    if (this.Hosts.Length > 0) { message = $"{message}, Valid {(this.Hosts.Length == 1 ? "host" : "hosts")}: {String.Join(", ", this.Hosts)}"; }
                 }
                 this.ErrorMessage = message;
             }
@@ -41,7 +41,7 @@ namespace UD.Core.Attributes.DataAnnotations
         }
         private bool IsHostAllowed(string host)
         {
-            foreach (var pattern in this.hosts)
+            foreach (var pattern in this.Hosts)
             {
                 if (pattern.StartsWith("*."))
                 {

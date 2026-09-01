@@ -27,12 +27,12 @@
         [Display(Name = nameof(DisplayNames.ClientRequestInfoResultIpAddress), ResourceType = typeof(DisplayNames))]
         public string? IpAddress { get; set; }
         public ClientRequestInfo() : this(default, default) { }
-        public ClientRequestInfo(bool IsMobil, object IpAddress)
+        public ClientRequestInfo(bool isMobil, object ipAddress)
         {
-            this.IsMobil = IsMobil;
-            this.IpAddress = this.ipAddressCast(IpAddress);
+            this.IsMobil = isMobil;
+            this.IpAddress = IpAddressCast(ipAddress);
         }
-        private string? ipAddressCast(object ipAddress)
+        private static string? IpAddressCast(object ipAddress)
         {
             if (ipAddress is IPAddress _ip) { return _ip.MapToIPv4().ToString(); }
             if (ipAddress is String _s && IPAddress.TryParse(_s, out _ip)) { return _ip.MapToIPv4().ToString(); }

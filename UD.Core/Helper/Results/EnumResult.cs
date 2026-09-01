@@ -14,11 +14,11 @@
         public string Text { get; }
         public string DisplayName { get; }
         public EnumResult() : this(default, "", "") { }
-        public EnumResult(long Value, string Text, string DisplayName)
+        public EnumResult(long value, string text, string displayName)
         {
-            this.Value = Value;
-            this.Text = Text;
-            this.DisplayName = DisplayName;
+            this.Value = value;
+            this.Text = text;
+            this.DisplayName = displayName;
         }
         public override string ToString() => String.Join("-", this.Value, this.Text);
         /// <summary><paramref name="value"/> için tanımlanan nesneler: EnumResult, IFormCollection, Enum, AnonymousObjectClass</summary>

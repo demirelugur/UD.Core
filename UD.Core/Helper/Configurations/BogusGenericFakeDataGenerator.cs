@@ -137,8 +137,8 @@
         private string CreateFullName(Faker faker) => String.Concat(faker.Person.FirstName, " ", faker.Person.LastName.ToUpper()).Trim();
         private MailAddress CreateEMail(Faker faker) => new(this._fakerEN.Internet.ExampleEmail().ToLower(), CreateFullName(faker));
         private IPAddress CreateIPAddress() => this._fakerEN.Internet.IpAddress().MapToIPv4();
-        private bool IsEqual(string parameterName, string value) => parameterName.Equals(value, StringComparison.OrdinalIgnoreCase);
-        private int GetSignificantDigits(Faker faker) => (MaximumLengthConstants.TRTaxIdentityNumber - (faker.Random.Bool(0.9f) ? 0 : (faker.Random.Bool(0.9f) ? 1 : 2)));
+        private static bool IsEqual(string parameterName, string value) => parameterName.Equals(value, StringComparison.OrdinalIgnoreCase);
+        private static int GetSignificantDigits(Faker faker) => (MaximumLengthConstants.TRTaxIdentityNumber - (faker.Random.Bool(0.9f) ? 0 : (faker.Random.Bool(0.9f) ? 1 : 2)));
         private object CreateFakeInstance(string parameterName, Type type, Faker faker)
         {
             if (TryValidators.TryTypeIsNullable(type, out Type _baseType)) { return faker.Random.Bool(this._nullChange) ? null : this.CreateFakeInstance(parameterName, _baseType, faker); }
@@ -158,7 +158,7 @@
             if (type == typeof(long))
             {
                 if (IsEqual(parameterName, "tridentitynumber")) { return Generator.FakeTRIdentityNumber(); }
-                if (IsEqual(parameterName, "trtaxidentitynumber")) { return Generator.FakeTRTaxIdentityNumber(this.GetSignificantDigits(faker)); }
+                if (IsEqual(parameterName, "trtaxidentitynumber")) { return Generator.FakeTRTaxIdentityNumber(GetSignificantDigits(faker)); }
                 return faker.Random.Long(this._longMin, this._longMax);
             }
             if (type == typeof(bool)) { return faker.Random.Bool(); }
