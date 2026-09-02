@@ -20,7 +20,7 @@
         public static BigInteger ToBigInteger(this Guid guid) => new(guid.ToByteArray(true), true, true);
         /// <summary><paramref name="guid"/> değerini, belirtilen <paramref name="format"/> kullanarak bir taban dizesine dönüştürür. Bu yöntem, GUID&#39;in benzersiz değerini temsil eden bir tamsayıyı alır ve belirtilen taban karakter kümesini kullanarak, GUID&#39;in kompakt bir dize temsili elde eder. Sonuç olarak, GUID&#39;in benzersizliğini koruyan ve daha kısa bir dize temsili elde edilir.</summary>
         /// <param name="guid">Dönüştürülecek GUID değeri.</param>
-        /// <param name="format">Kullanılacak taban formatı.</param>
+        /// <param name="format">Kullanılacak taban biçimi.</param>
         /// <returns>GUID&#39;in belirtilen taban biçiminde temsil ettiği dize.</returns>
         public static string ToBaseString(this Guid guid, EnumGuidFormat format)
         {

@@ -80,9 +80,9 @@
         public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string base64String)
         {
             base64String = base64String.ToStringOrEmpty();
-            if (base64String == "" || !base64String.StartsWith("data:")) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI formatı."); }
+            if (base64String == "" || !base64String.StartsWith("data:")) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI biçimi."); }
             var parts = base64String.Substring(5).Split([";base64,"], StringSplitOptions.None);
-            if (parts.Length != 2) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI formatı: MIME tipi veya base64 verisi eksik."); }
+            if (parts.Length != 2) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI biçimi: MIME tipi veya base64 verisi eksik."); }
             return (Convert.FromBase64String(parts[1]), parts[0]);
         }
         /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>

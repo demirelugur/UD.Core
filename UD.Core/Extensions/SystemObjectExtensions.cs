@@ -14,7 +14,7 @@
     using UD.Core.Helper;
     public static class SystemObjectExtensions
     {
-        /// <summary>Verilen nesneyi JSON formatına dönüştürür. JSON çıktısı None biçiminde ve bazı özel ayarlarla döner.</summary>
+        /// <summary>Verilen nesneyi JSON biçiminde dönüştürür. JSON çıktısı None biçiminde ve bazı özel ayarlarla döner.</summary>
         /// <param name="value">JSON&#39;a dönüştürülecek nesne.</param>
         /// <returns>Nesnenin JSON string biçiminde temsili.</returns>
         public static string ToJSON(this object value) => JsonConvert.SerializeObject(value, Formatting.None, GlobalConstants.JsonSerializerSettings);

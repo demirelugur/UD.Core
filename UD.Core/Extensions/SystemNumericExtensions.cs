@@ -79,7 +79,7 @@
         public static string ToStringInvariantCulture(this decimal value) => value.ToString(CultureInfo.InvariantCulture);
         #endregion
         #region Double
-        /// <summary>Dosya boyutu gibi büyük sayıları insan tarafından okunabilir bir biçimde formatlar. Örneğin, 1536 değeri &quot;1.5 KB&quot; olarak dönecektir.</summary>
+        /// <summary>Dosya boyutu gibi büyük sayıları insan tarafından okunabilir biçimde biçimler. Örneğin, 1536 değeri &quot;1.5 KB&quot; olarak dönecektir.</summary>
         public static string ToFileSizeString(this double value)
         {
             value = Math.Max(0, value);

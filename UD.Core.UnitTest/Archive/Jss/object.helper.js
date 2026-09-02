@@ -14,6 +14,12 @@ const beautifyTurkishPlate = (value) => {
     while (index < value.length && value.charCodeAt(index) >= 65 && value.charCodeAt(index) <= 90) { index++; }
     return (index > 2 && index <= 5) ? `${value.slice(0, 2)} ${value.slice(2, index)} ${value.slice(index)}` : value;
 };
+const copyAsync = async (copiedData) => {
+    try {
+        await navigator.clipboard.writeText(copiedData);
+        alert('Kopyalama başarılı');
+    } catch (_) { alert('Kopyalama başarısız'); }
+};
 const decodeTokenPayload = (token) => {
     if (isNullOrEmpty(token)) { return null; }
     let split = String(token).trim().split('.');
@@ -26,9 +32,7 @@ const decodeTokenPayload = (token) => {
         return JSON.parse(json);
     } catch { return null; }
 };
-const distinct = (array) => {
-    return [...new Set(array)];
-};
+const distinct = (array) => [...new Set(array)];
 const generateGuid = () => {
     if (typeof crypto === 'object' && typeof crypto.randomUUID === 'function') { return crypto.randomUUID(); }
     let r, v;
@@ -46,9 +50,7 @@ const groupBy = (array, ...keySelectors) => { /* Örnek kullanım: Tekli Gruplam
         return acc;
     }, {});
 };
-const isNotNullOrEmpty = (value) => {
-    return !isNullOrEmpty(value);
-};
+const isNotNullOrEmpty = (value) => !isNullOrEmpty(value);
 const isNullOrEmpty = (value) => {
     if (typeof value === 'undefined') { return true; }
     if (value === null) { return true; }
@@ -85,7 +87,7 @@ const isValidEmail = (value) => {
     return emailRegex.test(value);
 };
 const isValidGuid = (value) => {
-    if (isNullOrEmpty(value)) { return false; }
+    if (isNullOrEmpty(value)) { return (typeof value === 'string' && value === GuidEmpty); }
     let guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
     return guidRegex.test(String(value).trim());
 };
@@ -125,6 +127,7 @@ export const objectHelper = {
     GuidMaxValue,
     beautifyPhoneNumber,
     beautifyTurkishPlate,
+    copyAsync,
     decodeTokenPayload,
     distinct,
     generateGuid,

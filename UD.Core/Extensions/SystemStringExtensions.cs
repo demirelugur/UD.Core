@@ -49,7 +49,7 @@ namespace UD.Core.Extensions
             if (Checks.IsEnglishCurrentUICulture) { return new("The value is too large to represent a valid Guid."); }
             return new("Deðer geçerli bir Guid için çok büyük.");
         }
-        /// <summary>Bir dizeyi <see cref="DateTime"/> türüne dönüþtürür. Dize geçerli bir tarih formatýnda deðilse, varsayýlan <see cref="DateTime"/> deðeri döndürülür.</summary>
+        /// <summary>Bir dizeyi <see cref="DateTime"/> türüne dönüþtürür. Dize geçerli bir tarih biçiminde deðilse, varsayýlan <see cref="DateTime"/> deðeri döndürülür.</summary>
         /// <param name="value">Dönüþtürülecek tarih içeren dize.</param>
         /// <returns>Geçerli bir <see cref="DateTime"/> nesnesi veya varsayýlan <see cref="DateTime"/> deðeri.</returns>
         public static DateTime ToDate(this string value) => value.ParseOrDefault<DateTime>();
@@ -245,7 +245,7 @@ namespace UD.Core.Extensions
             }
             return default;
         }
-        /// <summary>Verilen metnin SHA-256 veya SHA-512 hash deðerini hesaplayarak hexadecimal (hex) formatýnda döndürür.</summary>
+        /// <summary>Verilen metnin SHA-256 veya SHA-512 hash deðerini hesaplayarak hexadecimal (hex) biçiminde döndürür.</summary>
         /// <param name="value">Hash deðeri hesaplanacak metin.</param>
         /// <param name="is512"><see langword="true"/> ise SHA-512, <see langword="false"/> ise SHA-256 algoritmasý kullanýlýr.</param>
         /// <returns>SHA-512 için 128 karakter, SHA-256 için 64 karakter uzunluðunda hexadecimal hash deðeri.</returns>
