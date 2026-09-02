@@ -12,40 +12,40 @@
         {
             this._next = next;
         }
-        public async Task InvokeAsync(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context)
         {
-            var endPoint = httpContext.GetEndpoint();
+            var endPoint = context.GetEndpoint();
             if (endPoint?.Metadata?.GetMetadata<DisableTransactionAttribute>() != null)
             {
-                await this._next(httpContext);
+                await this._next(context);
                 return;
             }
-            var method = httpContext.Request.Method;
+            var method = context.Request.Method;
             if (!(HttpMethods.IsPost(method) || HttpMethods.IsPut(method) || HttpMethods.IsPatch(method) || HttpMethods.IsDelete(method)))
             {
-                await this._next(httpContext);
+                await this._next(context);
                 return;
             }
-            var dbContext = httpContext.RequestServices.GetService<TContext>();
+            var dbContext = context.RequestServices.GetService<TContext>();
             if (dbContext == null)
             {
-                await this._next(httpContext);
+                await this._next(context);
                 return;
             }
             if (dbContext.Database.CurrentTransaction != null)
             {
-                await this._next(httpContext);
+                await this._next(context);
                 return;
             }
             var strategy = dbContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async (cancellationToken) =>
             {
-                using var tran = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+                await using var tran = await dbContext.Database.BeginTransactionAsync(cancellationToken);
                 try
                 {
-                    await this._next(httpContext);
-                    var status = httpContext.Response.StatusCode;
-                    if (status.Between(StatusCodes.Status200OK, StatusCodes.Status400BadRequest - 1) && !httpContext.IsTransactionRollbackRequired()) { await tran.CommitAsync(cancellationToken); } //if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
+                    await this._next(context);
+                    var status = context.Response.StatusCode;
+                    if (status.Between(StatusCodes.Status200OK, StatusCodes.Status400BadRequest - 1) && !context.IsTransactionRollbackRequired()) { await tran.CommitAsync(cancellationToken); } //if (dbContext.ChangeTracker.HasChanges()) { await dbContext.SaveChangesAsync(cancellationToken); }
                     else { await tran.RollbackAsync(cancellationToken); }
                 }
                 catch
@@ -53,7 +53,7 @@
                     try { await tran.RollbackAsync(CancellationToken.None); } catch { }
                     throw;
                 }
-            }, httpContext.RequestAborted);
+            }, context.RequestAborted);
         }
     }
 }

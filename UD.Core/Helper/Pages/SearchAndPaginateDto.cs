@@ -22,11 +22,11 @@
         public int Size { get; set; }
         public string? Ordering { get { return _ordering; } set { _ordering = value.ParseOrDefault<string>(); } }
         public SearchAndPaginateDto() : this(default, default, default) { }
-        public SearchAndPaginateDto(int PageNumber, int Size, string? Ordering)
+        public SearchAndPaginateDto(int pageNumber, int size, string? ordering)
         {
-            this.PageNumber = PageNumber;
-            this.Size = Size;
-            this.Ordering = Ordering;
+            this.PageNumber = pageNumber;
+            this.Size = size;
+            this.Ordering = ordering;
         }
         public virtual Task<Paginate<T>> ToPagedListAsync<T>(IQueryable<T> source, bool loadInfo, CancellationToken cancellationToken) => source.ToPagedListAsync(this.PageNumber, this.Size, this.Ordering, loadInfo, cancellationToken);
     }

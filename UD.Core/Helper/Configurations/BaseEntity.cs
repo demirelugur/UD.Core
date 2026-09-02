@@ -24,9 +24,9 @@
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual TKey Id { get; set; }
         protected BaseEntity() : this(default) { }
-        protected BaseEntity(TKey Id)
+        protected BaseEntity(TKey id)
         {
-            this.Id = Id;
+            this.Id = id;
         }
         public override object[] GetKeys() => [this.Id];
         public override string ToString() => $"[ENTITY: {this.GetType().Name}], [{nameof(this.Id)}] = {this.Id}";

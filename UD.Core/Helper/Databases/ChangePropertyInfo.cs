@@ -2,13 +2,13 @@
 {
     public sealed class ChangePropertyInfo
     {
-        public object originalValue { get; set; }
-        public object currentValue { get; set; }
+        public object OriginalValue { get; set; }
+        public object CurrentValue { get; set; }
         public ChangePropertyInfo() : this(default, default) { }
         public ChangePropertyInfo(object originalValue, object currentValue)
         {
-            this.originalValue = originalValue;
-            this.currentValue = currentValue;
+            this.OriginalValue = originalValue;
+            this.CurrentValue = currentValue;
         }
     }
 }

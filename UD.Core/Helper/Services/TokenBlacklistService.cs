@@ -11,14 +11,14 @@
     }
     public class TokenBlacklistService : ITokenBlacklistService
     {
-        private static readonly ConcurrentDictionary<string, DateTime> blackListedTokens = [];
+        private static readonly ConcurrentDictionary<string, DateTime> _blackListedTokens = [];
         public TokenBlacklistService() { }
         public bool Any(string token)
         {
-            blackListedTokens.RemoveWhere(x => x.Value < DateTime.UtcNow);
-            return blackListedTokens.ContainsKey(token);
+            _blackListedTokens.RemoveWhere(x => x.Value < DateTime.UtcNow);
+            return _blackListedTokens.ContainsKey(token);
         }
-        public void Add(string token, TimeSpan expiration) => blackListedTokens.AddOrUpdate(token, DateTime.UtcNow.Add(expiration));
+        public void Add(string token, TimeSpan expiration) => _blackListedTokens.AddOrUpdate(token, DateTime.UtcNow.Add(expiration));
         public void TryAdd(string token, TimeSpan expiration)
         {
             if (!this.Any(token)) { this.Add(token, expiration); }

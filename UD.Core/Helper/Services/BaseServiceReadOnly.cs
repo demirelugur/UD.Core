@@ -28,11 +28,11 @@
     where TSearchDto : class, ISearchAndPaginateDto
     {
         protected readonly IMapper Mapper;
-        protected BaseServiceReadOnly(TContext Context, IMapper Mapper) : base(Context)
+        protected BaseServiceReadOnly(TContext context, IMapper mapper) : base(context)
         {
-            this.Mapper = Mapper ?? throw new ArgumentNullException(nameof(Mapper));
+            this.Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-        internal bool TryGetKeyValues(object id, out object[] keyValues)
+        internal static bool TryGetKeyValues(object id, out object[] keyValues)
         {
             if (id == null) { keyValues = []; }
             else if (id is object[] _array) { keyValues = _array; }
@@ -44,7 +44,7 @@
         protected abstract IQueryable<TEntity> ApplyFiltering(IQueryable<TEntity> query, TSearchDto searchDto);
         public virtual async Task<TEntityDto?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
         {
-            if (this.TryGetKeyValues(id, out object[] _keyValues))
+            if (TryGetKeyValues(id, out object[] _keyValues))
             {
                 var entity = await base.DbSet.FindAsync(_keyValues, cancellationToken);
                 if (entity != null) { return this.Mapper.Map<TEntityDto>(entity); }

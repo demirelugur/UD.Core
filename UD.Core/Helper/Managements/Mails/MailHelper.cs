@@ -15,17 +15,17 @@
         public MailAddress[] Bccs { get; }
         public Attachment[] Attachments { get; }
         public MailHelper() : this("", "", default, default, default) { }
-        public MailHelper(string Subject, string Body, bool IsBodyHtml, MailPriority Priority, MailAddress[] Tos) : this(Subject, Body, IsBodyHtml, Priority, Tos, default, default, default) { }
-        public MailHelper(string Subject, string Body, bool IsBodyHtml, MailPriority Priority, MailAddress[] Tos, MailAddress[] CCs, MailAddress[] Bccs, Attachment[] Attachments)
+        public MailHelper(string subject, string body, bool isBodyHtml, MailPriority priority, MailAddress[] tos) : this(subject, body, isBodyHtml, priority, tos, default, default, default) { }
+        public MailHelper(string subject, string body, bool isBodyHtml, MailPriority priority, MailAddress[] tos, MailAddress[] cCs, MailAddress[] bccs, Attachment[] attachments)
         {
-            this.Subject = Subject.ToStringOrEmpty();
-            this.Body = Body.ToStringOrEmpty();
-            this.IsBodyHtml = IsBodyHtml;
-            this.Priority = Priority;
-            this.Tos = Tos ?? [];
-            this.CCs = CCs ?? [];
-            this.Bccs = Bccs ?? [];
-            this.Attachments = Attachments ?? [];
+            this.Subject = subject.ToStringOrEmpty();
+            this.Body = body.ToStringOrEmpty();
+            this.IsBodyHtml = isBodyHtml;
+            this.Priority = priority;
+            this.Tos = tos ?? [];
+            this.CCs = cCs ?? [];
+            this.Bccs = bccs ?? [];
+            this.Attachments = attachments ?? [];
         }
         public async Task<(bool hasError, Exception ex)> SendAsync(SmtpClientBasic smtpClientBasic, CancellationToken cancellationToken = default)
         {

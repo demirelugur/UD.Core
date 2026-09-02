@@ -1,20 +1,21 @@
 ﻿namespace UD.Core.Helper.Generates
 {
     using System.Text;
+    using UD.Core.Extensions;
     public sealed class PasswordGenerator
     {
-        public static readonly PasswordGenerator Default = new("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "0123456789", "!@#$%^*()_+[]{}|;:,.?");
         private readonly string _upperCases;
         private readonly string _lowerCases;
         private readonly string _digits;
         private readonly string _punctuations;
         private readonly string _allowedCharacters;
+        public PasswordGenerator() : this("", "", "", "") { }
         public PasswordGenerator(string upperCases, string lowerCases, string digits, string punctuations)
         {
-            this._upperCases = upperCases;
-            this._lowerCases = lowerCases;
-            this._digits = digits;
-            this._punctuations = punctuations;
+            this._upperCases = upperCases.CoalesceOrDefault("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            this._lowerCases = lowerCases.CoalesceOrDefault("abcdefghijklmnopqrstuvwxyz");
+            this._digits = digits.CoalesceOrDefault("0123456789");
+            this._punctuations = punctuations.CoalesceOrDefault("!@#$%^*()_+[]{}|;:,.?");
             this._allowedCharacters = String.Join("", this._upperCases, this._lowerCases, this._digits, this._punctuations).Trim();
         }
         public string Generate()

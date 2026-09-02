@@ -8,8 +8,11 @@
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDJSONAttribute : ValidationAttribute
     {
-        public JTokenType jTokenType { get; }
-        public UDJSONAttribute(JTokenType jTokenType) { this.jTokenType = jTokenType; }
+        public JTokenType JTokenType { get; }
+        public UDJSONAttribute(JTokenType jTokenType)
+        {
+            this.JTokenType = jTokenType;
+        }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty();
@@ -19,7 +22,7 @@
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (TryValidators.TryJson(valueString, this.jTokenType, out JToken _jToken))
+            if (TryValidators.TryJson(valueString, this.JTokenType, out JToken _jToken))
             {
                 if (_jToken.HasValues)
                 {
@@ -34,8 +37,8 @@
             }
             if (this.ErrorMessage.IsNullOrEmpty())
             {
-                this.ErrorMessage = $"{validationContext.DisplayName}, JSON biçimine ({this.jTokenType:g}) uygun olmalıdır!";
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in JSON format ({this.jTokenType:g})!"; }
+                this.ErrorMessage = $"{validationContext.DisplayName}, JSON biçimine ({this.JTokenType:g}) uygun olmalıdır!";
+                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in JSON format ({this.JTokenType:g})!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

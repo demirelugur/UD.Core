@@ -7,17 +7,17 @@
     using UD.Core.Extensions;
     public sealed class ChangeEntry
     {
-        public string entityName { get; set; }
-        public object entityPKValue { get; set; }
-        public Dictionary<string, object> entity { get; set; }
-        public Dictionary<string, ChangePropertyInfo> changeProperties { get; set; }
+        public string EntityName { get; set; }
+        public object EntityPKValue { get; set; }
+        public Dictionary<string, object> Entity { get; set; }
+        public Dictionary<string, ChangePropertyInfo> ChangeProperties { get; set; }
         public ChangeEntry() : this(default, default, default, default) { }
         public ChangeEntry(string entityName, object entityPKValue, Dictionary<string, object> entity, Dictionary<string, ChangePropertyInfo> changeProperties)
         {
-            this.entityName = entityName ?? "";
-            this.entityPKValue = entityPKValue;
-            this.entity = entity ?? [];
-            this.changeProperties = changeProperties ?? [];
+            this.EntityName = entityName ?? "";
+            this.EntityPKValue = entityPKValue;
+            this.Entity = entity ?? [];
+            this.ChangeProperties = changeProperties ?? [];
         }
         private static bool IsMapped(PropertyInfo propertyInfo) => (!propertyInfo.IsSkipAuditLog() && propertyInfo.IsMapped());
         private static bool IsTypeByteArrayOrHtmlContent(PropertyInfo propertyInfo) => (propertyInfo.PropertyType == typeof(byte[]) || propertyInfo.IsHtmlContent());
@@ -52,19 +52,12 @@
                 Dictionary<string, ChangePropertyInfo> changes = null;
                 if (_ee.State == EntityState.Modified)
                 {
-                    changes = _ee.OriginalValues.Properties
-                    .Where(x => IsMapped(x.PropertyInfo))
-                    .Select(x => new
+                    changes = _ee.OriginalValues.Properties.Where(x => IsMapped(x.PropertyInfo)).Select(x => new
                     {
                         x.PropertyInfo,
                         Original = _ee.OriginalValues[x],
                         Current = _ee.CurrentValues[x]
-                    })
-                    .Where(x => !AreEqual(x.Original, x.Current))
-                    .ToDictionary(
-                        x => x.PropertyInfo.GetColumnName(),
-                        x => (IsTypeByteArrayOrHtmlContent(x.PropertyInfo) ? new ChangePropertyInfo(ComputeHash(x.Original), ComputeHash(x.Current)) : new ChangePropertyInfo(x.Original, x.Current))
-                    );
+                    }).Where(x => !AreEqual(x.Original, x.Current)).ToDictionary(x => x.PropertyInfo.GetColumnName(), x => (IsTypeByteArrayOrHtmlContent(x.PropertyInfo) ? new ChangePropertyInfo(ComputeHash(x.Original), ComputeHash(x.Current)) : new ChangePropertyInfo(x.Original, x.Current)));
                 }
                 return new(_ee.Metadata.ClrType.GetTableName(true), GetPKValue(_ee.Entity, _ee.Metadata.ClrType), ExtractScalarProperties(_ee.Entity, _ee.Metadata.ClrType), changes);
             }
@@ -76,7 +69,7 @@
                 return model;
             }
             */
-            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ChangeEntry((string)x.entityName, (object)x.entityPKValue, (Dictionary<string, object>)x.entity, (Dictionary<string, ChangePropertyInfo>)x.changeProperties)).FirstOrDefault();
+            return value.ToEnumerable().Select(x => x.ToDynamic()).Select(x => new ChangeEntry((string)x.EntityName, (object)x.EntityPKValue, (Dictionary<string, object>)x.Entity, (Dictionary<string, ChangePropertyInfo>)x.ChangeProperties)).FirstOrDefault();
         }
     }
 }

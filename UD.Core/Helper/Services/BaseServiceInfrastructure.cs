@@ -24,9 +24,9 @@
         where TContext : DbContext
         where TEntity : class, IBaseEntity
     {
-        protected BaseServiceInfrastructure(TContext Context)
+        protected BaseServiceInfrastructure(TContext context)
         {
-            this.Context = Context ?? throw new ArgumentNullException(nameof(Context));
+            this.Context = context ?? throw new ArgumentNullException(nameof(context));
         }
         public TContext Context { get; }
         public DbSet<TEntity> DbSet => this.Context.Set<TEntity>();

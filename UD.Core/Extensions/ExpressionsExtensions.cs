@@ -3,7 +3,6 @@
     using System.Linq.Expressions;
     using System.Reflection;
     using UD.Core.Helper;
-    using UD.Core.Helper.Configurations;
     public static class ExpressionsExtensions
     {
         /// <summary>Verilen ifadenin adını alır.</summary>
@@ -45,6 +44,15 @@
             var visitor = new SubstituteParameterVisitor(leftParameter, right.Parameters[0]);
             var body = Expression.MakeBinary(expressionType, left.Body, visitor.Visit(right.Body));
             return Expression.Lambda<Func<T, bool>>(body, leftParameter);
+        }
+        private class SubstituteParameterVisitor : ExpressionVisitor
+        {
+            private readonly Dictionary<Expression, Expression> _sub;
+            public SubstituteParameterVisitor(ParameterExpression leftParameter, ParameterExpression rightParameter)
+            {
+                this._sub = new() { { rightParameter, leftParameter } };
+            }
+            protected override Expression VisitParameter(ParameterExpression node) => (this._sub.TryGetValue(node, out Expression _exp) ? _exp : node);
         }
     }
 }

@@ -14,13 +14,13 @@ namespace UD.Core.Helper.Responses
         public decimal BanknoteBuying { get; set; }
         public decimal BanknoteSelling { get; set; }
         public TCMBResponse() : this(default, default, default, default, default) { }
-        public TCMBResponse(int Unit, decimal ForexBuying, decimal ForexSelling, decimal BanknoteBuying, decimal BanknoteSelling)
+        public TCMBResponse(int unit, decimal forexBuying, decimal forexSelling, decimal banknoteBuying, decimal banknoteSelling)
         {
-            this.Unit = Unit;
-            this.ForexBuying = ForexBuying;
-            this.ForexSelling = ForexSelling;
-            this.BanknoteBuying = BanknoteBuying;
-            this.BanknoteSelling = BanknoteSelling;
+            this.Unit = unit;
+            this.ForexBuying = forexBuying;
+            this.ForexSelling = forexSelling;
+            this.BanknoteBuying = banknoteBuying;
+            this.BanknoteSelling = banknoteSelling;
         }
     }
 }

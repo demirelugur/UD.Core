@@ -11,23 +11,23 @@
         public EnumAlertState State { get; set; }
         public string[] Messages { get; set; } = [];
         public ApiResponse() : this(default, default) { }
-        public ApiResponse(EnumAlertState State, string[] Messages)
+        public ApiResponse(EnumAlertState state, string[] messages)
         {
-            this.State = State;
-            this.Messages = (Messages.IsNullOrEmptyOrAllNull() ? [this.State.GetDisplayNameLocalized()] : Messages);
+            this.State = state;
+            this.Messages = (messages.IsNullOrEmptyOrAllNull() ? [this.State.GetDisplayNameLocalized()] : messages);
         }
-        public static ApiResponse setError(params string[] Messages) => new(EnumAlertState.error, Messages);
-        public static ApiResponse setWarning(params string[] Messages) => new(EnumAlertState.warning, Messages);
+        public static ApiResponse setError(params string[] messages) => new(EnumAlertState.error, messages);
+        public static ApiResponse setWarning(params string[] messages) => new(EnumAlertState.warning, messages);
     }
     public class ApiResponse<T> : ApiResponse
     {
         public T Response { get; set; }
         public ApiResponse() : this(default, default, default) { }
-        public ApiResponse(T Response, EnumAlertState State, string[] Messages) : base(State, Messages)
+        public ApiResponse(T response, EnumAlertState state, string[] messages) : base(state, messages)
         {
-            this.Response = (State.IsFailed() ? this.GetDefaultValue() : Response);
+            this.Response = (state.IsFailed() ? GetDefaultValue() : response);
         }
-        private T GetDefaultValue()
+        private static T GetDefaultValue()
         {
             var t = typeof(T);
             if (t == typeof(string)) { return (T)(object)String.Empty; }

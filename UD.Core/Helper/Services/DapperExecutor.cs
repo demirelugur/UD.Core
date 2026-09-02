@@ -28,21 +28,15 @@
         public void Dispose()
         {
             if (this._disposed) { return; }
-            if (this._ownsConnection)
-            {
-                if (this.Connection.State != ConnectionState.Closed) { this.Connection.Close(); }
-                this.Connection.Dispose();
-            }
+            if (this.Connection.State != ConnectionState.Closed) { this.Connection.Close(); }
+            if (this._ownsConnection) { this.Connection.Dispose(); }
             this._disposed = true;
         }
         public async ValueTask DisposeAsync()
         {
             if (this._disposed) { return; }
-            if (this._ownsConnection)
-            {
-                await this.EnsureConnectionCloseAsync();
-                await this.Connection.DisposeAsync();
-            }
+            await this.EnsureConnectionCloseAsync();
+            if (this._ownsConnection) { await this.Connection.DisposeAsync(); }
             this._disposed = true;
         }
         [ActivatorUtilitiesConstructor]
@@ -50,10 +44,10 @@
         {
             this._ownsConnection = false;
         }
-        public DapperExecutor(DbConnection Connection, IDbTransaction? Transaction)
+        public DapperExecutor(DbConnection connection, IDbTransaction? transaction)
         {
-            this.Connection = Connection;
-            this.Transaction = Transaction;
+            this.Connection = connection;
+            this.Transaction = transaction;
             this._ownsConnection = true;
         }
         public DbConnection Connection { get; }

@@ -35,11 +35,11 @@
         public string FormattedFileSize => Convert.ToDouble(this.Size).ToFileSizeString();
         public bool HasFileValidationErrors(ICollection<IFormFile> files, out string[] errors) => HasFileValidationErrors(files, this, out errors);
         public FileUploadOptions() : this(default, default, default) { }
-        public FileUploadOptions(string[] Accept, long Size, byte FileCount)
+        public FileUploadOptions(string[] accept, long size, byte fileCount)
         {
-            this.Accept = Accept ?? [];
-            this.Size = Size;
-            this.FileCount = FileCount;
+            this.Accept = accept ?? [];
+            this.Size = size;
+            this.FileCount = fileCount;
         }
         public static bool HasFileValidationErrors(ICollection<IFormFile> files, FileUploadOptions fileRequest, out string[] errors)
         {
