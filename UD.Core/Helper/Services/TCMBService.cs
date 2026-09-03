@@ -22,7 +22,7 @@ namespace UD.Core.Helper.Services
         public TCMBService() { }
         private async Task<XDocument> GetXmlAsync(DateTime date, CancellationToken cancellationToken)
         {
-            if (this._dicXmlCache.TryGetValue(date, out XmlCacheItem _cachedXml)) { return _cachedXml.xml; }
+            if (this._dicXmlCache.TryGetValue(date, out var _cachedXml)) { return _cachedXml.xml; }
             var (hasError, dataBinary, _, ex) = await GetUrl(date).GetBinaryDataAsync(TimeSpan.FromSeconds(5), cancellationToken);
             if (hasError) { throw ex; }
             var parsedXml = XDocument.Parse(Encoding.UTF8.GetString(dataBinary));
@@ -35,12 +35,12 @@ namespace UD.Core.Helper.Services
             return doc.xml;
         }
         private static Uri GetUrl(DateTime date) => new(date == DateTime.Today ? "https://www.tcmb.gov.tr/kurlar/today.xml" : $"https://www.tcmb.gov.tr/kurlar/{date:yyyyMM}/{date:ddMMyyyy}.xml");
-        private static decimal ParseDecimalValue(XElement element) => (Decimal.TryParse(element?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal _result) ? _result : default);
+        private static decimal ParseDecimalValue(XElement element) => (Decimal.TryParse(element?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var _result) ? _result : default);
         private static TCMBResponse GetRate(XDocument xml, string code)
         {
             var node = xml.Descendants("Currency").FirstOrDefault(x => x.Attribute("CurrencyCode")?.Value == code);
             var data = new TCMBResponse();
-            if (Int32.TryParse(node.Element(nameof(data.Unit))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out int _valueInt)) { data.Unit = _valueInt; }
+            if (Int32.TryParse(node.Element(nameof(data.Unit))?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var _valueInt)) { data.Unit = _valueInt; }
             data.ForexBuying = ParseDecimalValue(node.Element(nameof(data.ForexBuying)));
             data.ForexSelling = ParseDecimalValue(node.Element(nameof(data.ForexSelling)));
             data.BanknoteBuying = ParseDecimalValue(node.Element(nameof(data.BanknoteBuying)));

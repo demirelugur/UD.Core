@@ -30,7 +30,7 @@
             var sb = new StringBuilder();
             while (value > 0)
             {
-                value = BigInteger.DivRem(value, chars.Length, out BigInteger _remainder);
+                value = BigInteger.DivRem(value, chars.Length, out var _remainder);
                 sb.Insert(0, chars[(int)_remainder]);
             }
             return sb.ToString();

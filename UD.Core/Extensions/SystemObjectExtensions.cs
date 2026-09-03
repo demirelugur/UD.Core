@@ -54,7 +54,7 @@
                 catch { return default; }
             }
             if (value is IDictionary _dic && _dic.Contains(key)) { return _dic[key].ParseOrDefault<TKey>(); }
-            if (value is IFormCollection _form && _form.TryGetStringValue(key, out string _formValue)) { return _formValue.ParseOrDefault<TKey>(); }
+            if (value is IFormCollection _form && _form.TryGetStringValue(key, out var _formValue)) { return _formValue.ParseOrDefault<TKey>(); }
             if (value is QueryString _qs && _qs.HasValue)
             {
                 var querydic = HttpUtility.ParseQueryString(_qs.Value);
@@ -176,7 +176,7 @@
                 }
                 if (value is String _s && !_s.IsNullOrEmpty())
                 {
-                    if (Int64.TryParse(_s, out long _valueLong)) { return _valueLong.TryToEnum<TEnum>(); }
+                    if (Int64.TryParse(_s, out var _valueLong)) { return _valueLong.TryToEnum<TEnum>(); }
                     if (Enum.TryParse(_s, true, out _enum)) { return _enum; }
                 }
             }

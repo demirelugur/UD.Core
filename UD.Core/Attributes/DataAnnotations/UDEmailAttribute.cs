@@ -21,7 +21,7 @@ namespace UD.Core.Attributes.DataAnnotations
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (TryValidators.TryMailAddress(email, out MailAddress _ma) && (this.Hosts.Length == 0 || this.IsHostAllowed(_ma.Host)))
+            if (TryValidators.TryMailAddress(email, out var _ma) && (this.Hosts.Length == 0 || this.IsHostAllowed(_ma.Host)))
             {
                 validationContext.SetValidatePropertyValue(_ma.Address.ToLowerInvariant());
                 return ValidationResult.Success;

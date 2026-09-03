@@ -67,7 +67,7 @@
                 if (DateTime.TryParse(_s, out _dt)) { return _dt; }
                 if (DateTimeOffset.TryParse(_s, out _dto)) { return _dto.DateTime; }
                 if (DateOnly.TryParse(_s, out _do)) { return _do.ToDateTime(timeOnly ?? default); }
-                if (Int64.TryParse(_s, out long _ticks)) { return new(_ticks); }
+                if (Int64.TryParse(_s, out var _ticks)) { return new(_ticks); }
             }
             return default;
         }
@@ -90,7 +90,7 @@
         /// <returns>Dönüştürülmüş değer</returns>
         public static object ChangeType(object value, Type type)
         {
-            var t = TryValidators.TryTypeIsNullable(type, out Type _baseType);
+            var t = TryValidators.TryTypeIsNullable(type, out var _baseType);
             if (value == null)
             {
                 if (t) { return null; }
@@ -119,11 +119,11 @@
             if (value is JToken _jTokenValue && _jTokenValue.IsNoneOrNullOrUndefined()) { return (default, default); }
             var valueString = value.ToStringOrEmpty();
             if (valueString == "") { return (default, default); }
-            _ = TryValidators.TryTypeIsNullable(propertyType, out Type _baseType);
+            _ = TryValidators.TryTypeIsNullable(propertyType, out var _baseType);
             if (_baseType.IsEnum)
             {
                 if (value.GetType() == _baseType) { return (value, _baseType); }
-                if (Enum.TryParse(_baseType, valueString, true, out object _enum)) { return (_enum, _baseType); }
+                if (Enum.TryParse(_baseType, valueString, true, out var _enum)) { return (_enum, _baseType); }
                 return (default, _baseType);
             }
             if (_baseType == typeof(bool))

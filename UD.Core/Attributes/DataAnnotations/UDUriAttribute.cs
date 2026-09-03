@@ -15,7 +15,7 @@
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (TryValidators.TryUri(valueString, out Uri _uri))
+            if (TryValidators.TryUri(valueString, out var _uri))
             {
                 validationContext.SetValidatePropertyValue(_uri.ToString().TrimEnd('/'));
                 return ValidationResult.Success;

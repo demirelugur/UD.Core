@@ -16,7 +16,7 @@
         public static bool IsViewableInBrowser(string path)
         {
             var uzn = Path.GetExtension(path).ToLower();
-            return (uzn == ".pdf" || (new FileExtensionContentTypeProvider().Mappings.TryGetValue(uzn, out string _value) && _value.StartsWith("image/")));
+            return (uzn == ".pdf" || (new FileExtensionContentTypeProvider().Mappings.TryGetValue(uzn, out var _value) && _value.StartsWith("image/")));
         }
         /// <summary><paramref name="iban"/> değerinin geçerli bir <see cref="TitleConstants.Iban"/> biçimine sahip olup olmadığını kontrol eder. Bu metod, IBAN numarasının uzunluğunu, karakterlerini ve doğrulama algoritmasını kullanarak geçerliliğini değerlendirir. IBAN numarası, ülke kodu, kontrol basamakları ve banka hesap numarası gibi bileşenlerden oluşur. Eğer verilen IBAN numarası geçerli ise <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu kontrol, finansal işlemlerde doğru ve geçerli IBAN numaralarının kullanılmasını sağlamak için önemlidir.</summary>
         public static bool IsIBANValid(string iban)
@@ -25,7 +25,7 @@
             if (!iban.Length.Between(15, 34) || iban.Any(x => !Char.IsLetterOrDigit(x))) { return false; }
             var rearranged = String.Concat(iban[4..], iban[..4]);
             var numericIban = String.Concat(rearranged.Select(x => Char.IsDigit(x) ? x.ToString() : (x - 'A' + 10).ToString()));
-            return BigInteger.TryParse(numericIban, out BigInteger _bi) && _bi % 97 == 1;
+            return BigInteger.TryParse(numericIban, out var _bi) && _bi % 97 == 1;
         }
         /// <summary><paramref name="value"/> değerinin güçlü bir şifre olup olmadığını kontrol eder. Bu metod, şifrenin minimum uzunlukta olup olmadığını ve en az bir rakam, bir küçük harf, bir büyük harf ve bir özel karakter içerip içermediğini değerlendirir. Eğer şifre bu kriterleri karşılıyorsa <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu kontrol, kullanıcıların güvenli şifreler oluşturmasını sağlamak için kullanılabilir.</summary>
         /// <param name="value">Kontrol edilecek şifre değeri.</param>

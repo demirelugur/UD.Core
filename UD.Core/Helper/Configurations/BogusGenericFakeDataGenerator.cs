@@ -141,7 +141,7 @@
         private static int GetSignificantDigits(Faker faker) => (MaximumLengthConstants.TRTaxIdentityNumber - (faker.Random.Bool(0.9f) ? 0 : (faker.Random.Bool(0.9f) ? 1 : 2)));
         private object CreateFakeInstance(string parameterName, Type type, Faker faker)
         {
-            if (TryValidators.TryTypeIsNullable(type, out Type _baseType)) { return faker.Random.Bool(this._nullChange) ? null : this.CreateFakeInstance(parameterName, _baseType, faker); }
+            if (TryValidators.TryTypeIsNullable(type, out var _baseType)) { return faker.Random.Bool(this._nullChange) ? null : this.CreateFakeInstance(parameterName, _baseType, faker); }
             if (type == typeof(string))
             {
                 if (this._valueStringFactories.TryGetValue(parameterName, out var factory)) { return factory(faker); }

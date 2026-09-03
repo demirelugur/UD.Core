@@ -84,7 +84,7 @@
             if (extension != "")
             {
                 if (extension[0] != '.') { extension = String.Concat(".", extension); }
-                if (new FileExtensionContentTypeProvider().Mappings.TryGetValue(extension, out string _v)) { return _v; }
+                if (new FileExtensionContentTypeProvider().Mappings.TryGetValue(extension, out var _e)) { return _e; }
             }
             return "application/octet-stream";
         }

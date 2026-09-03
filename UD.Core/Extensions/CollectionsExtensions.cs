@@ -57,7 +57,7 @@
         public static bool IsNullOrEmptyOrAllNull<T>(this IEnumerable<T> source)
         {
             if (source == null) { return true; } // Alternatif: (source == null || !source.Any() || source.All(x => x == null))
-            if (source.TryGetNonEnumeratedCount(out int _count) && _count == 0) { return true; }
+            if (source.TryGetNonEnumeratedCount(out var _count) && _count == 0) { return true; }
             foreach (var item in source) { if (item != null) { return false; } }
             return true;
         }

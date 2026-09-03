@@ -52,7 +52,7 @@
             {
                 this._sub = new() { { rightParameter, leftParameter } };
             }
-            protected override Expression VisitParameter(ParameterExpression node) => (this._sub.TryGetValue(node, out Expression _exp) ? _exp : node);
+            protected override Expression VisitParameter(ParameterExpression node) => (this._sub.TryGetValue(node, out var _exp) ? _exp : node);
         }
     }
 }
