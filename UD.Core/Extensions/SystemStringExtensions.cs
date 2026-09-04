@@ -97,7 +97,15 @@ namespace UD.Core.Extensions
         public static string CoalesceOrDefault(this string value, params string[] defaultValues)
         {
             value = value.ToStringOrEmpty();
-            if (value == "") { return (defaultValues ?? []).Select(x => x.ToStringOrEmpty()).FirstOrDefault(x => x != "") ?? ""; }
+            if (value == "")
+            {
+                string s;
+                foreach (var item in (defaultValues ?? []))
+                {
+                    s = item.ToStringOrEmpty();
+                    if (s != "") { return s; }
+                }
+            }
             return value;
         }
         /// <summary>Verilen dize deðerinin null veya boþ olup olmadýðýný kontrol eder.</summary>
