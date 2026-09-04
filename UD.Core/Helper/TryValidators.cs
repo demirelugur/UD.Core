@@ -152,7 +152,7 @@
         /// <returns>Geçerli bir URI ise <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool TryUri(string uriString, out Uri outvalue)
         {
-            try { outvalue = (Uri.TryCreate(uriString.ToStringOrEmpty(), UriKind.Absolute, out Uri _uri) && _uri.Scheme.Includes(Uri.UriSchemeHttp, Uri.UriSchemeHttps)) ? _uri : default; }
+            try { outvalue = (Uri.TryCreate(uriString.ToStringOrEmpty(), UriKind.Absolute, out var _uri) && _uri.Scheme.Includes(Uri.UriSchemeHttp, Uri.UriSchemeHttps)) ? _uri : default; }
             catch { outvalue = default; }
             return outvalue != null;
         }
@@ -260,7 +260,7 @@
         {
             try
             {
-                var q = ((TryUri(value, out Uri _u) && _u.Host.Contains("maps.google.com")) ? (new QueryString(_u.Query).ParseOrDefault<string>("q") ?? "") : value.ToStringOrEmpty()).Split(',').Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
+                var q = ((TryUri(value, out var _u) && _u.Host.Contains("maps.google.com")) ? (new QueryString(_u.Query).ParseOrDefault<string>("q") ?? "") : value.ToStringOrEmpty()).Split(',').Select(x => x.ToStringOrEmpty()).Where(x => x != "").ToArray();
                 if (q.Length == 2 && q.All(IsGoogleMapsCoordinateCheck))
                 {
                     outvalue = new($"https://maps.google.com/?q={String.Join(",", q)}");
@@ -275,7 +275,7 @@
                 return false;
             }
         }
-        private static bool IsGoogleMapsCoordinateCheck(string value) => (Decimal.TryParse(value.Trim(), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out decimal _r) && _r.Between(-180M, 180M));
+        private static bool IsGoogleMapsCoordinateCheck(string value) => (Decimal.TryParse(value.Trim(), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out var _d) && _d.Between(-180M, 180M));
         /// <summary>
         /// Verilen bir metni, belirtilen diller arasında asenkron olarak çevirir.
         /// <para>Bu metot, çeviri işlemi için Google Çeviri API&#39;sini kullanarak, verilen &quot;<paramref name="value"/>&quot; parametresindeki metni &quot;<paramref name="from"/>&quot; dilinden &quot;<paramref name="to"/>&quot; diline çevirir. Varsayılan olarak &quot;<paramref name="from"/>&quot; dili Türkçe (tr) olarak ayarlanmıştır. Eğer çeviri işlemi başarılı olursa, metnin çevirisi ve işlem durumu döndürülür. Hata durumunda, boş bir değer ve <see langword="false"/> durumu döner.</para>

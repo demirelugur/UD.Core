@@ -60,7 +60,7 @@
         }
         public virtual async Task DeleteByIdAsync(object id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            if (TryGetKeyValues(id, out object[] _keyValues))
+            if (TryGetKeyValues(id, out var _keyValues))
             {
                 var entity = await base.DbSet.FindAsync(_keyValues, cancellationToken);
                 await this.DeleteAsync(entity, autoSave, cancellationToken);
@@ -102,7 +102,7 @@
         }
         public virtual async Task UpdateAsync(object id, TUpdateDto updateDto, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            if (TryGetKeyValues(id, out object[] _keyValues))
+            if (TryGetKeyValues(id, out var _keyValues))
             {
                 var entity = await base.DbSet.FindAsync(_keyValues, cancellationToken);
                 if (entity != null)

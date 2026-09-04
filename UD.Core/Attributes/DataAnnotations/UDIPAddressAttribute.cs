@@ -17,7 +17,7 @@
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (IPAddress.TryParse(ip, out IPAddress _ip))
+            if (IPAddress.TryParse(ip, out var _ip))
             {
                 validationContext.SetValidatePropertyValue(_ip.MapToIPv4().ToString());
                 return ValidationResult.Success;

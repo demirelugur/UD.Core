@@ -73,7 +73,7 @@ namespace UD.Core.Extensions
             var sb = new StringBuilder(value.Length);
             foreach (var item in value.ToCharArray())
             {
-                if (_charReplacements.TryGetValue(item, out char _v)) { sb.Append(_v); }
+                if (_charReplacements.TryGetValue(item, out var _c)) { sb.Append(_c); }
                 else if (item == ' ') { sb.Append('-'); }
                 else if (Array.IndexOf(_charsToRemove, item) == -1) { sb.Append(item); }
             }
@@ -89,7 +89,7 @@ namespace UD.Core.Extensions
         /// </summary>
         /// <param name="phoneNumberTR">Dönüþtürülmek istenen telefon numarasý.</param>
         /// <returns>Biçimlenmiþ Türk telefon numarasý ya da geçerli deðilse boþ bir string.</returns>
-        public static string ToPrettyPhoneNumberTR(this string phoneNumberTR) => (TryValidators.TryPhoneNumberTR(phoneNumberTR, out string _s) ? $"({_s.Substring(0, 3)}) {_s.Substring(3, 3)}-{_s.Substring(6, 4)}" : "");
+        public static string ToPrettyPhoneNumberTR(this string phoneNumberTR) => (TryValidators.TryPhoneNumberTR(phoneNumberTR, out var _s) ? $"({_s.Substring(0, 3)}) {_s.Substring(3, 3)}-{_s.Substring(6, 4)}" : "");
         /// <summary>Verilen string deðer null veya boþ (&quot;&quot;) ise, parametre olarak girilen alternatif string deðerler arasýnda ilk dolu olaný döndürür. Eðer hiçbir alternatif deðer dolu deðilse boþ string (&quot;&quot;) döner.</summary>
         /// <param name="value">Kontrol edilecek ana string deðer.</param>
         /// <param name="defaultValues">Alternatif string deðerler listesi.</param>
@@ -131,8 +131,8 @@ namespace UD.Core.Extensions
         /// <returns><see langword="true"/>, eðer e-Posta adresi geçerli ve host kýsmý belirtilen host ile eþleþiyorsa; aksi takdirde <see langword="false"/>.</returns>
         public static bool IsMailFromHost(this string value, string host)
         {
-            host = host.ToStringOrEmpty().TrimStart('@').ToLower();
-            return TryValidators.TryMailAddress(value, out MailAddress _ma) && _ma.Host == host;
+            host = host.ToStringOrEmpty().TrimStart('@').ToLowerInvariant();
+            return TryValidators.TryMailAddress(value, out var _ma) && _ma.Host == host;
         }
         /// <summary>Verilen dize deðerinin geçerli bir URI olup olmadýðýný kontrol eder.</summary>
         /// <param name="value">Kontrol edilecek dize (URI).</param>

@@ -12,7 +12,7 @@
             get { return _isbn10; }
             set
             {
-                if (TryIsValid(value, out string _c)) { this.SetISBN(_c); }
+                if (TryIsValid(value, out var _c)) { this.SetISBN(_c); }
                 if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException("ISBN is incompatible!"); }
                 throw new NotSupportedException($"{TitleConstants.Isbn} uyumsuzdur!");
             }
@@ -22,7 +22,7 @@
             get { return _isbn13; }
             set
             {
-                if (TryIsValid(value, out string _c)) { this.SetISBN(_c); }
+                if (TryIsValid(value, out var _c)) { this.SetISBN(_c); }
                 if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException("ISBN is incompatible!"); }
                 throw new NotSupportedException($"{TitleConstants.Isbn} uyumsuzdur!");
             }

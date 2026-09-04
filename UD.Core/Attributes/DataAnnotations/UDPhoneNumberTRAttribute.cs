@@ -15,9 +15,9 @@
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (TryValidators.TryPhoneNumberTR(phoneTR, out string _phonetr))
+            if (TryValidators.TryPhoneNumberTR(phoneTR, out var _phoneTR))
             {
-                validationContext.SetValidatePropertyValue(_phonetr);
+                validationContext.SetValidatePropertyValue(_phoneTR);
                 return ValidationResult.Success;
             }
             if (this.ErrorMessage.IsNullOrEmpty())

@@ -44,7 +44,7 @@
         /// <returns>İstemcinin IPv4 formatındaki IP adresi veya bulunamazsa <see cref="IPAddress.Any"/>.</returns>
         public static IPAddress GetIPAddress(this HttpContext context)
         {
-            if (IPAddress.TryParse(context.Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "", out IPAddress _ip)) { return _ip.MapToIPv4(); }
+            if (IPAddress.TryParse(context.Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "", out var _ip)) { return _ip.MapToIPv4(); }
             _ip = context.Connection.RemoteIpAddress;
             return (_ip == null ? IPAddress.Any : _ip.MapToIPv4());
         }
@@ -55,7 +55,7 @@
         /// <summary><paramref name="context"/> için bir işleme geri alma (rollback) işareti olup olmadığını kontrol eder. Eğer işaret varsa, işlem sırasında bir hata oluştuğunu ve veritabanı işlemlerinin geri alınması gerektiğini belirtir.</summary>
         /// <param name="context">İşlem geri alma işareti kontrol edilecek <see cref="HttpContext"/> nesnesi.</param>
         /// <returns><see langword="true"/> ise işlem geri alma işareti mevcut, aksi takdirde <see langword="false"/>.</returns>
-        public static bool IsTransactionRollbackRequired(this HttpContext context) => (context.Items.TryGetValue(_transactionRollbackKey, out object _value) && _value is Boolean _b && _b);
+        public static bool IsTransactionRollbackRequired(this HttpContext context) => (context.Items.TryGetValue(_transactionRollbackKey, out var _value) && _value is Boolean _b && _b);
         #endregion
         #region IFormCollection
         /// <summary>Form koleksiyonundan belirtilen anahtar ile bir dize değerini alır.</summary>
@@ -65,7 +65,7 @@
         /// <returns>Değer başarıyla alındıysa <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool TryGetStringValue(this IFormCollection form, string key, out string outvalue)
         {
-            if (form.TryGetValue(key.ToStringOrEmpty(), out StringValues _sv) && _sv.Count > 0)
+            if (form.TryGetValue(key.ToStringOrEmpty(), out var _sv) && _sv.Count > 0)
             {
                 outvalue = _sv.ToStringOrEmpty();
                 return true;
@@ -84,7 +84,7 @@
         {
             key = key.ToStringOrEmpty();
             if (!key.EndsWith("[]")) { key = String.Concat(key, "[]"); }
-            if (form.TryGetValue(key, out StringValues _sv) && _sv.Count > 0)
+            if (form.TryGetValue(key, out var _sv) && _sv.Count > 0)
             {
                 outvalues = _sv.Select(x => x.ParseOrDefault<TKey>()).ToArray();
                 return true;

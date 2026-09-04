@@ -115,7 +115,7 @@ namespace UD.Core.Extensions
         }
         private static (string columnName, string sqlDbTypeName) GetPrimaryKeyInfo(Type tableType)
         {
-            if (TryValidators.TryTableisKeyAttribute(tableType, out PropertyInfo[] _properties) && _properties.Length == 1 && _properties[0].IsPK() && _properties[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
+            if (TryValidators.TryTableisKeyAttribute(tableType, out var _properties) && _properties.Length == 1 && _properties[0].IsPK() && _properties[0].GetDatabaseGeneratedOption() == DatabaseGeneratedOption.Identity)
             {
                 var propertytype = _properties[0].PropertyType;
                 if (propertytype.IsEnum) { propertytype = Enum.GetUnderlyingType(propertytype); }

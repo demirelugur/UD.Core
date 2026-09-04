@@ -16,7 +16,7 @@
                 validationContext.SetValidatePropertyValue(null);
                 return ValidationResult.Success;
             }
-            if (TryValidators.TryMACAddress(valueString, out string _mac))
+            if (TryValidators.TryMACAddress(valueString, out var _mac))
             {
                 validationContext.SetValidatePropertyValue(_mac);
                 return ValidationResult.Success;

@@ -44,7 +44,7 @@
         protected abstract IQueryable<TEntity> ApplyFiltering(IQueryable<TEntity> query, TSearchDto searchDto);
         public virtual async Task<TEntityDto?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
         {
-            if (TryGetKeyValues(id, out object[] _keyValues))
+            if (TryGetKeyValues(id, out var _keyValues))
             {
                 var entity = await base.DbSet.FindAsync(_keyValues, cancellationToken);
                 if (entity != null) { return this.Mapper.Map<TEntityDto>(entity); }
