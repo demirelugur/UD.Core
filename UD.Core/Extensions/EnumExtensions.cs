@@ -6,6 +6,13 @@
     using UD.Core.Helper;
     public static class EnumExtensions
     {
+        internal static (int maxLength, string chars) GetFormatInfo(this EnumGuidFormat format) => format switch
+        {
+            EnumGuidFormat.Base32 => (26, "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
+            EnumGuidFormat.Base36 => (25, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+            EnumGuidFormat.Base62 => (22, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"),
+            _ => throw format.ArgumentOutOfRange(nameof(format))
+        };
         /// <summary><paramref name="value"/> değerinin, <see cref="EnumAlertState.warning"/> veya <see cref="EnumAlertState.error"/> değerlerini içerip içermediğini kontrol eder. Eğer <paramref name="value"/> değeri bu iki değerden herhangi birini içeriyorsa, <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
         /// <param name="value">Kontrol edilecek EnumAlertState değeri.</param>
         /// <returns>Belirtilen değerlerin herhangi birini içeriyorsa <see langword="true"/>, aksi takdirde <see langword="false"/>.</returns>
@@ -130,12 +137,27 @@
                 _ => throw type.ArgumentOutOfRange(nameof(type))
             };
         }
-        internal static (int maxLength, string chars) GetFormatInfo(this EnumGuidFormat format) => format switch
+        /// <summary><paramref name="enum"/> değerinden belirtilen bayrakları temizler ve yeni bir enum değeri döndürür. Bu yöntem, bit bayraklarını temsil eden enum türleri için kullanışlıdır.</summary>
+        /// <typeparam name="T">Enum türü</typeparam>
+        /// <param name="enum">Bayrakları temizlenecek enum değeri</param>
+        /// <param name="flags">Temizlenecek bayraklar</param>
+        /// <returns>Yeni enum değeri</returns>
+        public static T ClearFlag<T>(this Enum @enum, params T[] flags)
         {
-            EnumGuidFormat.Base32 => (26, "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
-            EnumGuidFormat.Base36 => (25, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-            EnumGuidFormat.Base62 => (22, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"),
-            _ => throw format.ArgumentOutOfRange(nameof(format))
-        };
+            var result = Convert.ToInt64(@enum);
+            result = (flags ?? []).Aggregate(result, (current, flag) => current & ~Convert.ToInt64(flag));
+            return (T)Enum.Parse(@enum.GetType(), result.ToString());
+        }
+        /// <summary><paramref name="enum"/> değerine belirtilen bayrakları ekler ve yeni bir enum değeri döndürür. Bu yöntem, bit bayraklarını temsil eden enum türleri için kullanışlıdır.</summary>
+        /// <typeparam name="T">Enum türü</typeparam>
+        /// <param name="enum">Bayrakları eklenecek enum değeri</param>
+        /// <param name="flags">Eklenecek bayraklar</param>
+        /// <returns>Yeni enum değeri</returns>
+        public static T SetFlag<T>(this Enum @enum, params T[] flags)
+        {
+            var result = Convert.ToInt64(@enum);
+            result = (flags ?? []).Aggregate(result, (current, flag) => current | Convert.ToInt64(flag));
+            return (T)Enum.Parse(@enum.GetType(), result.ToString());
+        }
     }
 }
