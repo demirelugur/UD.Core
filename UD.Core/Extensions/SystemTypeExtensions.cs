@@ -4,7 +4,8 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using UD.Core.Helper;
-    using UD.Core.Helper.Results;
+    using UD.Core.Results;
+
     public static class SystemTypeExtensions
     {
         /// <summary>Verilen türün (Type) bir tabloya eşlendiğini kontrol eder. Türün, <see cref="TableAttribute"/> ile işaretlenmiş olup olmadığını kontrol ederek tabloya eşlenip eşlenmediğini döndürür.</summary>

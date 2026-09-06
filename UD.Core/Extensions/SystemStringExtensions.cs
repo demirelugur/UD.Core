@@ -3,7 +3,6 @@ namespace UD.Core.Extensions
     using Newtonsoft.Json.Linq;
     using System;
     using System.Globalization;
-    using System.Net.Mail;
     using System.Numerics;
     using System.Reflection;
     using System.Text;

@@ -3,14 +3,13 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Primitives;
     using System;
     using System.Globalization;
     using System.Linq;
     using System.Net;
     using UD.Core.Enums;
     using UD.Core.Helper;
-    using UD.Core.Helper.Managements.Files;
+    using UD.Core.Managements.Files;
     public static class AspNetCoreExtensions
     {
         #region HttpContext
