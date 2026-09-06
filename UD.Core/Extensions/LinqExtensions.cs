@@ -6,10 +6,11 @@
     using System.Linq;
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
+    using UD.Core.Abstractions;
     using UD.Core.Helper;
-    using UD.Core.Helper.Configurations;
-    using UD.Core.Helper.Pages;
-    using UD.Core.Helper.Results;
+    using UD.Core.Pages;
+    using UD.Core.Results;
+
     public static class LinqExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>
@@ -136,21 +137,23 @@
         /// <para>
         /// <example>
         /// <para>SQL Örneği:</para>
-        /// SELECT * FROM [dbo].[LoremIpsum] ORDER BY [Key] OFFSET ((@pagenumber - 1) * @size) ROWS FETCH NEXT @size ROWS ONLY
+        /// SELECT * FROM [dbo].[LoremIpsum] ORDER BY [Key] OFFSET (@pagenumber * @size) ROWS FETCH NEXT @size ROWS ONLY
         /// </example>
         /// </para>
         /// </summary>
         /// <param name="source">Sayfalama işlemi yapılacak IOrderedQueryable kaynağı.</param>
-        /// <param name="pageNumber">Sayfa numarası (1 tabanlı).</param>
+        /// <param name="pageNumber">Sayfa numarası (0 tabanlı).</param>
         /// <param name="size">Her sayfada gösterilecek kayıt sayısı.</param>
         /// <returns>Paginasyon yapılmış IQueryable kaynak.</returns>
         public static IQueryable<T> Paginate<T>(this IOrderedQueryable<T> source, int pageNumber, int size)
         {
-            pageNumber = Math.Max(1, pageNumber);
+            pageNumber = Math.Max(0, pageNumber);
             size = Math.Max(1, size);
-            if (pageNumber == 1) { return source.Take(size); }
-            var skip = ((pageNumber - 1) * size);
-            return source.Skip(skip).Take(size);
+            if (pageNumber == 0) { return source.Take(size); }
+            var skipLong = ((long)pageNumber * size);
+            if (skipLong > Int32.MaxValue) { skipLong = Int32.MaxValue; }
+            var skipInt = (int)skipLong;
+            return source.Skip(skipInt).Take(size);
         }
     }
 }

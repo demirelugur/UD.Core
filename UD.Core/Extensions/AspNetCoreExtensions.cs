@@ -10,7 +10,8 @@
     using System.Net;
     using UD.Core.Enums;
     using UD.Core.Helper;
-    using UD.Core.Helper.Managements.Files;
+    using UD.Core.Managements.Files;
+
     public static class AspNetCoreExtensions
     {
         #region HttpContext

@@ -6,9 +6,9 @@ namespace UD.Core.Attributes.DataAnnotations
     using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class UDIBANAttribute : ValidationAttribute
+    public sealed class UDIbanAttribute : ValidationAttribute
     {
-        public UDIBANAttribute() { }
+        public UDIbanAttribute() { }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var valueString = value.ToStringOrEmpty().ToUpper();

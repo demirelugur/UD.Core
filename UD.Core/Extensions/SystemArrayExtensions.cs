@@ -5,7 +5,8 @@
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Helper;
-    using UD.Core.Helper.Managements.Files;
+    using UD.Core.Managements.Files;
+
     public static class SystemArrayExtensions
     {
         /// <summary>Hata mesajları dizisini iç içe geçmiş istisnalara dönüştürür.</summary>

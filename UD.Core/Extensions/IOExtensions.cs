@@ -1,7 +1,8 @@
 ﻿namespace UD.Core.Extensions
 {
     using System.IO;
-    using UD.Core.Helper.Managements.Files;
+    using UD.Core.Managements.Files;
+
     public static class IOExtensions
     {
         /// <summary>Belirtilen kaynak dizinini hedef dizine kopyalar.</summary>

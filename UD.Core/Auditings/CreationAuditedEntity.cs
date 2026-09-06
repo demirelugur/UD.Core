@@ -2,7 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
-    using UD.Core.Helper.Configurations;
+    using UD.Core.Abstractions;
     public interface IHasCreationTime
     {
         DateTime CreationTime { get; set; }

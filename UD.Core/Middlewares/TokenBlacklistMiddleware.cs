@@ -3,8 +3,9 @@
     using Microsoft.AspNetCore.Http;
     using UD.Core.Extensions;
     using UD.Core.Helper;
-    using UD.Core.Helper.Responses;
-    using UD.Core.Helper.Services;
+    using UD.Core.Responses;
+    using UD.Core.Services;
+
     public sealed class TokenBlacklistMiddleware
     {
         private readonly RequestDelegate _next;

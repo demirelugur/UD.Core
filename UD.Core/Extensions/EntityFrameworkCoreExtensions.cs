@@ -14,8 +14,8 @@ namespace UD.Core.Extensions
     using System.Text;
     using UD.Core.Attributes;
     using UD.Core.Auditings;
+    using UD.Core.Databases;
     using UD.Core.Helper;
-    using UD.Core.Helper.Databases;
     public static class EntityFrameworkCoreExtensions
     {
         #region DbContext
