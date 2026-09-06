@@ -1,7 +1,6 @@
 namespace UD.Core.Attributes.DataAnnotations
 {
     using System.ComponentModel.DataAnnotations;
-    using System.Net.Mail;
     using UD.Core.Extensions;
     using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;

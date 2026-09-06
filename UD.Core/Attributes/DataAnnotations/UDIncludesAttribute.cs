@@ -35,14 +35,14 @@
                         return ValidationResult.Success;
                     }
                 }
-                else { contains = this.Values.Select(x => x.ToString()).Contains(_s); }
+                else { contains = this.Values.Any(x => String.Equals(x?.ToString(), _s, StringComparison.Ordinal)); }
             }
-            else if (value is (Byte or Int16 or Int32 or Int64))
+            else if (value.GetType().IsEnum || value is (Byte or Int16 or Int32 or Int64))
             {
                 var valueLong = Convert.ToInt64(value);
-                contains = this.Values.Any(v => Convert.ToInt64(v) == valueLong);
+                contains = this.Values.Any(v => v != null && Convert.ToInt64(v) == valueLong);
             }
-            else { contains = this.Values.Any(v => v.ToString() == value.ToString()); }
+            else { contains = this.Values.Any(v => String.Equals(v?.ToString(), value.ToString(), StringComparison.Ordinal)); }
             return (contains == this.IsEqual ? ValidationResult.Success : this.ToResult(validationContext));
         }
         private ValidationResult ToResult(ValidationContext validationContext)

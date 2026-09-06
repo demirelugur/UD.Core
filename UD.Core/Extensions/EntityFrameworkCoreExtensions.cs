@@ -10,7 +10,6 @@ namespace UD.Core.Extensions
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq.Expressions;
-    using System.Reflection;
     using System.Text;
     using UD.Core.Attributes;
     using UD.Core.Auditings;
