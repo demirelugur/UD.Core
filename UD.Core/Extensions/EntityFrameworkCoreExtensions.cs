@@ -28,9 +28,8 @@ namespace UD.Core.Extensions
         {
             var entry = context.Entry(entity);
             var properties = typeof(T).GetProperties().Where(x => x.IsMapped() && entry.Property(x.Name).IsModified).ToArray();
-            var columns = (expressions ?? []).Select(x => x.GetMemberName()).ToArray();
-            if (columns.Length == 0) { return properties.Length > 0; }
-            return properties.Any(x => columns.Contains(x.Name));
+            var columns = (expressions ?? []).Select(x => x.GetMemberName()).ToHashSet();
+            return (columns.Count == 0 ? properties.Length > 0 : properties.Any(x => columns.Contains(x.Name)));
         }
         /// <summary>Belirli bir bileþik anahtar(composite key) özelliði ile eski varlýðýn güncellenmesini saðlar.</summary>
         public static async Task<T> SetCompositeKeyAsync<T, CompositeKey>(this DbContext context, bool autoSave, T oldEntity, Expression<Func<T, CompositeKey>> compositeKey, CompositeKey compositeKeyNewValue, CancellationToken cancellationToken = default) where T : class, new()
