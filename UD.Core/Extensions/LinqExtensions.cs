@@ -12,7 +12,6 @@
     using UD.Core.Helper;
     using UD.Core.Pages;
     using UD.Core.Results;
-
     public static class LinqExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>
