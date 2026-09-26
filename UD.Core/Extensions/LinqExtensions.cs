@@ -3,14 +3,15 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Query;
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Linq.Dynamic.Core;
     using System.Linq.Expressions;
     using UD.Core.Abstractions;
+    using UD.Core.Enums;
     using UD.Core.Helper;
     using UD.Core.Pages;
     using UD.Core.Results;
-
     public static class LinqExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>
@@ -110,6 +111,32 @@
             else { orderedSource = source.OrderByDynamic(ordering); }
             var items = await orderedSource.Paginate(pageNumber, size).ToArrayAsync(cancellationToken);
             return new(pageNumber, size, items, p);
+        }
+        /// <summary><paramref name="source"/> IQueryable kaynağını, <paramref name="dicOrdering"/> parametresine göre sıralar. Sıralama sırasında bir hata oluşursa, geçerli UI kültürüne bağlı olarak İngilizce veya Türkçe bir hata mesajı ile birlikte ArgumentException fırlatır.</summary>
+        /// <typeparam name="T">Sorgu sonucundaki öğelerin tipi.</typeparam>
+        /// <param name="source">Sıralanacak IQueryable kaynağı.</param>
+        /// <param name="dicOrdering">Sıralama ifadelerini ve yönlerini içeren sözlük.</param>
+        /// <returns>Sıralanmış IOrderedQueryable kaynağı.</returns>
+        /// <exception cref="ArgumentException">Sıralama işlemi sırasında bir hata oluşursa fırlatılır.</exception>
+        public static IOrderedQueryable<T> OrderByDynamic<T>(this IQueryable<T> source, Dictionary<string, EnumOrder> dicOrdering)
+        {
+            var list = new List<string>();
+            foreach (var item in dicOrdering)
+            {
+                if (item.Key.IsNullOrEmpty())
+                {
+                    if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("The sort field cannot be left blank", nameof(source)); }
+                    throw new ArgumentException("Sıralama alanı boş olamaz.", nameof(source));
+                }
+                if (!Enum.IsDefined(item.Value))
+                {
+                    if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"Invalid sort direction: \"{item.Value}\".", nameof(source)); }
+                    throw new ArgumentException($"Geçersiz sıralama yönü: \"{item.Value}\".", nameof(source));
+                }
+                var key = String.Concat(item.Key.Substring(0, 1).ToUpper(CultureInfo.GetCultureInfo(1033)), item.Key.Substring(1)).Trim();
+                list.Add(String.Concat(key, " ", item.Value.ToString("g")));
+            }
+            return source.OrderByDynamic(String.Join(", ", list));
         }
         /// <summary><paramref name="source"/> IQueryable kaynağını, <paramref name="ordering"/> parametresine göre sıralar. Sıralama sırasında bir hata oluşursa, geçerli UI kültürüne bağlı olarak İngilizce veya Türkçe bir hata mesajı ile birlikte InvalidOperationException fırlatır.</summary>
         /// <typeparam name="T">Sorgu sonucundaki öğelerin tipi.</typeparam>

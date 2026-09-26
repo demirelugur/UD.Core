@@ -1,3 +1,4 @@
+import { message } from "antd";
 const GuidEmpty = '00000000-0000-0000-0000-000000000000';
 const GuidMaxValue = 'FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF';
 const beautifyPhoneNumber = (value) => {
@@ -17,8 +18,8 @@ const beautifyTurkishPlate = (value) => {
 const copyAsync = async (copiedData) => {
     try {
         await navigator.clipboard.writeText(copiedData);
-        alert('Kopyalama başarılı');
-    } catch (_) { alert('Kopyalama başarısız'); }
+        message.success('Kopyalama başarılı');
+    } catch (_) { message.error('Kopyalama başarısız'); }
 };
 const decodeTokenPayload = (token) => {
     if (isNullOrEmpty(token)) { return null; }
@@ -33,6 +34,21 @@ const decodeTokenPayload = (token) => {
     } catch { return null; }
 };
 const distinct = (array) => [...new Set(array)];
+const downloadFile = (path, title) => {
+    if (typeof path !== 'string') { path = String(path || ''); }
+    path = path.trim();
+    if (path.length > 0 && path[0] === '/') { path = path.slice(1); }
+    if (isNullOrEmpty(path)) { throw new Error('Dosya yolu boş olamaz'); }
+    if (isNullOrEmpty(title)) { throw new Error('Dosya başlığı boş olamaz'); }
+    let link = document.createElement("a");
+    let baseUrl = import.meta.env.BASE_URL || "/";
+    link.href = baseUrl.concat(path);
+    link.download = title;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    return;
+};
 const generateGuid = () => {
     if (typeof crypto === 'object' && typeof crypto.randomUUID === 'function') { return crypto.randomUUID(); }
     let r, v;
@@ -86,8 +102,11 @@ const isValidEmail = (value) => {
     let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(value);
 };
-const isValidGuid = (value) => {
-    if (isNullOrEmpty(value)) { return (typeof value === 'string' && value === GuidEmpty); }
+const isValidGuid = (value, isIncludeGuidEmpty) => {
+    if (isNullOrEmpty(value)) {
+        if (typeof isIncludeGuidEmpty === 'boolean' && isIncludeGuidEmpty && typeof value === 'string' && value === GuidEmpty) { return true; }
+        return false;
+    }
     let guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
     return guidRegex.test(String(value).trim());
 };
@@ -130,6 +149,7 @@ export const objectHelper = {
     copyAsync,
     decodeTokenPayload,
     distinct,
+    downloadFile,
     generateGuid,
     groupBy,
     isNotNullOrEmpty,
