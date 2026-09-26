@@ -18,7 +18,7 @@ namespace UD.Core.Extensions
     public static class EntityFrameworkCoreExtensions
     {
         #region DbContext
-        /// <summary>Belirtilen varlýðýn (entity) bir veya daha fazla özelliðinin deðiþtirilip deðiþtirilmediðini kontrol eder.</summary>
+        /// <summary><paramref name="context"/> üzerinde izlenen <paramref name="entity"/> nesnesinin belirtilen property&#39;lerinin deðiþip deðiþmediðini kontrol eder. Eðer entity'nin durumu <see cref="EntityState.Modified"/> ise ve belirtilen property&#39;lerden en az biri deðiþmiþse <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
         /// <typeparam name="T">Kontrol edilecek varlýk türü.</typeparam>
         /// <param name="context">DbContext örneði.</param>
         /// <param name="entity">Deðiþiklik durumu kontrol edilecek varlýk.</param>
@@ -27,6 +27,7 @@ namespace UD.Core.Extensions
         public static bool IsModified<T>(this DbContext context, T entity, params Expression<Func<T, object>>[] expressions) where T : class
         {
             var entry = context.Entry(entity);
+            if (entry.State != EntityState.Modified) { return false; }
             var properties = typeof(T).GetProperties().Where(x => x.IsMapped() && entry.Property(x.Name).IsModified).ToArray();
             var columns = (expressions ?? []).Select(x => x.GetMemberName()).ToHashSet();
             return (columns.Count == 0 ? properties.Length > 0 : properties.Any(x => columns.Contains(x.Name)));
