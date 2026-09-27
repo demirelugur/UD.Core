@@ -1,6 +1,4 @@
-﻿using UD.Core.Helper;
-
-namespace UD.Core.Generates
+﻿namespace UD.Core.Generates
 {
     using Microsoft.IdentityModel.Tokens;
     using System;

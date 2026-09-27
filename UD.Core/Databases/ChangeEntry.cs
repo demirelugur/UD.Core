@@ -5,8 +5,6 @@
     using System.Linq;
     using System.Reflection;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
-
     public sealed class ChangeEntry
     {
         public string EntityName { get; set; }
@@ -33,7 +31,7 @@
             if (value == null) { return Array.Empty<byte>().ComputeHash(true); }
             if (value is String _s) { return _s.ComputeHash(true); }
             if (value is byte[] _byteArray) { return _byteArray.ComputeHash(true); }
-            throw new NotSupportedException($"{nameof(ComputeHash)} metodu sadece null, string ve byte[] değerlerini destekler.");
+            throw new NotSupportedException($"{nameof(ComputeHash)} metodu, string ve byte[] tiplerini destekler.");
         }
         private static object GetPKValue(object entity, Type entityType)
         {
