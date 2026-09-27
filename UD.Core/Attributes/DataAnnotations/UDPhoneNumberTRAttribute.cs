@@ -20,11 +20,7 @@
                 validationContext.SetValidatePropertyValue(_phoneTR);
                 return ValidationResult.Success;
             }
-            if (this.ErrorMessage.IsNullOrEmpty())
-            {
-                this.ErrorMessage = $"{validationContext.DisplayName}, (xxx) xxx-xxxx biçimine uygun telefon numarası olmalıdır!";
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid phone number in the format of (xxx) xxx-xxxx!"; }
-            }
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, (xxx) xxx-xxxx biçimine uygun telefon numarası olmalıdır!"; }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

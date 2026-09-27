@@ -5,7 +5,6 @@
     using System.Net;
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
-    using UD.Core.Resources;
     using static UD.Core.Helper.GlobalConstants;
     public interface IClientRequestInfo
     {
@@ -20,11 +19,11 @@
         public bool Equals(ClientRequestInfo other) => (other != null && this.IsMobil == other.IsMobil && this.IpAddress == other.IpAddress);
         #endregion
         [UDRequired]
-        [Display(Name = nameof(DisplayNames.ClientRequestInfoResultMobile), ResourceType = typeof(DisplayNames))]
+        [Display(Name = "Mobil mi?")]
         public bool IsMobil { get; set; }
         [UDStringLength(MaximumLengthConstants.IPAddress)]
         [UDIPAddress]
-        [Display(Name = nameof(DisplayNames.ClientRequestInfoResultIpAddress), ResourceType = typeof(DisplayNames))]
+        [Display(Name = "IP Adresi")]
         public string? IpAddress { get; set; }
         public ClientRequestInfo() : this(default, default) { }
         public ClientRequestInfo(bool isMobil, object ipAddress)

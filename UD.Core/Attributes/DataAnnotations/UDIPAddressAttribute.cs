@@ -4,7 +4,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Net;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDIPAddressAttribute : ValidationAttribute
     {
@@ -22,11 +21,7 @@
                 validationContext.SetValidatePropertyValue(_ip.MapToIPv4().ToString());
                 return ValidationResult.Success;
             }
-            if (this.ErrorMessage.IsNullOrEmpty())
-            {
-                this.ErrorMessage = $"{validationContext.DisplayName}, geçerli bir IP adresi olmalıdır!";
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid IP address!"; }
-            }
+            if (this.ErrorMessage.IsNullOrEmpty()) {  this.ErrorMessage = $"{validationContext.DisplayName}, geçerli bir IP adresi olmalıdır!"; }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

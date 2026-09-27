@@ -2,7 +2,6 @@
 {
     using System;
     using System.Globalization;
-    using UD.Core.Helper;
     using UD.Core.Results;
     using static UD.Core.Helper.GlobalConstants;
     public static class SystemDateExtensions
@@ -78,11 +77,7 @@
         /// <summary><paramref name="basDate"/> ile <paramref name="bitDate"/> arasındaki farkı yıl, ay, gün ve saat:dakika:saniye biçiminde hesaplar. Başlangıç tarihi bitiş tarihinden sonra ise hata fırlatır.</summary>
         public static DateIntervalResult GetDateInterval(this DateTime basDate, DateTime bitDate)
         {
-            if (basDate > bitDate)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("The start date must be a value before the end date!"); }
-                throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!");
-            }
+            if (basDate > bitDate) { throw new ArgumentException("Başlangıç tarihi, Bitiş Tarihinden önce bir değer olmalıdır!"); }
             var yil = bitDate.Year - basDate.Year;
             var ay = bitDate.Month - basDate.Month;
             var gun = bitDate.Day - basDate.Day;
@@ -123,32 +118,15 @@
         /// <summary>TimeSpan değerini gün, saat, dakika ve saniye (milisaniye dahil) bileşenlerine ayırarak okunabilir bir metne dönüştürür. Negatif süreleri destekler.</summary>
         public static string ToPretty(this TimeSpan timeSpan)
         {
-            var isEnglish = Checks.IsEnglishCurrentUICulture;
-            var secondText = isEnglish ? "sec." : "sn.";
+            var secondText = "sn.";
             if (timeSpan == TimeSpan.Zero) { return String.Concat("0 ", secondText); }
             var isNegative = timeSpan < TimeSpan.Zero;
             if (isNegative) { timeSpan = timeSpan.Duration(); }
             var parts = new List<string>();
-            if (timeSpan.Days > 0)
-            {
-                var dayText = isEnglish ? (timeSpan.Days > 1 ? "days" : "day") : "gün";
-                parts.Add(String.Join(" ", timeSpan.Days, dayText));
-            }
-            if (timeSpan.Hours > 0)
-            {
-                var hourText = isEnglish ? (timeSpan.Hours > 1 ? "hours" : "hour") : "saat";
-                parts.Add(String.Join(" ", timeSpan.Hours.ToString().Replicate(), hourText));
-            }
-            if (timeSpan.Minutes > 0)
-            {
-                var minuteText = isEnglish ? "min." : "dk.";
-                parts.Add(String.Join(" ", timeSpan.Minutes.ToString().Replicate(), minuteText));
-            }
-            if (timeSpan.Milliseconds > 0)
-            {
-                var nf = CultureInfo.CurrentUICulture.NumberFormat;
-                parts.Add($"{(timeSpan.Seconds > 0 ? timeSpan.Seconds.ToString().Replicate() : "0")}{nf.CurrencyDecimalSeparator}{timeSpan.Milliseconds.ToString().Replicate(3)} {secondText}");
-            }
+            if (timeSpan.Days > 0) { parts.Add(String.Concat(timeSpan.Days, " gün")); }
+            if (timeSpan.Hours > 0) { parts.Add(String.Concat(timeSpan.Hours, " saat")); }
+            if (timeSpan.Minutes > 0) { parts.Add(String.Concat(timeSpan.Minutes, " dk.")); }
+            if (timeSpan.Milliseconds > 0) { parts.Add($"{(timeSpan.Seconds > 0 ? timeSpan.Seconds.ToString().Replicate() : "0")},{timeSpan.Milliseconds.ToString().Replicate(3)} {secondText}"); }
             else if (timeSpan.Seconds > 0) { parts.Add(String.Join(" ", timeSpan.Seconds.ToString().Replicate(), secondText)); }
             var result = String.Join(" ", parts);
             return isNegative ? String.Concat("- ", result) : result;

@@ -23,11 +23,7 @@
                     else if (TryValidators.TryGetProperty(_uce.Value, nameof(MemberInfo.Name), out string _name)) { result = _name; }
                 }
             }
-            if (result.IsNullOrEmpty())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The value of \"{expression}\" is incompatible!", nameof(expression)); }
-                throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression));
-            }
+            if (result.IsNullOrEmpty()) { throw new ArgumentException($"\"{expression}\" değeri uyumsuzdur!", nameof(expression)); }
             return result;
         }
         /// <summary>Expression&lt;Func&lt;T, bool&gt;&gt; türündeki iki predicate&#39;i mantıksal AND (&amp;&amp;) operatörü ile birleştirir.</summary>

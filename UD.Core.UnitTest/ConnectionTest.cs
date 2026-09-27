@@ -6,7 +6,6 @@
     using Newtonsoft.Json.Linq;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Globalization;
     using System.IO;
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
@@ -18,8 +17,6 @@
         [SetUp]
         public void Setup()
         {
-            CultureInfo.CurrentCulture = new("tr-TR");
-            CultureInfo.CurrentUICulture = new("tr-TR");
             this.connection = new("Data Source=:memory:");
             this.connection.Open();
             this.context = new(new DbContextOptionsBuilder<TestDbContext>().UseSqlite(this.connection).Options);

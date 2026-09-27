@@ -22,11 +22,7 @@ namespace UD.Core.Attributes.DataAnnotations
                 validationContext.SetValidatePropertyValue(valueString);
                 return ValidationResult.Success;
             }
-            if (this.ErrorMessage.IsNullOrEmpty())
-            {
-                this.ErrorMessage = $"{validationContext.DisplayName}, {TitleConstants.Iban} biçimine uygun olmalıdır!";
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid IBAN format!"; }
-            }
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, {TitleConstants.Iban} biçimine uygun olmalıdır!"; }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

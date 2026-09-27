@@ -3,7 +3,6 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDIncludesAttribute : ValidationAttribute
     {
@@ -49,16 +48,8 @@
         {
             if (this.ErrorMessage.IsNullOrEmpty())
             {
-                if (this.IsEqual)
-                {
-                    this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.Values)}] değerlerinden biri olmalıdır!";
-                    if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be one of the values [{String.Join(", ", this.Values)}]!"; }
-                }
-                else
-                {
-                    this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.Values)}] değerleri dışında farklı bir değer olmalıdır!";
-                    if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a different value than [{String.Join(", ", this.Values)}]!"; }
-                }
+                if (this.IsEqual) { this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.Values)}] değerlerinden biri olmalıdır!"; }
+                else { this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.Values)}] değerleri dışında farklı bir değer olmalıdır!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }

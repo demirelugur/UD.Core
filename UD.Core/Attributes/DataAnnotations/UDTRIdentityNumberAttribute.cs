@@ -3,7 +3,6 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDTRIdentityNumberAttribute : ValidationAttribute
     {
@@ -17,11 +16,7 @@
                 validationContext.SetValidatePropertyValue(valueLong);
                 return ValidationResult.Success;
             }
-            if (this.ErrorMessage.IsNullOrEmpty())
-            {
-                this.ErrorMessage = $"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!";
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid T.C. Identity Number format!"; }
-            }
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, T.C. Kimlik Numarası biçimine uygun olmalıdır!"; }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

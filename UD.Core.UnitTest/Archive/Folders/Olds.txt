@@ -733,3 +733,79 @@ public static string SerialNumber(string serialNumber, EnumNVIIdentityCard? nVII
     if (!showFull) { cs = String.Concat(cs.Substring(0, 3), new('*', cs.Length - 3)); }
     return (nVIIdentityCardTypes.HasValue ? $"{cs} ({nVIIdentityCardTypes.Value.GetDisplayNameLocalized()})" : cs);
 }
+***************************************
+/// <summary><see cref="CultureInfo.CurrentUICulture"/>&#39;un iki harfli ISO dil kodunun &quot;en&quot; içerip içermediğini kontrol eder. Bu özellik, uygulamanın geçerli kullanıcı arayüzü kültürünün İngilizce olup olmadığını belirlemek için kullanılabilir. Eğer geçerli UI kültürü İngilizce ise <see langword="true"/> döner, aksi takdirde <see langword="false"/> döner.</summary>
+public static bool IsEnglishCurrentUICulture => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("en", StringComparison.CurrentCultureIgnoreCase);
+***************************************
+/// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
+/// <param name="value">Açıklaması alınacak Enum değeri.</param>
+/// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
+public static string GetDisplayNameLocalized(this EnumAlertState value)
+{
+    if (Checks.IsEnglishCurrentUICulture)
+    {
+        return value switch
+        {
+            EnumAlertState.success => "Operation successful",
+            EnumAlertState.info => "Information",
+            EnumAlertState.warning => "Warning",
+            EnumAlertState.error => "An error occurred",
+            _ => throw value.ArgumentOutOfRange(nameof(value))
+        };
+    }
+    return value.GetDisplayNameFromEnum();
+}
+***************************************
+/// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
+/// <param name="value">Açıklaması alınacak EnumStatus değeri.</param>
+/// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
+public static string GetDisplayNameLocalized(this EnumStatus value)
+{
+    if (Checks.IsEnglishCurrentUICulture)
+    {
+        return value switch
+        {
+            EnumStatus.active => "Active",
+            EnumStatus.passive => "Passive",
+            _ => throw value.ArgumentOutOfRange(nameof(value))
+        };
+    }
+    return value.GetDisplayNameFromEnum();
+}
+***************************************
+/// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun açıklamayı döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış İngilizce açıklamaları döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
+/// <param name="value">Açıklaması alınacak Enum değeri.</param>
+/// <returns>Geçerli UI kültürüne uygun açıklama.</returns>
+public static string GetDisplayNameLocalized(this EnumTCMBRateCode value)
+{
+    if (Checks.IsEnglishCurrentUICulture)
+    {
+        return value switch
+        {
+            EnumTCMBRateCode.USD => "US DOLLAR",
+            EnumTCMBRateCode.AUD => "AUSTRALIAN DOLLAR",
+            EnumTCMBRateCode.DKK => "DANISH KRONE",
+            EnumTCMBRateCode.EUR => "EURO",
+            EnumTCMBRateCode.GBP => "BRITISH POUND",
+            EnumTCMBRateCode.CHF => "SWISS FRANC",
+            EnumTCMBRateCode.SEK => "SWEDISH KRONA",
+            EnumTCMBRateCode.CAD => "CANADIAN DOLLAR",
+            EnumTCMBRateCode.KWD => "KUWAITI DINAR",
+            EnumTCMBRateCode.NOK => "NORWEGIAN KRONE",
+            EnumTCMBRateCode.SAR => "SAUDI RIYAL",
+            EnumTCMBRateCode.JPY => "JAPANESE YEN",
+            EnumTCMBRateCode.RON => "ROMANIAN LEU",
+            EnumTCMBRateCode.RUB => "RUSSIAN RUBLE",
+            EnumTCMBRateCode.CNY => "CHINESE YUAN",
+            EnumTCMBRateCode.PKR => "PAKISTANI RUPEE",
+            EnumTCMBRateCode.QAR => "QATARI RIYAL",
+            EnumTCMBRateCode.KRW => "SOUTH KOREAN WON",
+            EnumTCMBRateCode.AZN => "AZERBAIJANI MANAT",
+            EnumTCMBRateCode.AED => "UNITED ARAB EMIRATES DIRHAM",
+            EnumTCMBRateCode.KZT => "KAZAKHSTANI TENGE",
+            _ => throw value.ArgumentOutOfRange(nameof(value))
+        };
+    }
+    return value.GetDisplayNameFromEnum();
+}
+***************************************

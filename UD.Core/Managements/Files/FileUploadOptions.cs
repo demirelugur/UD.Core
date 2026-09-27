@@ -10,8 +10,7 @@
     using UD.Core.Attributes.DataAnnotations;
     using UD.Core.Extensions;
     using UD.Core.Helper;
-    using UD.Core.Resources;
-
+    using static UD.Core.Helper.GlobalConstants;
     public sealed class FileUploadOptions : IEquatable<FileUploadOptions>
     {
         #region Equals
@@ -21,14 +20,14 @@
         #endregion
         [UDRequired]
         [UDArrayMinLength]
-        [Display(Name = nameof(DisplayNames.FileSettingsHelperAccept), ResourceType = typeof(DisplayNames))]
+        [Display(Name = "Uzantı")]
         public string[] Accept { get; set; } = [];
-        [Range(1, Int64.MaxValue, ErrorMessageResourceName = nameof(DisplayNames.RangeValidationError), ErrorMessageResourceType = typeof(DisplayNames))]
-        [Display(Name = nameof(DisplayNames.FileSettingsHelperSize), ResourceType = typeof(DisplayNames))]
+        [Range(1, Int64.MaxValue, ErrorMessage = ValidationMessageTurkishConstants.Range)]
+        [Display(Name = "Belge Boyutu")]
         [DefaultValue(1048576)]
         public long Size { get; set; }
-        [Range(1, Byte.MaxValue, ErrorMessageResourceName = nameof(DisplayNames.RangeValidationError), ErrorMessageResourceType = typeof(DisplayNames))]
-        [Display(Name = nameof(DisplayNames.FileSettingsHelperFileCount), ResourceType = typeof(DisplayNames))]
+        [Range(1, Byte.MaxValue, ErrorMessage = ValidationMessageTurkishConstants.Range)]
+        [Display(Name = "Belge Sayısı")]
         [DefaultValue(1)]
         public byte FileCount { get; set; }
         [JsonIgnore]
@@ -59,13 +58,6 @@
                        "Yüklenecek maksimum dosya sayısını aştınız!",
                        $"Maksimum dosya sayısı: {fileRequest.FileCount}"
                     ];
-                    if (Checks.IsEnglishCurrentUICulture)
-                    {
-                        errors = [
-                           "You have exceeded the maximum number of files allowed to upload!",
-                           $"Maximum file count: {fileRequest.FileCount}"
-                        ];
-                    }
                     return true;
                 }
                 var filesArray = files.Select(file => new
@@ -87,14 +79,6 @@
                        $"Uyumsuz olan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
                        $"İzin verilen uzantı türleri: {String.Join(", ", fileRequest.Accept)}"
                     ];
-                    if (Checks.IsEnglishCurrentUICulture)
-                    {
-                        errors = [
-                            "The file extensions are not compatible!",
-                            $"Incompatible files: {String.Join(", ", filesArray.Where(x => !x.checkExt).OrderBy(x => x.fileName).Select(x => x.fileName).ToArray())}",
-                            $"Allowed extension types: {String.Join(", ", fileRequest.Accept)}"
-                        ];
-                    }
                     return true;
                 }
                 if (filesArray.Any(x => !x.checkSize))
@@ -104,14 +88,6 @@
                        $"Kapasite miktarı aşan dosyalar: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(": ", x.fileName, Convert.ToDouble(x.size).ToFileSizeString())).ToArray())}",
                        $"Tek bir dosya için izin verilen maksimum boyut miktarı: {fileRequest.FormattedFileSize}"
                     ];
-                    if (Checks.IsEnglishCurrentUICulture)
-                    {
-                        errors = [
-                            "You have exceeded the allowed upload size for a single file!",
-                            $"Files exceeding the size limit: {String.Join(", ", filesArray.Where(x => !x.checkSize).OrderByDescending(x => x.size).ThenBy(x => x.fileName).Select(x => String.Join(": ", x.fileName, Convert.ToDouble(x.size).ToFileSizeString())).ToArray())}",
-                            $"Maximum allowed size for a single file: {fileRequest.FormattedFileSize}"
-                        ];
-                    }
                     return true;
                 }
                 errors = [];

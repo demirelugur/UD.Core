@@ -14,7 +14,7 @@
         public ApiResponse(EnumAlertState state, string[] messages)
         {
             this.State = state;
-            this.Messages = (messages.IsNullOrEmptyOrAllNull() ? [this.State.GetDisplayNameLocalized()] : messages);
+            this.Messages = (messages.IsNullOrEmptyOrAllNull() ? [this.State.GetDisplayNameFromEnum()] : messages);
         }
         public static ApiResponse setError(params string[] messages) => new(EnumAlertState.error, messages);
         public static ApiResponse setWarning(params string[] messages) => new(EnumAlertState.warning, messages);

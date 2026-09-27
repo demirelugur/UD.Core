@@ -40,7 +40,7 @@
                 return _dic.Cast<DictionaryEntry>().ToDictionary(x =>
                 {
                     var key = x.Key?.ToString();
-                    if (key.IsNullOrEmpty()) { throw new ArgumentNullException(nameof(x.Key), (Checks.IsEnglishCurrentUICulture ? "A parameter name cannot be empty." : "Parametre adı boş olamaz.")); }
+                    if (key.IsNullOrEmpty()) { throw new ArgumentNullException(nameof(x.Key), "Parametre adı boş olamaz."); }
                     return key;
                 }, x => x.Value);
             }
@@ -48,7 +48,6 @@
             if (obj is IEnumerable<KeyValuePair<string, object>> _pairs) { return ToDictionaryFromObject(_pairs.ToDictionary(x => x.Key, x => x.Value)); }
             var t = obj.GetType();
             if (t.IsCustomClass()) { return ToDictionaryFromObject(t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj))); }
-            if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"The type of {nameof(obj)} is not in a suitable format!"); }
             throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
         }
         /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı), JToken(DateTime türüne uygun biçimde olmalı)</para></summary>
@@ -79,9 +78,9 @@
         public static (byte[] bytes, string mimeType) ToBinaryFromBase64String(string base64String)
         {
             base64String = base64String.ToStringOrEmpty();
-            if (base64String == "" || !base64String.StartsWith("data:")) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format." : "Geçersiz veri URI biçimi."); }
+            if (base64String == "" || !base64String.StartsWith("data:")) { throw new ArgumentException("Geçersiz veri URI biçimi."); }
             var parts = base64String.Substring(5).Split([";base64,"], StringSplitOptions.None);
-            if (parts.Length != 2) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? "Invalid data URI format: MIME type or base64 data is missing." : "Geçersiz veri URI biçimi: MIME tipi veya base64 verisi eksik."); }
+            if (parts.Length != 2) { throw new ArgumentException("Geçersiz veri URI biçimi: MIME tipi veya base64 verisi eksik."); }
             return (Convert.FromBase64String(parts[1]), parts[0]);
         }
         /// <summary>Bir değeri belirtilen türe dönüştürür. Eğer değer null ise ve tip nullable ise null döner. Enum türlerini destekler ve enum değerlerini ilgili türe dönüştürür.</summary>
@@ -94,7 +93,6 @@
             if (value == null)
             {
                 if (t) { return null; }
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("Value cannot be null for a non-nullable type!"); }
                 throw new ArgumentException("Null değer alamayan bir tür için değer null olamaz!");
             }
             if (_baseType.IsEnum) { return Enum.ToObject(_baseType, value); }

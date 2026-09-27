@@ -3,7 +3,6 @@ namespace UD.Core.Attributes.DataAnnotations
     using System;
     using System.ComponentModel.DataAnnotations;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDEnumAttribute<TEnum> : ValidationAttribute where TEnum : struct, Enum
     {
@@ -19,11 +18,7 @@ namespace UD.Core.Attributes.DataAnnotations
             var enumValue = value.TryToEnum<TEnum>();
             var typeofEnum = typeof(TEnum);
             if (enumValue.HasValue && (!this.CheckIsDefined || Enum.IsDefined(typeofEnum, enumValue.Value))) { return ValidationResult.Success; }
-            if (this.ErrorMessage.IsNullOrEmpty())
-            {
-                this.ErrorMessage = $"{validationContext.DisplayName}, {typeofEnum.FullName} türünden bir {nameof(Enum)} değeri olmalıdır!";
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be a valid {nameof(Enum)} value of type {typeofEnum.FullName}!"; }
-            }
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, {typeofEnum.FullName} türünden bir {nameof(Enum)} değeri olmalıdır!"; }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

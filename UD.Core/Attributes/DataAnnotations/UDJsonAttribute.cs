@@ -35,11 +35,7 @@
                     return ValidationResult.Success;
                 }
             }
-            if (this.ErrorMessage.IsNullOrEmpty())
-            {
-                this.ErrorMessage = $"{validationContext.DisplayName}, JSON biçimine ({this.JTokenType:g}) uygun olmalıdır!";
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in JSON format ({this.JTokenType:g})!"; }
-            }
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, JSON biçimine ({this.JTokenType:g}) uygun olmalıdır!"; }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

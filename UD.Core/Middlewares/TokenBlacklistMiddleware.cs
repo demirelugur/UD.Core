@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Http;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     using UD.Core.Responses;
     using UD.Core.Services;
 
@@ -22,7 +21,7 @@
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 context.Response.ContentType = "application/json";
-                await context.Response.WriteAsJsonAsync(ApiResponse.setWarning(Checks.IsEnglishCurrentUICulture ? "Token invalid!" : "Token geçersiz!"), context.RequestAborted);
+                await context.Response.WriteAsJsonAsync(ApiResponse.setWarning("Token geçersiz!"), context.RequestAborted);
                 return;
             }
             await this._next(context);

@@ -9,7 +9,6 @@
     using System.Linq.Expressions;
     using UD.Core.Abstractions;
     using UD.Core.Enums;
-    using UD.Core.Helper;
     using UD.Core.Pages;
     using UD.Core.Results;
     public static class LinqExtensions
@@ -76,7 +75,6 @@
                 i++;
             }
             if (r.Length <= maxLength) { return r; }
-            if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException($"The generated SEO data exceeds the maximum length of {maxLength} characters!"); }
             throw new ArgumentOutOfRangeException($"Oluşturulan SEO verisi {maxLength} karakterlik maksimum uzunluğu aşıyor!");
         }
         /// <summary>IQueryable koleksiyonunu asenkron olarak sayfalanmış bir listeye dönüştürür. </summary>
@@ -123,16 +121,8 @@
             var list = new List<string>();
             foreach (var item in dicOrdering)
             {
-                if (item.Key.IsNullOrEmpty())
-                {
-                    if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("The sort field cannot be left blank", nameof(source)); }
-                    throw new ArgumentException("Sıralama alanı boş olamaz.", nameof(source));
-                }
-                if (!Enum.IsDefined(item.Value))
-                {
-                    if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"Invalid sort direction: \"{item.Value}\".", nameof(source)); }
-                    throw new ArgumentException($"Geçersiz sıralama yönü: \"{item.Value}\".", nameof(source));
-                }
+                if (item.Key.IsNullOrEmpty()) { throw new ArgumentException("Sıralama alanı boş olamaz.", nameof(source)); }
+                if (!Enum.IsDefined(item.Value)) { throw new ArgumentException($"Geçersiz sıralama yönü: \"{item.Value}\".", nameof(source)); }
                 var key = String.Concat(item.Key.Substring(0, 1).ToUpper(CultureInfo.GetCultureInfo(1033)), item.Key.Substring(1)).Trim();
                 list.Add(String.Concat(key, " ", item.Value.ToString("g")));
             }
@@ -150,11 +140,6 @@
             try { return source.OrderBy(ordering, args); }
             catch (Exception ex)
             {
-                if (Checks.IsEnglishCurrentUICulture)
-                {
-                    if (args.IsNullOrEmptyOrAllNull()) { throw new InvalidOperationException($"Sorting failed: {ordering}", ex); }
-                    throw new InvalidOperationException($"Sorting failed: {ordering}, Arguments: {String.Join(", ", args)}", ex);
-                }
                 if (args.IsNullOrEmptyOrAllNull()) { throw new InvalidOperationException($"Sıralama hatası: {ordering}", ex); }
                 throw new InvalidOperationException($"Sıralama hatası: {ordering}, Argümanlar: {String.Join(", ", args)}", ex);
             }

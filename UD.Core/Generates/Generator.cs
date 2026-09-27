@@ -26,7 +26,6 @@ namespace UD.Core.Generates
             if (expiresIn <= TimeSpan.Zero)
             {
                 var s = nameof(expiresIn);
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentOutOfRangeException(s, $"\"{s}\" must be greater than zero."); }
                 throw new ArgumentOutOfRangeException(s, $"\"{s}\" süresi sıfırdan büyük bir değer olmalıdır!");
             }
             var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

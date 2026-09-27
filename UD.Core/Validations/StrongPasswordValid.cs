@@ -22,47 +22,14 @@
         public bool TryIsWarning(string value, string name, string surname, out string[] errors)
         {
             var r = new List<string>();
-            var isEnglish = Checks.IsEnglishCurrentUICulture;
-            if (!Checks.IsStrongPassword(value, this._minimumLength))
-            {
-                if (isEnglish) { r.Add($"The password must have a minimum of {this._minimumLength} characters and contain at least 1 Uppercase Letter, 1 Lowercase Letter, 1 Number and 1 Punctuation mark!"); }
-                else { r.Add($"Şifre minimum {this._minimumLength} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }
-            }
-            if (this._maximumLength.HasValue)
-            {
-                if (value.Length > this._maximumLength.Value)
-                {
-                    if (isEnglish) { r.Add($"Password can be maximum {this._maximumLength.Value} characters!"); }
-                    else { r.Add($"Şifre maksimum {this._maximumLength.Value} karakter olabilir!"); }
-                }
-            }
-            if (this._isConsecutive && CheckConsecutive(value))
-            {
-                if (isEnglish) { r.Add("The password must not contain 3 consecutive numbers! (123, 987 etc...)"); }
-                else { r.Add("Şifre içerisinde 3 ardışık sayı (123, 987 vb...) bulunmamalıdır!"); }
-            }
-            if (this._isEmptyCharacter && value.Contains(' '))
-            {
-                if (isEnglish) { r.Add("There should be no empty characters in the password!"); }
-                else { r.Add("Şifre içerisinde boş karakter bulunmamalıdır!"); }
-            }
-            if (this._isTurkishSpecialCharacter && value.Any(ArrayConstants.TurkishSpecialCharacters.Contains))
-            {
-                var t = String.Join(", ", ArrayConstants.TurkishSpecialCharacters);
-                if (isEnglish) { r.Add($"The password must not contain any letters specific to the Turkish language! ({t})"); }
-                else { r.Add($"Şifre içerisinde Türk diline özgü harf ({t}) bulunmamalıdır!"); }
-            }
+            if (!Checks.IsStrongPassword(value, this._minimumLength)) { r.Add($"Şifre minimum {this._minimumLength} karakter ve içerisinde en az 1 Büyük Harf, 1 Küçük Harf, 1 Rakam ve 1 Noktalama işareti olmalıdır!"); }
+            if (this._maximumLength.HasValue && value.Length > this._maximumLength.Value) { r.Add($"Şifre maksimum {this._maximumLength.Value} karakter olabilir!"); }
+            if (this._isConsecutive && CheckConsecutive(value)) { r.Add("Şifre içerisinde 3 ardışık sayı (123, 987 vb...) bulunmamalıdır!"); }
+            if (this._isEmptyCharacter && value.Contains(' ')) { r.Add("Şifre içerisinde boş karakter bulunmamalıdır!"); }
+            if (this._isTurkishSpecialCharacter && value.Any(ArrayConstants.TurkishSpecialCharacters.Contains)) { r.Add($"Şifre içerisinde Türk diline özgü harf ({String.Join(", ", ArrayConstants.TurkishSpecialCharacters)}) bulunmamalıdır!"); }
             var valueSeo = value.ToSeoFriendly();
-            if (CheckFullName(valueSeo, name))
-            {
-                if (isEnglish) { r.Add("Your name(s) must not appear in the password!"); }
-                else { r.Add("Şifre içerisinde adınız/adlarınız geçmemelidir!"); }
-            }
-            if (CheckFullName(valueSeo, surname))
-            {
-                if (isEnglish) { r.Add("Your surname(s) must not appear in the password!"); }
-                else { r.Add("Şifre içerisinde soyadınız/soyadlarınız geçmemelidir!"); }
-            }
+            if (CheckFullName(valueSeo, name)) { r.Add("Şifre içerisinde adınız / adlarınız geçmemelidir!"); }
+            if (CheckFullName(valueSeo, surname)) { r.Add("Şifre içerisinde soyadınız / soyadlarınız geçmemelidir!"); }
             errors = r.ToArray();
             return r.Count > 0;
         }

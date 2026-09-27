@@ -130,22 +130,10 @@
         public static void SetPropertyValue(object entity, string propertyName, object propertyNewValue)
         {
             var type = entity.GetType();
-            if (!type.IsCustomClass())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The \"{nameof(entity)}\" argument type must be class!", nameof(entity)); }
-                throw new ArgumentException($"\"{nameof(entity)}\" argümanı türü class olmalıdır!", nameof(entity));
-            }
+            if (!type.IsCustomClass()) { throw new ArgumentException($"\"{nameof(entity)}\" argümanı türü class olmalıdır!", nameof(entity)); }
             var pi = type.GetProperty(propertyName);
-            if (pi == null)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentNullException(nameof(propertyName), $"The \"{nameof(propertyName)}\" property was not found!"); }
-                throw new ArgumentNullException(nameof(propertyName), $"\"{nameof(propertyName)}\" özelliği bulunamadı!");
-            }
-            if (!pi.CanWrite)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"The \"{nameof(propertyName)}\" property is not writable!"); }
-                throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!");
-            }
+            if (pi == null) { throw new ArgumentNullException(nameof(propertyName), $"\"{nameof(propertyName)}\" özelliği bulunamadı!"); }
+            if (!pi.CanWrite) { throw new InvalidOperationException($"\"{nameof(propertyName)}\" özelliği yazılabilir değil!"); }
             pi.SetValue(entity, Converters.ChangeType(propertyNewValue, pi.PropertyType));
         }
         /// <summary>Script etiketlerini varsayılan olarak temizleyen bir HtmlSanitizer nesnesi oluşturur. Bu metod, HTML içeriğini temizlemek ve güvenli hale getirmek için kullanılabilir. Oluşturulan HtmlSanitizer nesnesi, script etiketlerini temizleyerek potansiyel XSS saldırılarına karşı koruma sağlar. İsteğe bağlı olarak, farklı temizleme seçenekleri belirten bir HtmlSanitizerOptions nesnesi de sağlanabilir.</summary>

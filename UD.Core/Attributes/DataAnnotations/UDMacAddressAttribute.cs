@@ -21,11 +21,7 @@
                 validationContext.SetValidatePropertyValue(_mac);
                 return ValidationResult.Success;
             }
-            if (this.ErrorMessage.IsNullOrEmpty())
-            {
-                this.ErrorMessage = $"{validationContext.DisplayName}, {TitleConstants.Mac} Adresi biçimine uygun olmalıdır!";
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be in a valid {TitleConstants.Mac} Address format!"; }
-            }
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = $"{validationContext.DisplayName}, {TitleConstants.Mac} Adresi biçimine uygun olmalıdır!"; }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
     }

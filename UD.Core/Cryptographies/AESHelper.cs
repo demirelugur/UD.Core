@@ -4,7 +4,6 @@
     using System.Security.Cryptography;
     using System.Text;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     public sealed class AESHelper
     {
         #region Private
@@ -55,11 +54,7 @@
         public static string Decrypt(string cipherText, string key)
         {
             var cipherBytes = Convert.FromBase64String(cipherText);
-            if (cipherBytes.Length < _ivRequiredLength)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException("Invalid cipher text.", nameof(cipherText)); }
-                throw new ArgumentException("Geçersiz şifreli metin.", nameof(cipherText));
-            }
+            if (cipherBytes.Length < _ivRequiredLength) { throw new ArgumentException("Geçersiz şifreli metin.", nameof(cipherText)); }
             var offset = 0;
             var keyBytes = GenerateKey(key, _keyRequiredLength);
             var ivBytes = new byte[_ivRequiredLength];

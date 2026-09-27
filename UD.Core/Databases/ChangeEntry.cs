@@ -33,7 +33,6 @@
             if (value == null) { return Array.Empty<byte>().ComputeHash(true); }
             if (value is String _s) { return _s.ComputeHash(true); }
             if (value is byte[] _byteArray) { return _byteArray.ComputeHash(true); }
-            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"{nameof(ComputeHash)} method only supports null, string and byte[] values"); }
             throw new NotSupportedException($"{nameof(ComputeHash)} metodu sadece null, string ve byte[] değerlerini destekler.");
         }
         private static object GetPKValue(object entity, Type entityType)

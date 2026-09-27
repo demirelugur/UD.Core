@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Results
 {
-    using UD.Core.Helper;
     public sealed class DateIntervalResult
     {
         private readonly int _year;
@@ -16,21 +15,9 @@
         public override string ToString()
         {
             var r = new List<string>();
-            if (this._year > 0)
-            {
-                var p0 = Checks.IsEnglishCurrentUICulture ? "year" : "yıl";
-                r.Add(String.Join(" ", this._year.ToString(), p0));
-            }
-            if (this._month > 0)
-            {
-                var p1 = Checks.IsEnglishCurrentUICulture ? "month" : "ay";
-                r.Add(String.Join(" ", this._month.ToString(), p1));
-            }
-            if (this._day > 0)
-            {
-                var p2 = Checks.IsEnglishCurrentUICulture ? "day" : "gün";
-                r.Add(String.Join(" ", this._day.ToString(), p2));
-            }
+            if (this._year > 0) { r.Add(String.Concat(this._year.ToString(), " yıl")); }
+            if (this._month > 0) { r.Add(String.Concat(this._month.ToString(), " ay")); }
+            if (this._day > 0) { r.Add(String.Concat(this._day.ToString(), " gün")); }
             return (r.Count > 0 ? String.Join(", ", r) : "");
         }
     }

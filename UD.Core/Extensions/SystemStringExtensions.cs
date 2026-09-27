@@ -42,11 +42,10 @@ namespace UD.Core.Extensions
         {
             if (c.HasValue)
             {
-                if (Checks.IsEnglishCurrentUICulture) { return new($"Invalid character: \"{c.Value}\""); }
+                if (c.Value == '"') { return new($"Geçersiz karakter: '{c.Value}'"); }
                 return new($"Geçersiz karakter: \"{c.Value}\"");
             }
-            if (Checks.IsEnglishCurrentUICulture) { return new("The value is too large to represent a valid Guid."); }
-            return new("Deðer geçerli bir Guid için çok büyük.");
+            return new("Deðer, geçerli bir Guid için çok büyük.");
         }
         /// <summary>Bir dizeyi <see cref="DateTime"/> türüne dönüþtürür. Dize geçerli bir tarih biçiminde deðilse, varsayýlan <see cref="DateTime"/> deðeri döndürülür.</summary>
         /// <param name="value">Dönüþtürülecek tarih içeren dize.</param>

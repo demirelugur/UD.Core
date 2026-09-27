@@ -5,7 +5,6 @@
     using System.Linq;
     using UD.Core.Helper;
     using UD.Core.Results;
-
     public static class SystemTypeExtensions
     {
         /// <summary>Verilen türün (Type) bir tabloya eşlendiğini kontrol eder. Türün, <see cref="TableAttribute"/> ile işaretlenmiş olup olmadığını kontrol ederek tabloya eşlenip eşlenmediğini döndürür.</summary>
@@ -33,7 +32,6 @@
                 if (isSquareBrackets) { return String.Join(".", r.Select(x => $"[{x}]").ToArray()); }
                 return String.Join(".", r);
             }
-            if (Checks.IsEnglishCurrentUICulture) { throw new NotSupportedException($"The type \"{type.FullName}\" does not have the \"{typeof(TableAttribute).FullName}\" attribute. ", new Exception("To get the table name, the relevant class must be decorated with the [Table(\"TableName\")] attribute.")); }
             throw new NotSupportedException($"\"{type.FullName}\" tipi üzerinde \"{typeof(TableAttribute).FullName}\" özniteliği bulunmamaktadır. ", new Exception("Tablo adını alabilmek için ilgili sınıfa [Table(\"TabloAdi\")] özniteliği eklenmelidir."));
         }
         /// <summary> <paramref name="type"/> türünün varsayılan değerini döndürür. Eğer tür nullable değilse ve bir değer türüyse, <see cref="Activator.CreateInstance(Type)"/> kullanılarak varsayılan değeri oluşturulur. Aksi takdirde, null döndürülür. Bu yöntem, özellikle nullable olmayan değer türleri için varsayılan değerleri almak için kullanışlıdır.</summary>
@@ -43,11 +41,7 @@
         /// <returns>Enum sonuçları dizisi.</returns>
         public static EnumResult[] ToEnumResultArray(this Type type)
         {
-            if (!type.IsEnum)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"The type \"{type.FullName}\" must be a valid \"{nameof(Enum)}\" type!", nameof(type)); }
-                throw new ArgumentException($"\"{type.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(type));
-            }
+            if (!type.IsEnum) { throw new ArgumentException($"\"{type.FullName}\" türü geçerli bir \"{nameof(Enum)}\" türü olmalıdır!", nameof(type)); }
             return Enum.GetValues(type).Cast<object>().Select(EnumResult.ToEntityFromObject).ToArray();
         }
         /// <summary>Belirtilen <paramref name="type"/> türünün, verilen açık generic (<paramref name="openGeneric"/>) türünden türeyip türemediğini kontrol eder.</summary>

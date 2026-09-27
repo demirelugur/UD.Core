@@ -44,16 +44,8 @@ namespace UD.Core.Extensions
                 isSetCompositeKeyName = x.Name == compositeKeyName,
                 isCompositeKey = x.IsPK() && x.GetDatabaseGeneratedOption() == DatabaseGeneratedOption.None
             }).ToArray();
-            if (!properties.Any(x => x.isSetCompositeKeyName && x.isCompositeKey))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"The property \"{compositeKeyName}\" in table \"{tableName}\" must have either \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" specified!"); }
-                throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" özelliðinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!");
-            }
-            if (properties.Count(x => x.isCompositeKey) < 2)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new KeyNotFoundException($"The \"{tableName}\" table must contain at least 2 properties with \"{typeof(KeyAttribute).FullName}\" and \"{typeof(DatabaseGeneratedAttribute).FullName}\" attributes to continue processing!"); }
-                throw new KeyNotFoundException($"Ýþleme devam edebilmek için \"{tableName}\" tablosunda en az 2 özelliðin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" içermesi gerekmektedir!");
-            }
+            if (!properties.Any(x => x.isSetCompositeKeyName && x.isCompositeKey)) { throw new Exception($"\"{tableName}\" tablosundaki \"{compositeKeyName}\" özelliðinde \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" belirtilmelidir!"); }
+            if (properties.Count(x => x.isCompositeKey) < 2) { throw new KeyNotFoundException($"Ýþleme devam edebilmek için \"{tableName}\" tablosunda en az 2 özelliðin \"{typeof(KeyAttribute).FullName}\" ve \"{typeof(DatabaseGeneratedAttribute).FullName}\" içermesi gerekmektedir!"); }
             var newEntity = new T();
             var entry = context.Entry(oldEntity);
             var dbSet = context.Set<T>();
@@ -92,11 +84,7 @@ namespace UD.Core.Extensions
             if (isDebug) { return Task.FromResult(0); }
             var sb = new StringBuilder();
             var index = 0;
-            if (!mappedTables.All(x => x.IsMappedTable()))
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new Exception($"All provided types must be mapped to database tables. Ensure that each type is decorated with the \"{nameof(TableAttribute)}\"."); }
-                throw new Exception($"Tüm türler veritabaný tablolarýna eþlenmiþ olmalýdýr. Her bir türün \"{nameof(TableAttribute)}\" ile iþaretlendiðinden emin olun.");
-            }
+            if (!mappedTables.All(x => x.IsMappedTable())) { throw new Exception($"Tüm türler veritabaný tablolarýna eþlenmiþ olmalýdýr. Her bir türün \"{nameof(TableAttribute)}\" ile iþaretlendiðinden emin olun."); }
             foreach (var type in mappedTables)
             {
                 var (columnName, sqlDbTypeName) = GetPrimaryKeyInfo(type);

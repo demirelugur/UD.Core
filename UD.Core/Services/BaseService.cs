@@ -6,7 +6,6 @@
     using System.Linq.Expressions;
     using UD.Core.Abstractions;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     using UD.Core.Pages;
     public interface IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseServiceReadOnly<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
@@ -118,23 +117,11 @@
             var type = typeof(TEntity);
             var properties = this.Context.Model.FindEntityType(type)?.FindPrimaryKey()?.Properties;
             var keyName = (properties.IsNullOrEmptyOrAllNull() ? "" : properties[0].Name);
-            if (keyName.IsNullOrEmpty())
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException("PK not found"); }
-                throw new InvalidOperationException("Birincil Anahtar(PK) bulunamadı!");
-            }
+            if (keyName.IsNullOrEmpty()) { throw new InvalidOperationException("Birincil Anahtar(PK) bulunamadı!"); }
             var property = type.GetProperty(keyName);
-            if (property == null)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Property \"{keyName}\" not found on {type.Name}"); }
-                throw new InvalidOperationException($"\"{keyName}\" özelliği \"{type.Name}\" üzerinde bulunamadı!");
-            }
+            if (property == null) { throw new InvalidOperationException($"\"{keyName}\" özelliği \"{type.Name}\" üzerinde bulunamadı!"); }
             var value = property.GetValue(entity);
-            if (value == null)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"Key value is null"); }
-                throw new InvalidOperationException($"Anahtar(Key) değeri boş.");
-            }
+            if (value == null) { throw new InvalidOperationException($"Anahtar(Key) değeri boş."); }
             return value;
         }
     }

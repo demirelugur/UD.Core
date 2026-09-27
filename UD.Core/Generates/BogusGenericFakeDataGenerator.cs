@@ -216,11 +216,7 @@
             if (type.IsClass)
             {
                 var ctor = type.GetConstructors().OrderByDescending(c => c.GetParameters().Length).FirstOrDefault();
-                if (ctor == null)
-                {
-                    if (Checks.IsEnglishCurrentUICulture) { throw new InvalidOperationException($"No constructor found for \"{type.FullName}\"!"); }
-                    throw new InvalidOperationException($"\"{type.FullName}\" için hiçbir kurucu (Constructors) bulunamadı!");
-                }
+                if (ctor == null) { throw new InvalidOperationException($"\"{type.FullName}\" için hiçbir kurucu (Constructors) bulunamadı!"); }
                 var args = ctor.GetParameters().Select(x => this.CreateFakeInstance(x.Name, x.ParameterType, faker)).ToArray();
                 return ctor.Invoke(args);
             }

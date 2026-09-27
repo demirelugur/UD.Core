@@ -4,7 +4,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Globalization;
     using UD.Core.Extensions;
-    using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDRangeDecimalPrecisionAttribute : RangeAttribute
@@ -15,7 +14,7 @@
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(precision);
             ArgumentOutOfRangeException.ThrowIfNegative(scale);
-            if (scale > precision) { throw new ArgumentException(Checks.IsEnglishCurrentUICulture ? $"{nameof(this.Scale)} cannot be greater than {nameof(this.Precision)}." : $"{nameof(this.Scale)}, {nameof(this.Precision)}'dan büyük olamaz."); }
+            if (scale > precision) { throw new ArgumentException($"{nameof(this.Scale)}, {nameof(this.Precision)}'dan büyük olamaz."); }
             this.Precision = precision;
             this.Scale = scale;
         }
@@ -24,11 +23,7 @@
             if (value == null && !validationContext.IsRequiredAttribute()) { return ValidationResult.Success; }
             var valueDecimal = value.ToDecimal();
             if (valueDecimal >= Convert.ToDecimal(this.Minimum) && valueDecimal <= Convert.ToDecimal(this.Maximum)) { return ValidationResult.Success; }
-            if (this.ErrorMessage.IsNullOrEmpty())
-            {
-                this.ErrorMessage = String.Format(ValidationMessageTurkishConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum);
-                if (Checks.IsEnglishCurrentUICulture) { this.ErrorMessage = $"{validationContext.DisplayName} must be between [{this.Minimum} - {this.Maximum}]!"; }
-            }
+            if (this.ErrorMessage.IsNullOrEmpty()) { this.ErrorMessage = String.Format(ValidationMessageTurkishConstants.Range, validationContext.DisplayName, this.Minimum, this.Maximum); }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
         private static string GetMaxString(int precision, int scale)

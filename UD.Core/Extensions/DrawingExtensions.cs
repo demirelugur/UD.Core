@@ -4,7 +4,6 @@
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
-    using UD.Core.Helper;
     public static class DrawingExtensions
     {
         /// <summary>Görüntüyü belirtilen biçimde bayt dizisine dönüştürür.</summary>
@@ -25,11 +24,7 @@
         /// <remarks>Kullandığı yerde Dispose edilmelidir!</remarks>
         public static Bitmap Resize(this Image image, Size size)
         {
-            if (size.IsEmpty)
-            {
-                if (Checks.IsEnglishCurrentUICulture) { throw new ArgumentException($"{nameof(size)} parameter must be valid!", nameof(size)); }
-                throw new ArgumentException($"{nameof(size)} parametresi geçerli olmalıdır!", nameof(size));
-            }
+            if (size.IsEmpty) { throw new ArgumentException($"{nameof(size)} parametresi geçerli olmalıdır!", nameof(size)); }
             var bm = new Bitmap(size.Width, size.Height); // Not: using kullanılırsa bitmap değerleri iletilmemekte
             using var g = Graphics.FromImage(bm);
             g.CompositingQuality = CompositingQuality.HighQuality;

@@ -29,11 +29,6 @@ namespace UD.Core.Attributes.DataAnnotations
             {
                 var message = String.Format(ValidationMessageTurkishConstants.Email, validationContext.DisplayName);
                 if (this.Hosts.Length > 0) { message = $"{message}, Geçerli {(this.Hosts.Length == 1 ? "host" : "hostlar")}: {String.Join(", ", this.Hosts)}"; }
-                if (Checks.IsEnglishCurrentUICulture)
-                {
-                    message = String.Concat(validationContext.DisplayName, " must be a valid email address!");
-                    if (this.Hosts.Length > 0) { message = $"{message}, Valid {(this.Hosts.Length == 1 ? "host" : "hosts")}: {String.Join(", ", this.Hosts)}"; }
-                }
                 this.ErrorMessage = message;
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);

@@ -133,7 +133,7 @@
                 if (TryValidators.TryValidateObject(_t, out errors)) { return (true, default, errors); }
                 return (false, _t, default);
             }
-            return (true, default, [EnumAlertState.error.GetDisplayNameLocalized()]);
+            return (true, default, [EnumAlertState.error.GetDisplayNameFromEnum()]);
         }
         #endregion
         #region IFormFile

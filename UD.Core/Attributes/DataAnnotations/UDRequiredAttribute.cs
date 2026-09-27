@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using UD.Core.Helper;
     using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDRequiredAttribute : RequiredAttribute
@@ -10,7 +9,7 @@
         public UDRequiredAttribute()
         {
             this.AllowEmptyStrings = false;
-            this.ErrorMessage = (Checks.IsEnglishCurrentUICulture ? "{0} cannot be left blank!" : ValidationMessageTurkishConstants.Required);
+            this.ErrorMessage = ValidationMessageTurkishConstants.Required;
         }
     }
 }
