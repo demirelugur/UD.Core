@@ -168,7 +168,7 @@ namespace UD.Core.Extensions
         /// <summary>Metin içerisindeki tab (\t), satýr baþý (\r) ve yeni satýr (\n) karakterlerini boþluk ile deðiþtirir ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null deðerlerde güvenli þekilde çalýþýr.</summary>
         public static string ReplaceTRNSpace(this string value) => (value ?? "").Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').Trim();
         /// <summary>Metin içerisindeki birden fazla ardýþýk boþluðu tek bir boþluða indirger ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null veya boþ metinlerde güvenli þekilde çalýþýr.</summary>
-        public static string RemoveMultipleSpace(this string value) => String.Join(' ', (value ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        public static string RemoveMultipleSpace(this string value) => String.Join(' ', (value ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries)).Trim();
         /// <summary>Belirtilen karakter ile doldurarak bir string deðerini belirli bir uzunluða getirir.</summary>
         /// <param name="value">Uzunluðu ayarlanacak string deðeri.</param>
         /// <param name="totalValueLength">Hedef toplam uzunluk. Varsayýlan deðer 2&#39;dir.</param>
