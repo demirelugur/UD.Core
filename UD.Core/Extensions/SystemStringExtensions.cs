@@ -166,9 +166,9 @@ namespace UD.Core.Extensions
         /// <exception cref="ArgumentException">method parametresi boþ veya null olduðunda fýrlatýlýr</exception>
         public static string GetRouteName<T>(this string methodName, bool useFullTypeName) where T : class => $"/{(useFullTypeName ? typeof(T).FullName : typeof(T).Name)}/{methodName}";
         /// <summary>Metin içerisindeki tab (\t), satýr baþý (\r) ve yeni satýr (\n) karakterlerini boþluk ile deðiþtirir ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null deðerlerde güvenli þekilde çalýþýr.</summary>
-        public static string ReplaceTRNSpace(this string value) => value.ToStringOrEmpty().Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').Trim();
+        public static string ReplaceTRNSpace(this string value) => (value ?? "").Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').Trim();
         /// <summary>Metin içerisindeki birden fazla ardýþýk boþluðu tek bir boþluða indirger ve baþtaki ile sondaki gereksiz boþluklarý temizler. Null veya boþ metinlerde güvenli þekilde çalýþýr.</summary>
-        public static string RemoveMultipleSpace(this string value) => RegexPatterns.MultipleSpacesPattern().Replace(value.ToStringOrEmpty(), " ").Trim();
+        public static string RemoveMultipleSpace(this string value) => String.Join(' ', (value ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries));
         /// <summary>Belirtilen karakter ile doldurarak bir string deðerini belirli bir uzunluða getirir.</summary>
         /// <param name="value">Uzunluðu ayarlanacak string deðeri.</param>
         /// <param name="totalValueLength">Hedef toplam uzunluk. Varsayýlan deðer 2&#39;dir.</param>

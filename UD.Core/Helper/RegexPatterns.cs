@@ -30,9 +30,6 @@ namespace UD.Core.Helper
         /// <summary>Ardışık birden fazla tire karakterini tespit eden regex.</summary>
         [GeneratedRegex(@"-+")]
         public static partial Regex MultipleHyphensPattern();
-        /// <summary>Ardışık birden fazla boşluk karakterini tespit eden regex.</summary>
-        [GeneratedRegex(@" +")]
-        public static partial Regex MultipleSpacesPattern();
         /// <summary>Yalnızca rakamlardan oluşan string&#39;i doğrulayan regex. Türk telefon numarası validasyonu için kullanılır.</summary>
         [GeneratedRegex(@"^\d+$")]
         public static partial Regex NumericOnlyPattern();
