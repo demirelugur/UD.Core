@@ -198,9 +198,9 @@ namespace UD.Core.Extensions
         /// <returns>Baþlýk durumuna dönüþtürülmüþ string.</returns>
         public static string ToTitleCase(this string value)
         {
-            value = value.ToTitleCase(true, ['.', '+', '(', '-']);
-            if (value == "") { return ""; }
             var cultureInfo = new CultureInfo("tr-TR");
+            value = value.ToTitleCase(true, ['.', '+', '(', '-'], cultureInfo);
+            if (value == "") { return ""; }
             foreach (var word in _lowerCaseWords) { value = value.Replace($" {word} ", $" {word.ToLower(cultureInfo)} "); }
             return value;
         }
