@@ -68,11 +68,10 @@ const groupBy = (array, ...keySelectors) => { /* Örnek kullanım: Tekli Gruplam
 };
 const isNotNullOrEmpty = (value) => !isNullOrEmpty(value);
 const isNullOrEmpty = (value) => {
-    if (typeof value === 'undefined') { return true; }
-    if (value === null) { return true; }
+    if (isNullOrUndefined(value)) { return true; }
     if (typeof value === 'object') {
         if (value instanceof Date) {
-            if (isNaN(value.valueOf())) { return true; }
+            if (!Number.isInteger(value.valueOf())) { return true; }
             let minDate = new Date(1753, 0, 1);
             let maxDate = new Date(9999, 11, 31, 23, 59, 59, 999);
             return value <= minDate || value >= maxDate;
@@ -88,8 +87,9 @@ const isNullOrEmpty = (value) => {
     }
     return false;
 };
+const isNullOrUndefined = (value) => (typeof value === 'undefined' || value === null);
 const isObject = (value) => {
-    if (value === null) { return false; }
+    if (isNullOrUndefined(value)) { return false; }
     return (typeof value === 'object' && !Array.isArray(value));
 };
 const isTokenExpired = (token) => {
@@ -103,12 +103,12 @@ const isValidEmail = (value) => {
     return emailRegex.test(value);
 };
 const isValidGuid = (value, isIncludeGuidEmpty) => {
-    if (isNullOrEmpty(value)) {
-        if (typeof isIncludeGuidEmpty === 'boolean' && isIncludeGuidEmpty && typeof value === 'string' && value === GuidEmpty) { return true; }
-        return false;
-    }
+    if (isNullOrUndefined(value)) { return false; }
+    if (typeof value !== 'string') { return false; }
+    value = String(value).trim();
+    if (typeof isIncludeGuidEmpty === 'boolean' && isIncludeGuidEmpty && value === GuidEmpty) { return true; }
     let guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    return guidRegex.test(String(value).trim());
+    return guidRegex.test(value);
 };
 const isValidPhoneNumber = (value) => {
     if (isNullOrEmpty(value)) { return false; }
@@ -117,10 +117,11 @@ const isValidPhoneNumber = (value) => {
     return phoneRegex.test(cleanedValue);
 };
 const toTitleCase = (value) => {
-    value = toTitleCaseBase(value, true, ['.', '+', '(', '-']);
+    let locale = 'tr-TR';
+    value = toTitleCaseBase(value, true, ['.', '+', '(', '-'], locale);
     if (value === '') { return ''; }
     let word;
-    for (word of ['Ancak', 'Ama', 'Da', 'De', 'Fakat', 'Gibi', 'İle', 'İse', 'Ki', 'Lakin', 'Ve', 'Veya']) { value = value.replaceAll(` ${word} `, ` ${word.toLocaleLowerCase('tr-TR')} `); }
+    for (word of ['Ancak', 'Ama', 'Da', 'De', 'Fakat', 'Gibi', 'İle', 'İse', 'Ki', 'Lakin', 'Ve', 'Veya']) { value = value.replaceAll(` ${word} `, ` ${word.toLocaleLowerCase(locale)} `); }
     return value.replaceAll('+', ' + ').replaceAll('-', ' - ');
 };
 const toTitleCaseBase = (value, isWhiteSpace = true, punctuations = [], locale = 'tr-TR') => {
@@ -141,6 +142,10 @@ const toTitleCaseBase = (value, isWhiteSpace = true, punctuations = [], locale =
     }
     return result;
 };
+const stringNormalize = (value) => {
+    if (isNullOrEmpty(value)) { return ''; }
+    return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').replace(/ş/g, 's').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ı/g, 'i').replace(/Ç/g, 'C').replace(/Ş/g, 'S').replace(/Ğ/g, 'G').replace(/Ü/g, 'U').replace(/Ö/g, 'O').replace(/İ/g, 'I');
+};
 export const objectHelper = {
     GuidEmpty,
     GuidMaxValue,
@@ -154,11 +159,13 @@ export const objectHelper = {
     groupBy,
     isNotNullOrEmpty,
     isNullOrEmpty,
+    isNullOrUndefined,
     isObject,
     isTokenExpired,
     isValidEmail,
     isValidGuid,
     isValidPhoneNumber,
     toTitleCase,
-    toTitleCaseBase
+    toTitleCaseBase,
+    stringNormalize
 };

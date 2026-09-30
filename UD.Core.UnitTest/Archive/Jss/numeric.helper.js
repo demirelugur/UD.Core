@@ -8,14 +8,15 @@ const Int32MaxValue = 2147483647;
 const Int64MinValue = -9223372036854775808n;
 const Int64MaxValue = 9223372036854775807n;
 const formatNumberTR = (value, fractionDigits) => {
-    value = value ?? 0;
-    if (Number.isNaN(value)) { return value; }
+    if (objectHelper.isNullOrUndefined(value)) { return 0; }
+    if (typeof value !== 'number') { value = Number(value); }
+    if (!Number.isInteger(value)) { return 0; }
     let options = {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
         ...(fractionDigits ?? {})
     };
-    return Number(value).toLocaleString('tr-TR', options);
+    return value.toLocaleString('tr-TR', options);
 };
 const isTCKimlikNo = (tckn) => {
     if (objectHelper.isNullOrEmpty(tckn)) { return false; }
