@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using System;
 namespace UD.Core.Extensions
 {
     public static class FluentValidationExtensions

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using UD.Core.Extensions;
 namespace UD.Core.Attributes.DataAnnotations

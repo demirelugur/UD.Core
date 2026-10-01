@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.StaticFiles;
-using System;
 using System.Numerics;
 using UD.Core.Extensions;
 using static UD.Core.Helper.GlobalConstants;

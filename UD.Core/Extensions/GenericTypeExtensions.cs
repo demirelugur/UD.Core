@@ -1,5 +1,4 @@
-﻿using System;
-namespace UD.Core.Extensions
+﻿namespace UD.Core.Extensions
 {
     public static class GenericTypeExtensions
     {

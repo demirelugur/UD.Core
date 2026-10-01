@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using UD.Core.Extensions;
 namespace UD.Core.Cryptographies

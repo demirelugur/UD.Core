@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-namespace UD.Core.Extensions
+﻿namespace UD.Core.Extensions
 {
     public static class SystemUriExtensions
     {

@@ -1,5 +1,4 @@
-﻿using System.IO;
-using UD.Core.Managements.Files;
+﻿using UD.Core.Managements.Files;
 namespace UD.Core.Extensions
 {
     public static class IOExtensions

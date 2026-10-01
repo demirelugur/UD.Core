@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using static UD.Core.Helper.GlobalConstants;
 namespace UD.Core.Attributes.DataAnnotations
 {

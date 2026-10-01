@@ -1,5 +1,4 @@
-﻿using System;
-using UD.Core.Extensions;
+﻿using UD.Core.Extensions;
 using static UD.Core.Helper.GlobalConstants;
 namespace UD.Core.Helper
 {

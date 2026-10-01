@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Reflection;
 using UD.Core.Services;
 namespace UD.Core.Extensions
