@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Extensions
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using UD.Core.Helper;
+namespace UD.Core.Extensions
 {
-    using System.Linq.Expressions;
-    using System.Reflection;
-    using UD.Core.Helper;
     public static class ExpressionsExtensions
     {
         /// <summary>Verilen ifadenin adını alır.</summary>

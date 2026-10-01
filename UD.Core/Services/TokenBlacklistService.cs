@@ -1,8 +1,7 @@
-﻿namespace UD.Core.Services
+﻿using System.Collections.Concurrent;
+using UD.Core.Extensions;
+namespace UD.Core.Services
 {
-    using System;
-    using System.Collections.Concurrent;
-    using UD.Core.Extensions;
     public interface ITokenBlacklistService // AddSingleton
     {
         bool Any(string token);

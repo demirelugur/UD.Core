@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Auditings
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using UD.Core.Abstractions;
+namespace UD.Core.Auditings
 {
-    using System;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using UD.Core.Abstractions;
     public interface IHasCreationTime
     {
         DateTime CreationTime { get; set; }

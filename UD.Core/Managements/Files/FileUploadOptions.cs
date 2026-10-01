@@ -1,16 +1,14 @@
-﻿namespace UD.Core.Managements.Files
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+using UD.Core.Attributes.DataAnnotations;
+using UD.Core.Extensions;
+using UD.Core.Helper;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Managements.Files
 {
-    using Microsoft.AspNetCore.Http;
-    using System;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Text.Json.Serialization;
-    using UD.Core.Attributes.DataAnnotations;
-    using UD.Core.Extensions;
-    using UD.Core.Helper;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class FileUploadOptions : IEquatable<FileUploadOptions>
     {
         #region Equals

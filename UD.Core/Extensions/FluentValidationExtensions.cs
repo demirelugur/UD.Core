@@ -1,7 +1,7 @@
-﻿namespace UD.Core.Extensions
+﻿using FluentValidation;
+using System;
+namespace UD.Core.Extensions
 {
-    using FluentValidation;
-    using System;
     public static class FluentValidationExtensions
     {
         private static IRuleBuilderOptions<T, string> MustStringHasValue<T>(this IRuleBuilder<T, string> ruleBuilder) => ruleBuilder.Must(value => !value.IsNullOrEmpty());

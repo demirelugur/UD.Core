@@ -1,13 +1,13 @@
-﻿namespace UD.Core.Managements.Mails
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Net.Mail;
+using UD.Core.Attributes.DataAnnotations;
+using UD.Core.Extensions;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Managements.Mails
 {
-    using Microsoft.AspNetCore.Http;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-    using System.Net;
-    using System.Net.Mail;
-    using UD.Core.Attributes.DataAnnotations;
-    using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class SmtpClientBasic : IEquatable<SmtpClientBasic>
     {
         #region Equals

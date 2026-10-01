@@ -1,10 +1,9 @@
-﻿namespace UD.Core.Filters
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using UD.Core.Extensions;
+using UD.Core.Responses;
+namespace UD.Core.Filters
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using UD.Core.Extensions;
-    using UD.Core.Responses;
-
     public sealed class ApiResponseTransactionFilter : IAsyncActionFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)

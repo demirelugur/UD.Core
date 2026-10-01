@@ -1,7 +1,6 @@
-﻿namespace UD.Core.Extensions
+﻿using Newtonsoft.Json.Linq;
+namespace UD.Core.Extensions
 {
-    using Newtonsoft.Json.Linq;
-    using System;
     public static class JsonExtensions
     {
         /// <summary><paramref name="jToken"/> değeri null, <see cref="JTokenType.None"/>, <see cref="JTokenType.Null"/> veya <see cref="JTokenType.Undefined"/> ise <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu metot, bir <see cref="JToken"/> nesnesinin geçerli bir değere sahip olup olmadığını kontrol etmek için kullanılır.</summary>

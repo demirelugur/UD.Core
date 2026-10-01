@@ -1,7 +1,7 @@
-﻿namespace UD.Core.Helper
+﻿using UD.Core.Extensions;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Helper
 {
-    using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class MaskedFormatter
     {
         /// <summary>Türkiye biçimine uygun telefon numarasını maskeleme işlemi yapar.</summary>

@@ -1,8 +1,7 @@
-﻿namespace UD.Core.Extensions
+﻿using UD.Core.Enums;
+using UD.Core.Responses;
+namespace UD.Core.Extensions
 {
-    using UD.Core.Enums;
-    using UD.Core.Responses;
-
     ///<summary><see cref="ApiResponse{T}"/> geri dönüşleri için oluşturulmuş yardımcı foksiyonlar</summary>
     public static class ApiResponseExtensions
     {

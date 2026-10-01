@@ -1,13 +1,12 @@
-﻿namespace UD.Core.Validations
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Linq.Expressions;
+using System.Net;
+using UD.Core.Extensions;
+using UD.Core.Helper;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Validations
 {
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using System;
-    using System.Linq.Expressions;
-    using System.Net;
-    using UD.Core.Extensions;
-    using UD.Core.Helper;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class Guard
     {
         public static void ThrowIfEmpty(string value, string argName)

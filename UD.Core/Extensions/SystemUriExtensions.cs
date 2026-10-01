@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Extensions
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+namespace UD.Core.Extensions
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
     public static class SystemUriExtensions
     {
         /// <summary>Verilen dizeye &quot;v&quot; parametresiyle bir sürüm numarası ekleyerek yeni bir URL oluşturur.</summary>

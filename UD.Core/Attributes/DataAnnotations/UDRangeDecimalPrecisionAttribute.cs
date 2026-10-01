@@ -1,10 +1,10 @@
-﻿namespace UD.Core.Attributes.DataAnnotations
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using UD.Core.Extensions;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Attributes.DataAnnotations
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.Globalization;
-    using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDRangeDecimalPrecisionAttribute : RangeAttribute
     {

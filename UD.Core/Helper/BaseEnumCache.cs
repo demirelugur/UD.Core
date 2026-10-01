@@ -1,11 +1,7 @@
-﻿namespace UD.Core.Helper
+﻿using UD.Core.Extensions;
+using UD.Core.Results;
+namespace UD.Core.Helper
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using UD.Core.Extensions;
-    using UD.Core.Results;
-
     public class BaseEnumCache<TEnum> where TEnum : struct, Enum
     {
         private static readonly Type _type = typeof(TEnum);

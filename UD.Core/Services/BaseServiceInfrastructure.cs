@@ -1,13 +1,13 @@
-﻿namespace UD.Core.Services
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
+using System.Data.Common;
+using System.Dynamic;
+using UD.Core.Abstractions;
+using UD.Core.Helper;
+namespace UD.Core.Services
 {
-    using Microsoft.Data.SqlClient;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Storage;
-    using System.Data;
-    using System.Data.Common;
-    using System.Dynamic;
-    using UD.Core.Abstractions;
-    using UD.Core.Helper;
     public interface IBaseServiceInfrastructure<TContext, TEntity>
         where TContext : DbContext
         where TEntity : class, IBaseEntity

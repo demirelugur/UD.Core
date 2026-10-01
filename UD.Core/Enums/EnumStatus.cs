@@ -1,6 +1,6 @@
-﻿namespace UD.Core.Enums
+﻿using System.ComponentModel.DataAnnotations;
+namespace UD.Core.Enums
 {
-    using System.ComponentModel.DataAnnotations;
     public enum EnumStatus : byte
     {
         /// <summary>Aktif</summary>

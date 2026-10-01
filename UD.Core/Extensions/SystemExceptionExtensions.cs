@@ -1,12 +1,9 @@
-﻿namespace UD.Core.Extensions
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+namespace UD.Core.Extensions
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Net;
     public static class SystemExceptionExtensions
     {
         /// <summary>Verilen istisnanın en içteki (inner) istisnasını döner.</summary>

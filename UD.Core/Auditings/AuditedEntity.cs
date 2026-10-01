@@ -1,7 +1,7 @@
-﻿namespace UD.Core.Auditings
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace UD.Core.Auditings
 {
-    using System;
-    using System.ComponentModel.DataAnnotations.Schema;
     public interface IHasModificationTime
     {
         DateTime? LastModificationTime { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace UD.Core.Auditings
+﻿using System.ComponentModel.DataAnnotations.Schema;
+namespace UD.Core.Auditings
 {
-    using System.ComponentModel.DataAnnotations.Schema;
     public interface ISoftDelete
     {
         bool IsDeleted { get; set; }

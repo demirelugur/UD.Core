@@ -1,12 +1,12 @@
-﻿namespace UD.Core.Extensions
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
+using UD.Core.Attributes;
+using UD.Core.Helper;
+namespace UD.Core.Extensions
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Reflection;
-    using UD.Core.Attributes;
-    using UD.Core.Helper;
     public static class ReflectionExtensions
     {
         #region PropertyInfo

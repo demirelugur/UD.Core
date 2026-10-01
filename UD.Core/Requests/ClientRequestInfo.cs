@@ -1,11 +1,11 @@
-﻿namespace UD.Core.Requests
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using UD.Core.Attributes.DataAnnotations;
+using UD.Core.Extensions;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Requests
 {
-    using Microsoft.AspNetCore.Http;
-    using System.ComponentModel.DataAnnotations;
-    using System.Net;
-    using UD.Core.Attributes.DataAnnotations;
-    using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     public interface IClientRequestInfo
     {
         bool IsMobil { get; set; }

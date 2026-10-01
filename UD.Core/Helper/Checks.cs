@@ -1,10 +1,10 @@
-﻿namespace UD.Core.Helper
+﻿using Microsoft.AspNetCore.StaticFiles;
+using System;
+using System.Numerics;
+using UD.Core.Extensions;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Helper
 {
-    using Microsoft.AspNetCore.StaticFiles;
-    using System;
-    using System.Numerics;
-    using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed partial class Checks
     {
         /// <summary><paramref name="value"/> değerinin HTML içeriği içerip içermediğini kontrol eder. Bu metod, verilen string değerin HTML etiketleri içerip içermediğini belirlemek için düzenli ifadeler kullanır. Eğer string değerde HTML etiketleri bulunursa, bu metod <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner. Bu kontrol, kullanıcı tarafından sağlanan verilerin HTML içeriği içerip içermediğini tespit etmek ve potansiyel XSS saldırılarına karşı önlem almak için kullanılabilir.</summary>

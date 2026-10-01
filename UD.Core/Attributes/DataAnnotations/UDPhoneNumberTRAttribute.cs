@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Attributes.DataAnnotations
+﻿using System.ComponentModel.DataAnnotations;
+using UD.Core.Extensions;
+using UD.Core.Helper;
+namespace UD.Core.Attributes.DataAnnotations
 {
-    using System.ComponentModel.DataAnnotations;
-    using UD.Core.Extensions;
-    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDPhoneNumberTRAttribute : ValidationAttribute
     {

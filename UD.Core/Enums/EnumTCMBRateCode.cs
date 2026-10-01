@@ -1,6 +1,6 @@
-﻿namespace UD.Core.Enums
+﻿using System.ComponentModel.DataAnnotations;
+namespace UD.Core.Enums
 {
-    using System.ComponentModel.DataAnnotations;
     public enum EnumTCMBRateCode : byte
     {
         /// <summary>ABD DOLARI</summary>

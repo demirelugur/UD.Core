@@ -1,7 +1,7 @@
-﻿namespace UD.Core.Extensions
+﻿using System;
+using System.Diagnostics;
+namespace UD.Core.Extensions
 {
-    using System;
-    using System.Diagnostics;
     public static class DiagnosticsExtensions
     {
         /// <summary>Stopwatch&#39;ı durdurur ve geçen süreyi döner.</summary>

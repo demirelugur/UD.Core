@@ -1,9 +1,7 @@
-﻿namespace UD.Core.Cryptographies
+﻿using UD.Core.Extensions;
+using UD.Core.Validations;
+namespace UD.Core.Cryptographies
 {
-    using System;
-    using UD.Core.Extensions;
-    using UD.Core.Validations;
-
     public sealed class CaesarHelper
     {
         private static string ApplyShift(string text, int shift)

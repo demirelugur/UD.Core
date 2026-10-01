@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Middlewares
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
+using System.Text;
+namespace UD.Core.Middlewares
 {
-    using Microsoft.AspNetCore.Http;
-    using System.Security.Cryptography;
-    using System.Text;
     public sealed class SecurityHeadersMiddleware
     {
         private readonly RequestDelegate _next;

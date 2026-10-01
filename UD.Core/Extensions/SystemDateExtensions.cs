@@ -1,9 +1,8 @@
-﻿namespace UD.Core.Extensions
+﻿using System.Globalization;
+using UD.Core.Results;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Extensions
 {
-    using System;
-    using System.Globalization;
-    using UD.Core.Results;
-    using static UD.Core.Helper.GlobalConstants;
     public static class SystemDateExtensions
     {
         #region DateTime

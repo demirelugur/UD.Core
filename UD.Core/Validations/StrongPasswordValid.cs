@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Validations
+﻿using UD.Core.Extensions;
+using UD.Core.Helper;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Validations
 {
-    using UD.Core.Extensions;
-    using UD.Core.Helper;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class StrongPasswordValid
     {
         private readonly int _minimumLength;

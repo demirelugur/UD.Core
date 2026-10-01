@@ -1,20 +1,20 @@
+using Ganss.Xss;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
+using System.Text;
+using UD.Core.Attributes;
+using UD.Core.Auditings;
+using UD.Core.Databases;
+using UD.Core.Helper;
 namespace UD.Core.Extensions
 {
-    using Ganss.Xss;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-    using Microsoft.EntityFrameworkCore.Metadata;
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq.Expressions;
-    using System.Text;
-    using UD.Core.Attributes;
-    using UD.Core.Auditings;
-    using UD.Core.Databases;
-    using UD.Core.Helper;
     public static class EntityFrameworkCoreExtensions
     {
         #region DbContext

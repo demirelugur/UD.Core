@@ -1,16 +1,14 @@
-﻿namespace UD.Core.Extensions
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Globalization;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
+using UD.Core.Abstractions;
+using UD.Core.Enums;
+using UD.Core.Pages;
+using UD.Core.Results;
+namespace UD.Core.Extensions
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Query;
-    using System;
-    using System.Globalization;
-    using System.Linq;
-    using System.Linq.Dynamic.Core;
-    using System.Linq.Expressions;
-    using UD.Core.Abstractions;
-    using UD.Core.Enums;
-    using UD.Core.Pages;
-    using UD.Core.Results;
     public static class LinqExtensions
     {
         /// <summary>Belirtilen koşul sağlandığında sorguya ek filtre uygular. Dinamik olarak filtre eklemek istediğiniz durumlarda kullanışlıdır.</summary>

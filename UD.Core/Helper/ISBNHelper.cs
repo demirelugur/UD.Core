@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Helper
+﻿using System;
+using UD.Core.Extensions;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Helper
 {
-    using System;
-    using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class ISBNHelper
     {
         public ISBNHelper(string isbn) => this.SetISBN(isbn);

@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Extensions
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using UD.Core.Helper;
+namespace UD.Core.Extensions
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using UD.Core.Helper;
     public static class DataAnnotationsExtensions
     {
         /// <summary>Verilen validation bağlamında bir özelliğin gerekli olup olmadığını kontrol eder.</summary>

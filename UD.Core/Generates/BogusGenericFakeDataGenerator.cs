@@ -1,14 +1,12 @@
-﻿namespace UD.Core.Generates
+﻿using Bogus;
+using System.Collections;
+using System.Net;
+using System.Net.Mail;
+using UD.Core.Extensions;
+using UD.Core.Helper;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Generates
 {
-    using Bogus;
-    using System;
-    using System.Collections;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Mail;
-    using UD.Core.Extensions;
-    using UD.Core.Helper;
-    using static UD.Core.Helper.GlobalConstants;
     /// <summary>
     /// Sahte veri üretimi için kullanılan genel bir sınıf. Bogus kütüphanesini kullanarak farklı veri türlerinde özelleştirilebilir sahte veriler üretir.
     /// <list type="bullet">

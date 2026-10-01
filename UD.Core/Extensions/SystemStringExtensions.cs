@@ -1,14 +1,13 @@
+using Newtonsoft.Json.Linq;
+using System.Globalization;
+using System.Numerics;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using UD.Core.Enums;
+using UD.Core.Helper;
 namespace UD.Core.Extensions
 {
-    using Newtonsoft.Json.Linq;
-    using System;
-    using System.Globalization;
-    using System.Numerics;
-    using System.Reflection;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using UD.Core.Enums;
-    using UD.Core.Helper;
     public static partial class SystemStringExtensions
     {
         /// <summary><paramref name="value"/> deðerini <see cref="Guid"/> türüne dönüþtürür. Eðer <paramref name="value"/> geçerli bir Guid biçiminde deðilse, varsayýlan <see cref="Guid"/> deðeri döndürülür.</summary>

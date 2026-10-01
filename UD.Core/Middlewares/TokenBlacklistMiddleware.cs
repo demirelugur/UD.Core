@@ -1,10 +1,9 @@
-﻿namespace UD.Core.Middlewares
+﻿using Microsoft.AspNetCore.Http;
+using UD.Core.Extensions;
+using UD.Core.Responses;
+using UD.Core.Services;
+namespace UD.Core.Middlewares
 {
-    using Microsoft.AspNetCore.Http;
-    using UD.Core.Extensions;
-    using UD.Core.Responses;
-    using UD.Core.Services;
-
     public sealed class TokenBlacklistMiddleware
     {
         private readonly RequestDelegate _next;

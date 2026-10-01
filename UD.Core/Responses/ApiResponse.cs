@@ -1,9 +1,7 @@
-﻿namespace UD.Core.Responses
+﻿using UD.Core.Enums;
+using UD.Core.Extensions;
+namespace UD.Core.Responses
 {
-    using System;
-    using System.Collections.Generic;
-    using UD.Core.Enums;
-    using UD.Core.Extensions;
     public class ApiResponse
     {
         public static readonly ApiResponse setSuccess = new(EnumAlertState.success, default);

@@ -1,9 +1,9 @@
-﻿namespace UD.Core.Extensions
+﻿using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+namespace UD.Core.Extensions
 {
-    using System;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
     public static class DrawingExtensions
     {
         /// <summary>Görüntüyü belirtilen biçimde bayt dizisine dönüştürür.</summary>

@@ -1,13 +1,11 @@
-﻿namespace UD.Core.Generates
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using UD.Core.Extensions;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Generates
 {
-    using Microsoft.IdentityModel.Tokens;
-    using System;
-    using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Security.Claims;
-    using System.Text;
-    using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class Generator
     {
         /// <summary><paramref name="claims"/> değerlerine göre bir JWT token oluşturur. Token, verilen <paramref name="key"/> ile imzalanır ve belirtilen süre boyunca geçerli olur. İsteğe bağlı olarak, token&#39;ın <paramref name="issuer"/> tarafından verildiği ve <paramref name="audience"/> tarafından hedeflendiği bilgileri de eklenebilir. Ayrıca, token&#39;ın geçerlilik başlangıç zamanı olarak <paramref name="notBefore"/> değeri de belirtilebilir.</summary>

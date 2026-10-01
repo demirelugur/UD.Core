@@ -1,12 +1,10 @@
-﻿namespace UD.Core.Extensions
+﻿using System.Data;
+using System.Globalization;
+using System.Numerics;
+using UD.Core.Validations;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Extensions
 {
-    using System;
-    using System.Data;
-    using System.Globalization;
-    using System.Linq;
-    using System.Numerics;
-    using UD.Core.Validations;
-    using static UD.Core.Helper.GlobalConstants;
     public static class SystemNumericExtensions
     {
         #region BigInteger

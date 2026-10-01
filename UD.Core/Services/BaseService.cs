@@ -1,12 +1,12 @@
-﻿namespace UD.Core.Services
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
+using UD.Core.Abstractions;
+using UD.Core.Extensions;
+using UD.Core.Pages;
+namespace UD.Core.Services
 {
-    using AutoMapper;
-    using Microsoft.EntityFrameworkCore;
-    using System.Linq.Dynamic.Core;
-    using System.Linq.Expressions;
-    using UD.Core.Abstractions;
-    using UD.Core.Extensions;
-    using UD.Core.Pages;
     public interface IBaseService<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto, TInsertDto, TUpdateDto> : IBaseServiceReadOnly<TContext, TEntity, TEntityDto, TEntityListDto, TSearchDto>
     where TContext : DbContext
     where TEntity : class, IBaseEntity

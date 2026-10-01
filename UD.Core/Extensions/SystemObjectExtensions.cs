@@ -1,17 +1,15 @@
-﻿namespace UD.Core.Extensions
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System.Collections;
+using System.ComponentModel;
+using System.Data;
+using System.Dynamic;
+using System.Globalization;
+using System.Numerics;
+using System.Web;
+using UD.Core.Helper;
+namespace UD.Core.Extensions
 {
-    using Microsoft.AspNetCore.Http;
-    using Newtonsoft.Json;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Data;
-    using System.Dynamic;
-    using System.Globalization;
-    using System.Numerics;
-    using System.Web;
-    using UD.Core.Helper;
     public static class SystemObjectExtensions
     {
         /// <summary>Verilen nesneyi JSON biçiminde dönüştürür. JSON çıktısı None biçiminde ve bazı özel ayarlarla döner.</summary>

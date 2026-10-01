@@ -1,8 +1,8 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using UD.Core.Extensions;
 namespace UD.Core.Attributes.DataAnnotations
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using UD.Core.Extensions;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDEnumAttribute<TEnum> : ValidationAttribute where TEnum : struct, Enum
     {

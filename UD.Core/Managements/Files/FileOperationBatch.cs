@@ -1,9 +1,8 @@
-﻿namespace UD.Core.Managements.Files
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using UD.Core.Extensions;
+namespace UD.Core.Managements.Files
 {
-    using Microsoft.AspNetCore.Http;
-    using System.Collections.Generic;
-    using UD.Core.Extensions;
-
     public sealed class FileOperationBatch
     {
         private readonly HashSet<string> _toBeDeletedDirectories = [];

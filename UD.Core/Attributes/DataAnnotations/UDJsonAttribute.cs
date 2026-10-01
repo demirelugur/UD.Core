@@ -1,10 +1,10 @@
-﻿namespace UD.Core.Attributes.DataAnnotations
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.ComponentModel.DataAnnotations;
+using UD.Core.Extensions;
+using UD.Core.Helper;
+namespace UD.Core.Attributes.DataAnnotations
 {
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using System.ComponentModel.DataAnnotations;
-    using UD.Core.Extensions;
-    using UD.Core.Helper;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
     public sealed class UDJSONAttribute : ValidationAttribute
     {

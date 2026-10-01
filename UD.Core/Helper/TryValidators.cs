@@ -1,25 +1,22 @@
-﻿namespace UD.Core.Helper
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
+using System.Collections;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Drawing;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
+using System.Web;
+using UD.Core.Extensions;
+using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Helper
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.IdentityModel.Tokens;
-    using Newtonsoft.Json.Linq;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Data;
-    using System.Drawing;
-    using System.Globalization;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
-    using System.Net.Mail;
-    using System.Reflection;
-    using System.Security.Claims;
-    using System.Text;
-    using System.Text.Json;
-    using System.Web;
-    using UD.Core.Extensions;
-    using static UD.Core.Helper.GlobalConstants;
     public sealed partial class TryValidators
     {
         /// <summary>Verilen nesnenin doğrulama kurallarına göre geçerliliğini kontrol eder. Eğer nesne geçerli değilse, doğrulama hatalarını içeren bir dizi döner.</summary>

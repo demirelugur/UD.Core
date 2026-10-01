@@ -1,8 +1,7 @@
-﻿namespace UD.Core.Results
+﻿using Microsoft.AspNetCore.Http;
+using UD.Core.Extensions;
+namespace UD.Core.Results
 {
-    using Microsoft.AspNetCore.Http;
-    using System;
-    using UD.Core.Extensions;
     public class EnumResult : IEquatable<EnumResult>
     {
         #region Equals

@@ -1,13 +1,12 @@
+using System.Collections.Concurrent;
+using System.Globalization;
+using System.Text;
+using System.Xml.Linq;
+using UD.Core.Enums;
+using UD.Core.Extensions;
+using UD.Core.Responses;
 namespace UD.Core.Services
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Globalization;
-    using System.Text;
-    using System.Xml.Linq;
-    using UD.Core.Enums;
-    using UD.Core.Extensions;
-    using UD.Core.Responses;
     public interface ITCMBService // AddSingleton
     {
         Task<TCMBResponse> GetAsync(EnumTCMBRateCode rateCode, DateOnly? date = null, CancellationToken cancellationToken = default);

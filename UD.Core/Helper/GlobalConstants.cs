@@ -1,9 +1,9 @@
-﻿namespace UD.Core.Helper
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Globalization;
+using System.Security.Cryptography;
+namespace UD.Core.Helper
 {
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using System.Globalization;
-    using System.Security.Cryptography;
     public sealed class GlobalConstants
     {
         public const string DefaultUri = "https://example.com";

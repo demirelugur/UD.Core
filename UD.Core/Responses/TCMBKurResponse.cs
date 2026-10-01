@@ -1,6 +1,5 @@
 namespace UD.Core.Responses
 {
-    using System;
     public sealed class TCMBResponse : IEquatable<TCMBResponse>
     {
         #region Equals

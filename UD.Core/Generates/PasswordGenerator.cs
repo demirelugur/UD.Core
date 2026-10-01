@@ -1,7 +1,7 @@
-﻿namespace UD.Core.Generates
+﻿using System.Text;
+using UD.Core.Extensions;
+namespace UD.Core.Generates
 {
-    using System.Text;
-    using UD.Core.Extensions;
     public sealed class PasswordGenerator
     {
         private readonly string _upperCases;

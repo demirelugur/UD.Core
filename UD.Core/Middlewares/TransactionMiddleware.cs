@@ -1,10 +1,10 @@
-﻿namespace UD.Core.Middlewares
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using UD.Core.Attributes;
+using UD.Core.Extensions;
+namespace UD.Core.Middlewares
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
-    using UD.Core.Attributes;
-    using UD.Core.Extensions;
     public sealed class TransactionMiddleware<TContext> where TContext : DbContext
     {
         private readonly RequestDelegate _next;

@@ -1,14 +1,13 @@
-﻿namespace UD.Core.UnitTest
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using UD.Core.Attributes.DataAnnotations;
+using UD.Core.Extensions;
+namespace UD.Core.UnitTest
 {
-    using Microsoft.Data.Sqlite;
-    using Microsoft.EntityFrameworkCore;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.IO;
-    using UD.Core.Attributes.DataAnnotations;
-    using UD.Core.Extensions;
     [TestFixture]
     public class ConnectionTest
     {

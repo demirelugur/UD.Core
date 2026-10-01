@@ -1,10 +1,9 @@
-﻿namespace UD.Core.Managements.Mails
+﻿using System.Net.Mail;
+using UD.Core.Extensions;
+using UD.Core.Helper;
+using UD.Core.Validations;
+namespace UD.Core.Managements.Mails
 {
-    using System.Net.Mail;
-    using UD.Core.Extensions;
-    using UD.Core.Helper;
-    using UD.Core.Validations;
-
     public sealed class MailHelper
     {
         public string Subject { get; }

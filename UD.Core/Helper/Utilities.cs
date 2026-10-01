@@ -1,15 +1,14 @@
-﻿namespace UD.Core.Helper
+﻿using Ganss.Xss;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
+using System.Transactions;
+using UD.Core.Extensions;
+namespace UD.Core.Helper
 {
-    using Ganss.Xss;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.StaticFiles;
-    using Microsoft.Data.SqlClient;
-    using Microsoft.Extensions.DependencyInjection;
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq.Expressions;
-    using System.Transactions;
-    using UD.Core.Extensions;
     public sealed class Utilities
     {
         /// <summary>SQL Server veritabanı bağlantı dizesi oluşturur. 

@@ -1,6 +1,6 @@
+using System.Text.RegularExpressions;
 namespace UD.Core.Helper
 {
-    using System.Text.RegularExpressions;
     public static partial class RegexPatterns
     {
         /// <summary>HTML etiketlerini tespit etmek için kullanılan regex. Etiket açma/kapama, self-closing ve attributeleri yakalar.</summary>

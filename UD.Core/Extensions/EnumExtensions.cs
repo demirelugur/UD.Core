@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Extensions
+﻿using Microsoft.AspNetCore.Http;
+using System.Data;
+using UD.Core.Enums;
+namespace UD.Core.Extensions
 {
-    using Microsoft.AspNetCore.Http;
-    using System.Data;
-    using UD.Core.Enums;
     public static class EnumExtensions
     {
         internal static (int maxLength, string chars) GetFormatInfo(this EnumGuidFormat format) => format switch

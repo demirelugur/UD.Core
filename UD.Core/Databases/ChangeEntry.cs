@@ -1,10 +1,10 @@
-﻿namespace UD.Core.Databases
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq;
+using System.Reflection;
+using UD.Core.Extensions;
+namespace UD.Core.Databases
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-    using System.Linq;
-    using System.Reflection;
-    using UD.Core.Extensions;
     public sealed class ChangeEntry
     {
         public string EntityName { get; set; }

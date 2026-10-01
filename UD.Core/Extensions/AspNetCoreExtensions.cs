@@ -1,15 +1,15 @@
-﻿namespace UD.Core.Extensions
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using UD.Core.Enums;
+using UD.Core.Helper;
+using UD.Core.Managements.Files;
+namespace UD.Core.Extensions
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
-    using Microsoft.Extensions.DependencyInjection;
-    using System;
-    using System.Globalization;
-    using System.Linq;
-    using System.Net;
-    using UD.Core.Enums;
-    using UD.Core.Helper;
-    using UD.Core.Managements.Files;
     public static class AspNetCoreExtensions
     {
         #region HttpContext

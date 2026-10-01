@@ -1,6 +1,5 @@
 ﻿namespace UD.Core.Abstractions
 {
-    using System;
     public interface IEntityDto { }
     public interface IEntityDto<TKey> : IEntityDto
     {
@@ -9,7 +8,7 @@
     [Serializable]
     public abstract class EntityDto : IEntityDto
     {
-        public override string ToString() => $"[DTO: {this.GetType().Name}]";
+        public override string ToString() => $"DTO: {this.GetType().Name}";
     }
     [Serializable]
     public abstract class EntityDto<TKey> : EntityDto, IEntityDto<TKey>

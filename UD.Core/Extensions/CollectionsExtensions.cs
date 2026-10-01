@@ -1,9 +1,9 @@
-﻿namespace UD.Core.Extensions
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UD.Core.Results;
+namespace UD.Core.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using UD.Core.Results;
     public static class CollectionsExtensions
     {
         #region IDictionary

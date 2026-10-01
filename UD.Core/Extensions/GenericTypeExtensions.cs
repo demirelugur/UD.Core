@@ -1,6 +1,6 @@
-﻿namespace UD.Core.Extensions
+﻿using System;
+namespace UD.Core.Extensions
 {
-    using System;
     public static class GenericTypeExtensions
     {
         /// <summary><paramref name="value"/> değeri için standart bir <see cref="ArgumentOutOfRangeException"/> oluşturur.</summary>

@@ -1,8 +1,8 @@
-﻿namespace UD.Core.Pages
+﻿using System.ComponentModel;
+using UD.Core.Attributes.DataAnnotations;
+using UD.Core.Extensions;
+namespace UD.Core.Pages
 {
-    using System.ComponentModel;
-    using UD.Core.Attributes.DataAnnotations;
-    using UD.Core.Extensions;
     public interface ISearchAndPaginateDto
     {
         int PageNumber { get; set; }

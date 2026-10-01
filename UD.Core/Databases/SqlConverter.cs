@@ -1,6 +1,6 @@
-﻿namespace UD.Core.Databases
+﻿using static UD.Core.Helper.GlobalConstants;
+namespace UD.Core.Databases
 {
-    using static UD.Core.Helper.GlobalConstants;
     public sealed class SqlConverter
     {
         /// <summary> Guid değerini SQL Server UNIQUEIDENTIFIER tipine dönüştüren CONVERT ifadesini oluşturur.</summary>

@@ -1,8 +1,7 @@
-﻿namespace UD.Core.Abstractions
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace UD.Core.Abstractions
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
     public interface IBaseEntity
     {
         object[] GetKeys();
@@ -14,7 +13,7 @@
     [Serializable]
     public abstract class BaseEntity : IBaseEntity
     {
-        public override string ToString() => $"[ENTITY: {this.GetType().Name}], [Keys] = [{String.Join(", ", this.GetKeys())}]";
+        public override string ToString() => $"ENTITY: {this.GetType().FullName}, [Keys] = [{String.Join(", ", this.GetKeys())}]";
         public abstract object[] GetKeys();
     }
     [Serializable]
@@ -29,6 +28,6 @@
             this.Id = id;
         }
         public override object[] GetKeys() => [this.Id];
-        public override string ToString() => $"[ENTITY: {this.GetType().Name}], [{nameof(this.Id)}] = {this.Id}";
+        public override string ToString() => $"ENTITY: {this.GetType().FullName}, [{nameof(this.Id)}] = {this.Id}";
     }
 }
