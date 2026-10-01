@@ -24,12 +24,7 @@ namespace UD.Core.Extensions
         /// <exception cref="NotSupportedException">Eğer belirtilen tip üzerinde <see cref="TableAttribute"/> özniteliği bulunmazsa fırlatılır.</exception>
         public static string GetTableName(this Type type, bool isSquareBrackets)
         {
-            if (TryValidators.TryCustomAttribute(type, out TableAttribute _ta))
-            {
-                var r = new List<string> { _ta.Schema.CoalesceOrDefault("dbo"), _ta.Name };
-                if (isSquareBrackets) { return String.Join(".", r.Select(x => $"[{x}]").ToArray()); }
-                return String.Join(".", r);
-            }
+            if (TryValidators.TryCustomAttribute(type, out TableAttribute _ta)) { return _ta.GetTableName(isSquareBrackets); }
             throw new NotSupportedException($"\"{type.FullName}\" tipi üzerinde \"{typeof(TableAttribute).FullName}\" özniteliği bulunmamaktadır. ", new Exception("Tablo adını alabilmek için ilgili sınıfa [Table(\"TabloAdi\")] özniteliği eklenmelidir."));
         }
         /// <summary> <paramref name="type"/> türünün varsayılan değerini döndürür. Eğer tür nullable değilse ve bir değer türüyse, <see cref="Activator.CreateInstance(Type)"/> kullanılarak varsayılan değeri oluşturulur. Aksi takdirde, null döndürülür. Bu yöntem, özellikle nullable olmayan değer türleri için varsayılan değerleri almak için kullanışlıdır.</summary>
