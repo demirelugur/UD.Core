@@ -74,9 +74,9 @@ namespace UD.Core.Extensions
                 else if (item == ' ') { sb.Append('-'); }
                 else if (Array.IndexOf(_charsToRemove, item) == -1) { sb.Append(item); }
             }
-            value = sb.ToString().ToLower().Trim();
-            value = RegexPatterns.NonAlphanumericPattern().Replace(value, "-");
-            value = RegexPatterns.MultipleHyphensPattern().Replace(value, "-");
+            value = sb.ToString().ToLowerInvariant().Trim();
+            value = Regex.Replace(value, @"[^a-z0-9-]", "-");
+            value = Regex.Replace(value, @"-+", "-");
             return value.Trim('-');
         }
         /// <summary>

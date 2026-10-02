@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Web;
 using UD.Core.Extensions;
 using static UD.Core.Helper.GlobalConstants;
@@ -129,7 +130,7 @@ namespace UD.Core.Helper
             else if (phoneNumberTR.Length == 13 && phoneNumberTR.StartsWith("+90")) { phoneNumberTR = phoneNumberTR.Substring(3); }
             else if (phoneNumberTR.Length == 12 && phoneNumberTR.StartsWith("90")) { phoneNumberTR = phoneNumberTR.Substring(2); }
             else if (phoneNumberTR.Length == 11 && phoneNumberTR[0] == '0') { phoneNumberTR = phoneNumberTR.Substring(1); }
-            var r = phoneNumberTR.Length == 10 && RegexPatterns.NumericOnlyPattern().IsMatch(phoneNumberTR);
+            var r = phoneNumberTR.Length == 10 && Regex.IsMatch(phoneNumberTR, @"^\d+$");
             outvalue = r ? phoneNumberTR : "";
             return r;
         }
@@ -216,8 +217,8 @@ namespace UD.Core.Helper
         {
             try
             {
-                value = value.ToStringOrEmpty().ToUpper();
-                if (value.Length == MaximumLengthConstants.Mac && RegexPatterns.MacAddressPattern().IsMatch(value))
+                value = value.ToStringOrEmpty().ToUpperInvariant();
+                if (value.Length == MaximumLengthConstants.Mac && Regex.IsMatch(value, @"^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$"))
                 {
                     outvalue = value.Replace("-", ":");
                     return true;
@@ -346,9 +347,9 @@ namespace UD.Core.Helper
             outvalue = "";
             value = new(value.ToStringOrEmpty().ToUpperInvariant().Where(Char.IsLetterOrDigit).ToArray());
             if (value == "") { return false; }
-            var match = RegexPatterns.TurkishPlatePattern1().Match(value); // 2 rakam + 1 harf + 4-5 rakam
-            if (!match.Success) { match = RegexPatterns.TurkishPlatePattern2().Match(value); } // 2 rakam + 2 harf + 3-4 rakam
-            if (!match.Success) { match = RegexPatterns.TurkishPlatePattern3().Match(value); } // 2 rakam + 3 harf + 2-3 rakam
+            var match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{1})(?<number>\d{4,5})$"); // 2 rakam + 1 harf + 4-5 rakam
+            if (!match.Success) { match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{2})(?<number>\d{3,4})$"); } // 2 rakam + 2 harf + 3-4 rakam
+            if (!match.Success) { match = Regex.Match(value, @"^(?<city>\d{2})(?<letters>[A-Z]{3})(?<number>\d{2,3})$"); } // 2 rakam + 3 harf + 2-3 rakam
             if (!match.Success) { return false; }
             var cityPlate = match.Groups["city"].Value.ParseOrDefault<int>();
             if (!cityPlate.Between(1, 81)) { return false; }
