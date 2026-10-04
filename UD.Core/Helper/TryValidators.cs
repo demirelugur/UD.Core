@@ -60,7 +60,7 @@ namespace UD.Core.Helper
         {
             try
             {
-                outvalue = new(address.ToStringOrEmpty());
+                outvalue = new(address.ToStringOrEmpty().ToLowerInvariant());
                 return true;
             }
             catch

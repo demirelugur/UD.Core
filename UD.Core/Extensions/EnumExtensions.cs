@@ -16,10 +16,6 @@ namespace UD.Core.Extensions
         /// <param name="value">Kontrol edilecek EnumAlertState değeri.</param>
         /// <returns>Belirtilen değerlerin herhangi birini içeriyorsa <see langword="true"/>, aksi takdirde <see langword="false"/>.</returns>
         public static bool IsFailed(this EnumAlertState value) => value.Includes(EnumAlertState.warning, EnumAlertState.error);
-        /// <summary><paramref name="value"/> değerinin <see cref="EnumStatus.active"/> olup olmadığını kontrol eder. Eğer <paramref name="value"/> değeri <see cref="EnumStatus.active"/> ise, <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
-        /// <param name="value">Kontrol edilecek EnumStatus değeri.</param>
-        /// <returns><paramref name="value"/> değeri <see cref="EnumStatus.active"/> ise <see langword="true"/>, aksi takdirde <see langword="false"/>.</returns>
-        public static bool IsActive(this EnumStatus value) => value == EnumStatus.active;
         /// <summary><paramref name="value"/> değerine göre, geçerli UI kültürüne uygun HTTP durum kodunu döndürür. Eğer geçerli UI kültürü İngilizce ise, Enum değerlerine özel tanımlanmış HTTP durum kodlarını döndürür. Diğer durumlarda, Enum değerlerinin açıklamalarını enum tanımlarında belirtilen açıklamalara göre döndürür.</summary>
         /// <param name="value">HTTP durum kodu alınacak Enum değeri.</param>
         /// <returns>Geçerli UI kültürüne uygun HTTP durum kodu.</returns>
@@ -31,6 +27,10 @@ namespace UD.Core.Extensions
             EnumAlertState.error => StatusCodes.Status400BadRequest,
             _ => throw value.ArgumentOutOfRange(nameof(value))
         };
+        /// <summary><paramref name="value"/> değerinin <see cref="EnumStatus.active"/> olup olmadığını kontrol eder. Eğer <paramref name="value"/> değeri <see cref="EnumStatus.active"/> ise, <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
+        /// <param name="value">Kontrol edilecek EnumStatus değeri.</param>
+        /// <returns><paramref name="value"/> değeri <see cref="EnumStatus.active"/> ise <see langword="true"/>, aksi takdirde <see langword="false"/>.</returns>
+        public static bool IsActive(this EnumStatus value) => value == EnumStatus.active;
         /// <summary>Verilen <see cref="SqlDbType"/> enum değerini, SQL Server sistem tür kimliğine (<c>[system_type_id]</c>) dönüştürür. Bu kimlikler, SQL Server&#39;ın [sys].[types] sistem tablosunda bulunan ve her veri türü için benzersiz olan sayısal değerlerdir.</summary>
         /// <param name="type">Dönüştürülecek <see cref="SqlDbType"/> enum değeri.</param>
         /// <returns>SQL Server sistem tür kimliği (<c>[system_type_id]</c>) değeri</returns>
