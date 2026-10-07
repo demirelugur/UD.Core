@@ -2,20 +2,23 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
-using UD.Core.Attributes;
+using UD.Core.Attributes; // <see langword="true"/>
 using UD.Core.Helper;
 namespace UD.Core.Extensions
 {
     public static class ReflectionExtensions
     {
         #region PropertyInfo
-        /// <summary>Belirtilen özellik bilgilerinin veritabanı kaynaklı haritalanmış bir özellik olup olmadığını kontrol eder.</summary>
+        /// <summary><paramref name="propertyInfo"/> özelliğinin veritabanına eşlenip eşlenmediğini kontrol eder. Özellik, <see cref="NotMappedAttribute"/> ile işaretlenmişse, bu metot <see langword="false"/> döner; aksi takdirde <see langword="true"/> döner.</summary>
         /// <param name="propertyInfo">Kontrol edilecek özellik bilgisi.</param>
-        /// <returns>Haritalanmış bir özellik ise <see langword="true"/>, değilse false <see langword="false"/>.</returns>
+        /// <returns>Özellik veritabanına eşlenmişse <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool IsMapped(this PropertyInfo propertyInfo)
         {
-            if (!propertyInfo.CanRead || !propertyInfo.CanWrite || propertyInfo.IsNotMapped()) { return false; }
-            if ((propertyInfo.GetMethod.IsVirtual || propertyInfo.SetMethod.IsVirtual) && (propertyInfo.PropertyType.IsMappedTable() || (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) && propertyInfo.PropertyType.GenericTypeArguments[0].IsMappedTable()))) { return false; }
+            ArgumentNullException.ThrowIfNull(propertyInfo, nameof(propertyInfo));
+            if (!propertyInfo.CanRead || !propertyInfo.CanWrite || propertyInfo.IsNotMappedAttribute()) { return false; }
+            var getMethod = propertyInfo.GetMethod;
+            if (getMethod == null) { return false; }
+            if (getMethod.IsVirtual && !getMethod.IsFinal) { return false; }
             return true;
         }
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) birincil anahtar (Primary Key) olup olmadığını kontrol eder. Özelliğin, <see cref="KeyAttribute"/> ile işaretlenmiş olup olmadığını kontrol ederek birincil anahtar durumunu döndürür.</summary>
@@ -26,7 +29,7 @@ namespace UD.Core.Extensions
         /// <param name="propertyInfo">Kontrol edilecek özellik (<see cref="PropertyInfo"/> nesnesi).</param>
         /// <returns>Özellik <see cref="NotMappedAttribute"/> ile işaretlenmişse <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         /// <remarks>Bu metot, Entity Framework veya benzeri ORM yapılarında, bir özelliğin veritabanına eşlenip eşlenmediğini hızlıca kontrol etmek için kullanılabilir.</remarks>
-        public static bool IsNotMapped(this PropertyInfo propertyInfo) => TryValidators.TryCustomAttribute(propertyInfo, out NotMappedAttribute _);
+        public static bool IsNotMappedAttribute(this PropertyInfo propertyInfo) => TryValidators.TryCustomAttribute(propertyInfo, out NotMappedAttribute _);
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) HTML içeriği içerip içermediğini kontrol eder. Özellik, <see cref="HtmlContentAttribute"/> ile işaretlenmişse, bu metot <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
         public static bool IsHtmlContent(this PropertyInfo propertyInfo) => TryValidators.TryCustomAttribute(propertyInfo, out HtmlContentAttribute _);
         /// <summary>Verilen özelliğin (<see cref="PropertyInfo"/>) temizlenmeden (sanitize) geçirilmesi gerektiğini belirten <see cref="SkipSanitizeAttribute"/> ile işaretlenip işaretlenmediğini kontrol eder. Eğer özellik bu özniteliğe sahipse, bu metot <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>

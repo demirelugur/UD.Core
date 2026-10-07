@@ -809,3 +809,14 @@ public static string GetDisplayNameLocalized(this EnumTCMBRateCode value)
     return value.GetDisplayNameFromEnum();
 }
 ***************************************
+/// <summary>Belirtilen özellik bilgilerinin veritabanı kaynaklı haritalanmış bir özellik olup olmadığını kontrol eder.</summary>
+/// <param name="propertyInfo">Kontrol edilecek özellik bilgisi.</param>
+/// <returns>Haritalanmış bir özellik ise <see langword="true"/>, değilse false <see langword="false"/>.</returns>
+public static bool IsMapped(this PropertyInfo propertyInfo)
+{
+    if (!propertyInfo.CanRead || !propertyInfo.CanWrite || propertyInfo.IsNotMapped()) { return false; }
+    if ((propertyInfo.GetMethod.IsVirtual || propertyInfo.SetMethod.IsVirtual) && (propertyInfo.PropertyType.IsMappedTable() || (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) && propertyInfo.PropertyType.GenericTypeArguments[0].IsMappedTable()))) { return false; }
+    return true;
+}
+***************************************
+***************************************
