@@ -69,39 +69,51 @@ namespace UD.Core.Helper
                 return false;
             }
         }
-        /// <summary>
-        /// Verilen nesne üzerinde belirtilen anahtar (property veya sözlük elemanı) aranır.
-        /// <para>Eğer nesne bir <see cref="IDictionary"/> ise anahtar sözlükte aranır. Eğer normal ya da anonim bir nesne ise reflection ile public özelliklerde aranır.</para>
-        /// </summary>
+        /// <summary><paramref name="value"/> değişkeninde verilen nesnenin, belirtilen <paramref name="key"/> anahtarına sahip bir özelliği olup olmadığını kontrol eder. Eğer özellik bulunursa, <paramref name="outvalue"/> parametresine özelliğin değeri atanır ve metot <see langword="true"/> döner. Özellik bulunamazsa veya değer dönüştürülemezse, <paramref name="outvalue"/> boş bir değer olarak atanır ve metot <see langword="false"/> döner.</summary>
         /// <typeparam name="TKey">Beklenen değer tipi.</typeparam>
-        /// <param name="value">Üzerinde arama yapılacak nesne (sözlük, anonim tip, dinamik nesne vb.).</param>
+        /// <param name="value">Arama yapılacak nesne (sözlük, anonim tip, dinamik nesne vb.).</param>
         /// <param name="key">Erişilmek istenen property ya da sözlük anahtar adı.</param>
         /// <param name="outvalue">Bulunursa değerin <typeparamref name="TKey"/> tipinde sonucu, aksi halde varsayılan değer.</param>
         /// <returns>Anahtar bulunduysa ve değer istenen tipe dönüştürülebiliyorsa <see langword="true"/>, aksi halde <see langword="false"/>.</returns>
         public static bool TryGetProperty<TKey>(object value, string key, out TKey outvalue)
         {
+            outvalue = default;
+            if (value == null || key.IsNullOrEmpty()) { return false; }
             try
             {
-                if (value != null && !key.IsNullOrEmpty())
+                object propertyValue = null;
+                if (value is IDictionary<string, object> _genericDict)
                 {
-                    if (value is IDictionary _dic && _dic.Contains(key) && _dic[key] is TKey _tdic)
+                    if (!_genericDict.TryGetValue(key, out propertyValue))
                     {
-                        outvalue = _tdic;
-                        return true;
-                    }
-                    var pi = value.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                    if (pi != null)
-                    {
-                        var piValue = pi.GetValue(value);
-                        if (piValue is TKey _tpi)
-                        {
-                            outvalue = _tpi;
-                            return true;
-                        }
+                        var pair = _genericDict.FirstOrDefault(x => x.Key == key);
+                        if (pair.Key.IsNullOrEmpty()) { return false; }
+                        propertyValue = pair.Value;
                     }
                 }
-                outvalue = default;
-                return false;
+                else if (value is IDictionary _standartDict)
+                {
+                    foreach (DictionaryEntry entry in _standartDict)
+                    {
+                        if (entry.Key == null || entry.Key.ToString() != key) { continue; }
+                        propertyValue = entry.Value;
+                        break;
+                    }
+                }
+                else
+                {
+                    var propertyInfo = value.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                    if (propertyInfo == null) { return false; }
+                    propertyValue = propertyInfo.GetValue(value);
+                }
+                if (propertyValue == null) { return false; }
+                if (propertyValue is TKey _typedValue)
+                {
+                    outvalue = _typedValue;
+                    return true;
+                }
+                outvalue = (TKey)Convert.ChangeType(propertyValue, Nullable.GetUnderlyingType(typeof(TKey)) ?? typeof(TKey));
+                return true;
             }
             catch
             {
