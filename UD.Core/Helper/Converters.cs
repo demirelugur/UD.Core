@@ -24,7 +24,7 @@ namespace UD.Core.Helper
             Array.Reverse(elements);
             return String.Concat(elements);
         }
-        /// <summary><paramref name="obj"/> nesnesini Dictionary&lt;string, object&gt; tipine dönüştürür. <paramref name="obj"/> için tanımlanan nesneler: IDictionary, KeyValuePair&lt;string, object&gt;, IEnumerable&lt;KeyValuePair&lt;string, object&gt;&gt;, Custom Class (Property&#39;leri Dictionary&#39;e dönüştürülebilir olmalı)</summary>
+        /// <summary><paramref name="obj"/> nesnesini Dictionary&lt;string, object&gt; tipine dönüştürür. Nesne, IDictionary, KeyValuePair veya IEnumerable&lt;KeyValuePair&gt; gibi sözlük benzeri bir yapıya sahipse, bu yapıyı kullanır. Eğer nesne özel bir sınıf ise, sınıfın özelliklerini kullanarak bir sözlük oluşturur. Uygun olmayan türler için bir istisna fırlatır.</summary>
         /// <param name="obj">Dönüştürülecek nesne.</param>
         /// <returns>Dictionary&lt;string, object&gt; tipinde dönüştürülmüş nesne.</returns>
         /// <exception cref="ArgumentNullException">Parametre adı boş olduğunda fırlatılır.</exception>
@@ -32,19 +32,12 @@ namespace UD.Core.Helper
         public static Dictionary<string, object> ToDictionaryFromObject(object obj)
         {
             if (obj == null) { return []; }
-            if (obj is IDictionary _dic)
-            {
-                return _dic.Cast<DictionaryEntry>().ToDictionary(x =>
-                {
-                    var key = x.Key?.ToString();
-                    if (key.IsNullOrEmpty()) { throw new ArgumentNullException(nameof(x.Key), "Parametre adı boş olamaz."); }
-                    return key;
-                }, x => x.Value);
-            }
+            if (obj is IDictionary<string, object> _dicDynamic) { return _dicDynamic.ToDictionary(x => x.Key, x => x.Value); }
+            if (obj is IDictionary _dic) { return _dic.Keys.Cast<object>().ToDictionary(key => key.ToString()!, key => _dic[key]); }
             if (obj is KeyValuePair<string, object> _pair) { return ToDictionaryFromObject(_pair.ToEnumerable()); }
-            if (obj is IEnumerable<KeyValuePair<string, object>> _pairs) { return ToDictionaryFromObject(_pairs.ToDictionary(x => x.Key, x => x.Value)); }
+            if (obj is IEnumerable<KeyValuePair<string, object>> _pairs) { return _pairs.ToDictionary(x => x.Key, x => x.Value); }
             var t = obj.GetType();
-            if (t.IsCustomClass()) { return ToDictionaryFromObject(t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj))); }
+            if (t.IsCustomClass()) { return t.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj)); }
             throw new Exception($"{nameof(obj)} türü uygun biçimde değildir!");
         }
         /// <summary>Verilen nesneyi DateTime tipine dönüştürür ve isteğe bağlı bir zaman değeri ekler.<para><paramref name="obj"/> için tanımlanan nesneler: DateTime, DateTimeOffset, DateOnly, Int64, String(DateTime, DateTimeOffset, DateOnly, Int64 türlerine uygun biçimde olmalı), JToken(DateTime türüne uygun biçimde olmalı)</para></summary>
