@@ -14,7 +14,7 @@ namespace UD.Core.Extensions
         {
             if (jToken.IsNoneOrNullOrUndefined()) { return []; }
             if (jToken.Type == JTokenType.Array) { return jToken.Select(x => x.Value<TKey>()).ToArray(); }
-            throw jToken.Type.ArgumentOutOfRange(nameof(jToken.Type));
+            throw jToken.Type.ArgumentOutOfRange();
         }
     }
 }

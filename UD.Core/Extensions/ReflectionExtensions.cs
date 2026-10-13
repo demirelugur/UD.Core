@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
-using UD.Core.Attributes; // <see langword="true"/>
+using UD.Core.Attributes;
 using UD.Core.Helper;
 namespace UD.Core.Extensions
 {
@@ -14,7 +14,7 @@ namespace UD.Core.Extensions
         /// <returns>Özellik veritabanına eşlenmişse <see langword="true"/>, aksi takdirde <see langword="false"/> döner.</returns>
         public static bool IsMapped(this PropertyInfo propertyInfo)
         {
-            ArgumentNullException.ThrowIfNull(propertyInfo, nameof(propertyInfo));
+            ArgumentNullException.ThrowIfNull(propertyInfo);
             if (!propertyInfo.CanRead || !propertyInfo.CanWrite || propertyInfo.IsNotMappedAttribute()) { return false; }
             var getMethod = propertyInfo.GetMethod;
             if (getMethod == null) { return false; }

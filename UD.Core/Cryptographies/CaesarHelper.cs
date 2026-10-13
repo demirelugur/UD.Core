@@ -23,7 +23,7 @@ namespace UD.Core.Cryptographies
         /// <returns>Şifrelenmiş metin.</returns>
         public static string Encrypt(string plainText, int shift)
         {
-            Guard.ThrowIfZeroOrNegative(shift, nameof(shift));
+            Guard.ThrowIfZeroOrNegative(shift);
             return ApplyShift(plainText, shift);
         }
         /// <summary><paramref name="cipherText"/> değerini <paramref name="shift"/> kadar kaydırarak çözer. Şifre çözme işlemi sırasında, yalnızca İngilizce alfabesindeki harfler (büyük ve küçük) kaydırılırken, diğer karakterler (boşluk, noktalama işaretleri, sayılar vb.) olduğu gibi bırakılır. Kaydırma işlemi, harflerin alfabedeki konumlarına göre gerçekleştirilir ve kaydırma miktarı 26&#39;ya bölünerek döngüsel bir şekilde uygulanır. Örneğin, &#39;D&#39; harfi 3 kaydırıldığında &#39;A&#39; olurken, &#39;A&#39; harfi 1 kaydırıldığında &#39;Z&#39; olur.</summary>
@@ -32,7 +32,7 @@ namespace UD.Core.Cryptographies
         /// <returns>Deşifre edilmiş metin.</returns>
         public static string Decrypt(string cipherText, int shift)
         {
-            Guard.ThrowIfZeroOrNegative(shift, nameof(shift));
+            Guard.ThrowIfZeroOrNegative(shift);
             return ApplyShift(cipherText, 0 - shift);
         }
     }

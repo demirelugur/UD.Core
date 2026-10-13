@@ -16,7 +16,7 @@ namespace UD.Core.Extensions
         {
             var minValue = BigInteger.Zero;
             var maxValue = (BigInteger.One << 128) - BigInteger.One;
-            Guard.ThrowIfNotValidRange(value, minValue, maxValue, nameof(value));
+            Guard.ThrowIfNotValidRange(value, minValue, maxValue);
             var bytes = value.ToByteArray(true, true);
             if (bytes.Length < 16) { bytes = [.. Enumerable.Repeat(Byte.MinValue, 16 - bytes.Length), .. bytes]; }
             return new(bytes, true);
@@ -59,7 +59,7 @@ namespace UD.Core.Extensions
                 231 => SqlDbType.NVarChar,
                 239 => SqlDbType.NChar,
                 241 => SqlDbType.Xml,
-                _ => throw systemTypeId.ArgumentOutOfRange(nameof(systemTypeId))
+                _ => throw systemTypeId.ArgumentOutOfRange()
             };
         }
         #endregion

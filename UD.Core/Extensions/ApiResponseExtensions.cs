@@ -2,7 +2,6 @@
 using UD.Core.Responses;
 namespace UD.Core.Extensions
 {
-    ///<summary><see cref="ApiResponse{T}"/> geri dönüşleri için oluşturulmuş yardımcı foksiyonlar</summary>
     public static class ApiResponseExtensions
     {
         public static ApiResponse<T> ReturnError<T>(this string message) => new[] { message }.ReturnError<T>();

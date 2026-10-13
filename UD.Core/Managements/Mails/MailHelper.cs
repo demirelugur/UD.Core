@@ -29,10 +29,10 @@ namespace UD.Core.Managements.Mails
         }
         public async Task<(bool hasError, Exception ex)> SendAsync(SmtpClientBasic smtpClientBasic, CancellationToken cancellationToken = default)
         {
-            Guard.ThrowIfEmpty(this.Subject, nameof(this.Subject));
-            Guard.ThrowIfEmpty(this.Body, nameof(this.Body));
-            Guard.ThrowIfEmpty(this.Tos, nameof(this.Tos));
-            Guard.ThrowIfNotValidEnumDefined<MailPriority>(this.Priority, nameof(this.Priority));
+            Guard.ThrowIfEmpty(this.Subject);
+            Guard.ThrowIfEmpty(this.Body);
+            Guard.ThrowIfEmpty(this.Tos);
+            Guard.ThrowIfNotValidEnumDefined<MailPriority>(this.Priority);
             try
             {
                 smtpClientBasic ??= new();

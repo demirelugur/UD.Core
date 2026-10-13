@@ -10,7 +10,7 @@ namespace UD.Core.Extensions
             EnumGuidFormat.Base32 => (26, "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
             EnumGuidFormat.Base36 => (25, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
             EnumGuidFormat.Base62 => (22, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"),
-            _ => throw format.ArgumentOutOfRange(nameof(format))
+            _ => throw format.ArgumentOutOfRange()
         };
         /// <summary><paramref name="value"/> değerinin, <see cref="EnumAlertState.warning"/> veya <see cref="EnumAlertState.error"/> değerlerini içerip içermediğini kontrol eder. Eğer <paramref name="value"/> değeri bu iki değerden herhangi birini içeriyorsa, <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
         /// <param name="value">Kontrol edilecek EnumAlertState değeri.</param>
@@ -25,7 +25,7 @@ namespace UD.Core.Extensions
             EnumAlertState.info => StatusCodes.Status202Accepted,
             EnumAlertState.warning => StatusCodes.Status202Accepted,
             EnumAlertState.error => StatusCodes.Status400BadRequest,
-            _ => throw value.ArgumentOutOfRange(nameof(value))
+            _ => throw value.ArgumentOutOfRange()
         };
         /// <summary><paramref name="value"/> değerinin <see cref="EnumStatus.active"/> olup olmadığını kontrol eder. Eğer <paramref name="value"/> değeri <see cref="EnumStatus.active"/> ise, <see langword="true"/> döner; aksi takdirde <see langword="false"/> döner.</summary>
         /// <param name="value">Kontrol edilecek EnumStatus değeri.</param>
@@ -68,7 +68,7 @@ namespace UD.Core.Extensions
                 SqlDbType.NVarChar => 231,
                 SqlDbType.NChar => 239,
                 SqlDbType.Xml => 241,
-                _ => throw type.ArgumentOutOfRange(nameof(type))
+                _ => throw type.ArgumentOutOfRange()
             };
         }
         /// <summary><paramref name="enum"/> değerinden belirtilen bayrakları temizler ve yeni bir enum değeri döndürür. Bu yöntem, bit bayraklarını temsil eden enum türleri için kullanışlıdır.</summary>

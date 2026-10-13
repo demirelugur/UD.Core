@@ -9,7 +9,7 @@ namespace UD.Core.Extensions
         /// <returns>Tablo adını döndürür.</returns>
         public static string GetTableName(this TableAttribute table, bool isSquareBrackets)
         {
-            ArgumentNullException.ThrowIfNull(table, nameof(table));
+            ArgumentNullException.ThrowIfNull(table);
             var r = new List<string> { table.Schema.CoalesceOrDefault("dbo"), table.Name };
             if (isSquareBrackets) { return String.Join(".", r.Select(x => $"[{x}]").ToArray()); }
             return String.Join(".", r);
