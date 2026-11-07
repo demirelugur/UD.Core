@@ -24,7 +24,7 @@ namespace UD.Core.Extensions
         {
             var (maxLength, chars) = format.GetFormatInfo();
             if (value.Length > maxLength) { throw ToGuidFromBaseFormatException(null); }
-            BigInteger number = 0;
+            var number = BigInteger.One;
             foreach (var character in value)
             {
                 var index = chars.IndexOf(character);
