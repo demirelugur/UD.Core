@@ -3,11 +3,11 @@ using UD.Core.Extensions;
 namespace UD.Core.Attributes.DataAnnotations
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-    public sealed class UDIncludesAttribute : ValidationAttribute
+    public sealed class UDIncludesAttribute<T> : ValidationAttribute where T : struct
     {
         public bool IsEqual { get; }
-        public object[] Values { get; }
-        public UDIncludesAttribute(bool isEqual, params object[] values)
+        public T[] Values { get; }
+        public UDIncludesAttribute(bool isEqual, params T[] values)
         {
             this.IsEqual = isEqual;
             this.Values = values ?? [];
@@ -20,35 +20,25 @@ namespace UD.Core.Attributes.DataAnnotations
                 if (isRequired) { return this.ToResult(validationContext); }
                 return ValidationResult.Success;
             }
-            bool contains;
-            if (value is String _s)
+            if (value is not T _typedValue) { return new($"{validationContext.DisplayName} alanı uygun türde değil.", [validationContext.MemberName]); }
+            var contains = false;
+            var type = typeof(T);
+            if (type.IsEnum || type.Includes(typeof(byte), typeof(short), typeof(int), typeof(long)))
             {
-                _s = _s.Trim();
-                if (_s == "")
-                {
-                    if (isRequired) { contains = false; }
-                    else
-                    {
-                        validationContext.SetValidatePropertyValue(null);
-                        return ValidationResult.Success;
-                    }
-                }
-                else { contains = this.Values.Any(x => String.Equals(x?.ToString(), _s, StringComparison.Ordinal)); }
+                var valueLong = Convert.ToInt64(_typedValue);
+                contains = this.Values.Any(v => Convert.ToInt64(v) == valueLong);
             }
-            else if (value.GetType().IsEnum || value is (Byte or Int16 or Int32 or Int64))
-            {
-                var valueLong = Convert.ToInt64(value);
-                contains = this.Values.Any(v => v != null && Convert.ToInt64(v) == valueLong);
-            }
-            else { contains = this.Values.Any(v => String.Equals(v?.ToString(), value.ToString(), StringComparison.Ordinal)); }
+            else if (_typedValue is DateTime dt) { contains = this.Values.Cast<DateTime>().Any(v => v == dt); }
+            else { contains = this.Values.Any(v => v.Equals(_typedValue)); }
             return (contains == this.IsEqual ? ValidationResult.Success : this.ToResult(validationContext));
         }
         private ValidationResult ToResult(ValidationContext validationContext)
         {
             if (this.ErrorMessage.IsNullOrEmpty())
             {
-                if (this.IsEqual) { this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.Values)}] değerlerinden biri olmalıdır!"; }
-                else { this.ErrorMessage = $"{validationContext.DisplayName}, [{String.Join(", ", this.Values)}] değerleri dışında farklı bir değer olmalıdır!"; }
+                var valuesStr = String.Join(", ", this.Values);
+                if (this.IsEqual) { this.ErrorMessage = $"{validationContext.DisplayName}, [{valuesStr}] değerlerinden biri olmalıdır!"; }
+                else { this.ErrorMessage = $"{validationContext.DisplayName}, [{valuesStr}] değerleri dışında farklı bir değer olmalıdır!"; }
             }
             return new(this.ErrorMessage, [validationContext.MemberName]);
         }
