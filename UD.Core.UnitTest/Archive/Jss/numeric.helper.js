@@ -10,7 +10,7 @@ const Int64MaxValue = 9223372036854775807n;
 const formatNumberTR = (value, fractionDigits) => {
     if (objectHelper.isNullOrUndefined(value)) { return 0; }
     if (typeof value !== 'number') { value = Number(value); }
-    if (!Number.isInteger(value)) { return 0; }
+    if (isNaN(value)) { return 0; }
     let options = {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,

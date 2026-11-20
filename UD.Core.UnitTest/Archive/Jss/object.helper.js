@@ -1,6 +1,21 @@
 import { message } from "antd";
 const GuidEmpty = '00000000-0000-0000-0000-000000000000';
 const GuidMaxValue = 'FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF';
+const applyNumericMask = (value, mask) => {
+    if (typeof mask !== 'string' || mask.length === 0) { return value ?? ''; }
+    let i, maskChar, digitIndex = 0, result = '', digits = String(value ?? '').replace(/\D/g, '');
+    for (i = 0; i < mask.length; i += 1) {
+        maskChar = mask[i];
+        if (maskChar === '9') {
+            if (digitIndex >= digits.length) { break; }
+            result += digits[digitIndex];
+            digitIndex += 1;
+            continue;
+        }
+        if (digitIndex < digits.length) { result += maskChar; }
+    }
+    return result;
+};
 const beautifyPhoneNumber = (value) => {
     if (isNullOrEmpty(value)) { return ''; }
     let s = String(value).trim();
@@ -29,19 +44,21 @@ const decodeTokenPayload = (token) => {
     try {
         let base64 = payloadPart.replace(/-/g, '+').replace(/_/g, '/');
         let padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=');
-        let json = atob(padded);
+        let binary = atob(padded);
+        let bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+        let json = new TextDecoder('utf-8').decode(bytes);
         return JSON.parse(json);
     } catch { return null; }
 };
 const distinct = (array) => [...new Set(array)];
-const downloadFile = (path, title) => {
+const downloadFromPath = (path, title) => {
     if (typeof path !== 'string') { path = String(path || ''); }
     path = path.trim();
     if (path.length > 0 && path[0] === '/') { path = path.slice(1); }
     if (isNullOrEmpty(path)) { throw new Error('Dosya yolu boş olamaz'); }
     if (isNullOrEmpty(title)) { throw new Error('Dosya başlığı boş olamaz'); }
     let link = document.createElement("a");
-    let baseUrl = import.meta.env.BASE_URL || "/";
+    let baseUrl = import.meta.env.BASE_URL || '/';
     link.href = baseUrl.concat(path);
     link.download = title;
     document.body.appendChild(link);
@@ -54,14 +71,14 @@ const generateGuid = () => {
     let r, v;
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
         r = (Math.random() * 16) | 0;
-        v = c === "x" ? r : (r & 0x3) | 0x8;
+        v = c === "x" ? r : ((r & 0x3) | 0x8);
         return v.toString(16);
     });
 };
-const groupBy = (array, ...keySelectors) => { /* Örnek kullanım: Tekli Gruplama: groupBy(users, x => x.city), Çoklu Gruplama: groupBy(users, x => x.city, x => x.age) */
+const groupBy = (array, ...keySelectors) => { /* Örnek kullanım: Tekli Gruplama: groupBy(users, x => x.city), groupBy(users, "city"); Çoklu Gruplama: groupBy(users, x => x.city, x => x.age), groupBy(users, "city", "age"), groupBy(users, ["city", "age"]) */
     let key;
     return array.reduce((acc, item) => {
-        key = keySelectors.map(selector => selector(item)).join('|');
+        key = keySelectors.map(selector => (typeof selector === "function" ? selector(item) : item[selector])).join('|');
         (acc[key] ??= []).push(item);
         return acc;
     }, {});
@@ -106,7 +123,7 @@ const isValidGuid = (value, isIncludeGuidEmpty) => {
     if (isNullOrUndefined(value)) { return false; }
     if (typeof value !== 'string') { return false; }
     value = String(value).trim();
-    if (typeof isIncludeGuidEmpty === 'boolean' && isIncludeGuidEmpty && value === GuidEmpty) { return true; }
+    if (value === GuidEmpty) { return (typeof isIncludeGuidEmpty === 'boolean' && isIncludeGuidEmpty); }
     let guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
     return guidRegex.test(value);
 };
@@ -149,12 +166,13 @@ const stringNormalize = (value) => {
 export const objectHelper = {
     GuidEmpty,
     GuidMaxValue,
+    applyNumericMask,
     beautifyPhoneNumber,
     beautifyTurkishPlate,
     copyAsync,
     decodeTokenPayload,
     distinct,
-    downloadFile,
+    downloadFromPath,
     generateGuid,
     groupBy,
     isNotNullOrEmpty,
